@@ -1,0 +1,1167 @@
+/* ════════════════════════════════════════════════════════════════════
+   app.css — Learner Application prototype
+   Custom styles only. Tokens + components live in tokens.css /
+   tasty-components.css. Never hardcode hex — use var(--c-*) / var(--*).
+   ─────────────────────────────────────────────────────────────────────
+   MAP — grep the `─── name ───` header to jump (or grep the class).
+     Base · Workflow helper text · AER workflow · SSN field · Certification checkboxes
+     HS / College selection cards · Path-select screen · Member-select cards · Entry screen card
+     Dashboard · DashboardStatusTracker row · Institution logo circles · MemberBox DE override
+     Dashboard HS MemberBox · DE Tab · AER confirm / Registered screens · Course registration
+     Dev panel · Dashboard invite / discovery row lead media · DE-tab invite member box
+     DE Application Form · Email-entry landing · DE application intro hint · DE-tab header actions
+     Confirm-email screen · Submitted confirmation · Email landing (mock mail client)
+     DE-tab institution SectionHeaders · Account-flow minimal topbar · Select Your High School
+     External college DE website mock · Parchment sign-in (login)
+   Component CSS of note: .tasty-dashboard-status-tracker / .tasty-mini-status-tracker (the
+   DST organism, §3 in app.js) · .tasty-member-logo.is-xs · .path-select-tile--dual.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ─── Base ─── */
+body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-base); background: var(--white-space-base); }
+* { box-sizing: border-box; }
+
+/* Footer anchor: screen is a flex column (kit .app-wrap is flex:1), and
+   page-content grows so the page-footer sits at the bottom of the viewport. */
+.screen.active { display: flex; flex-direction: column; }
+.page-content {
+  flex: 1;
+  padding: var(--space-xl) max(var(--space-jumbo), calc((100% - 1600px) / 2));
+}
+
+.req { color: var(--thunderBird); }
+
+/* Contain the validator's absolute vicon to its field (composite name fields lack
+   a .tasty-field__control, so the icon would otherwise escape to the page margin). */
+.tasty-field { position: relative; }
+
+/* ─── Workflow helper text ─── */
+.workflow-hint {
+  color: var(--body-font-weak);
+  font-size: var(--font-small);
+  margin: 0 0 var(--space-lg);
+}
+.fieldset-hint {
+  color: var(--body-font-weak);
+  font-size: var(--font-small);
+  margin: calc(-1 * var(--space-xs)) 0 var(--space-md);
+}
+.aer-context-line {
+  color: var(--body-font-weak);
+  font-size: var(--font-small);
+  margin: calc(-1 * var(--space-xs)) 0 var(--space-lg);
+}
+
+/* ─── AER workflow: keep kit default max 760px ─── */
+.aer-workflow { /* container width inherited from .tasty-workflow (760px) */ }
+/* A workflow head with only a title (no back/cancel) centers it across the 3-col grid */
+.tasty-workflow__head > .tasty-workflow__title:only-child { grid-column: 1 / -1; }
+
+/* ─── SSN field ─── */
+.ssn-input { letter-spacing: 0.3em; font-family: monospace; }
+
+/* ─── Certification checkboxes (canonical .tasty-checkbox) ─── */
+.cert-row { margin-bottom: var(--space-md); }
+/* full-width, top-aligned for multi-line labels */
+.cert-check { width: auto; align-items: flex-start; line-height: 1.5; }
+.cert-check .tasty-checkbox__box { margin-top: 1px; }
+.cert-text {
+  font-size: var(--font-small);
+  color: var(--body-font-base);
+  padding-top: 0;
+}
+
+/* ─── HS / College selection cards ─── */
+/* ─── Path-select screen (demo entry chooser / choose-your-own-adventure) ─── */
+.path-select-wrap {
+  min-height: 100vh; background: var(--white-space-base);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px; text-align: center;
+}
+.path-select-logo { margin-bottom: 24px; }
+.path-select-persona {
+  display: inline-flex; align-items: center; gap: 16px; text-align: left;
+  background: var(--white-space-z-index2); border: 1px solid var(--border-color); border-left: 4px solid var(--action-default);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-card);
+  padding: 16px 26px 16px 20px; margin-bottom: 28px;
+}
+.path-select-persona__avatar {
+  width: 54px; height: 54px; flex-shrink: 0; border-radius: 50%;
+  background: var(--anakiwa); color: var(--action-active);
+  display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: var(--font-weight-bold); letter-spacing: .5px;
+}
+.path-select-persona__text { display: flex; flex-direction: column; gap: 3px; }
+.path-select-persona__eyebrow { font-size: var(--font-xSmall); font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: .8px; color: var(--body-font-weak); }
+.path-select-persona__role { font-size: 22px; font-weight: var(--font-weight-bold); color: var(--body-font-strong); line-height: 1.1; }
+.path-select-persona__name { font-size: var(--font-small); color: var(--body-font-weak); }
+.path-select-heading { font-size: var(--font-xLarge); font-weight: var(--font-weight-bold); color: var(--body-font-strong); margin: 0 0 8px; }
+.path-select-sub { font-size: var(--font-small); color: var(--body-font-weak); margin: 0 0 36px; }
+.path-select-options { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+.path-select-tile {
+  width: 280px; max-width: 100%; background: var(--white-space-z-index2); border: 1px solid var(--border-color);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 28px 24px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
+  text-align: center; font-family: inherit;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+}
+.path-select-tile:hover { border-color: var(--action-default); box-shadow: var(--shadow-pop); transform: translateY(-2px); }
+.path-select-tile-icon {
+  color: var(--action-default);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 4px;
+}
+.path-select-tile-title { font-size: var(--font-medium); font-weight: var(--font-weight-bold); color: var(--body-font-strong); }
+.path-select-tile-desc { font-size: var(--font-small); color: var(--body-font-weak); line-height: 1.5; }
+/* Dual-origin tile: a card (not one big button) with a two-button "from email / from dashboard" row. */
+.path-select-tile--dual { cursor: default; }
+.path-select-tile--dual:hover { border-color: var(--border-color); box-shadow: var(--shadow-card); transform: none; }
+.path-select-tile-actions { display: flex; flex-direction: column; gap: 8px; width: 100%; margin-top: 6px; }
+.path-select-tile-actions .tasty-btn { width: 100%; }
+
+/* ─── Member-select cards (HS / college single-select) ─── */
+/* Base .tasty-member-select / .tasty-member-select__card come from the kit
+   (tasty-components.css). The kit ships no selected/hover/interactive state —
+   these local rules add a minimal single-select highlight using tokens only. */
+.de-member-select { padding: 0; gap: var(--space-md); }
+.de-select-card {
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  gap: 2px;
+  background: var(--white-space-base);
+  transition: border-color .15s, background .15s, box-shadow .15s;
+}
+.de-select-card:hover { border-color: var(--action-default); }
+.de-select-card:focus-visible { outline: 2px solid var(--action-default); outline-offset: 2px; }
+.de-select-card.is-selected {
+  border-color: var(--action-default);
+  background: var(--anakiwa);
+  box-shadow: inset 0 0 0 1px var(--action-default);
+}
+.de-select-card__name { font-weight: var(--font-weight-semibold); color: var(--body-font-strong); }
+.de-select-card__meta { font-size: var(--font-small); color: var(--body-font-weak); }
+
+/* ─── Entry screen card ─── */
+.entry-card {
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--white-space-z-index2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+.entry-illus { margin-bottom: var(--space-lg); }
+.entry-title {
+  font-size: var(--font-xLarge);
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong);
+  margin: 0 0 var(--space-sm);
+  line-height: 1.3;
+}
+.entry-body {
+  color: var(--body-font-weak);
+  margin: 0 0 var(--space-lg);
+  font-size: var(--font-small);
+  line-height: 1.6;
+}
+.entry-college-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: var(--anakiwa);
+  border: 1px solid var(--curiousBlue);
+  border-radius: 100px;
+  font-size: var(--font-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--action-active);
+  margin-bottom: var(--space-lg);
+}
+.entry-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* ─── Dashboard ─── */
+.dashboard-section-title {
+  font-size: var(--font-large);
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong);
+  margin: 0 0 var(--space-md);
+}
+
+/* ─── DashboardStatusTracker row ─── */
+.dst-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  background: var(--white-space-z-index2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-card);
+  flex-wrap: wrap;
+}
+.dst-row.is-invite { background: var(--status-base-3); }
+.dst-row__body { flex: 1; min-width: 200px; }
+.dst-row__title { font-weight: var(--font-weight-bold); margin: 0 0 4px; color: var(--body-font-strong); }
+.dst-row__text { font-size: var(--font-small); color: var(--body-font-base); margin: 0; line-height: 1.5; }
+.dst-row__label { font-size: var(--font-small); font-weight: var(--font-weight-semibold); color: var(--body-font-base); white-space: nowrap; }
+.dst-row__next { display: flex; flex-direction: column; gap: 2px; }
+.dst-row__next-title { font-weight: var(--font-weight-bold); font-size: var(--font-small); color: var(--body-font-strong); }
+.dst-row__next-sub { font-size: var(--font-small); color: var(--body-font-weak); }
+.dst-row__actions { display: flex; align-items: center; gap: var(--space-sm); flex-shrink: 0; }
+
+/* ─── Institution logo circles (dashboard DST + MemberBox header) ─── */
+.de-inst-logo {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: 15px;
+  flex-shrink: 0;
+  background: var(--white);
+  color: var(--body-font-strong);
+}
+.de-inst-logo--hs { background: var(--anakiwa); color: var(--action-default); }
+.de-inst-logo--college { background: var(--seashell); color: var(--cider); }
+.de-member-box .de-inst-logo { width: 60px; height: 60px; font-size: var(--font-large); border-radius: 50%; }
+
+/* ─── MemberBox DE override (full-width column card) ─── */
+.de-member-box { flex-direction: column; align-items: stretch; padding: 0; margin-bottom: var(--space-lg); }
+.de-inst-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-color);
+}
+.de-inst {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex: 1;
+  min-width: 140px;
+}
+.de-inst-arrow { color: var(--body-font-weak); flex-shrink: 0; display: flex; align-items: center; }
+.de-member-aside {              /* shared: dashboard HS box (Order + kebab), invite box, confirm box */
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.de-app-id { font-size: var(--font-xSmall); color: var(--body-font-weak); font-family: monospace; white-space: nowrap; }
+
+/* DE app-box aside ONLY (Figma): status tag + App ID form one right-aligned group (App ID sits
+   directly UNDER the tag, never under the kebab); the OptionsMenu is a sibling to the right.
+   Scoped so it never touches the shared .de-member-aside. */
+.de-app-aside { display: flex; align-items: flex-start; gap: var(--space-sm); flex-shrink: 0; margin-left: auto; }
+.de-app-aside__meta { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-xs); }
+
+/* OptionsMenu (canonical Tasty): trigger + dropdown; menu anchors below-right of the kebab. */
+.de-options { position: relative; display: inline-flex; }
+.de-options .tasty-menu { top: calc(100% + 4px); right: 0; min-width: 200px; }
+.de-stepper-area { padding: var(--space-lg) var(--space-xl); overflow-x: auto; }
+
+/* ─── Dashboard HS MemberBox (SectionHeader + DE section + credential tiles + footer) ─── */
+.hs-member-box { margin-bottom: var(--space-lg); }
+/* header + DE section share one white area: drop the inherited divider */
+.hs-header { border-bottom: none; padding-bottom: var(--space-sm); }
+.hs-section-header { width: auto; flex: 1 1 auto; min-width: 0; }
+.hs-order-btn { display: inline-flex; align-items: center; gap: var(--space-sm); }
+.hs-order-btn__div { width: 1px; height: 16px; background: currentColor; opacity: .45; }
+.hs-kebab { flex-shrink: 0; }
+
+/* DE section (banner or status pill) nested inside the box */
+.hs-de-wrap { padding: 0 var(--space-xl) var(--space-md); }
+
+/* In-progress status pill — gray, holds the condensed tracker */
+.de-pill {
+  display: flex; align-items: center; gap: var(--space-lg);
+  background: var(--white-space-z-index3);
+  border-radius: 32px;
+  padding: var(--space-md) var(--space-lg);
+  flex-wrap: wrap;
+}
+.de-pill__logo { width: 40px; height: 40px; flex-shrink: 0; }
+.de-pill__label { font-weight: var(--font-weight-bold); color: var(--body-font-strong); white-space: nowrap; }
+.de-pill__next { margin-left: auto; display: flex; flex-direction: column; text-align: right; }
+.de-pill__next-title { font-weight: var(--font-weight-bold); color: var(--body-font-strong); }
+.de-pill__next-sub { font-size: var(--font-small); color: var(--body-font-weak); }
+.de-pill .tasty-btn { margin-left: auto; }
+
+/* DashboardStatusTracker + MiniStatusTracker organism/molecule now live in the kit
+   (../_kit/styles/tasty-components.css), promoted via the generator. Kept local below:
+   prototype-only helpers the kit intentionally doesn't carry.
+   TODO: tracker buttons should use the canonical .tasty-btn.is-ghost.is-error rather than this alias. */
+.tasty-btn.is-transparent.is-error   { color: var(--context-error); }
+.tasty-btn.is-transparent.is-success { color: var(--context-success); }
+.de-dst-standalone { margin-bottom: var(--space-lg); }
+
+/* Invite banner (tasty-banner) — pale-green tint, dark text */
+.de-invite-banner {
+  background: var(--validation-base-valid); color: var(--body-font-base);
+  border-radius: var(--radius-lg); border: 0;
+  align-items: center; gap: var(--space-md); flex-wrap: wrap;
+}
+.de-invite-banner--standalone { margin-bottom: var(--space-lg); }
+.de-invite-banner .tasty-banner__icon { flex-shrink: 0; }
+.de-invite-banner .tasty-banner__message { flex: 1; min-width: 220px; font-size: var(--font-small); line-height: 1.5; }
+.de-invite-banner .tasty-banner__actions { display: flex; align-items: center; gap: var(--space-md); margin-left: auto; }
+/* banner actions are borderless text links (green Apply, gray Dismiss) */
+.de-invite-banner .tasty-banner__actions .tasty-btn { background: transparent; border-color: transparent; color: var(--body-font-base); }
+.de-invite-banner__apply { color: var(--context-success); }
+
+/* Credential tiles (canonical .tasty-credential-tile) */
+.hs-tiles { display: flex; flex-wrap: wrap; gap: var(--space-md); padding: 0 var(--space-xl) var(--space-lg); }
+.hs-tiles .tasty-credential-tile { flex: 1 1 340px; }
+.hs-tile__title { font-weight: var(--font-weight-bold); color: var(--body-font-strong); margin: 0; }
+.hs-tile__sub { font-size: var(--font-small); color: var(--body-font-weak); margin: 2px 0 0; }
+.hs-tile__meta { font-size: var(--font-small); color: var(--body-font-base); margin: 6px 0 0; }
+.hs-tile__badge { align-self: flex-start; }
+
+/* Order A Credential footer */
+.hs-credential {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
+  border-top: 1px solid var(--border-color);
+  background: var(--white-space-z-index2);
+  flex-wrap: wrap;
+}
+.hs-credential__title { font-weight: var(--font-weight-bold); color: var(--body-font-strong); margin: 0; }
+.hs-credential__sub { font-size: var(--font-small); color: var(--body-font-weak); margin: 4px 0 8px; }
+.hs-offers { display: flex; flex-wrap: wrap; gap: var(--space-md); }
+.hs-offer { display: inline-flex; align-items: center; gap: 5px; font-size: var(--font-small); color: var(--body-font-base); }
+.hs-offer svg { color: var(--action-default); flex-shrink: 0; }
+
+/* "Order From Another Institution" block */
+.hs-another { display: flex; flex-direction: column; align-items: center; gap: var(--space-md); padding: var(--space-jumbo) 0; }
+.hs-another__illus svg, .hs-another__illus img { display: block; width: 120px; height: auto; }
+.hs-another__btn { display: inline-flex; align-items: center; gap: var(--space-sm); }
+
+/* ─── DynamicActionCardSection (Tasty organism · Figma 99-01 Organisms 5844:109456) ───
+   KIT-GROWTH ▶ NOT in the kit yet — local until promoted to _kit/styles + tasty-prototype-starter.
+   The MemberBox's lower region. Plain by default; the status color lives in the MemberBox status
+   tag. Only the success-green Register CTA (.is-success) is filled. */
+.tasty-dynamic-action-card-section {
+  border-top: 1px solid var(--border-color);
+  background: var(--white-space-z-index2);
+  padding: var(--space-xl);            /* match Figma breathing room; aligns to header inset */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);                /* header → divider → cards rhythm */
+}
+/* Plain section header: icon + title + sub */
+.tasty-dacs__header { display: flex; align-items: flex-start; gap: var(--space-md); }
+.tasty-dacs__icon {
+  flex: none; width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--body-font-weak);
+}
+.tasty-dacs__htext { flex: 1; min-width: 0; }
+.tasty-dacs__title { font-weight: var(--font-weight-bold); color: var(--body-font-strong); }
+.tasty-dacs__sub { font-size: var(--font-small); color: var(--body-font-weak); margin-top: 2px; }
+.tasty-dacs__divider { height: 1px; background: var(--border-color); }
+
+/* Action card (notification row) */
+.tasty-action-card { display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap; }
+.tasty-action-card__info { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 2px; }
+.tasty-action-card__name { font-weight: var(--font-weight-semibold); color: var(--body-font-strong); font-size: var(--font-small); }
+.tasty-action-card__role { font-size: var(--font-small); color: var(--body-font-weak); }
+.tasty-action-card__sent { font-size: var(--font-small); color: var(--body-font-weak); }
+.tasty-action-card__actions { display: flex; align-items: center; gap: var(--space-sm); flex-shrink: 0; }
+
+/* CallToAction row (Apply Now / Register / Reapply) */
+.tasty-dacs-cta { display: flex; align-items: center; gap: var(--space-md); flex-wrap: wrap; }
+.tasty-dacs-cta__media { flex: none; display: inline-flex; align-items: center; justify-content: center; color: var(--body-font-weak); }
+.tasty-dacs-cta__text { flex: 1; min-width: 220px; }
+.tasty-dacs-cta__title { font-weight: var(--font-weight-bold); color: var(--body-font-strong); }
+.tasty-dacs-cta__body { font-size: var(--font-small); color: var(--body-font-weak); margin-top: 2px; }
+.tasty-dacs-cta__aside { display: flex; align-items: center; gap: var(--space-md); flex-shrink: 0; margin-left: auto; }
+.tasty-dacs-cta__meta { font-size: var(--font-small); color: var(--body-font-base); text-align: right; white-space: nowrap; }
+/* The single filled variant: learner can register for courses */
+.tasty-dynamic-action-card-section.is-success { background: var(--status-base-2); border-top-color: var(--c-success-border); }
+.tasty-dynamic-action-card-section.is-success .tasty-dacs-cta__media { color: var(--context-success); }
+
+
+/* ─── DE Tab ─── */
+.de-tab-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.de-tab-title {
+  font-size: var(--font-xLarge);
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong);
+  margin: 0;
+}
+.de-view-tabs { margin-bottom: var(--space-lg); }
+
+/* Pre-app empty state in DE tab */
+.de-pre-app-empty {
+  background: var(--white-space-z-index2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 48px var(--space-lg);
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+.de-pre-app-empty-title {
+  font-size: var(--font-large);
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong);
+  margin: 0 0 var(--space-sm);
+}
+.de-pre-app-empty-text { color: var(--body-font-weak); margin: 0 0 var(--space-lg); font-size: var(--font-small); }
+
+/* ─── AER confirm / Registered screens ─── */
+.confirm-wrap {
+  width: 100%;                  /* REQUIRED: .page-content is a flex column, so without an explicit
+                                   width this box shrinks to its content (~820px) and max-width only
+                                   caps it. width:100% makes it fill the available width up to... */
+  max-width: 1404px;            /* desktop width so the tracker spans full-width like Figma; the
+                                   text blocks below stay centered/narrow via their own max-widths */
+  margin: 0 auto;
+  padding: var(--space-xl) 0;
+}
+.confirm-lead { text-align: center; margin-bottom: var(--space-lg); }
+.confirm-illus { margin-bottom: var(--space-md); }
+.confirm-title {
+  font-size: var(--font-xxLarge);
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong);
+  margin: 0 0 var(--space-sm);
+}
+.confirm-body {
+  color: var(--body-font-weak);
+  margin: 0 auto var(--space-sm);
+  max-width: 560px;
+  line-height: 1.6;
+}
+.confirm-actions { display: flex; justify-content: center; gap: var(--space-sm); margin-top: var(--space-lg); }
+.confirm-actions--row { flex-wrap: wrap; }
+
+/* Registered course list */
+.registered-card-body { padding: var(--space-lg) var(--space-xl); }
+.registered-card-meta {
+  font-size: var(--font-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--action-default);
+  margin: 0 0 var(--space-md);
+}
+.registered-empty {
+  text-align: center;
+  color: var(--body-font-weak);
+  font-size: var(--font-small);
+  padding: var(--space-md);
+  margin: 0;
+}
+.registered-courses {
+  background: var(--white-space-base);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+}
+.registered-course-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--font-small);
+}
+.registered-course-row:last-child { border-bottom: none; }
+.reg-course-code { font-weight: var(--font-weight-bold); color: var(--action-default); min-width: 80px; }
+.reg-course-title { flex: 1; color: var(--body-font-base); }
+.reg-course-credits { color: var(--body-font-weak); }
+
+/* ─── Course registration ─── */
+.courses-wrap { max-width: 1100px; }
+.courses-page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+.courses-page-title {
+  font-size: var(--font-xLarge);
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong);
+  margin: 0 0 4px;
+}
+.courses-page-meta { font-size: var(--font-small); color: var(--body-font-weak); margin: 0; }
+.courses-cart-badge {
+  font-size: var(--font-small);
+  font-weight: var(--font-weight-semibold);
+  color: var(--body-font-weak);
+  white-space: nowrap;
+  padding-top: var(--space-xs);
+}
+.courses-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--space-lg);
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .courses-layout { grid-template-columns: 1fr; }
+}
+.courses-search-row { margin-bottom: var(--space-md); }
+
+/* Course card */
+.course-item {
+  background: var(--white-space-z-index2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-sm);
+  transition: border-color .15s;
+}
+.course-item.is-added { border-color: var(--context-success); }
+.course-item-head { display: flex; align-items: flex-start; gap: var(--space-md); }
+.course-item-info { flex: 1; min-width: 0; }
+.course-code { font-size: var(--font-small); font-weight: var(--font-weight-bold); color: var(--action-default); margin: 0 0 2px; }
+.course-name { font-weight: var(--font-weight-semibold); color: var(--body-font-strong); margin: 0 0 var(--space-xs); }
+.course-meta-row { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.course-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-small);
+  color: var(--body-font-weak);
+}
+.course-item-action { flex-shrink: 0; }
+
+/* Cart */
+.cart-panel {
+  background: var(--white-space-z-index2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  position: sticky;
+  top: 80px;
+}
+.cart-title {
+  font-size: var(--font-medium);
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong);
+  margin: 0 0 var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+.cart-empty {
+  font-size: var(--font-small);
+  color: var(--body-font-weak);
+  text-align: center;
+  padding: var(--space-lg) 0;
+  margin: 0;
+}
+.cart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--font-small);
+}
+.cart-row:last-child { border-bottom: none; }
+.cart-row-left { min-width: 0; }
+.cart-row-code { font-weight: var(--font-weight-semibold); color: var(--body-font-strong); }
+.cart-row-credits { font-size: var(--font-xSmall); color: var(--body-font-weak); }
+.cart-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--body-font-weak);
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  line-height: 0;
+}
+.cart-remove-btn:hover { color: var(--context-error); }
+.cart-foot {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--space-sm);
+}
+.cart-credits { font-size: var(--font-small); color: var(--body-font-weak); margin: 0 0 var(--space-sm); }
+.cart-register-btn { width: 100%; justify-content: center; }
+
+
+/* ── Stepper: align active node + condensed active dot with Figma (gold/note theme) ── */
+
+/* Full tracker — active node ring = sahara (note fg), clock glyph also sahara */
+.tasty-stepper__step.is-active .tasty-stepper__node {
+  border-color: var(--status-foreground-4);
+  color: var(--status-foreground-4);
+}
+
+/* DE-tab tracker → desktop Stepper sizing (Figma 9952:43956): 50px nodes, 16px labels,
+   connector recentred on the larger node. Scoped to .de-stepper-area so the shared kit stepper
+   (30px) is untouched. KIT-GROWTH ▶ the kit needs a desktop/Format size variant of .tasty-stepper. */
+.de-stepper-area .tasty-stepper__node,
+.confirm-stepper .tasty-stepper__node { width: 50px; height: 50px; font-size: 16px; }
+.de-stepper-area .tasty-stepper__lbl,
+.confirm-stepper .tasty-stepper__lbl { font-size: 16px; font-weight: var(--font-weight-semibold); }
+.de-stepper-area .tasty-stepper:not(.is-vertical) .tasty-stepper__step:not(:last-child)::after,
+.confirm-stepper .tasty-stepper:not(.is-vertical) .tasty-stepper__step:not(:last-child)::after { top: 25px; }
+
+/* Upcoming step = a small gray dot centred in the (transparent) 50px node, not a numbered circle. */
+.tasty-stepper__step:not(.is-done):not(.is-active):not(.is-denied) .tasty-stepper__node { background: transparent; }
+.tasty-stepper__step:not(.is-done):not(.is-active):not(.is-denied) .tasty-stepper__node::before {
+  content: ""; display: block; width: 20px; height: 20px; border-radius: 50%; background: var(--border-color);
+}
+
+
+/* ─── Dashboard invite / discovery row lead media ─── */
+.dst-row__lead { flex-shrink: 0; display: flex; align-items: center; }
+.dst-row__lead .tillus { display: block; }
+.dst-row__apply { color: var(--context-success); border-color: var(--context-success); }
+.dst-row__apply:hover:not(:disabled) { background: var(--context-success); color: var(--white); }
+
+/* ─── DE-tab invite member box ─── */
+.de-inst-header--single .de-inst { flex: 0 1 auto; }
+
+/* ════════════════════════════════════════════════════════════
+   AER → Create-account form (WVCC branded)
+   ════════════════════════════════════════════════════════════ */
+
+/* WVCC branded header */
+.aer-brand {
+  background: var(--white-space-base);
+  border-bottom: 1px solid var(--border-color);
+}
+.aer-brand__accent {
+  height: 14px;
+  background: var(--cherry);
+}
+.aer-brand__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-lg);
+}
+.aer-brand__logo {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--white-space-base);
+  color: var(--cherry);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+}
+.aer-brand__name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--body-font-strong);
+  line-height: 1.2;
+}
+.aer-brand__addr {
+  margin-top: 2px;
+  font-size: var(--font-small);
+  color: var(--body-font-weak);
+}
+
+/* Hero */
+.aer-hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--white-space-base);
+  border-bottom: 1px solid var(--border-color);
+}
+.aer-hero__illus {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.aer-hero__illus svg,
+.aer-hero__illus img { display: block; width: 104px; height: 104px; }
+.aer-hero__title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--body-font-strong);
+}
+
+/* Read-only email + edit button */
+.aer-email {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.aer-email__addr {
+  font-size: var(--font-medium);
+  font-weight: var(--font-weight-semibold);
+  color: var(--body-font-base);
+}
+.aer-email__edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--action-default);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+}
+.aer-email__edit:hover { background: var(--white-space-z-index3); }
+.aer-email__edit svg { display: block; }
+
+/* Optional-field hint inside a label */
+.aer-optional {
+  font-weight: 400;
+  color: var(--body-font-weak);
+}
+
+/* Password legend with right-aligned requirements link */
+.aer-legend-text { margin-right: auto; }
+.aer-pw-reqs {
+  font-size: var(--font-small);
+  font-weight: 400;
+  color: var(--action-default);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.aer-pw-reqs:hover { text-decoration: underline; }
+/* legend is flex (kit); let it span full width so the link sits flush right */
+.tasty-fieldset > legend:has(.aer-pw-reqs) { width: 100%; padding-right: var(--space-xs); }
+
+/* Password field with inline show/hide eye */
+.aer-pw { position: relative; display: block; }
+.aer-pw__input { padding-right: 44px; width: 100%; }
+.aer-pw__toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--action-default);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+}
+.aer-pw__toggle:hover { background: var(--white-space-z-index3); }
+.aer-pw__toggle svg { display: block; }
+
+/* Foot: stacked submit + notes, centered */
+.aer-foot {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-md);
+}
+.aer-required-note {
+  margin: 0;
+  text-align: center;
+  font-size: var(--font-small);
+  color: var(--body-font-base);
+}
+.aer-required-note .req { color: var(--thunderBird); margin-right: 4px; }
+.aer-ferpa-note {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--interactive-border);
+  border-radius: var(--radius-md);
+  background: var(--background);
+  font-size: var(--font-small);
+  line-height: 1.4;
+  color: var(--body-font-base);
+}
+.aer-ferpa-note__icon { flex: 0 0 auto; color: var(--action-default); margin-top: 1px; }
+.aer-legal {
+  margin: 0;
+  text-align: center;
+  font-size: var(--font-small);
+  color: var(--body-font-weak);
+}
+.aer-legal a { color: var(--action-default); text-decoration: none; }
+.aer-legal a:hover { text-decoration: underline; }
+
+/* ─── DE Application Form (logged-in learner) ─── */
+.de-app-cols { display: flex; gap: var(--space-md); }
+.de-app-cols > * { flex: 1 1 0; min-width: 0; }
+.de-app-signed__label { display: block; margin-bottom: var(--space-xs); }
+
+/* Click-to-fill (demo): the whole form reads as clickable so a presenter can fill it in one tap. */
+.demo-fill-soft { cursor: pointer; }
+.de-app-cols-2 { display: flex; gap: var(--space-md); }
+.de-app-cols-2 > * { flex: 1 1 0; min-width: 0; }
+.de-app-label-row { display: flex; align-items: baseline; gap: var(--space-sm); }
+.dont-have-link { margin-left: auto; font-size: var(--font-small); font-weight: var(--font-weight-semibold); color: var(--action-default); text-decoration: none; font-style: italic; }
+.dont-have-link:hover { text-decoration: underline; }
+.de-app-section { background: var(--white-space-z-index3); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-md); }
+.de-app-section-title { font-size: var(--font-large); font-weight: var(--font-weight-bold); color: var(--body-font-strong); margin: 0; }
+.de-app-consent { border-top: 1px solid var(--border-color); padding-top: var(--space-lg); }
+.de-app-consent-title { font-size: var(--font-large); font-weight: var(--font-weight-bold); color: var(--body-font-strong); margin: 0 0 var(--space-md); }
+.sig-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-sm); }
+.sig-instr { font-size: var(--font-small); color: var(--body-font-weak); }
+.sig-pad-wrap { position: relative; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--white-space-base); margin-bottom: var(--space-md); overflow: hidden; }
+.sig-x { position: absolute; left: 14px; bottom: 18px; font-weight: var(--font-weight-bold); font-size: var(--font-large); color: var(--body-font-weak); pointer-events: none; }
+.sig-pad { display: block; width: 100%; height: 170px; cursor: crosshair; touch-action: none; }
+.de-app-signed { margin-bottom: var(--space-md); }
+/* Kit is-valid only styles .tasty-input; extend the green validated state to selects (Country/State). */
+.tasty-field.is-valid .tasty-select { background: var(--validation-base-valid); border-color: var(--context-success); border-left-width: 4px; padding-left: 34px; }
+
+/* ─── Email-entry landing (email-invite) — reuses aer-* chrome ─── */
+.eml-start {
+  font-size: var(--font-small);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--body-font-strong);
+  margin-bottom: var(--space-md);
+}
+.eml-field-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xs);
+}
+.eml-field-label {
+  font-size: var(--font-small);
+  color: var(--body-font-base);
+}
+.eml-reg-link {
+  font-size: var(--font-small);
+  font-style: italic;
+  font-weight: var(--font-weight-semibold);
+  color: var(--action-default);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.eml-reg-link:hover { text-decoration: underline; }
+
+/* ─── DE application intro hint (Figma 13364-53515) ─── */
+.de-app-intro {
+  display: flex; align-items: center; gap: var(--space-sm);
+  max-width: 760px; margin: 0 auto var(--space-md); padding: 0 var(--space-md);
+  font-size: var(--font-small); color: var(--body-font-base);
+}
+.de-app-intro__mark {
+  font-family: 'DM Serif Display', Georgia, serif; font-weight: 400;
+  font-size: var(--font-xxLarge); line-height: 1; letter-spacing: -2px;
+  color: var(--cherry); flex: 0 0 auto;
+}
+
+/* ─── DE-tab header actions (Figma 13497-73022) ─── */
+.de-tab-head--actions { display: flex; justify-content: flex-end; }
+
+/* ─── Confirm-email screen (#screen-confirm-email) ─── */
+.ce-workflow { max-width: 560px; }
+.ce-body { text-align: center; padding: var(--space-xl) var(--space-xl) var(--space-lg); }
+.ce-intro { color: var(--body-font-weak); margin: 0 0 var(--space-lg); line-height: 1.6; }
+.ce-intro strong { color: var(--body-font-strong); font-weight: var(--font-weight-bold); }
+
+.ce-illus-wrap { position: relative; display: inline-block; margin: 0 0 var(--space-md); }
+.ce-illus { display: inline-flex; }
+.ce-illus svg, .ce-illus img { display: block; width: 64px; height: 64px; }
+.ce-illus__badge {
+  position: absolute; top: -8px; right: -8px;
+  min-width: 22px; height: 22px; padding: 0 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--body-font-strong); color: var(--white-space-base);
+  border-radius: var(--radius-pill); font-size: 12px; font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.ce-title {
+  font-size: var(--font-large); font-weight: var(--font-weight-bold);
+  color: var(--body-font-strong); margin: 0 0 var(--space-sm);
+}
+.ce-body-text { color: var(--body-font-weak); margin: 0 auto var(--space-lg); max-width: 440px; line-height: 1.6; }
+.ce-body-text strong { color: var(--body-font-strong); font-weight: var(--font-weight-semibold); }
+
+.ce-form { display: flex; align-items: flex-start; justify-content: center; gap: var(--space-sm); }
+.ce-code-field { width: 220px; margin: 0; }
+.ce-code-field .tasty-field__label.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.ce-foot { flex-direction: column; align-items: center; gap: var(--space-sm); text-align: center; }
+.ce-help { color: var(--body-font-weak); margin: 0; font-size: var(--font-small); }
+.ce-links { margin: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-size: var(--font-small); }
+.ce-links a { color: var(--action-default); text-decoration: none; font-weight: var(--font-weight-semibold); }
+.ce-links a:hover { text-decoration: underline; }
+.ce-links__sep { color: var(--body-font-weak); }
+.ce-required-note { color: var(--body-font-weak); margin: var(--space-xs) 0 0; font-size: var(--font-small); }
+.ce-required-note .req { margin-right: 4px; }
+
+/* ─── Submitted confirmation (Figma 13364-53492) ─── */
+.confirm-title--thanks { color: var(--context-success); }
+.confirm-appid {
+  margin: var(--space-xs) 0 0; text-align: center;
+  font-size: var(--font-small); color: var(--body-font-weak);
+}
+.confirm-stepper { max-width: 1404px; margin: var(--space-lg) auto 0; overflow-x: auto; }
+.confirm-stepper .tasty-stepper { background: transparent; border: 0; padding: 0; }
+
+.confirm-next { max-width: 680px; margin: var(--space-xl) auto 0; text-align: center; }
+.confirm-next__title {
+  margin: 0 0 var(--space-md);
+  font-size: var(--font-large); font-weight: var(--font-weight-bold);
+  color: var(--body-font-base);
+}
+.confirm-next__lead {
+  display: flex; align-items: flex-start; gap: var(--space-md);
+  text-align: left; margin: 0 auto var(--space-md); max-width: 560px;
+}
+.confirm-next__mark {
+  font-family: 'DM Serif Display', Georgia, serif; font-size: 48px; line-height: 1;
+  letter-spacing: -4px; color: var(--cherry); flex: 0 0 auto;
+}
+.confirm-next__body { margin: 0; font-size: var(--font-small); color: var(--body-font-base); }
+.confirm-next__para { margin: var(--space-sm) 0 0; font-size: var(--font-small); color: var(--body-font-base); }
+
+/* ─── Email landing (Path 4 — mock mail client, ported from counselor/admin) ─── */
+.mail-app { position: fixed; inset: 0; display: flex; flex-direction: column; background: var(--white-space-z-index4); font-family: var(--font-family-base); z-index: 50; }
+.mail-app__topbar { display: flex; align-items: center; gap: 16px; height: 56px; padding: 0 16px; background: var(--white-space-base); border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+.mail-app__traffic { display: flex; gap: 8px; }
+.mail-app__dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.mail-app__dot--red { background: var(--thunderBird); }
+.mail-app__dot--yellow { background: var(--sahara); }
+.mail-app__dot--green { background: var(--context-success); }
+.mail-app__title { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--body-font-strong); padding-left: 16px; border-left: 1px solid var(--border-color); margin-left: 8px; }
+.mail-app__title i { font-size: 18px; color: var(--c-brand); }
+.mail-app__search { flex: 1; max-width: 720px; display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px; background: var(--white-space-z-index3); border: 1px solid transparent; border-radius: var(--radius-md); margin: 0 auto; }
+.mail-app__search:focus-within { background: var(--white-space-base); border-color: var(--border-color); }
+.mail-app__search i { color: var(--body-font-weak); font-size: 18px; }
+.mail-app__search input { flex: 1; border: none; background: transparent; outline: none; font: 400 14px var(--font-family-base); color: var(--body-font-base); }
+.mail-app__user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--c-brand); color: var(--white); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: var(--font-small); }
+.mail-app__body { flex: 1; display: flex; min-height: 0; }
+.mail-app__sidebar { width: 240px; flex-shrink: 0; background: var(--white-space-base); border-right: 1px solid var(--border-color); padding: 16px 12px; overflow-y: auto; }
+.mail-app__compose { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 20px; background: var(--c-brand); color: var(--white); border: none; border-radius: 100px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 16px; }
+.mail-app__compose i { font-size: 18px; }
+.mail-app__folders { list-style: none; margin: 0; padding: 0; }
+.mail-app__folder { display: flex; align-items: center; gap: 14px; height: 36px; padding: 0 12px; border-radius: 100px; font-size: var(--font-small); font-weight: 500; color: var(--body-font-base); cursor: pointer; }
+.mail-app__folder:hover { background: var(--white-space-z-index2); }
+.mail-app__folder i { font-size: 18px; color: var(--body-font-weak); flex-shrink: 0; }
+.mail-app__folder span:nth-child(2) { flex: 1; }
+.mail-app__folder--active { background: var(--anakiwa); color: var(--action-default); font-weight: 700; }
+.mail-app__folder--active i { color: var(--action-default); }
+.mail-app__badge { font-size: var(--font-xSmall); font-weight: 700; padding: 2px 8px; border-radius: 100px; background: var(--c-brand); color: var(--white); }
+.mail-app__badge--muted { background: var(--white-space-z-index2); color: var(--body-font-weak); }
+.mail-app__section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--body-font-weak); margin: 20px 12px 8px; }
+.mail-app__label-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin: 0 3px; }
+.mail-app__list { width: 380px; flex-shrink: 0; background: var(--white-space-base); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; overflow-y: auto; }
+.mail-app__list-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-size: var(--font-small); font-weight: 700; color: var(--body-font-strong); position: sticky; top: 0; background: var(--white-space-base); }
+.mail-app__list-count { margin-left: auto; font-size: 12px; font-weight: 400; color: var(--body-font-weak); }
+.mail-app__item { display: grid; grid-template-columns: auto auto 100px 1fr auto; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border-color); cursor: pointer; }
+.mail-app__item:hover { background: var(--white-space-z-index2); }
+.mail-app__item--selected, .mail-app__item--selected:hover { background: var(--anakiwa); }
+.mail-app__item-star { font-size: var(--font-medium); color: var(--body-font-weak); }
+.mail-app__item-star--filled { color: var(--sahara); }
+.mail-app__item-from { font-size: var(--font-small); font-weight: 600; color: var(--body-font-base); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mail-app__item--unread .mail-app__item-from { font-weight: 700; color: var(--body-font-strong); }
+.mail-app__item-meta { min-width: 0; }
+.mail-app__item-subject { font-size: var(--font-small); color: var(--body-font-base); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mail-app__item--unread .mail-app__item-subject { font-weight: 700; color: var(--body-font-strong); }
+.mail-app__item-preview { font-size: 12px; color: var(--body-font-weak); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mail-app__item-time { font-size: var(--font-xSmall); color: var(--body-font-weak); white-space: nowrap; }
+.mail-app__reader { flex: 1; display: flex; flex-direction: column; background: var(--white-space-base); overflow-y: auto; min-width: 0; }
+.mail-app__reader-toolbar { display: flex; align-items: center; gap: 4px; padding: 10px 24px; border-bottom: 1px solid var(--border-color); }
+.mail-app__reader-spacer { flex: 1; }
+.mail-app__icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: transparent; border: none; color: var(--body-font-weak); cursor: pointer; }
+.mail-app__icon-btn:hover { background: var(--white-space-z-index2); color: var(--body-font-strong); }
+.mail-app__icon-btn i { font-size: 18px; }
+.mail-app__reader-header { padding: 24px 40px 16px; border-bottom: 1px solid var(--border-color); }
+.mail-app__reader-subject { font-size: 22px; font-weight: 700; color: var(--body-font-strong); margin: 0 0 16px; line-height: 1.3; }
+.mail-app__reader-from { display: flex; align-items: center; gap: 12px; }
+.mail-app__reader-sender-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--c-brand); display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 8px; }
+.mail-app__reader-sender-avatar img { width: 100%; height: 100%; object-fit: contain; }
+.mail-app__reader-meta { font-size: var(--font-small); line-height: 1.4; color: var(--body-font-base); }
+.mail-app__reader-meta strong { color: var(--body-font-strong); }
+.mail-app__reader-email { color: var(--body-font-weak); font-size: 12px; margin-left: 4px; }
+.mail-app__reader-to { font-size: 12px; color: var(--body-font-weak); margin-top: 2px; }
+.mail-app__reader-body { padding: 32px 40px 48px; }
+
+/* ─── EMAIL NOTIFICATION WRAPPER — reusable shared shell, mirrored from
+   _shared/queue-screens/review-figma.css (counselor + college-admin use
+   that copy; this prototype keeps its own per its existing .mail-app
+   duplication convention). Figma "Email Msg" 13364:45249. ─── */
+.email-notif-card { width: 600px; max-width: 100%; margin: 0 auto; border: 1px solid var(--border-color); background: var(--white-space-base); }
+
+.email-notif-header { display: flex; align-items: center; gap: 20px; height: 186px; padding: 20px 50px; }
+.email-notif-logo { width: 110px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.email-notif-logo-tile {
+  width: 80px; height: 80px; background: #fff; border: 1px solid var(--border-color); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: var(--body-font-strong);
+}
+.email-notif-headline { flex: 1; font-size: 20px; font-weight: 600; line-height: 1.4; margin: 0; color: var(--body-font-strong); }
+
+.email-notif-rule { height: 1px; background: var(--border-color); }
+
+.email-notif-body { padding: 50px; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+.email-notif-copy { width: 100%; font-size: 16px; line-height: 28px; color: var(--body-font-strong); }
+.email-notif-copy p { margin: 0 0 20px; }
+.email-notif-copy p:last-child { margin-bottom: 0; }
+
+.email-notif-context-row { width: 100%; display: flex; background: var(--alabaster); padding: 10px 20px; font-size: 13px; line-height: 28px; color: var(--body-font-strong); }
+.email-notif-context-row .label { width: 105px; flex-shrink: 0; }
+.email-notif-context-row .value { font-weight: 600; }
+
+.email-notif-cta {
+  width: 100%; height: 50px; background: var(--context-success); border: none; border-radius: 4px;
+  color: #fff; font-size: 14px; font-weight: 700; text-transform: capitalize; cursor: pointer; font-family: inherit;
+}
+
+.email-notif-callout-wrap { padding: 0 50px 50px; width: 100%; }
+.email-notif-callout {
+  background: var(--status-base-4); border: 1px solid var(--status-foreground-4);
+  box-shadow: 0 0 7px rgba(0, 0, 0, .25); padding: 30px; font-size: 16px; line-height: 28px; color: var(--body-font-strong);
+}
+.email-notif-callout strong { font-weight: 700; }
+
+.email-notif-footer { height: 60px; background: var(--context-bold); display: flex; align-items: center; justify-content: center; gap: 30px; }
+.email-notif-footer .logo { color: #fff; font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+.email-notif-footer a { color: #fff; font-size: 10px; font-weight: 600; text-decoration: underline; }
+
+/* ─── DE-tab institution SectionHeaders (image on) + NavToggle count badges ─── */
+.de-inst-header .tasty-section-header.de-inst-sh { width: auto; flex: 0 1 auto; min-width: 0; }
+.de-inst-sh .de-sh-letter { width: 50px; height: 50px; font-size: 18px; }
+
+/* ─── Account-flow minimal topbar (Parchment + Support) ─── */
+.acct-topbar { display: flex; align-items: center; justify-content: space-between; padding: 16px max(50px, calc((100% - 1600px) / 2)); background: var(--white-space-z-index3); border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+.acct-topbar__support { display: inline-flex; align-items: center; gap: 5px; font-size: var(--font-small); color: var(--action-default); text-decoration: none; }
+.acct-topbar__support:hover { text-decoration: underline; }
+
+/* ─── Select Your High School (SectionHeader + TileMemberSelect) ─── */
+/* This page sets its own centered max-width, so override .page-content's full-width
+   centering padding (which would crush the column to min-content on wide monitors). */
+.hs-select-page { max-width: 1180px; margin: 0 auto; width: 100%; padding-left: var(--space-xl); padding-right: var(--space-xl); }
+.hs-select-brand { display: flex; align-items: center; gap: var(--space-md); padding-bottom: var(--space-lg); border-bottom: 1px solid var(--border-color); margin-bottom: var(--space-xl); }
+.hs-select-brand__logo { flex: none; width: 54px; height: 54px; }
+.hs-select-brand__logo img { width: 100%; height: 100%; object-fit: contain; }
+.hs-select-brand__text { margin: 0; font-size: var(--font-small); color: var(--body-font-base); }
+.hs-select-sh { width: auto; margin-bottom: var(--space-lg); }
+/* Tasty SectionHeaderTitle — "large" (lrg) scale (sectionHeaderTitleConstants.ts):
+   graphic 80px · title 30px · subtitle 16px · graphic→title gap 20px */
+.tasty-section-header.is-lrg { gap: 20px; }
+.tasty-section-header.is-lrg .tasty-section-header__graphic { width: 80px; height: 80px; font-size: 64px; }
+.tasty-section-header.is-lrg .tasty-section-header__title { font-size: var(--font-xxLarge); }
+.tasty-section-header.is-lrg .tasty-section-header__sub { font-size: var(--font-medium); }
+.hs-select-page .tasty-member-select { padding: 0; }
+/* TileMemberSelect = canonical .tasty-tile.is-interactive; only the content row is composed */
+.hs-tile { display: flex; align-items: center; gap: var(--space-lg); width: 100%; text-align: left; cursor: pointer; }
+.hs-tile.is-selected { border-color: var(--action-default); box-shadow: inset 0 0 0 1px var(--action-default); }
+.hs-tile__text { display: flex; flex-direction: column; gap: 2px; }
+.hs-select-help { display: flex; align-items: center; gap: 6px; margin-top: var(--space-lg); font-size: var(--font-small); color: var(--body-font-base); }
+.hs-select-help i { color: var(--body-font-weak); }
+.hs-select-help a { color: var(--action-default); text-decoration: none; }
+.hs-select-help a:hover { text-decoration: underline; }
+
+/* ─── External college DE website mock (Path 4b — deliberately NOT Parchment UI) ─── */
+/* Pre-account surfaces (entering email / creating / verifying an account) are not
+   logged in yet — hide the persona/account dropdown but keep the logo + language. */
+#screen-email-entry .parch-header__persona,
+#screen-aer .parch-header__persona,
+#screen-confirm-email .parch-header__persona { display: none; }
+
+.cw { min-height: 100vh; background: var(--white); font-family: var(--font-family-base); }
+.cw-browser { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--white-space-z-index2); border-bottom: 1px solid var(--border-color); }
+.cw-browser__dot { width: 11px; height: 11px; border-radius: 50%; background: var(--border-color); }
+.cw-browser__url { display: flex; align-items: center; gap: 6px; max-width: 540px; margin-left: 14px; padding: 5px 14px; background: var(--white); border: 1px solid var(--border-color); border-radius: 100px; font-size: 12px; color: var(--body-font-weak); }
+.cw-header { padding: 14px 0; border-bottom: 3px solid var(--cider); }
+.cw-header__inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.cw-header__brand { display: flex; align-items: center; gap: 12px; }
+.cw-header__seal { width: 46px; height: 46px; object-fit: contain; }
+.cw-header__name { font-size: 14px; font-weight: 800; line-height: 1.15; color: var(--cider); text-transform: uppercase; letter-spacing: .02em; }
+.cw-nav { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.cw-nav a { font-size: 14px; font-weight: 600; color: var(--body-font-strong); text-decoration: none; }
+.cw-nav a:hover { color: var(--cider); }
+.cw-nav__cta { padding: 8px 20px; background: var(--cider); color: var(--white) !important; border-radius: 4px; }
+.cw-hero { background: var(--cider); color: var(--white); padding: 72px 0; }
+.cw-hero__inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+.cw-hero__eyebrow { text-transform: uppercase; letter-spacing: .1em; font-size: var(--font-small); font-weight: 700; opacity: .85; margin: 0 0 12px; }
+.cw-hero__title { font-size: 44px; font-weight: 800; line-height: 1.1; margin: 0 0 16px; max-width: 660px; }
+.cw-hero__text { font-size: 17px; line-height: 1.6; opacity: .92; margin: 0 0 28px; max-width: 600px; }
+.cw-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border: 0; border-radius: 4px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.cw-btn--primary { background: var(--white); color: var(--cider); box-shadow: 0 2px 8px rgba(0,0,0,.16); }
+.cw-section { max-width: 1100px; margin: 0 auto; padding: 56px 48px; }
+.cw-section--alt { max-width: none; background: var(--white-space-z-index3); padding: 56px 0; }
+.cw-section--alt__inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+.cw-section__title { font-size: 28px; font-weight: 800; color: var(--body-font-strong); margin: 0 0 32px; }
+.cw-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+.cw-step__num { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 50%; background: var(--cider); color: var(--white); font-weight: 800; margin-bottom: 14px; }
+.cw-step__title { font-size: var(--font-medium); font-weight: 700; color: var(--body-font-strong); margin: 0 0 6px; }
+.cw-step__text { font-size: 14px; line-height: 1.55; color: var(--body-font-weak); margin: 0; }
+.cw-benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.cw-benefit i { font-size: var(--font-xxLarge); color: var(--cider); }
+.cw-benefit h3 { font-size: 17px; font-weight: 700; color: var(--body-font-strong); margin: 12px 0 6px; }
+.cw-benefit p { font-size: 14px; line-height: 1.55; color: var(--body-font-weak); margin: 0; }
+.cw-cta { text-align: center; padding: 64px 48px; }
+.cw-cta__title { font-size: var(--font-xxLarge); font-weight: 800; color: var(--body-font-strong); margin: 0 0 8px; }
+.cw-cta__text { font-size: 15px; color: var(--body-font-weak); margin: 0 0 24px; }
+.cw-cta .cw-btn--primary { background: var(--cider); color: var(--white); }
+.cw-footer { padding: 24px 0; background: var(--body-font-strong); color: var(--white-space-z-index2); font-size: 12px; }
+.cw-footer__inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.cw-footer__links a { color: var(--white-space-z-index2); text-decoration: none; }
+@media (max-width: 860px) { .cw-steps { grid-template-columns: repeat(2, 1fr); } .cw-benefits { grid-template-columns: 1fr; } }
+
+/* ─── Parchment sign-in (login) — mirrored from counselor/admin ─── */
+.login-screen-wrap { flex: 1; min-height: 100vh; background: var(--white-space-base); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+.login-logo { display: flex; align-items: center; justify-content: center; margin-bottom: 28px; }
+.login-card { background: var(--white-space-base); border: 1px solid var(--border-color); border-top: 3px solid var(--c-brand); border-radius: var(--radius-md); box-shadow: var(--shadow-pop); width: 100%; max-width: 480px; padding: 0; overflow: hidden; }
+/* Sign-in card sections — Figma "1.0.1 Counselor Login" (17649:228774): 40px body, grey legal footer. */
+.login-card__body { padding: 40px; }
+.login-legal { background: var(--white-space-z-index2); margin: 0; padding: 30px 40px; font-size: 13px; line-height: 1.5; color: var(--body-font-weak); }
+.login-legal a { color: var(--action-default); font-weight: 600; text-decoration: none; }
+.login-legal a:hover { text-decoration: underline; }
+.login-heading { font-size: 30px; font-weight: 300; color: var(--body-font-base); margin: 0 0 20px; text-align: center; }
+.login-field { margin-bottom: 15px; }
+.login-forgot { display: block; text-align: right; font-size: var(--font-small); color: var(--c-brand); text-decoration: none; margin: 6px 0 20px; }
+.login-forgot:hover { text-decoration: underline; }
+
+/* email-entry demo helper (existing-account vs new-email) */
+.eml-demo {
+  display: flex; align-items: flex-start; gap: 10px;
+  margin: var(--space-lg) 0 0;
+  padding: 12px 14px;
+  background: var(--white-space-z-index3);
+  border: 1px dashed var(--action-default);
+  border-radius: var(--radius-md);
+  font-size: 12px; color: var(--body-font-base); line-height: 1.5;
+}
+.eml-demo__badge {
+  flex: none; margin-top: 1px;
+  display: inline-flex; align-items: center;
+  padding: 2px 7px; border-radius: 4px;
+  background: var(--action-default); color: var(--white);
+  font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.eml-demo__body { flex: 1; }
+.eml-demo__link { background: none; border: 0; padding: 0; font: inherit; color: var(--action-default); cursor: pointer; text-decoration: underline; }

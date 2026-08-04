@@ -1,0 +1,44 @@
+/* ─────────────────────────────────────────────────────────────
+   DecisionTree — a branching choice: a question + large interactive
+   choice tiles. Rebuilt 1:1 from the Figma "DecisionTree" DS component
+   (node 16893:262949). The cards ARE the canonical Tasty tile
+   (.tasty-tile.is-interactive — bg/border/radius come from the kit);
+   these rules only add the DecisionTree layout, sizing and typography.
+   Shared by both DE prototypes' Add-Learners screen.
+   ───────────────────────────────────────────────────────────── */
+.decision-tree {
+  display: flex; flex-direction: column;
+  gap: 4px;                 /* space-xs */
+  padding: 24px 0;          /* space-lg block padding */
+}
+.decision-tree__question {
+  margin: 0; padding: 8px 0;   /* SectionHeaderTitle: space-sm block padding */
+  font-size: 30px; font-weight: 700; line-height: normal;
+  color: var(--c-text-strong);              /* body-font-strong */
+}
+.decision-tree__cards {
+  display: flex; gap: 16px; align-items: stretch; flex-wrap: wrap;
+}
+/* DecisionTreeBaseTile — the .tasty-tile carries bg/border/10px radius. */
+.decision-tree__tile {
+  flex: 1 0 0; min-width: 320px; min-height: 300px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  padding: 50px;                            /* space-jumbo */
+  text-align: center; font-family: inherit;
+  box-shadow: 0 4px 10px 0 var(--white-space-z-index4);   /* TileElevation */
+}
+.decision-tree__icon {
+  height: 124px; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-brand);                    /* action-default — glyph recolors via currentColor */
+}
+.decision-tree__title {
+  font-size: 20px; line-height: 26px; font-weight: 600;
+  color: var(--c-brand);                    /* action-default */
+  text-transform: capitalize;
+}
+.decision-tree__desc {
+  font-size: 16px; line-height: 20px; font-weight: 400;
+  color: var(--c-text-muted);               /* body-font-weak */
+  text-transform: capitalize;
+}

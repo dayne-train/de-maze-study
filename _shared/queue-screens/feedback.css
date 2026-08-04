@@ -1,0 +1,250 @@
+/* styles/screens/feedback.css — extracted from app.css (was lines 816-1169). Cascade order preserved via index.html link order. */
+     APPROVE SUCCESS SCREEN — Post-approval confirmation and next-action prompts
+  ───────────────────────────────────────────── */
+  .approve-success-wrap {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    padding: 60px max(50px, calc((100% - 1600px) / 2));
+  }
+  .approve-success-card {
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-pop);
+    padding: 48px 60px; text-align: center;
+    max-width: 520px; width: 100%;
+  }
+  .approve-success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--c-success-bg); color: var(--c-success);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; margin: 0 auto 24px;
+  }
+  .approve-success-title {
+    font-size: 24px; font-weight: 700; margin: 0 0 8px; color: var(--c-text-strong);
+  }
+  .approve-success-name   { font-size: 15px; color: var(--c-text-muted); margin: 0 0 4px; }
+  .approve-success-course { font-size: var(--font-small); color: var(--c-text-subtle); margin: 0 0 36px; }
+  .approve-success-btns   { display: flex; flex-direction: column; gap: 10px; }
+  .next-hint { display: block; font-size: var(--font-xSmall); color: var(--c-text-subtle); font-weight: 400; margin-top: 2px; }
+  .approve-all-done { font-size: var(--font-small); color: var(--c-text-subtle); margin-top: 12px; }
+
+  /* ─── Empty state ─── */
+  .empty-state {
+    text-align: center; padding: 80px 40px;
+    color: var(--c-text-muted);
+  }
+  .empty-state i { font-size: 48px; color: var(--c-border-strong); margin-bottom: 16px; display: block; }
+  .empty-state h3 { font-size: var(--font-medium); font-weight: 600; color: var(--c-text); margin: 0 0 6px; }
+  .empty-state p { font-size: var(--font-small); margin: 0; }
+
+  /* ─── modal-info-note — kept for reuse ─── */
+  .modal-info-note {
+    background: var(--c-brand-bg); border: 1px solid var(--c-brand-border);
+    border-radius: var(--radius-md); padding: 12px 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 12px; color: var(--c-info-text);
+  }
+  .modal-info-note i { font-size: var(--font-medium); flex-shrink: 0; margin-top: 1px; }
+
+  /* Denial reason field  [Tasty TextArea atom]. margin-top gives breathing room below the
+     info banner above it — .tasty-banner carries no margin of its own. */
+  .deny-field-label {
+    font-size: 12px; font-weight: 600; color: var(--c-text);
+    display: flex; align-items: center; gap: 4px; margin: 24px 0 6px;
+  }
+  .deny-field-label .required { color: var(--c-danger); }
+
+  /* Warning info note — warning context */
+  .modal-warn-note {
+    background: var(--c-warning-bg); border: 1px solid var(--c-warning-border);
+    border-radius: var(--radius-md); padding: 12px 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 12px; color: var(--c-warning-text); margin-top: 16px;
+  }
+  .modal-warn-note i { font-size: var(--font-medium); flex-shrink: 0; margin-top: 1px; }
+
+  /* Toast — now the canonical Tasty Toast component (.tasty-toast / .tasty-toast-stack)
+     from the shared kit (styles/tasty-components.css). showToast() in dev.js renders it. */
+
+  /* ─── Dev panel ─── */
+  .dev-panel-wrap {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 9000;
+    font-family: var(--font-family);
+  }
+  .dev-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #0E1721; /* @instBlack */
+    color: #FFF;
+    border: none;
+    padding: 10px 14px;
+    border-radius: var(--radius-pill);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-pop);
+    transition: background var(--t-quick);
+  }
+  .dev-toggle:hover { background: #1A2C40; }
+  .dev-toggle i { font-size: 14px; }
+
+  .dev-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    width: 280px;
+    background: #0E1721;
+    color: #DDD;
+    border-radius: var(--radius-lg);
+    padding: 0;
+    box-shadow: var(--shadow-pop);
+    border: 1px solid #1F2C3D;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .dev-panel.hidden { display: none; }
+
+  .dev-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #1F2C3D;
+    position: sticky;
+    top: 0;
+    background: #0E1721;
+    z-index: 1;
+  }
+  .dev-panel-title {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #FFF;
+  }
+  .dev-panel-close {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    transition: color var(--t-quick), background var(--t-quick);
+  }
+  .dev-panel-close:hover { color: #FFF; background: #1F2C3D; }
+  .dev-panel-close i { font-size: 14px; }
+
+  .dev-section {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1F2C3D;
+  }
+  .dev-section:last-child { border-bottom: none; }
+  .dev-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6E7B8B;
+    margin: 0 0 8px;
+  }
+
+  .dev-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .dev-btn-row--vertical { flex-direction: column; gap: 6px; }
+
+  .dev-btn {
+    background: #1F2C3D;
+    color: #DDD;
+    border: 1px solid #2A3A52;
+    border-radius: var(--radius-md);
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: var(--font-xSmall);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--t-quick), color var(--t-quick), border-color var(--t-quick);
+  }
+  .dev-btn:hover { background: #2A3A52; color: #FFF; }
+  .dev-btn:focus-visible { outline: 2px solid var(--c-brand); outline-offset: 2px; }
+  .dev-btn.active {
+    background: var(--c-brand);
+    border-color: var(--c-brand);
+    color: #FFF;
+  }
+  .dev-btn.active:hover { background: var(--c-brand-dark); border-color: var(--c-brand-dark); }
+
+  .dev-btn--action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: left;
+    width: 100%;
+    padding: 8px 12px;
+  }
+  .dev-btn--action i { font-size: 14px; flex-shrink: 0; }
+
+  /* Status column badges in table — MVP keeps only consent + lifecycle status */
+  .col-status-badge { width: 150px; vertical-align: middle; }
+  .status-badges { display: flex; flex-direction: column; gap: 3px; }
+  /* Status badges migrated to .tasty-status-tag (StatusTag) — see tasty-components.css.
+     .status-badges (column wrapper) + td.col-status-badge are kept. */
+  /* Denial reason modal */
+  /* Denial / cancellation modal — shell uses the Tasty modal component (modals.css).
+     Below: the audit-trail + reason content that lives in the modal body. */
+  .denial-audit-trail {
+    display: flex; gap: 0;
+    border: 1px solid var(--c-border); border-radius: var(--radius-md);
+    overflow: hidden; margin-bottom: 20px;
+  }
+  .denial-audit-item {
+    flex: 1; padding: 14px 20px;
+    border-right: 1px solid var(--c-border);
+  }
+  .denial-audit-item:last-child { border-right: none; }
+  .denial-audit-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--c-text-subtle); margin: 0 0 4px;
+  }
+  .denial-audit-value {
+    font-size: var(--font-small); font-weight: 600; color: var(--c-text-strong); margin: 0;
+  }
+  .denial-audit-value.tag {
+    display: inline-flex; align-items: center;
+    background: var(--c-danger-bg); color: var(--c-danger-text);
+    border: 1px solid var(--c-danger-border);
+    border-radius: 4px; padding: 2px 8px; font-size: var(--font-xSmall); font-weight: 600;
+  }
+  .denial-section-label {
+    font-size: var(--font-xSmall); font-weight: 700; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--c-text-subtle); margin: 0 0 10px;
+  }
+  .denial-reason-body {
+    background: var(--c-surface-dim); border: 1px solid var(--c-border);
+    border-radius: var(--radius-md); padding: 16px;
+    font-size: 14px; line-height: 1.7; color: var(--c-text);
+    margin: 0; font-style: italic;
+  }
+
+  /* Drawer inline notices (replaces heavy alert banner) */
+  .banner-list { display: flex; flex-direction: column; gap: 6px; }
+  .banner {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 9px 12px; border-radius: var(--radius-md);
+    font-size: 12px; line-height: 1.5;
+  }
+  /* .banner--info / .banner--warning removed — unused (dead) bespoke variants. */
+  .banner i { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* Drawer eligibility — clean ruled list, no individual boxes */

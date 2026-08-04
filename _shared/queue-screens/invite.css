@@ -1,0 +1,289 @@
+/* styles/screens/invite.css — extracted from app.css (was lines 1665-2046). Cascade order preserved via index.html link order. */
+  /* ─────────────────────────────────────────────
+     INVITE FLOW — CSS for all three invite steps + summary and cancel modals
+     Screens: invite-learners → invite-college → invite-groups
+  ───────────────────────────────────────────── */
+
+/* Back link as page content — no bar, aligns with body */
+.invite-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.invite-back-link:hover { color: var(--c-brand-dark); }
+.invite-back-link i { font-size: 14px; }
+
+/* Step nav — plain inline text, no bar */
+.invite-step-nav {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--c-text-subtle);
+  margin-top: -16px;
+}
+
+.wf-crumb {
+  color: var(--c-text-subtle);
+}
+
+.wf-crumb.active {
+  color: var(--c-brand-dark);
+  font-weight: 600;
+}
+
+.wf-crumb-sep {
+  color: var(--c-border-strong);
+  font-size: 12px;
+}
+
+.missing-data-flag {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--c-warning-text);
+  white-space: nowrap;
+}
+
+.missing-data-flag i {
+  font-size: var(--font-small);
+  color: var(--c-warning);
+  flex-shrink: 0;
+}
+
+/* Matches Figma "Edit" — Tasty Button Outline xs, Standard context */
+
+/* TileMemberSelect — matches Figma component exactly */
+.college-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.college-tile {
+  height: 175px;
+  background: var(--c-surface-subtle);      /* $white-space-z-index1 @fcfcfc */
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px 0 var(--c-surface-z1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 40px;
+  transition: border-color .15s, box-shadow .15s;
+  overflow: hidden;
+}
+
+.college-tile:hover {
+  border-color: var(--c-brand);
+  box-shadow: 0 4px 16px 0 var(--c-brand-bg);
+}
+
+.college-tile.selected {
+  border-color: var(--c-brand);
+  box-shadow: 0 0 0 3px var(--c-brand-bg), 0 4px 10px 0 var(--c-surface-z1);
+}
+
+/* ImageMemberLogo — 80×80 white square, 1px border, 4px padding */
+.college-tile-logo {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--c-text-strong);
+}
+
+.college-tile-name {
+  font-size: var(--font-large);
+  font-weight: 600;
+  color: var(--c-text-strong);
+  margin: 0 0 2px;
+}
+
+.college-tile-city {
+  font-size: var(--font-small);
+  color: var(--c-text-muted);
+  margin: 0;
+}
+
+/* ─── Groups form card — matches Figma "Select A Group" container ─── */
+.invite-groups-card {
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  background: var(--c-surface);
+  overflow: hidden;
+}
+
+.invite-groups-card-header {
+  padding: 14px 24px;
+  background: var(--c-surface-z1);
+  border-bottom: 1px solid var(--c-border);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-text-muted);
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+.invite-groups-card-body {
+  padding: 28px 40px;
+}
+
+/* College identity row inside card — logo + name/city/url */
+.invite-groups-college-identity {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+/* ImageMemberLogo — 80×80 white square matching TileMemberSelect */
+.invite-groups-college-logo {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--c-text-strong);
+}
+
+.invite-groups-college-name {
+  font-size: var(--font-large);
+  font-weight: 600;
+  color: var(--c-text-strong);
+  margin: 0 0 2px;
+}
+
+.invite-groups-college-city {
+  font-size: var(--font-small);
+  color: var(--c-text-muted);
+  margin: 0 0 4px;
+}
+
+.invite-groups-college-url {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-small);
+  color: var(--c-brand);
+  text-decoration: none;
+}
+.invite-groups-college-url:hover { text-decoration: underline; }
+.invite-groups-college-url i { font-size: 12px; }
+
+.invite-groups-section-heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-text-strong);
+  margin: 0 0 4px;
+}
+
+.invite-groups-card-footer {
+  padding: 20px 40px 24px;
+  border-top: 1px solid var(--c-border);
+  display: flex;
+  justify-content: center;
+  background: var(--c-surface);
+}
+
+/* Continue button — full-width, brand green when active, gray when disabled */
+
+/* Inline avatar for invite learner table rows — matches .user-avatar circle pattern */
+.table-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: var(--font-xSmall);
+  font-weight: 700;
+  flex-shrink: 0;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* Invite-summary modal shell now uses the Tasty modal component (.tasty-modal*).
+   Only the body content classes below remain. */
+.invite-summary-stats {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.invite-summary-stat {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.invite-summary-stat + .invite-summary-stat {
+  border-left: 1px solid var(--c-border);
+}
+
+.invite-summary-stat-label {
+  font-size: 12px;
+  color: var(--c-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 600;
+  margin: 0;
+}
+
+.invite-summary-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--c-text-strong);
+  margin: 0;
+}
+
+.invite-summary-stat-sub {
+  font-size: var(--font-small);
+  color: var(--c-text-muted);
+  margin: 0;
+}
+
+.invite-summary-note {
+  font-size: 14px;
+  color: var(--c-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Invite-cancel + invite-summary footers/shells now use the Tasty modal component. */

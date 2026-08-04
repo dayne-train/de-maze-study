@@ -1,0 +1,1234 @@
+/* styles/screens/review-figma.css — extracted from app.css (was lines 2303-3466). Cascade order preserved via index.html link order. */
+/* ════════════════════════════════════════════════════════════════════
+   SIMPLIFIED REVIEW SCREEN
+   Per Figma 02-03-EligibilityForm (10321:95079).
+   Single application + bulk both use this layout.
+   ════════════════════════════════════════════════════════════════════ */
+
+.review-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ─── Identity strip ─── (white bg, 50px top padding, max 1600) */
+.review-identity {
+  display: flex;
+  align-items: stretch;
+  gap: 1px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 50px 50px 0;
+  background: var(--c-surface);
+}
+
+.review-identity-left {
+  flex: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-right: 20px;
+  min-width: 0;
+}
+
+.review-identity-statement-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.review-identity-substatement {
+  font-size: var(--font-small);
+  color: var(--c-text-muted);
+  margin: 0;
+  font-weight: 400;
+}
+
+.review-member-logo {
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+  background: var(--c-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.review-member-logo-inner {
+  width: 80px;
+  height: 80px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-surface);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.review-member-logo-inner--count {
+  background: var(--c-brand);
+  color: var(--c-surface);
+  font-size: 32px;
+  border: none;
+}
+
+.review-identity-statement {
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--c-text);
+  margin: 0;
+  line-height: 1.45;
+}
+.review-identity-statement strong { font-weight: 600; }
+
+.review-identity-divider {
+  width: 1px;
+  background: var(--c-border);
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.review-identity-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 20px;
+}
+
+.review-id-kv {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  font-size: var(--font-small);
+  line-height: 1.6;
+}
+
+.review-id-kv-label {
+  font-weight: 400;
+  color: var(--c-text-muted);
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.review-id-kv-value {
+  flex: 1;
+  font-weight: 600;
+  color: var(--c-text);
+}
+
+/* ─── Action banner ─── (dark "context-bold" #555 bg, 50px tall) */
+/* Outer = transparent, centered, same 50px side insets as the identity strip + body,
+   so the dark bar lines up with the content (the "8" box ↔ metrics), not full-bleed. */
+.review-action-banner {
+  width: 100%;
+  max-width: 1600px;
+  margin: 20px auto 0;
+  padding: 0 50px;
+}
+.review-action-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 8px 16px;
+  background: var(--context-bold);
+  color: var(--c-surface);
+  font-size: var(--font-small);
+  line-height: 1.4;
+}
+.review-action-banner-inner > i { font-size: var(--font-medium); flex-shrink: 0; }
+.review-action-banner-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+.review-action-banner strong {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-right: 6px;
+}
+
+/* ─── Body ─── (max 1600, centered, 50px padding) */
+.review-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 50px;
+  flex: 1;
+}
+
+.review-title {
+  font-size: var(--font-xxLarge);
+  font-weight: 600;
+  color: var(--c-text-strong);
+  text-align: center;
+  margin: 0 0 10px;
+  padding: 10px;
+  width: 100%;
+}
+
+/* ─── Participation Agreement (600px-wide column) ─── */
+.review-agreement {
+  width: 600px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.review-agreement-title {
+  font-size: var(--font-medium);
+  font-weight: 700;
+  color: var(--c-text-strong);
+  margin: 0;
+  line-height: 28px;
+}
+
+.review-agreement-intro {
+  font-size: var(--font-medium);
+  font-weight: 400;
+  color: var(--c-text);
+  margin: 0 0 16px;
+  line-height: 28px;
+}
+
+.review-agreement-list {
+  list-style: disc;
+  margin: 0 0 16px;
+  padding-left: 24px;
+  font-size: var(--font-medium);
+  color: var(--c-text);
+  line-height: 28px;
+}
+.review-agreement-list li { margin-left: 0; }
+
+.review-agree-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.review-agree-row input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--c-border);
+  border-radius: 2px;
+  background: var(--c-surface);
+  cursor: pointer;
+  accent-color: var(--c-brand);
+  flex-shrink: 0;
+}
+.review-agree-row label {
+  font-size: var(--font-medium);
+  font-weight: 400;
+  color: var(--c-text);
+  cursor: pointer;
+}
+
+/* ─── Divider ─── */
+.review-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--c-border);
+  border: none;
+  margin: 30px 0;
+}
+
+/* ─── Action zone (Approve / Reject) ─── */
+.review-action-zone {
+  width: 100%;
+  background: var(--c-surface-subtle);
+  padding: 40px 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.review-action-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* ─── Bulk student list ─── (reuses bulk-student-row from prior version) */
+.bulk-student-list-box {
+  width: 100%;
+  max-width: 760px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.bulk-student-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--c-border);
+}
+.bulk-student-row:last-child { border-bottom: none; }
+
+.bulk-student-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-surface);
+  font-weight: 700;
+  font-size: var(--font-small);
+  flex-shrink: 0;
+}
+
+.bulk-student-info { flex: 1; min-width: 0; }
+.bulk-student-name { font-size: 14px; font-weight: 600; color: var(--c-text-strong); }
+.bulk-student-course { font-size: 12px; color: var(--c-text-muted); margin-top: 2px; }
+
+/* ════════════════════════════════════════════════════════════════════
+   BULK APPROVE v2 — Approve == grant eligibility
+   Attestation framing (no checkbox) + split Ready / Needs-attention
+   lists, grouped per exchange network, requirements linkable on demand.
+   ════════════════════════════════════════════════════════════════════ */
+.bulk-elig-wrap {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 0 0;
+}
+
+/* Attestation banner — replaces the old "I agree" checkbox.
+   Approving IS the eligibility attestation. */
+.bulk-attest {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--c-info-bg);
+  border: 1px solid var(--c-brand-border);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin: 0 0 22px;
+}
+.bulk-attest > i { color: var(--c-brand); font-size: var(--font-large); margin-top: 1px; flex-shrink: 0; }
+.bulk-attest-text { font-size: var(--font-small); color: var(--c-text); line-height: 1.55; }
+.bulk-attest-text strong { font-weight: 700; color: var(--c-text-strong); }
+
+/* Summary pills (Variation B) */
+.bulk-summary { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 18px; }
+.bulk-summary-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: var(--radius-pill);
+  font-size: var(--font-small); font-weight: 700; border: 1px solid transparent;
+}
+.bulk-summary-pill i { font-size: var(--font-medium); }
+.bulk-summary-pill.is-ready { background: var(--c-success-bg); color: var(--c-success-text); border-color: var(--c-success-border); }
+.bulk-summary-pill.is-hold  { background: var(--c-warning-bg); color: var(--c-warning-text); border-color: var(--c-warning-border); }
+
+/* Network card — bulk approve is grouped by institution (network-first, Corey review #1) */
+.bulk-net {
+  border: 1px solid var(--c-border); border-radius: var(--radius-md);
+  margin: 0 0 16px; overflow: hidden; background: var(--c-surface);
+}
+.bulk-net-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 13px 16px; background: var(--c-surface-subtle);
+  border-bottom: 1px solid var(--c-border);
+}
+.bulk-net-name { font-size: 14px; font-weight: 700; color: var(--c-text-strong); }
+.bulk-net-meta { font-size: 12px; color: var(--c-text-subtle); margin-top: 2px; }
+.bulk-req-link {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-family: var(--font-family); font-size: var(--font-small); font-weight: 600;
+  color: var(--c-brand); white-space: nowrap;
+}
+.bulk-req-link:hover { text-decoration: underline; }
+.bulk-req-link i { font-size: 15px; }
+
+/* Split sections (Variation A) */
+.bulk-split {
+  border: 1px solid var(--c-border); border-radius: var(--radius-md);
+  margin: 0 0 16px; overflow: hidden; background: var(--c-surface);
+}
+.bulk-split-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 16px; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--c-border);
+}
+.bulk-split-head i { font-size: var(--font-medium); }
+.bulk-split-head.is-ready { color: var(--c-success-text); background: var(--c-success-bg); }
+.bulk-split-head.is-attention { color: var(--c-warning-text); background: var(--c-warning-bg); }
+.bulk-split-sub { margin-left: auto; font-weight: 600; text-transform: none; letter-spacing: 0; opacity: 0.8; font-size: var(--font-xSmall); }
+
+/* Learner eligibility row */
+.bulk-elig-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-top: 1px solid var(--c-border);
+}
+.bulk-elig-row:first-child { border-top: none; }
+/* .bulk-elig-avatar retired Jun 30 — bulk-approve rows now use .tasty-persona-icon (DS). */
+.bulk-elig-info { flex: 1; min-width: 0; }
+.bulk-elig-name { font-size: 14px; font-weight: 600; color: var(--c-text-strong); }
+.bulk-elig-sub { font-size: 12px; color: var(--c-text-subtle); margin-top: 2px; }
+.bulk-elig-reason {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--c-warning-text); margin-top: 5px; font-weight: 500;
+}
+.bulk-elig-reason i { font-size: 14px; flex-shrink: 0; }
+.bulk-elig-more { color: var(--c-text-subtle); font-weight: 600; }
+
+/* Status pill on the right */
+.bulk-pill {
+  display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font-size: var(--font-xSmall); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.bulk-pill i { font-size: var(--font-small); }
+.bulk-pill.is-ready { background: var(--c-success-bg); color: var(--c-success-text); }
+.bulk-pill.is-hold  { background: var(--c-warning-bg); color: var(--c-warning-text); }
+
+/* Held-from-approval note above the action zone */
+.bulk-action-note {
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: var(--font-small); color: var(--c-text-muted); line-height: 1.5;
+  background: var(--c-warning-bg); border: 1px solid var(--c-warning-border);
+  border-radius: var(--radius-md); padding: 12px 14px; margin: 4px 0 22px;
+}
+.bulk-action-note i { color: var(--c-warning-text); font-size: var(--font-medium); margin-top: 1px; flex-shrink: 0; }
+.bulk-action-note strong { color: var(--c-text-strong); font-weight: 700; }
+.bulk-elig-wrap .review-action-zone { background: transparent; padding: 8px 0 60px; }
+
+/* Bulk success — counts + held-for-review */
+.bulk-success-stats { display: flex; gap: 12px; justify-content: center; margin: 8px 0 22px; }
+.bulk-success-stat {
+  flex: 1; max-width: 150px;
+  border: 1px solid var(--c-border); border-radius: var(--radius-md);
+  padding: 14px 10px;
+}
+.bulk-success-stat.is-ready { background: var(--c-success-bg); border-color: var(--c-success-border); }
+.bulk-success-stat.is-hold  { background: var(--c-warning-bg); border-color: var(--c-warning-border); }
+.bss-num { display: block; font-size: var(--font-xxLarge); font-weight: 800; line-height: 1; }
+.bulk-success-stat.is-ready .bss-num { color: var(--c-success-text); }
+.bulk-success-stat.is-hold  .bss-num { color: var(--c-warning-text); }
+.bss-lbl { display: block; font-size: var(--font-xSmall); font-weight: 700; margin-top: 7px; color: var(--c-text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+.bulk-success-held-note {
+  display: flex; gap: 7px; align-items: flex-start; justify-content: center;
+  font-size: 12px; color: var(--c-text-subtle); margin: 0 0 24px; line-height: 1.5;
+}
+.bulk-success-held-note i { color: var(--c-warning-text); font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.bulk-success-held-note strong { color: var(--c-text); font-weight: 700; }
+
+/* ════════════════════════════════════════════════════════════════════
+   §41 MAIL APP — Entry "Review Applications" screen
+   ════════════════════════════════════════════════════════════════════
+   Gmail-style 3-pane email browser. The Parchment notification is the
+   selected email; clicking the CTA inside it advances to login.
+   ════════════════════════════════════════════════════════════════════ */
+.mail-app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #e5e5e5;
+  font-family: var(--font-family);
+}
+
+/* ─── Top bar (generic mail client chrome) ─── */
+.mail-app__topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 56px;
+  padding: 0 16px;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  flex-shrink: 0;
+}
+
+.mail-app__traffic { display: flex; gap: 8px; }
+.mail-app__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.mail-app__dot--red    { background: #FF5F57; }
+.mail-app__dot--yellow { background: #FEBC2E; }
+.mail-app__dot--green  { background: #28C840; }
+
+.mail-app__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-text-strong);
+  letter-spacing: -0.01em;
+  padding-left: 16px;
+  border-left: 1px solid var(--c-border);
+  margin-left: 8px;
+}
+.mail-app__title i { font-size: 18px; color: var(--c-brand); }
+
+.mail-app__search {
+  flex: 1;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 16px;
+  background: var(--c-page);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  margin: 0 auto;
+}
+.mail-app__search:focus-within {
+  background: var(--c-surface);
+  border-color: var(--c-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.mail-app__search i { color: var(--c-text-subtle); font-size: 18px; }
+.mail-app__search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font: 400 14px var(--font-family);
+  color: var(--c-text);
+}
+
+.mail-app__user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--c-brand);
+  color: var(--c-surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--font-small);
+}
+
+/* ─── Body — 3-column flex (sidebar | list | reader) ─── */
+.mail-app__body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+/* ─── Sidebar ─── */
+.mail-app__sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+
+.mail-app__compose {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 20px;
+  background: var(--c-brand);
+  color: var(--c-surface);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background var(--t-quick), box-shadow var(--t-quick);
+}
+.mail-app__compose:hover {
+  background: var(--c-brand-dark);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+.mail-app__compose i { font-size: 18px; }
+
+.mail-app__folders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mail-app__folder {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-small);
+  font-weight: 500;
+  color: var(--c-text);
+  cursor: pointer;
+  transition: background var(--t-quick);
+}
+.mail-app__folder:hover { background: var(--c-surface-subtle); }
+.mail-app__folder i { font-size: 18px; color: var(--c-text-muted); flex-shrink: 0; }
+.mail-app__folder span:nth-child(2) { flex: 1; }
+
+.mail-app__folder--active {
+  background: var(--c-brand-bg);
+  color: var(--c-brand);
+  font-weight: 700;
+}
+.mail-app__folder--active i { color: var(--c-brand); }
+
+.mail-app__badge {
+  font-size: var(--font-xSmall);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--c-brand);
+  color: var(--c-surface);
+}
+.mail-app__badge--muted {
+  background: var(--c-surface-z1);
+  color: var(--c-text-muted);
+}
+.mail-app__folder--active .mail-app__badge {
+  background: var(--c-brand);
+  color: var(--c-surface);
+}
+
+.mail-app__section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-text-subtle);
+  margin: 20px 12px 8px;
+}
+
+.mail-app__label-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+/* ─── Email list pane ─── */
+.mail-app__list {
+  width: 380px;
+  flex-shrink: 0;
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.mail-app__list-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--c-border);
+  font-size: var(--font-small);
+  font-weight: 700;
+  color: var(--c-text-strong);
+  position: sticky;
+  top: 0;
+  background: var(--c-surface);
+}
+.mail-app__list-count {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--c-text-muted);
+}
+
+.mail-app__item {
+  display: grid;
+  grid-template-columns: auto auto 140px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--c-border);
+  cursor: pointer;
+  transition: background var(--t-quick);
+}
+.mail-app__item:hover { background: var(--c-surface-subtle); }
+.mail-app__item--selected {
+  background: var(--c-brand-bg);
+}
+.mail-app__item--selected:hover { background: var(--c-brand-bg); }
+
+.mail-app__item-star {
+  font-size: var(--font-medium);
+  color: var(--c-text-subtle);
+}
+.mail-app__item-star--filled { color: #F5C44C; }
+
+.mail-app__item-from {
+  font-size: var(--font-small);
+  font-weight: 600;
+  color: var(--c-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mail-app__item--unread .mail-app__item-from {
+  font-weight: 700;
+  color: var(--c-text-strong);
+}
+
+.mail-app__item-meta {
+  min-width: 0;
+}
+.mail-app__item-subject {
+  font-size: var(--font-small);
+  color: var(--c-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mail-app__item--unread .mail-app__item-subject {
+  font-weight: 700;
+  color: var(--c-text-strong);
+}
+
+.mail-app__item-preview {
+  font-size: 12px;
+  color: var(--c-text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mail-app__item-time {
+  font-size: var(--font-xSmall);
+  color: var(--c-text-muted);
+  white-space: nowrap;
+}
+.mail-app__item--unread .mail-app__item-time {
+  font-weight: 700;
+  color: var(--c-text);
+}
+
+/* ─── Reading pane ─── */
+.mail-app__reader {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-surface);
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.mail-app__reader-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+.mail-app__reader-spacer { flex: 1; }
+
+.mail-app__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--c-text-muted);
+  cursor: pointer;
+  transition: background var(--t-quick), color var(--t-quick);
+}
+.mail-app__icon-btn:hover { background: var(--c-surface-subtle); color: var(--c-text-strong); }
+.mail-app__icon-btn i { font-size: 18px; }
+
+.mail-app__reader-header {
+  padding: 24px 40px 16px;
+  border-bottom: 1px solid var(--c-border);
+}
+.mail-app__reader-subject {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--c-text-strong);
+  margin: 0 0 16px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.mail-app__reader-from {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mail-app__reader-sender-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--c-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 8px;
+}
+.mail-app__reader-sender-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mail-app__reader-meta {
+  font-size: var(--font-small);
+  line-height: 1.4;
+  color: var(--c-text);
+}
+.mail-app__reader-meta strong { color: var(--c-text-strong); }
+.mail-app__reader-email {
+  color: var(--c-text-muted);
+  font-size: 12px;
+  margin-left: 4px;
+}
+.mail-app__reader-to {
+  font-size: 12px;
+  color: var(--c-text-muted);
+  margin-top: 2px;
+}
+
+.mail-app__reader-body {
+  padding: 32px 40px 48px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   EMAIL NOTIFICATION WRAPPER — the reusable shared component rendered
+   inside the mail-app reading pane, one shell for every persona (Figma
+   "Email Msg" — Learner 13364:45249, Parent 13364:54249, HS Counselor
+   13364:53392). Persona copy/CTA/context-row live in each screen's HTML;
+   only this structure is shared. Measurements verified via Figma
+   get_design_context (186px header, 50px body padding, 50px CTA height,
+   30px callout padding, etc. all match exactly).
+   ───────────────────────────────────────────────────────────────────── */
+.email-notif-card { width: 600px; max-width: 100%; margin: 0 auto; border: 1px solid var(--c-border); background: var(--c-surface); }
+
+.email-notif-header { display: flex; align-items: center; gap: 20px; height: 186px; padding: 20px 50px; }
+.email-notif-logo { width: 110px; height: 110px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.email-notif-logo-tile {
+  width: 80px; height: 80px; background: #fff; border: 1px solid var(--c-border); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: var(--body-font-strong);
+}
+.email-notif-headline { flex: 1; font-size: 20px; font-weight: 600; line-height: 1.4; margin: 0; color: var(--body-font-strong); }
+
+.email-notif-rule { height: 1px; background: var(--c-border); }
+
+.email-notif-body { padding: 50px; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+.email-notif-copy { width: 100%; font-size: 16px; line-height: 28px; color: var(--body-font-strong); }
+.email-notif-copy p { margin: 0 0 20px; }
+.email-notif-copy p:last-child { margin-bottom: 0; }
+
+.email-notif-context-row { width: 100%; display: flex; background: var(--alabaster); padding: 10px 20px; font-size: 13px; line-height: 28px; color: var(--body-font-strong); }
+.email-notif-context-row .label { width: 105px; flex-shrink: 0; }
+.email-notif-context-row .value { font-weight: 600; }
+
+.email-notif-cta {
+  width: 100%; height: 50px; background: var(--c-success); border: none; border-radius: 4px;
+  color: #fff; font-size: 14px; font-weight: 700; text-transform: capitalize; cursor: pointer; font-family: inherit;
+}
+
+.email-notif-callout-wrap { padding: 0 50px 50px; width: 100%; }
+.email-notif-callout {
+  background: var(--status-base-4); border: 1px solid var(--status-foreground-4);
+  box-shadow: 0 0 7px rgba(0, 0, 0, .25); padding: 30px; font-size: 16px; line-height: 28px; color: var(--body-font-strong);
+}
+.email-notif-callout strong { font-weight: 700; }
+
+.email-notif-footer { height: 60px; background: var(--context-bold); display: flex; align-items: center; justify-content: center; gap: 30px; }
+.email-notif-footer .logo { color: #fff; font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+.email-notif-footer a { color: #fff; font-size: 10px; font-weight: 600; text-decoration: underline; }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   §41 UNIFIED APPLICATION DETAIL PAGE  — grep "appdetail"
+   Two-column "Application Review" (admin format) reused for every stage.
+   ════════════════════════════════════════════════════════════════════ */
+
+.appdetail {
+  display: flex;
+  gap: 56px;
+  align-items: flex-start;
+  width: 100%;
+  /* Match the workflow header / page-content 1600px band so the body's left edge
+     aligns with "Back to Queue" and the header width. */
+  padding: 44px max(50px, calc((100% - 1600px) / 2)) 80px;
+}
+.appdetail-main { flex: 1 1 auto; min-width: 0; }
+.appdetail-side {
+  flex: 0 0 360px;
+  width: 360px;
+  align-self: stretch;
+}
+
+/* ── Header ── */
+.appdetail-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 36px;
+}
+.appdetail-head-icon {
+  width: 58px; height: 58px;
+  border-radius: 10px;
+  background: var(--c-brand-bg);
+  color: var(--c-brand);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--font-xxLarge);
+  flex-shrink: 0;
+}
+.appdetail-head-text { flex: 1; min-width: 0; }
+.appdetail-title {
+  font-size: var(--font-xxLarge); font-weight: 700;
+  color: var(--c-text-strong);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.appdetail-subtitle {
+  font-size: 14px; color: var(--c-text-muted);
+  margin: 5px 0 0;
+}
+.appdetail-status-tag { flex-shrink: 0; margin-top: 6px; }
+
+/* ── Invited-state limited view ── */
+.appdetail-value-muted { color: var(--c-text-muted); font-weight: 400; font-style: italic; }
+.appdetail-invited-empty {
+  border: 1px dashed var(--c-border);
+  border-radius: 12px;
+  background: var(--c-surface-subtle);
+  padding: 40px 32px;
+  text-align: center;
+}
+.appdetail-invited-empty-icon {
+  width: 56px; height: 56px; margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--c-brand-bg); color: var(--c-brand);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.appdetail-invited-empty-title {
+  font-size: 18px; font-weight: 700; color: var(--c-text-strong);
+  margin: 0 0 8px;
+}
+.appdetail-invited-empty-text {
+  font-size: 14px; line-height: 1.55; color: var(--c-text-muted);
+  margin: 0 auto; max-width: 480px;
+}
+.appdetail-invited-summary { margin-top: 4px; }
+
+/* ── Field grid ── */
+.appdetail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 36px;
+}
+.appdetail-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.appdetail-field-label { font-size: 12.5px; color: var(--c-text-muted); font-weight: 400; }
+.appdetail-field-value {
+  font-size: 15px; font-weight: 600;
+  color: var(--c-text-strong);
+  line-height: 1.45;
+  word-break: break-word;
+}
+.appdetail-ssn { display: inline-flex; align-items: center; gap: 12px; }
+.appdetail-ssn-toggle {
+  background: none; border: none; cursor: pointer;
+  color: var(--c-brand); padding: 2px; display: inline-flex; font-size: var(--font-medium);
+}
+.appdetail-ssn-toggle:hover { color: var(--c-brand-dark); }
+
+.appdetail-rule { border: none; border-top: 1px solid var(--c-border); margin: 32px 0; }
+
+/* ── Signature + certifications ── */
+.appdetail-sign { display: flex; flex-direction: column; gap: 4px; }
+.appdetail-sign-line {
+  display: flex; align-items: flex-end; gap: 18px;
+  border-bottom: 1.5px solid var(--c-text-strong);
+  max-width: 620px;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+  min-height: 64px;
+}
+.appdetail-sign-x { font-size: 22px; font-weight: 700; color: var(--c-text-strong); padding-bottom: 8px; }
+.appdetail-signature {
+  font-family: "Snell Roundhand", "Brush Script MT", "Segoe Script", cursive;
+  font-size: 42px; line-height: 1;
+  color: var(--c-text-strong);
+  transform: rotate(-2deg);
+  padding-bottom: 6px;
+}
+.appdetail-sign-name { font-size: 15px; font-weight: 600; color: var(--c-text-strong); margin: 2px 0 6px; }
+.appdetail-certs {
+  list-style: none; margin: 10px 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: 12px;
+  max-width: 940px;
+}
+.appdetail-certs li {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 13.5px; color: var(--c-text); line-height: 1.5;
+}
+.appdetail-certs i { color: var(--c-success); font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+/* Attestations render as canonical read-only checked Tasty checkboxes. */
+.appdetail-certs .appdetail-cert-check { flex: none; margin-top: 1px; cursor: default; }
+
+/* ── Attachments ── */
+/* Concept — hidden by default; the dev drawer's "Attachments in detail" toggle
+   flips body.show-attachments (setShowAttachments in boot.js). */
+body:not(.show-attachments) .appdetail-attachments { display: none; }
+.appdetail-attachments { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
+.appdetail-attachments .appdetail-field-label { margin-bottom: 4px; }
+.appdetail-attach {
+  display: flex; align-items: center; gap: 14px;
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.appdetail-attach:hover { border-color: var(--c-brand-border); }
+.appdetail-attach-icon {
+  width: 34px; height: 34px; border-radius: 6px;
+  background: var(--c-surface-subtle);
+  color: var(--c-brand);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.appdetail-attach-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--c-text-strong); }
+.appdetail-attach-view {
+  background: none; border: none; cursor: pointer;
+  color: var(--c-brand); font-size: 19px; padding: 4px; display: inline-flex;
+}
+.appdetail-attach-view:hover { color: var(--c-brand-dark); }
+
+/* ── Right rail: status + queue progress, above the tracker (Jul 1) ── */
+.appdetail-side-status {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 20px;
+}
+.appdetail-remaining { font-size: 12.5px; font-weight: 600; color: var(--c-text-muted); }
+/* Reset the head-context margin-top (still used by the Invited-state status tag) so it centers cleanly here. */
+.appdetail-side-status .appdetail-status-tag { margin-top: 0; }
+
+/* ── Right rail: stepper ── */
+.appdetail-stepper { list-style: none; margin: 0 0 4px; padding: 0; }
+.appdetail-step { display: flex; gap: 14px; position: relative; padding-bottom: 18px; }
+.appdetail-step.is-last { padding-bottom: 0; }
+/* continuous connector through every marker centre (12px) */
+.appdetail-step:not(.is-last)::before {
+  content: ""; position: absolute;
+  left: 11px; top: 12px; height: 100%;
+  width: 2px; background: var(--c-border); z-index: 0;
+}
+.appdetail-step.is-complete:not(.is-last)::before { background: var(--c-success); }
+.appdetail-step-marker {
+  position: relative; z-index: 1;
+  width: 24px; height: 24px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--c-surface);
+}
+.appdetail-step-marker i { font-size: 15px; line-height: 1; }
+.appdetail-step-marker.is-complete { background: var(--c-success); }
+.appdetail-step-marker.is-complete i { color: #fff; font-size: 14px; }
+.appdetail-step-marker.is-current { background: var(--c-note-bg); border: 2px solid var(--c-note); }
+.appdetail-step-marker.is-current i { color: var(--c-note); font-size: var(--font-small); }
+.appdetail-step-marker.is-denied { background: var(--c-danger); }
+.appdetail-step-marker.is-denied i { color: #fff; font-size: 14px; }
+.appdetail-step-marker.is-upcoming::after {
+  content: ""; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--c-border-strong);
+}
+.appdetail-step-body { display: flex; flex-direction: column; gap: 2px; padding-top: 1px; }
+.appdetail-step-title { font-size: 13.5px; font-weight: 700; color: var(--c-text-strong); }
+.appdetail-step.is-complete .appdetail-step-title { color: var(--c-success); }
+.appdetail-step.is-upcoming .appdetail-step-title { color: var(--c-text-muted); font-weight: 600; }
+.appdetail-step-sub { font-size: 12.5px; color: var(--c-text-muted); }
+.appdetail-step-meta { font-size: 11.5px; color: var(--c-text-subtle); margin-top: 1px; }
+
+/* ── Right rail: meta blocks ── */
+.appdetail-side-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--font-small); font-weight: 600; color: var(--c-text-strong);
+}
+.appdetail-side-label i { color: var(--c-text-muted); font-size: var(--font-medium); }
+.appdetail-group-edit {
+  margin-left: auto; background: none; border: none; cursor: pointer;
+  color: var(--c-brand); padding: 2px; display: inline-flex; font-size: 15px;
+}
+.appdetail-group-edit:hover { color: var(--c-brand-dark); }
+.appdetail-group-value {
+  font-size: 14px; font-weight: 600; color: var(--c-text-strong);
+  margin: 10px 0 0;
+  border-left: 3px solid var(--c-brand);
+  padding-left: 12px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.appdetail-group-course { font-size: 12.5px; font-weight: 400; color: var(--c-text-muted); }
+
+.appdetail-side-school { display: flex; align-items: center; gap: 12px; margin-top: 24px; }
+/* .appdetail-school-mono retired Jun 30 — review-detail school monogram now uses .tasty-persona-icon (DS). */
+.appdetail-school-name { font-size: 14px; font-weight: 700; color: var(--c-text-strong); }
+
+.appdetail-side-person { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--c-border); }
+.appdetail-person-name {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 700; color: var(--c-text-strong);
+  margin: 0 0 14px;
+}
+.appdetail-person-name i { color: var(--c-text-muted); }
+.appdetail-meta { display: flex; flex-direction: column; gap: 9px; }
+.appdetail-meta-row { display: flex; gap: 12px; font-size: 12.5px; }
+.appdetail-meta-key { width: 96px; flex-shrink: 0; color: var(--c-text-muted); }
+.appdetail-meta-val { color: var(--c-text-strong); font-weight: 600; word-break: break-word; }
+.appdetail-meta-id { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+
+/* ── Right rail: contextual actions ── */
+.appdetail-actions {
+  margin-top: 28px; padding-top: 24px;
+  border-top: 1px solid var(--c-border);
+  display: flex; flex-wrap: wrap; gap: 12px;
+}
+.appdetail-action-btn { flex: 1 1 0; min-width: 130px; justify-content: center; }
+.appdetail-actions .is-full,
+.appdetail-actions .appdetail-readonly-note { flex: 1 1 100%; }
+.appdetail-readonly-note {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: var(--font-small); line-height: 1.5; margin: 0;
+  padding: 14px 16px; border-radius: 8px;
+  background: var(--c-surface-subtle); color: var(--c-text);
+}
+.appdetail-readonly-note i { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.appdetail-readonly-note.is-info i    { color: var(--c-brand); }
+.appdetail-readonly-note.is-success i { color: var(--c-success); }
+.appdetail-readonly-note.is-muted i   { color: var(--c-text-muted); }
+
+/* ── Transition nav — shown after in-place approve/deny ── */
+.appdetail-transition-nav {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%;
+}
+.appdetail-transition-nav:empty { display: none; }
+.appdetail-transition-nav .tasty-btn {
+  flex: none;
+}
+
+/* ── Live transition scoping — only applied during approve/deny,
+     not on initial render ── */
+.appdetail-stepper.is-live-transition .appdetail-step::before {
+  transition: background 0.3s ease;
+}
+.appdetail-stepper.is-live-transition .appdetail-step-marker {
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.appdetail-stepper.is-live-transition .appdetail-step-title {
+  transition: color 0.25s ease;
+}
+
+@keyframes markerPop {
+  0%   { transform: scale(0.65); }
+  55%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+@keyframes badgePop {
+  0%   { transform: scale(0.8); opacity: 0.4; }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 1240px) {
+  .appdetail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1000px) {
+  .appdetail { flex-direction: column; gap: 40px; padding: 36px 32px 64px; }
+  .appdetail-side { width: 100%; flex-basis: auto; }
+}
+@media (max-width: 560px) {
+  .appdetail-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Edit Groups screen ────────────────────────────────────────────── */
+.editgroups { width: 100%; }
+.editgroups .tasty-section-header { margin-bottom: 24px; }
+.editgroups-panel {
+  border: 1px solid var(--c-border); border-radius: var(--radius-md);
+  overflow: hidden; margin-bottom: 28px;
+}
+.editgroups-panel-head {
+  background: var(--c-surface-subtle); border-bottom: 1px solid var(--c-border);
+  padding: 12px 20px; text-align: center; font-size: 14px; font-weight: 700; color: var(--c-text-strong);
+}
+.editgroups-inst { display: flex; align-items: center; gap: 16px; padding: 20px 24px; }
+.editgroups-inst-abbr {
+  width: 56px; height: 56px; border: 1px solid; border-radius: 6px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800;
+}
+.editgroups-inst-name { font-size: var(--font-medium); font-weight: 700; color: var(--c-text-strong); margin: 0 0 2px; }
+.editgroups-inst-city { font-size: var(--font-small); color: var(--c-text-muted); margin: 0; }
+.editgroups-avail-title { font-size: 18px; font-weight: 700; color: var(--c-text-strong); margin: 0 0 12px; }
+.editgroups-table .col-check { width: 48px; }
+.editgroups-table .eg-group { font-weight: 600; color: var(--c-text-strong); white-space: nowrap; }
+.editgroups-table .eg-term { white-space: nowrap; color: var(--c-text); }
+.editgroups-table .eg-desc { font-size: var(--font-small); color: var(--c-text-muted); max-width: 420px; }
+.editgroups-table .eg-deadline { white-space: nowrap; color: var(--c-text); }
+.editgroups-table .eg-deadline i { color: var(--c-text-muted); margin-right: 5px; }
+.editgroups-table .tasty-checkbox { cursor: pointer; }
+.editgroups-foot { display: flex; justify-content: center; gap: 12px; padding: 28px 0 8px; }
+
+/* ── Edit Learner screen ───────────────────────────────────────────── */
+.editlearner { width: 100%; display: flex; justify-content: center; }
+.editlearner-card { width: 100%; max-width: 760px; border: 1px solid var(--c-border); border-radius: var(--radius-md); overflow: hidden; background: var(--c-surface); }
+.editlearner-card-head { background: var(--c-surface-subtle); border-bottom: 1px solid var(--c-border); padding: 14px 20px; text-align: center; font-size: 14px; font-weight: 700; color: var(--c-text-strong); }
+.editlearner-cardbody { padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; }
+.editlearner-verifiedid { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--c-text-muted); }
+.editlearner-id-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--c-info-bg); color: var(--c-brand); border-radius: 4px; padding: 2px 8px; font-weight: 600; }
+.editlearner-id-badge i { font-size: var(--font-small); }
+.editlearner-change { background: none; border: 0; color: var(--c-brand); font-weight: 600; font-size: 12px; cursor: pointer; padding: 0; }
+.editlearner-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.editlearner-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.editlearner-check { display: inline-flex; align-items: center; gap: 8px; font-size: var(--font-small); color: var(--c-text); cursor: pointer; }
+.editlearner-check input { width: 16px; height: 16px; accent-color: var(--c-brand); cursor: pointer; }
+.editlearner-toggles { margin: 4px 0; }
+.editlearner-addlink { display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; color: var(--c-brand); font-weight: 600; font-size: var(--font-small); cursor: pointer; padding: 8px 0; }
+.editlearner-addlink.is-open i { transform: rotate(45deg); }
+.editlearner-addlink i { transition: transform .12s ease; }
+.editlearner-reveal { display: flex; flex-direction: column; gap: 16px; }
+.editlearner-reveal[hidden] { display: none; }   /* a class's display:flex otherwise overrides the [hidden] attribute */
+.editlearner-ssn { position: relative; display: block; }
+.editlearner-ssn .ticon, .editlearner-ssn .tcon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--c-brand); cursor: pointer; }
+.editlearner-foot { border-top: 1px solid var(--c-border); background: var(--c-surface-subtle); padding: 24px 28px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.editlearner-reqnote { font-size: 12px; color: var(--c-text-muted); margin: 0; }
+.editlearner .req, .editlearner-reqnote .req { color: var(--c-danger, #c0392b); }

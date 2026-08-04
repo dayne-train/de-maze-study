@@ -1,0 +1,278 @@
+/* Active Enrollments (concept) — local-only, NOT part of ../_shared/queue-screens/.
+   This feature is dev-drawer-gated (default OFF); this sheet only affects
+   hs-approval-queue, never college-approval-queue. */
+
+.nav-tab[data-tab-id="active-enrollments"] { display: none; }
+body.show-active-enrollments .nav-tab[data-tab-id="active-enrollments"] { display: inline-flex; }
+
+.ae-term-field {
+  min-width: 200px;
+}
+
+/* .de-header-search (shared CSS) has no flex-grow of its own — it just sits at its
+   content's natural width, pushed right via margin-left:auto. That reads fine on the
+   Applications queue header (more competing siblings), but here it left the search input
+   visually cramped. Give it real room to grow within this row instead. Scoped locally,
+   not touching the shared _shared/queue-screens/base.css that college-admin also uses. */
+#ae-variant-table .de-header-search,
+#ae-variant-split .de-header-search {
+  flex: 1 1 auto;
+  max-width: 420px;
+}
+
+.ae-time-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+.ae-time-left-label {
+  font-size: 12px;
+  color: var(--body-font-weak);
+}
+
+/* Marks where a new student's rowspanned group starts, so adjacent students with
+   merged name cells (rowspan) don't visually run together. */
+.ae-row-group-start > td { border-top: 2px solid var(--border-color); }
+
+/* A/B variant switch (mirrors workflow-config-studio's .variant/.is-hidden pattern). */
+.ae-variant.is-hidden { display: none; }
+
+/* Variant B — Split View, grounded in the Tasty Split View template (Figma
+   node 7488:239562): left = table + controls, vertical rule, persistent right panel. */
+.ae-split-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+.ae-split-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.ae-split-rule {
+  align-self: stretch;
+  width: 1px;
+  background: var(--border-color);
+  flex-shrink: 0;
+}
+.ae-split-panel {
+  flex: 0 0 340px;
+  position: sticky;
+  top: 16px;
+}
+.ae-split-panel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: var(--body-font-weak);
+}
+.ae-split-panel-title {
+  font-weight: var(--font-weight-bold);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.ae-split-panel-course {
+  padding: 14px 0;
+  border-top: 1px solid var(--border-color);
+}
+.ae-split-panel-course:first-of-type { border-top: none; }
+.ae-split-panel-course-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.ae-split-panel-course-grade {
+  font-size: 13px;
+  color: var(--body-font-weak);
+  margin-bottom: 8px;
+}
+.ae-split-panel-course-actions {
+  margin-top: 8px;
+}
+
+.ae-course-field {
+  min-width: 220px;
+}
+
+/* Presentation-only "Show In Progress" dev toggle — mirrors the show-hs/applyHsScope idiom
+   (core.js) but hides this screen's In Progress tab + panel in both variants. */
+body.hide-in-progress .tasty-navtoggle__item[onclick*="switchEnrollmentSegment('in-progress')"],
+body.hide-in-progress .tasty-navtoggle__item[onclick*="switchEnrollmentSegmentB('in-progress')"] {
+  display: none;
+}
+
+/* Full-export kebab — now lives in the header row, right of the search area (a term-level
+   export, not tied to one segment). Menu drops below, right-aligned to the kebab. */
+.ae-options { position: relative; flex-shrink: 0; }
+.ae-options-menu { top: calc(100% + 6px); right: 0; min-width: 220px; }
+
+/* Drop Course confirmation modal footer — plain Cancel/Confirm row, no textarea gating
+   (unlike the Deny modal's buildDenyHTML, which this deliberately doesn't reuse). */
+.ae-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Variant A on-demand panel — reuses the .ae-split-* structure but stays collapsed until a
+   row's "View" is pressed. When collapsed the panel + rule drop out and the table reclaims the
+   full width (flex handles the reflow); pressing View un-collapses them. */
+.ae-split-panel.is-collapsed,
+.ae-split-rule.is-collapsed { display: none; }
+
+.ae-split-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ae-split-panel-head .ae-split-panel-title { margin-bottom: 0; }
+.ae-panel-close { flex-shrink: 0; margin: -6px -6px 0 0; }
+
+.ae-panel-grade-chip {
+  display: inline-block;
+  font-size: 13px;
+  margin: 4px 0 10px;
+  color: var(--body-font);
+}
+.ae-panel-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0;
+  border-top: 1px solid var(--border-color);
+}
+.ae-panel-meta-row { display: flex; justify-content: space-between; gap: 16px; font-size: 13px; }
+.ae-panel-meta-key { color: var(--body-font-weak); }
+.ae-panel-meta-val { font-weight: 600; text-align: right; }
+.ae-panel-section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: var(--font-weight-bold);
+  color: var(--body-font-weak);
+  margin: 12px 0 6px;
+}
+.ae-panel-desc { font-size: 13px; line-height: 1.5; }
+
+/* Cold storage — terms past ~2 years live in Reports (a later build), not this live view.
+   Communicated by listing the archived terms as disabled options in the term dropdowns. */
+
+@media (max-width: 1100px) {
+  .ae-split-layout { flex-direction: column; }
+  .ae-split-rule { display: none; }
+  .ae-split-panel { flex-basis: auto; width: 100%; position: static; }
+}
+
+/* ═══════════════════════ Variant C — Grade Report (bespoke, not Tasty components) ═══════════════════════
+   A deliberate exploration OUTSIDE the Tasty component set: transcript-style student cards + a
+   term summary band, tuned for the HS registrar's actual job (pull a term's grades → SIS import).
+   Still theme-aware — colors resolve through DS tokens so it survives light/dark/contrast. */
+.gradesc { display: flex; flex-direction: column; gap: 16px; }
+
+.gradesc-band {
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  padding: 20px 24px;
+  border: 1px solid var(--border-color); border-radius: 14px;
+  background: var(--c-surface-raised, var(--white-space-z-index4));
+}
+.gradesc-band-term { display: flex; flex-direction: column; gap: 6px; min-width: 180px; }
+.gradesc-band-term-label { font-size: 12px; font-weight: 700; color: var(--body-font-weak); text-transform: uppercase; letter-spacing: .04em; }
+.gradesc-select {
+  font: inherit; font-size: 15px; font-weight: 600;
+  padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px;
+  background: transparent; color: var(--body-font); cursor: pointer;
+}
+.gradesc-stats { display: flex; gap: 28px; margin-left: auto; }
+.gradesc-stat { display: flex; flex-direction: column; align-items: flex-start; }
+.gradesc-stat-num { font-size: 28px; font-weight: 800; line-height: 1.1; color: var(--body-font); font-variant-numeric: tabular-nums; }
+.gradesc-stat-label { font-size: 12px; color: var(--body-font-weak); }
+
+.gradesc-export-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: inherit; font-weight: 700; font-size: 14px;
+  padding: 11px 18px; border: none; border-radius: 10px;
+  background: var(--action-default); color: #fff; cursor: pointer;
+}
+.gradesc-export-btn:hover { filter: brightness(.94); }
+.gradesc-export-btn.is-sm { padding: 8px 14px; font-size: 13px; }
+.gradesc-export-btn .ti { font-size: 16px; }
+
+.gradesc-segs { display: flex; gap: 8px; }
+.gradesc-seg {
+  font: inherit; font-weight: 600; font-size: 14px;
+  padding: 8px 16px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--border-color); background: transparent; color: var(--body-font-weak);
+}
+.gradesc-seg.is-active { background: var(--action-default); color: #fff; border-color: var(--action-default); }
+.gradesc-seg-count { opacity: .75; margin-left: 4px; font-variant-numeric: tabular-nums; }
+
+.gradesc-bulkbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; border-radius: 10px; font-size: 14px;
+  background: var(--c-info-bg, var(--white-space-z-index4)); color: var(--c-info-text, var(--body-font));
+}
+.gradesc-bulkbar-spacer { flex: 1; }
+.gradesc-bulkbar-clear { font: inherit; background: none; border: none; color: var(--action-default); cursor: pointer; font-weight: 600; }
+
+.gradesc-list { display: flex; flex-direction: column; gap: 10px; }
+.gradesc-card {
+  display: grid; grid-template-columns: auto minmax(210px, 1.1fr) 2fr auto;
+  align-items: center; gap: 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--border-color); border-radius: 12px;
+  background: transparent;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+.gradesc-card:hover { border-color: var(--body-font-weak); }
+.gradesc-card.is-selected { border-color: var(--action-default); box-shadow: inset 0 0 0 1px var(--action-default); }
+.gradesc-card-check { display: flex; align-items: center; }
+.gradesc-card-check input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--action-default); }
+
+.gradesc-card-id { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.gradesc-avatar {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  background: var(--c-brand-bg, var(--white-space-z-index4)); color: var(--action-default);
+}
+.gradesc-card-name { font-weight: 700; font-size: 15px; color: var(--body-font); }
+.gradesc-card-sub { font-size: 12px; color: var(--body-font-weak); }
+
+.gradesc-card-courses { display: flex; flex-wrap: wrap; gap: 6px; }
+.gradesc-chip {
+  display: inline-flex; align-items: center;
+  font-size: 12px; font-weight: 600;
+  padding: 4px 10px; border-radius: 999px;
+  border: 1px solid transparent; font-variant-numeric: tabular-nums;
+}
+.gradesc-chip.is-pass { background: var(--c-success-bg); color: var(--c-success-text); border-color: var(--c-success-border, transparent); }
+.gradesc-chip.is-fail { background: var(--c-danger-bg); color: var(--c-danger-text); border-color: var(--c-danger-border, transparent); }
+.gradesc-chip.is-prog { background: var(--c-info-bg); color: var(--c-info-text); }
+.gradesc-chip.is-withdrawn { background: var(--white-space-z-index4); color: var(--body-font-weak); }
+/* Per-course institution abbr inside a chip — muted so the course code + grade still lead. */
+.gradesc-chip-inst { font-size: 10px; font-weight: 700; letter-spacing: .02em; opacity: .65; margin: 0 1px; }
+
+.gradesc-card-metrics { display: flex; gap: 20px; justify-content: flex-end; }
+.gradesc-metric { display: flex; flex-direction: column; align-items: flex-end; }
+.gradesc-metric-num { font-size: 18px; font-weight: 800; color: var(--body-font); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.gradesc-metric-lbl { font-size: 11px; color: var(--body-font-weak); text-transform: uppercase; letter-spacing: .03em; }
+
+.gradesc-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 60px 20px; color: var(--body-font-weak);
+}
+.gradesc-empty .ti { font-size: 32px; }
+
+@media (max-width: 900px) {
+  .gradesc-band { gap: 16px; }
+  .gradesc-stats { margin-left: 0; gap: 20px; }
+  .gradesc-card { grid-template-columns: auto 1fr; }
+  .gradesc-card-courses, .gradesc-card-metrics { grid-column: 2 / -1; justify-content: flex-start; }
+}

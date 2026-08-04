@@ -1,0 +1,216 @@
+/* styles/screens/search.css — extracted from app.css (was lines 2047-2302). Cascade order preserved via index.html link order. */
+/* ─── Advanced Search modal ───
+   Shell (overlay / surface / header / close) now uses the Tasty modal component
+   (.tasty-modal*, see modals.css). Only the header content + form styles remain. */
+.adv-search-header-left {
+  display: flex; align-items: center; gap: 12px;
+}
+.adv-search-header-right {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.adv-search-title {
+  font-size: 15px; font-weight: 700; color: var(--c-text-strong); margin: 0;
+}
+.adv-search-subtitle {
+  font-size: var(--font-xSmall); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--c-text-subtle); margin: 2px 0 0;
+}
+/* Section headers with icon pill */
+.adv-search-section-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.adv-search-section-icon {
+  width: 26px; height: 26px; border-radius: var(--radius-md);
+  background: var(--c-brand-bg); border: 1px solid var(--c-brand-border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-brand); font-size: var(--font-small); flex-shrink: 0;
+}
+.adv-search-section-title {
+  font-size: var(--font-xSmall); font-weight: 700; color: var(--c-text-subtle);
+  margin: 0; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.adv-search-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+.adv-search-section {
+  margin-bottom: 24px;
+}
+.adv-search-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.adv-search-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.adv-field { display: flex; flex-direction: column; gap: 4px; }
+.adv-field-label {
+  font-size: 12px; font-weight: 600; color: var(--c-text-muted);
+}
+.adv-field input[type="text"],
+.adv-field input[type="number"],
+.adv-field input[type="date"],
+.adv-field select {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--c-border);
+  border-radius: 4px;
+  font-family: var(--font-family);
+  font-size: var(--font-small);
+  color: var(--c-text);
+  background: var(--c-surface);
+}
+.adv-field input:focus, .adv-field select:focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -1px;
+  border-color: var(--focus-ring);
+}
+.adv-gpa-pair { display: flex; gap: 8px; align-items: center; }
+.adv-gpa-pair input { flex: 1; min-width: 0; }
+.adv-gpa-pair .adv-gpa-sep { color: var(--c-text-muted); font-size: var(--font-small); }
+.adv-checkbox-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 16px;
+}
+.adv-checkbox-grid label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: var(--font-small); color: var(--c-text);
+  cursor: pointer;
+}
+.adv-status-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.adv-status-chip {
+  border: 1px solid var(--c-border); background: var(--c-surface);
+  color: var(--c-text); padding: 6px 12px; border-radius: 16px;
+  font-size: var(--font-small); cursor: pointer;
+  user-select: none;
+}
+.adv-status-chip.selected {
+  background: var(--c-brand-bg);
+  border-color: var(--c-brand);
+  color: var(--c-brand-dark);
+  font-weight: 600;
+}
+.adv-search-footer {
+  border-top: 1px solid var(--c-border);
+  padding: 16px 24px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.adv-search-count {
+  text-align: center;
+  font-size: var(--font-small); color: var(--c-text);
+}
+.adv-search-count strong { color: var(--c-text-strong); }
+.adv-search-count.muted { color: var(--c-text-muted); }
+.adv-search-count.zero { color: var(--c-danger); }
+.adv-search-count.warn { color: var(--c-warning); }
+.adv-search-actions {
+  display: flex; gap: 12px; justify-content: center;
+}
+.adv-search-actions button {
+  height: 44px;
+  min-width: 200px;
+  padding: 0 24px;
+  border-radius: 4px;
+  font-family: var(--font-family);
+  font-size: 14px; font-weight: 600;
+  cursor: pointer;
+}
+/* Reset lives in header — compact ghost style */
+/* Cancel — same footprint as the old Reset in footer */
+
+/* ─── Advanced Search Results Screen ─── */
+.workflow-header-right {
+  display: flex; align-items: center;
+}
+.adv-cancel-screen-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--font-family-base); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--action-default);
+  padding: 0 4px;
+  transition: color var(--t-quick);
+}
+.adv-cancel-screen-btn:hover { color: var(--action-hover-default); }
+.adv-results-page-content {
+  max-width: 1400px;
+}
+.adv-results-page-identity {
+  display: flex; align-items: center; gap: 20px;
+  padding: 8px 0 16px;
+}
+.adv-results-count {
+  font-size: 14px; font-weight: 700; color: var(--body-font-base);
+  margin: 0 0 12px;
+}
+.adv-results-tags-row {
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap; margin-bottom: 16px;
+}
+.adv-results-tags {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+}
+.adv-results-row-actions {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+.search-filter-btn.adv-loaded::after {
+  content: '';
+  position: absolute;
+  top: 2px; right: 2px;
+  width: 8px; height: 8px;
+  background: var(--c-brand); border-radius: 50%;
+  border: 2px solid var(--c-surface);
+}
+
+/* ─── Advanced Search Results Screen ─── */
+.adv-results-screen { display: block; }
+.adv-results-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 0 8px;
+  gap: 16px;
+}
+.adv-results-count {
+  font-size: var(--font-small); font-weight: 700; color: var(--c-text-strong);
+}
+.adv-results-clear {
+  background: none; border: none; color: var(--c-brand); cursor: pointer;
+  font-family: var(--font-family); font-size: var(--font-small); font-weight: 600;
+}
+.adv-results-clear:hover { text-decoration: underline; }
+.adv-results-divider {
+  height: 1px; background: var(--c-border); margin: 0 0 12px;
+}
+.adv-results-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding-bottom: 16px;
+}
+.filter-tag {
+  display: inline-flex; align-items: stretch;
+  border: 1px solid var(--c-border);
+  border-radius: 15px; overflow: hidden;
+  height: 30px;
+  background: var(--c-surface);
+  font-size: var(--font-small);
+}
+.filter-tag-key {
+  display: flex; align-items: center;
+  padding: 0 12px 0 14px;
+  background: var(--c-surface-z1);
+  color: var(--c-text-muted);
+  font-weight: 600;
+}
+.filter-tag-value {
+  display: flex; align-items: center;
+  padding: 0 10px;
+  background: var(--c-surface-subtle);
+  color: var(--c-text);
+}
+.filter-tag-x {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px;
+  background: var(--c-surface-subtle);
+  border: none; cursor: pointer; color: var(--c-brand);
+  padding: 0;
+}
+.filter-tag-x i { font-size: 14px; }
+.filter-tag-x:hover { color: var(--c-brand-dark); }

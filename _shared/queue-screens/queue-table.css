@@ -1,0 +1,281 @@
+/* styles/screens/queue-table.css — extracted from app.css (was lines 296-514). Cascade order preserved via index.html link order. */
+  /* ─── Table section (bar + table, no gap between them) ─── */
+  .queue-section { display: flex; flex-direction: column; }
+  /* table-block: groups bulk-bar + table + pagination as one unit,
+     preventing page-content gap from inserting space between them */
+  .table-block { display: flex; flex-direction: column; }
+
+  /* ─── Table — Tasty spec ─── */
+  /* ─────────────────────────────────────────────
+     QUEUE TABLE — Shared table used by Needs Review, Invited, and invite flow screens
+  ───────────────────────────────────────────── */
+  .queue-table-wrap { overflow-x: auto; margin: 0; }
+  .queue-table {
+    width: 100%; border-collapse: collapse;
+    font-size: var(--font-small); font-family: var(--font-family);
+  }
+  /* Bulk actions bar — $brand0 @veniceBlue background when rows are selected */
+  .bulk-inline-bar {
+    display: none; /* shown via JS style.display */
+    align-items: center; gap: 12px;
+    padding: 0 12px; height: 50px;
+    background: var(--c-brand-dark);
+    border: 1px solid var(--c-brand-dark);
+    border-bottom: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+  .bulk-inline-count {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: var(--font-small); font-weight: 600; color: var(--c-surface);
+  }
+  .bulk-inline-count-badge {
+    background: rgba(255,255,255,0.2); color: var(--c-surface);
+    border-radius: 100px; padding: 1px 8px;
+    font-size: var(--font-xSmall); font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .bulk-inline-select-all {
+    background: transparent; border: none;
+    color: rgba(255,255,255,0.8); font-family: inherit;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    padding: 0; text-decoration: underline;
+    transition: opacity var(--t-quick);
+  }
+  .bulk-inline-select-all:hover { opacity: 0.75; }
+  .bulk-inline-select-all:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+  .bulk-inline-spacer { flex: 1; }
+  /* Tasty Button — Ghost on dark, Error context, sm */
+  .bulk-inline-deny {
+    height: 36px; padding: 0 16px;
+    background: transparent; color: var(--c-surface);
+    border: 1px solid rgba(255,255,255,0.5); border-radius: var(--radius-md);
+    font-family: inherit; font-size: var(--font-small); font-weight: 600;
+    cursor: pointer; transition: background var(--t-quick);
+    display: inline-flex; align-items: center;
+  }
+  .bulk-inline-deny:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.8); }
+  .bulk-inline-deny:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+  /* Tasty Button — Filled on dark, Standard context, sm */
+  .bulk-inline-approve {
+    height: 36px; padding: 0 16px;
+    background: var(--c-surface); color: var(--c-brand-dark);
+    border: 1px solid var(--c-surface); border-radius: var(--radius-md);
+    font-family: inherit; font-size: var(--font-small); font-weight: 600;
+    cursor: pointer; transition: opacity var(--t-quick);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .bulk-inline-approve:hover { opacity: 0.9; }
+  .bulk-inline-approve:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+  .bulk-inline-approve i { font-size: 15px; }
+  /* Header */
+  .queue-table thead th {
+    padding: 0 8px;
+    height: 50px;
+    background: var(--c-surface);
+    border-bottom: 2px solid var(--c-text-strong); /* $body-font-base — Tasty TableBasic spec */
+    text-align: left;
+    font-size: var(--font-small); font-weight: 700;
+    color: var(--c-brand);                         /* $action-default */
+    white-space: nowrap;
+    user-select: none;
+  }
+  .queue-table thead th .th-inner {
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .queue-table thead th .th-sort {
+    font-size: 12px; opacity: 0.35; flex-shrink: 0;
+    transition: opacity var(--t-quick);
+  }
+  /* Sortable columns — clickable headers */
+  .queue-table thead th.is-sortable { cursor: pointer; }
+  .queue-table thead th.is-sortable:hover .th-sort { opacity: 0.7; }
+  .queue-table thead th.is-sorted .th-sort { opacity: 1; }
+  .queue-table thead th.col-check { width: 44px; padding: 0 8px; }
+  .queue-table thead th.col-actions { text-align: right; }
+  /* Body rows — no zebra; hover/selected use $in-list-active @anakiwa */
+  .queue-table tbody tr {
+    height: 50px;
+    border-bottom: 1px solid var(--c-border);
+    transition: background var(--t-quick);
+    cursor: pointer;
+  }
+  .queue-table tbody tr:last-child { border-bottom: none; }
+  .queue-table tbody tr:nth-child(odd)  { background: var(--c-surface); }        /* white */
+  .queue-table tbody tr:nth-child(even) { background: var(--c-surface-subtle); } /* $white-space-z-index2 — Tasty zebra */
+  .queue-table tbody tr:hover { background: var(--c-row-active); }
+  .queue-table tbody tr.selected { background: var(--c-row-active); }
+  .queue-table tbody tr.approving { opacity: 0.5; pointer-events: none; }
+  @keyframes row-out {
+    from { opacity: 0.5; }
+    to   { opacity: 0; }
+  }
+  .queue-table td {
+    padding: 8px 8px;
+    vertical-align: middle;
+    color: var(--c-text);
+  }
+  .queue-table td.col-check { padding: 8px 8px; width: 44px; }
+  .queue-table td.col-actions { text-align: right; padding-right: 12px; }
+
+  /* Invite roster table: its short data cells (IDs, dates, grad year) left slack that
+     the right-aligned Edit column absorbed, bunching the data left with a big gap before
+     Edit. Shrink actions to its content so the data columns spread across the width and
+     Edit sits at the far right (matches Figma). Scoped to this table only. */
+  #invite-learner-table th.col-actions,
+  #invite-learner-table td.col-actions { width: 1%; white-space: nowrap; }
+
+  /* ─── Checkbox  [Tasty Checkbox atom — State: Default / Checked / Indeterminate] ─── */
+  /* Re-skinned to the kit CheckboxIcon spec (native input kept — no class-driven rewire):
+     18px box (→24 ≥961), 1px --interactive-border, checked/indeterminate fill = interactiveBorder,
+     glyph = colorContext.neutral. Was a 16px brand-blue replica. */
+  .row-checkbox {
+    width: 18px; height: 18px;
+    border: 1px solid var(--interactive-border);
+    border-radius: 3px; cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+    background: var(--context-neutral);
+    transition: all var(--t-quick);
+    display: block; flex-shrink: 0;
+    position: relative;
+  }
+  .row-checkbox:checked, .row-checkbox:indeterminate {
+    background: var(--interactive-border); border-color: var(--interactive-border);
+  }
+  .row-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 5.5px; top: 2px;
+    width: 5px; height: 9px;
+    border: 2px solid var(--context-neutral); border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+  .row-checkbox:indeterminate::after {
+    content: '';
+    position: absolute;
+    left: 3.5px; top: 7.5px;
+    width: 10px; height: 2px;
+    background: var(--context-neutral);
+  }
+  .row-checkbox:hover:not(:checked):not(:indeterminate) { border-color: var(--body-font-base); }
+  .row-checkbox:disabled {
+    background: var(--white-space-z-index4);
+    border-color: var(--border-color);
+    cursor: not-allowed;
+  }
+  .row-checkbox:focus-visible {
+    outline: 4px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  @media (min-width: 961px) {
+    .row-checkbox { width: 24px; height: 24px; }
+    .row-checkbox:checked::after { left: 8px; top: 3.5px; width: 6px; height: 11px; }
+    .row-checkbox:indeterminate::after { left: 5px; top: 10.5px; width: 12px; }
+  }
+
+  /* Header select-all checkbox */
+  .th-checkbox-wrap { display: flex; align-items: center; }
+
+  /* ─── Learner cell ─── */
+  .student-name { font-weight: 600; color: var(--c-text-strong); margin: 0 0 2px; }
+  .student-id { font-size: var(--font-xSmall); color: var(--c-text-subtle); margin: 0; }
+  .col-appid { font-size: var(--font-small); color: var(--c-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+  /* High School column — surfaced only when the HS counselor spans multiple schools (the combined
+     exchange model sets body.show-hs). Hidden everywhere else (college-admin never sets show-hs). */
+  .col-hs { display: none; }
+  body.show-hs .col-hs { display: table-cell; }
+  .appdetail-appid { font-size: 12px; font-weight: 600; color: var(--c-text-subtle); letter-spacing: 0.04em; margin: 0 0 4px; font-variant-numeric: tabular-nums; }
+  .student-alert { display: flex; align-items: center; gap: 4px; font-size: var(--font-xSmall); color: var(--c-warning); margin-top: 3px; font-weight: 500; }
+
+  /* ─── Tracker popover ─── */
+  .tracker-popover {
+    position: fixed; z-index: 600;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-pop);
+    padding: 14px 16px;
+    width: 220px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--t-quick);
+  }
+  .tracker-popover.visible { opacity: 1; }
+  .tracker-popover-name {
+    font-size: 12px; font-weight: 700; color: var(--c-text-strong);
+    margin: 0 0 12px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--c-border);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* Vertical tracker inside popover — Tasty tracker-vertical pattern */
+  .tracker-v { display: flex; flex-direction: column; }
+  .tracker-v-step { display: flex; gap: 10px; }
+  .tracker-v-left { display: flex; flex-direction: column; align-items: center; width: 14px; flex-shrink: 0; }
+  .tracker-v-dot {
+    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid var(--c-border); background: var(--c-surface); margin-top: 1px;
+  }
+  .tracker-v-dot.done    { background: var(--c-success); border-color: var(--c-success); }
+  .tracker-v-dot.active  { background: var(--c-surface); border-color: var(--c-brand); box-shadow: 0 0 0 3px var(--c-brand-bg); }
+  .tracker-v-dot.pending { background: var(--c-surface); border-color: var(--c-border-strong); }
+  .tracker-v-connector { width: 2px; flex: 1; min-height: 14px; background: var(--c-border); margin: 3px 0; }
+  .tracker-v-connector.done { background: var(--c-success); }
+  .tracker-v-step:last-child .tracker-v-connector { display: none; }
+  .tracker-v-body { flex: 1; padding-bottom: 16px; min-width: 0; }
+  .tracker-v-step:last-child .tracker-v-body { padding-bottom: 0; }
+  .tracker-v-step-label { font-size: 12px; font-weight: 700; color: var(--c-text-strong); margin: 0 0 1px; line-height: 1.3; }
+  .tracker-v-step-sub { font-size: var(--font-xSmall); color: var(--c-text-subtle); margin: 0; line-height: 1.4; }
+  .tracker-v-step-sub.active { color: var(--c-brand); font-weight: 600; }
+  .tracker-v-step-sub.done   { color: var(--c-success); }
+
+  /* ─── Inline row action buttons — Tasty Button Outline, Standard, xs ─── */
+  .row-actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+  /* ─────────────────────────────────────────────
+/* ── Multi-group cell: "{first} +N" with hover tooltip (Tasty tooltip) ── */
+.group-cell { position: relative; display: inline-flex; align-items: center; gap: 6px; }
+.group-more {
+  position: relative; cursor: default;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 18px; padding: 0 6px;
+  border-radius: 9px; background: var(--c-surface-subtle);
+  border: 1px solid var(--c-border);
+  font-size: var(--font-xSmall); font-weight: 700; color: var(--c-brand);
+}
+.group-cell .group-tooltip {
+  position: absolute; left: 0; top: calc(100% + 6px); z-index: 60;
+  display: none; white-space: nowrap; text-align: left; font-weight: 400; cursor: default;
+}
+.group-more:hover .group-tooltip,
+.group-more:focus-within .group-tooltip { display: block; }
+
+/* ── Group cell: free-text names now carry program + term ("Math - Dual Enrollment
+      Fall 2026"), so the name truncates with an ellipsis and the tooltip appears only
+      when it's actually clipped (JS adds .is-truncated in markTruncatedCourses). ── */
+.group-cell { max-width: 220px; vertical-align: middle; }   /* display/gap set above (inline-flex, +N chip) */
+.group-cell__text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.group-cell .group-name-tooltip {
+  position: absolute; left: 0; top: calc(100% + 6px); z-index: 60;
+  display: none; white-space: nowrap; text-align: left; font-weight: 400; cursor: default;
+}
+.group-cell.is-truncated:hover .group-name-tooltip,
+.group-cell.is-truncated:focus-within .group-name-tooltip { display: block; }
+
+/* ── Selected-course cell (Registered bucket): truncates with an ellipsis and only
+      reveals the Tasty hover tooltip when the value is actually clipped (JS adds
+      .is-truncated in markTruncatedCourses). ── */
+.col-course { max-width: 160px; }
+.course-cell { position: relative; display: inline-block; max-width: 160px; vertical-align: middle; }
+.course-cell__text { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.course-cell .course-tooltip {
+  position: absolute; left: 0; top: calc(100% + 6px); z-index: 60;
+  display: none; white-space: nowrap; text-align: left; font-weight: 400; cursor: default;
+}
+.course-cell.is-truncated .course-cell__text { cursor: default; }
+.course-cell.is-truncated:hover .course-tooltip,
+.course-cell.is-truncated:focus-within .course-tooltip { display: block; }
+
+/* ── Right-panel multi-group list ── */
+.appdetail-group-line { display: block; }
+.appdetail-group-line + .appdetail-group-line { margin-top: 4px; }
+.appdetail-group-term { color: var(--c-text-muted); font-weight: 400; }

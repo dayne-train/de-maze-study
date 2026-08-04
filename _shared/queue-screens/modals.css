@@ -1,0 +1,20 @@
+/* queue-screens/modals.css — PROTO-UNIQUE modal pieces only.
+   The Tasty modal show/hide convention + sizing (.tasty-modal-overlay/.open, is-narrow/
+   is-md/is-wide, __body overflow) now comes from ../_kit/styles/modals.css, linked just
+   before this file. Keep only what the kit shim does not provide. */
+
+/* A two-line head (title + sub-meta) — used by the denial/cancellation modal. */
+.tasty-modal__head .tasty-modal__submeta {
+  font-size: var(--font-small); color: var(--c-text-muted); margin: 2px 0 0;
+}
+
+/* ── Approval consent modal ── */
+.approve-consent-lead { font-size: 14px; line-height: 1.6; color: var(--c-text); margin: 0 0 16px; }
+.approve-consent-lead strong { color: var(--c-text-strong); font-weight: 700; }
+#approve-consent-accordion { border-radius: var(--radius-md); }
+#approve-consent-accordion .req-modal-list { margin: 0; }
+.approve-consent-dismiss {
+  display: flex; align-items: center; gap: 8px;
+  margin: 18px 0 0; font-size: var(--font-small); color: var(--c-text); cursor: pointer;
+}
+.approve-consent-dismiss input { width: 16px; height: 16px; cursor: pointer; flex-shrink: 0; }

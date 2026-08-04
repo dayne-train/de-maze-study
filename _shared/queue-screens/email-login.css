@@ -1,0 +1,223 @@
+/* styles/screens/email-login.css — extracted from app.css (was lines 1170-1288). Cascade order preserved via index.html link order. */
+  /* ─── Email screen ─── */
+  .email-screen-wrap {
+    background: #edf0f4; min-height: 100vh; padding: 24px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .email-screen-topbar {
+    width: 100%; max-width: 800px; padding-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .email-screen-brand {
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .email-screen-brand-top {
+    display: flex; align-items: center; gap: 5px;
+    font-size: var(--font-medium); font-weight: 700; color: var(--c-text-strong);
+  }
+  .email-screen-brand-sub {
+    font-size: 8px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--c-text-muted); padding-left: 27px;
+  }
+  .email-client-wrap {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: 4px;
+    width: 100%; max-width: 800px; box-shadow: var(--shadow-card); overflow: hidden;
+  }
+  .email-client-toolbar {
+    background: var(--c-surface-z1); border-bottom: 1px solid var(--c-border);
+    padding: 9px 20px; display: flex; align-items: center; gap: 16px;
+  }
+  .email-client-btn {
+    font-size: var(--font-xSmall); font-weight: 600; color: var(--c-text-muted);
+    background: none; border: none; cursor: default;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .email-header-bar {
+    padding: 16px 24px; border-bottom: 1px solid var(--c-border);
+  }
+  .email-subject-line {
+    font-size: 17px; font-weight: 700; color: var(--c-text-strong); margin: 0 0 10px;
+  }
+  .email-from-row {
+    display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--c-text-muted);
+  }
+  .email-sender-dot {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--c-brand);
+    color: white; font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .email-body-area { padding: 32px 48px 40px; }
+  .email-parch-logo {
+    display: flex; flex-direction: column; gap: 1px; margin-bottom: 24px;
+  }
+  .email-parch-logo-top {
+    display: flex; align-items: center; gap: 5px;
+    font-size: var(--font-medium); font-weight: 700; color: var(--c-text-strong);
+  }
+  .email-parch-logo-sub {
+    font-size: 8px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--c-text-muted); padding-left: 27px;
+  }
+  .email-greeting { font-size: 14px; color: var(--c-text); line-height: 1.7; margin-bottom: 20px; }
+  .email-preview-table {
+    width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 24px;
+  }
+  .email-preview-table th {
+    background: var(--c-surface-z1); border: 1px solid var(--c-border);
+    padding: 5px 12px; text-align: left; font-weight: 600; color: var(--c-text-muted);
+  }
+  .email-preview-table td {
+    border: 1px solid var(--c-border); padding: 6px 12px; color: var(--c-text);
+  }
+  .email-preview-table tr:nth-child(even) td { background: var(--c-surface-z1); }
+  .email-cta-area { text-align: center; margin: 28px 0; }
+  .email-cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 28px; background: var(--c-success); color: white;
+    border: none; border-radius: var(--radius-md); font-family: var(--font-family);
+    font-size: 15px; font-weight: 700; cursor: pointer; transition: background var(--t-quick);
+  }
+  .email-cta-btn:hover { background: #286e0c; }
+  .email-footer-note {
+    font-size: var(--font-xSmall); color: var(--c-text-subtle); text-align: center; line-height: 1.7;
+    margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--c-border);
+  }
+
+  /* ─── Login screen ─── */
+  /* Sign-in screen — Figma "1.0.1 Counselor Login" (17649:228774): white page,
+     480px card on a 3px brand rule, 40px body, grey legal footer. */
+  .login-screen-wrap {
+    min-height: 100vh; background: var(--c-surface);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px;
+  }
+  .login-card {
+    background: var(--c-surface); border: 1px solid var(--c-border); border-top: 3px solid var(--c-brand);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-pop); width: 100%; max-width: 480px; padding: 0;
+    overflow: hidden;
+  }
+  .login-card__body { padding: 40px; }
+  .login-legal {
+    background: var(--c-surface-subtle);   /* whiteSpace.zIndex2 #F9F9F9, per Figma */
+    margin: 0; padding: 30px 40px;
+    font-size: 13px; line-height: 1.5; color: var(--c-text-subtle);
+  }
+  .login-legal a { color: var(--c-brand); font-weight: 600; text-decoration: none; }
+  .login-legal a:hover { text-decoration: underline; }
+  .login-logo {
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 28px;
+  }
+  .login-logo-img { display: block; width: 200px; height: auto; }
+  .login-heading { font-size: 30px; font-weight: 300; color: var(--c-text); margin: 0 0 20px; text-align: center; }
+  .login-sub { font-size: var(--font-small); color: var(--c-text-muted); margin: 0 0 26px; }
+  .login-field { margin-bottom: 15px; }
+  .login-label {
+    display: block; font-size: var(--font-small); font-weight: 700; color: var(--c-text-strong);
+    margin-bottom: 6px;
+  }
+  .login-req { color: var(--context-error); font-weight: 700; margin-right: 1px; }
+  .login-forgot {
+    display: block; text-align: right; font-size: var(--font-small); color: var(--c-brand);
+    text-decoration: none; margin: 6px 0 20px;
+  }
+  .login-forgot:hover { text-decoration: underline; }
+  .login-input {
+    width: 100%; height: 40px; border: 1px solid var(--c-border); border-radius: var(--radius-md);
+    padding: 0 12px; font-family: var(--font-family); font-size: 14px; color: var(--c-text);
+    background: var(--c-surface); box-sizing: border-box; transition: border-color var(--t-quick);
+  }
+  .login-input:focus { outline: none; border-color: var(--c-brand); box-shadow: 0 0 0 3px var(--c-brand-bg); }
+  /* Sign-in "submitting"/locked state — greyed fields w/ lock glyph + disabled button (the kit's
+     :disabled handles the grey/italic; we just reveal the lock vicon and make room for it). */
+  .tasty-field.is-locked .tasty-input { padding-left: 34px; }
+  .tasty-field.is-locked .tasty-field__vicon { display: inline-flex; color: var(--body-font-weak); }
+  .login-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 18px 0; color: var(--c-text-subtle); font-size: var(--font-xSmall);
+  }
+  .login-divider::before, .login-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--c-border);
+  }
+
+  /* ─── Path-select screen (demo entry chooser) ─── */
+  .path-select-wrap {
+    min-height: 100vh; background: var(--c-page);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px; text-align: center;
+  }
+  .path-select-logo { margin-bottom: 24px; }
+  /* Persona signifier — makes the demo persona you're stepping into unmistakable. */
+  .path-select-persona {
+    display: inline-flex; align-items: center; gap: 16px; text-align: left;
+    background: var(--c-surface); border: 1px solid var(--c-border); border-left: 4px solid var(--c-brand);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-card);
+    padding: 16px 26px 16px 20px; margin-bottom: 28px;
+  }
+  .path-select-persona__avatar {
+    width: 54px; height: 54px; flex-shrink: 0; border-radius: 50%;
+    background: var(--c-brand-bg); color: var(--c-brand);
+    display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; letter-spacing: .5px;
+  }
+  .path-select-persona__text { display: flex; flex-direction: column; gap: 3px; }
+  .path-select-persona__eyebrow { font-size: var(--font-xSmall); font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--c-text-muted); }
+  .path-select-persona__role { font-size: 22px; font-weight: 700; color: var(--c-text-strong); line-height: 1.1; }
+  .path-select-persona__name { font-size: var(--font-small); color: var(--c-text-muted); }
+  .path-select-heading { font-size: 26px; font-weight: 400; color: var(--c-text-strong); margin: 0 0 8px; }
+  .path-select-sub { font-size: 14px; color: var(--c-text-muted); margin: 0 0 36px; }
+  .path-select-options { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .path-select-tile {
+    width: 280px; max-width: 100%; background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 28px 24px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
+    text-align: center; font-family: var(--font-family);
+    transition: border-color var(--t-quick), box-shadow var(--t-quick), transform var(--t-quick);
+  }
+  .path-select-tile:hover { border-color: var(--c-brand); box-shadow: var(--shadow-pop); transform: translateY(-2px); }
+  .path-select-tile-icon {
+    width: 48px; height: 48px; border-radius: 50%; background: var(--c-brand-bg); color: var(--c-brand);
+    display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 4px;
+  }
+  .path-select-tile-title { font-size: var(--font-medium); font-weight: 700; color: var(--c-text-strong); }
+  .path-select-tile-desc { font-size: var(--font-small); color: var(--c-text-muted); line-height: 1.5; }
+
+  /* ─── Service-selector screen (multi-product chooser) ─── */
+  #screen-service-select.active { display: flex; flex-direction: column; min-height: 100vh; }
+  .service-select-body { flex: 1; padding: 56px 24px 64px; text-align: center; background: var(--c-surface); }
+  .service-select-heading { font-size: var(--font-xxLarge); font-weight: 400; color: var(--c-text-strong); margin: 0 0 10px; }
+  .service-select-sub { font-size: 14px; color: var(--c-text-muted); margin: 0 0 10px; }
+  /* "Set Your Preferences" link under the subtext */
+  .service-select-prefs {
+    display: inline-block; margin: 0 0 40px; font-size: 14px; font-weight: 600;
+    color: var(--c-action-default); text-decoration: none;
+  }
+  .service-select-prefs:hover { text-decoration: underline; }
+  .service-select-grid { display: flex; gap: 32px; justify-content: center; align-items: stretch; flex-wrap: wrap; }
+  .service-card {
+    width: 420px; max-width: 100%; text-align: center; background: var(--c-surface);
+    display: flex; flex-direction: column; align-items: center;
+    border: 1px solid var(--c-border); border-radius: var(--tasty-radius, 6px); padding: 32px 40px 36px;
+  }
+  /* Product lockup (Parchment Award / Parchment Pathways) + divider */
+  .service-card-logo {
+    width: 100%; display: flex; justify-content: center; padding-bottom: 20px;
+    border-bottom: 1px solid var(--c-border); margin-bottom: 24px;
+  }
+  /* Illustration row — centered glyph with the optional "Default" badge trailing it */
+  /* Illustration is truly centered in the card; the Default badge is pulled out of
+     flow (absolute) so it trails the glyph without shifting it off-center. */
+  .service-card-illus { position: relative; width: 100%; align-self: stretch; display: flex; justify-content: center; align-items: center; margin: 6px 0 22px; }
+  /* Badge sits centered in the gap between the illustration's right edge and the
+     card's right border (glyph is 72px, so its right edge is at 50% + 36px). */
+  .service-card-badge { position: absolute; left: calc(75% + 18px); top: 50%; transform: translate(-50%, -50%); white-space: nowrap; }
+  /* .service-card-badge is a .tasty-status-tag — the component owns its color/shape. */
+  .service-card-icon { margin: 6px 0 14px; }
+  .service-card-title { font-size: var(--font-large); font-weight: 700; color: var(--c-text-strong); margin: 0 0 12px; }
+  .service-card-desc { font-size: var(--font-small); color: var(--c-text-muted); line-height: 1.5; margin: 0 0 24px; }
+  .service-card .tasty-btn { margin-top: auto; width: 100%; }
+  .service-select-footer {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 14px 40px; background: var(--c-page-header); color: #fff; font-size: 12px;
+  }
+  .service-select-footer-side { flex: 1; display: flex; align-items: center; gap: 6px; }
+  .service-select-footer-right { justify-content: flex-end; }
+  .service-select-footer-center { flex: 0 0 auto; }

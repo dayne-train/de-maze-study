@@ -1,0 +1,25 @@
+/* ══════════════════════════════════════════════════════════════════════
+   maze-shim.css — participant-build overrides for the DE Maze study.
+   Loaded last, after the kit and each prototype's own stylesheet.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── Dev drawer: hidden unless Cmd/Ctrl+D ──────────────────────────────
+   The gear trigger (button.devdrawer-tab) is the FIRST CHILD of #devdrawer
+   (dev-drawer.js:231-237), so hiding the parent hides both the drawer and its
+   trigger. That is the whole mechanism.                                     */
+html:not(.maze-dev) #devdrawer { display: none !important; }
+
+/* The drawer PUSHES page content: dev-drawer.js:62 sets
+   html.devdrawer-open body { padding-right: <W>px }. If the drawer were left
+   open while hidden, the page would sit shoved sideways with nothing visible
+   causing it — a bug report we would never be able to reproduce. */
+html:not(.maze-dev).devdrawer-open body { padding-right: 0 !important; }
+
+/* ── Remove demo-only affordances ──────────────────────────────────────
+   .demo-fill-soft is the click-to-fill hover hint on the learner's account and
+   DE application forms (learner app.js:1494-1504). In a presenter demo it is a
+   convenience; in an unmoderated study it is a leading cue that tells the
+   participant the form is not really theirs to read. The forms are prepopulated
+   instead — see config/learner-application.js.                              */
+.demo-fill-soft { cursor: inherit !important; }
+.demo-fill-soft:hover { outline: none !important; box-shadow: none !important; }

@@ -1,0 +1,224 @@
+/* styles/screens/base.css — extracted from app.css (was lines 1-295). Cascade order preserved via index.html link order. */
+/* ════════════════════════════════════════════════════════════════════
+   PARCHMENT — Approval Queue screens (HS + college) · COMPONENTS + SCREENS
+   ════════════════════════════════════════════════════════════════════
+   Tokens   → styles/tokens.css   (Tasty primitives + --c-* aliases)
+   Chrome   → styles/chrome.css   (page-header, nav-tabs, footer, wf-header)
+   This file: every other style. All values resolve through --c-* tokens.
+
+   ╔══════════════════════════ TABLE OF CONTENTS ═══════════════════════╗
+   ║  §1  RESET + BODY                          grep "box-sizing"       ║
+   ║  §2  BRAND / USER-PILL (legacy)            grep ".brand-logo"      ║
+   ║  §3  SEARCH BANNER                         grep ".search-banner"   ║
+   ║  §4  STATUS BADGE COUNT PILLS              grep "count-pill"       ║
+   ║  §5  TOOLBAR ROW + SEARCH INPUT (atom)     grep "toolbar-row"      ║
+   ║  §6  GHOST BUTTON (sm)                     grep "btn-ghost-sm"     ║
+   ║  §7  TABLE PAGINATION                      grep "table-pagination" ║
+   ║  §8  TABLE — Tasty spec                    grep "queue-table"      ║
+   ║  §9  BULK ACTIONS BAR                      grep "bulk-inline-bar"  ║
+   ║  §10 CHECKBOX atom                         grep ".row-checkbox"    ║
+   ║  §11 LEARNER CELL + STEP DOTS              grep "step-dot"         ║
+   ║  §12 TRACKER POPOVER (vertical stepper)    grep "tracker-popover"  ║
+   ║  §13 INLINE ROW ACTION BUTTONS             grep "row-action-btn"   ║
+   ║  §14 REVIEW SCREEN (old eligibility view — legacy classes) grep "review-info-bar" ║
+   ║  §15 BULK APPROVE SCREEN (legacy)          grep "bulk-approve-page"║
+   ║  §16 CANCEL CONFIRMATION MODAL             grep "cancel-modal"     ║
+   ║  §17 INVITE SUMMARY MODAL                  grep "invite-summary"   ║
+   ║  §18 GENERIC MODAL + EMPTY STATE           grep "modal-overlay"    ║
+   ║  §19 TOAST                                 grep ".toast "          ║
+   ║  §20 DEV PANEL                             grep "dev-panel"        ║
+   ║  §21 STATUS BADGES (consent + lifecycle)   grep "status-badge"     ║
+   ║  §22 DENIAL REASON MODAL                   grep "denial-reason"    ║
+   ║  §23 DRAWER NOTICES + ELIGIBILITY          grep "drawer-elig"      ║
+   ║  §24 EMAIL SCREEN                          grep "email-screen-wrap"║
+   ║  §25 LOGIN SCREEN                          grep "login-screen-wrap"║
+   ║  §26 DASHBOARD SCREEN                      grep "dashboard-body"   ║
+   ║  §27 WORKSPACE SEARCH BANNER + CARDS       grep "ws-search-banner" ║
+   ║  §28 SEG ROW (segmented control + search)  grep ".seg-row"         ║
+   ║  §29 TRANSCRIPT VIEWER                     grep "transcript-modal" ║
+   ║  §30 NAV TOGGLE SET (segmented)            grep "nav-toggle-set"   ║
+   ║  §31 SEGMENT PANELS + EMPTY                grep "seg-panel"        ║
+   ║  §32 WORKFLOW STEP CONTENT                 grep "step-nav"         ║
+   ║  §33 TILE MEMBER SELECT                    grep "tile-member"      ║
+   ║  §34 IMAGE MEMBER LOGO                     grep "image-member-logo"║
+   ║  §35 GROUPS FORM CARD                      grep "groups-card"      ║
+   ║  §36 INVITE LEARNER AVATARS                grep "invite-learner"   ║
+   ║  §37 INVITE CANCEL MODAL                   grep "invite-cancel"    ║
+   ║  §38 ADVANCED SEARCH MODAL                 grep "adv-search-modal" ║
+   ║  §39 ADVANCED SEARCH RESULTS SCREEN        grep "adv-results"      ║
+   ║  §40 SIMPLIFIED REVIEW SCREEN (Figma)      grep "review-page"      ║
+   ╚════════════════════════════════════════════════════════════════════╝
+   ════════════════════════════════════════════════════════════════════ */
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--c-page); }
+  body {
+    font-family: var(--font-family);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--c-text);
+  }
+
+  /* ─── App Header ─── */
+  /* ─────────────────────────────────────────────
+     APP CHROME — Header, footer, brand, user pill
+  ───────────────────────────────────────────── */
+  .app-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 50px; height: 80px;
+    background: var(--c-page-header);
+    border-bottom: 1px solid var(--c-border);
+    flex-shrink: 0;
+  }
+  .brand { display: flex; align-items: center; }
+  .brand-logo { display: flex; flex-direction: column; line-height: 1; gap: 1px; }
+  .brand-logo-top {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--c-text-strong);
+  }
+  .brand-icon {
+    width: 22px; height: 22px; background: var(--c-nav-active); border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c-surface); font-size: var(--font-xSmall); font-weight: 700; flex-shrink: 0;
+  }
+  .brand-logo-sub {
+    font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--c-text-muted); padding-left: 27px;
+  }
+  .user-pill {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 20px 10px 10px; height: 60px;
+    background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-md);
+    cursor: pointer; transition: border-color var(--t-quick); min-width: 200px;
+  }
+  .user-pill:hover { border-color: var(--c-border-strong); }
+  .user-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--c-nav-active);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--c-surface); font-weight: 600; font-size: 14px;
+    border: 1px solid var(--c-border); flex-shrink: 0;
+  }
+  .user-text { font-size: var(--font-small); color: var(--c-text-subtle); line-height: 1.3; }
+  .user-text strong { color: var(--c-text); font-weight: 700; }
+
+  /* ─── Search Banner — full-width strip above segment tabs ─── */
+  .search-banner {
+    background: var(--c-surface-subtle);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; gap: 16px;
+    padding: 32px 40px;
+    min-height: 140px;
+  }
+  .search-banner-left {
+    display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0;
+  }
+  .search-banner-right {
+    flex: 1; display: flex; align-items: center; gap: 8px; justify-content: flex-end;
+  }
+
+  /* ─── Status badge count pills ─── */
+  .count-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--c-warning-bg); color: var(--c-warning-text);
+    border: 1px solid var(--c-warning-border); border-radius: 100px;
+    font-size: var(--font-xSmall); font-weight: 700; padding: 2px 8px; letter-spacing: 0.01em;
+    margin-left: 6px; vertical-align: middle;
+  }
+  .count-badge.brand {
+    background: var(--c-brand-bg); color: var(--c-brand-dark); border-color: var(--c-brand-border);
+  }
+
+  /* ─── Filter / toolbar row ─── */
+  .toolbar-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 16px;
+  }
+  /* SearchInput — Tasty Atoms: joined input + button compound (Figma spec)
+     Spec: 50px height (med variant), 16px/400 Open Sans, border-color → instBlue on focus,
+     bg → validation-base-focus on focus, box-shadow 3px instBlue ring        */
+  .search-wrap { display: flex; flex: 1; }
+  .search-input-wrap {
+    flex: 1; display: flex; align-items: center;
+    border: 1px solid var(--interactive-border);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    background: var(--white-space-base);
+    position: relative;
+    transition: border-color var(--t-quick), background var(--t-quick), box-shadow var(--t-quick);
+  }
+  .search-input-wrap:focus-within {
+    outline: 4px solid var(--focus-ring); outline-offset: 4px;   /* kit .tasty-input:focus */
+  }
+  .search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--body-font-weak); font-size: var(--font-large); pointer-events: none;
+  }
+  .search-input {
+    flex: 1; height: 50px; border: none; outline: none; background: transparent;
+    font-family: var(--font-family-base); font-size: var(--font-medium); font-weight: 400;
+    color: var(--body-font-base); padding: 0 10px 0 44px;
+  }
+  .search-input::placeholder { color: var(--body-font-weak); }
+  .search-filter-btn {
+    display: flex; align-items: center; justify-content: center;
+    background: none; border: none; padding: 0 12px;
+    color: var(--body-font-weak); font-size: var(--font-large); cursor: pointer;
+    align-self: stretch; height: auto; flex-shrink: 0; border-radius: 0;
+    transition: color var(--t-quick), background var(--t-quick);
+    position: relative;
+  }
+  .search-filter-btn:hover { color: var(--body-font-base); background: var(--white-space-z-index3); }
+  .search-filter-btn.active { color: var(--action-default); }
+  .search-filter-btn .filter-count {
+    display: none; align-items: center; justify-content: center;
+    min-width: 16px; height: 16px; padding: 0 3px;
+    background: var(--action-default); color: var(--white);
+    border-radius: var(--radius-pill); font-size: 9px; font-weight: 700; line-height: 1;
+    position: absolute; top: 0; right: 0;
+  }
+  .search-filter-btn.active .filter-count { display: flex; }
+  .search-btn {
+    height: 50px; padding: 0 32px;
+    background: var(--action-default); color: var(--white);
+    border: none;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-family: var(--font-family-base); font-size: var(--font-medium); font-weight: 600;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    transition: border-color var(--t-quick);  /* not background — gradient hover would flash on hover-off */
+  }
+  .search-btn:hover { background: var(--action-hover-primary); border-color: transparent; }
+  .search-btn:focus-visible { outline: var(--focus-ring-thickness) solid var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+  /* Tasty Button — Ghost, Standard context, sm */
+  .filter-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 40px; padding: 0 14px; /* Tasty: match SearchInput 40px height */
+    border: 1px solid var(--c-border); border-radius: var(--radius-md);
+    background: var(--c-surface);
+    font-family: inherit; font-size: var(--font-small); font-weight: 500; color: var(--c-text-muted);
+    cursor: pointer; transition: all var(--t-quick);
+  }
+  .filter-btn:hover { border-color: var(--c-border-strong); color: var(--c-text); }
+  .filter-btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .filter-btn i { font-size: 15px; }
+  .toolbar-spacer { flex: 1; }
+  .results-label { font-size: 12px; color: var(--c-text-subtle); white-space: nowrap; }
+  /* ── Table pagination component ── */
+  .table-pagination { display:flex; flex-direction:column; align-items:center; gap:8px; padding:8px 0 16px; }
+  .pagination-range { font-size: var(--font-xSmall); font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--c-text-base); }
+  .pagination-range strong { font-weight:700; color:var(--c-text-strong); }
+  .pagination-buttons { display:flex; align-items:center; gap:3px; }
+  /* Pagination buttons now use the kit .tasty-pagination__item (Pagination.tsx: 40px square,
+     active = body-base fill, disabled = .is-disabled). Generated in core.js; container stays local. */
+  .pagination-per-page { font-size: var(--font-xSmall); font-weight:600; letter-spacing:0.07em; text-transform:uppercase; color:var(--c-text); display:flex; align-items:center; gap:4px; }
+  .pagination-per-page strong { color:var(--c-brand); }
+  .pg-perpage-select { font-size: var(--font-xSmall); font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--c-brand); background:transparent; border:none; border-bottom:1px solid var(--c-brand); cursor:pointer; padding:0 2px; line-height:1.4; }
+  .filter-btn.active { border-color: var(--c-brand); color: var(--c-brand-dark); background: var(--c-brand-bg); }
+  .filter-btn .filter-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 17px; height: 17px; padding: 0 4px;
+    background: var(--c-brand-dark); color: white;
+    border-radius: 99px; font-size: 10px; font-weight: 700; line-height: 1; margin-left: 2px;
+  }
+  /* Filter-panel dropdown removed — advanced search now opens via the Workspace
+     adv-search button (ws-adv-btn) into the .tasty-modal adv-search overlay. */

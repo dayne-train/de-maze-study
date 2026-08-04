@@ -1,0 +1,3183 @@
+{
+  "icon": {
+    "phone": {
+      "name": "PhoneIcon",
+      "file": "10a-phone.svg",
+      "path": "assets/tasty/icons/10a-phone.svg"
+    },
+    "phone-notify": {
+      "name": "PhoneNotifyIcon",
+      "file": "10b-phone-notify.svg",
+      "path": "assets/tasty/icons/10b-phone-notify.svg"
+    },
+    "weights": {
+      "name": "WeightsIcon",
+      "file": "10c-weights.svg",
+      "path": "assets/tasty/icons/10c-weights.svg"
+    },
+    "leadership": {
+      "name": "LeadershipIcon",
+      "file": "10d-leadership.svg",
+      "path": "assets/tasty/icons/10d-leadership.svg"
+    },
+    "connect": {
+      "name": "ConnectIcon",
+      "file": "10e-connect.svg",
+      "path": "assets/tasty/icons/10e-connect.svg"
+    },
+    "summit": {
+      "name": "SummitIcon",
+      "file": "10f-summit.svg",
+      "path": "assets/tasty/icons/10f-summit.svg"
+    },
+    "trophy": {
+      "name": "TrophyIcon",
+      "file": "10g-trophy.svg",
+      "path": "assets/tasty/icons/10g-trophy.svg"
+    },
+    "ribbon": {
+      "name": "RibbonIcon",
+      "file": "10h-ribbon.svg",
+      "path": "assets/tasty/icons/10h-ribbon.svg"
+    },
+    "coffee": {
+      "name": "CoffeeIcon",
+      "file": "10i-coffee.svg",
+      "path": "assets/tasty/icons/10i-coffee.svg"
+    },
+    "aacrao": {
+      "name": "AacraoIcon",
+      "file": "10j-aacrao.svg",
+      "path": "assets/tasty/icons/10j-aacrao.svg"
+    },
+    "sftp": {
+      "name": "SftpIcon",
+      "file": "10k-sftp.svg",
+      "path": "assets/tasty/icons/10k-sftp.svg"
+    },
+    "k12": {
+      "name": "K12Icon",
+      "file": "11a-k12.svg",
+      "path": "assets/tasty/icons/11a-k12.svg"
+    },
+    "school": {
+      "name": "SchoolIcon",
+      "file": "11b-school.svg",
+      "path": "assets/tasty/icons/11b-school.svg"
+    },
+    "higher-ed": {
+      "name": "HigherEdIcon",
+      "file": "11c-higher-ed.svg",
+      "path": "assets/tasty/icons/11c-higher-ed.svg"
+    },
+    "state-agencies": {
+      "name": "StateAgenciesIcon",
+      "file": "11d-state-agencies.svg",
+      "path": "assets/tasty/icons/11d-state-agencies.svg"
+    },
+    "organization": {
+      "name": "OrganizationIcon",
+      "file": "11e-organization.svg",
+      "path": "assets/tasty/icons/11e-organization.svg"
+    },
+    "business": {
+      "name": "BusinessIcon",
+      "file": "11f-business.svg",
+      "path": "assets/tasty/icons/11f-business.svg"
+    },
+    "learners": {
+      "name": "LearnersIcon",
+      "file": "11g-learners.svg",
+      "path": "assets/tasty/icons/11g-learners.svg"
+    },
+    "member-info": {
+      "name": "MemberInfoIcon",
+      "file": "11h-member-info.svg",
+      "path": "assets/tasty/icons/11h-member-info.svg"
+    },
+    "org-codes": {
+      "name": "OrgCodesIcon",
+      "file": "11i-org-codes.svg",
+      "path": "assets/tasty/icons/11i-org-codes.svg"
+    },
+    "org-structure": {
+      "name": "OrgStructureIcon",
+      "file": "11j-org-structure.svg",
+      "path": "assets/tasty/icons/11j-org-structure.svg"
+    },
+    "application-order": {
+      "name": "ApplicationOrderIcon",
+      "file": "11k-application-order.svg",
+      "path": "assets/tasty/icons/11k-application-order.svg"
+    },
+    "enrollment-complete": {
+      "name": "EnrollmentCompleteIcon",
+      "file": "11l-enrollment-complete.svg",
+      "path": "assets/tasty/icons/11l-enrollment-complete.svg"
+    },
+    "document": {
+      "name": "DocumentIcon",
+      "file": "12a-document.svg",
+      "path": "assets/tasty/icons/12a-document.svg"
+    },
+    "transcript": {
+      "name": "TranscriptIcon",
+      "file": "12b-transcript.svg",
+      "path": "assets/tasty/icons/12b-transcript.svg"
+    },
+    "certificate": {
+      "name": "CertificateIcon",
+      "file": "12c-certificate.svg",
+      "path": "assets/tasty/icons/12c-certificate.svg"
+    },
+    "diploma": {
+      "name": "DiplomaIcon",
+      "file": "12d-diploma.svg",
+      "path": "assets/tasty/icons/12d-diploma.svg"
+    },
+    "pdf": {
+      "name": "PdfIcon",
+      "file": "12e-pdf.svg",
+      "path": "assets/tasty/icons/12e-pdf.svg"
+    },
+    "consent": {
+      "name": "ConsentIcon",
+      "file": "12f-consent.svg",
+      "path": "assets/tasty/icons/12f-consent.svg"
+    },
+    "verified-document": {
+      "name": "VerifiedDocumentIcon",
+      "file": "12g-verified-document.svg",
+      "path": "assets/tasty/icons/12g-verified-document.svg"
+    },
+    "batch": {
+      "name": "BatchIcon",
+      "file": "12h-batch.svg",
+      "path": "assets/tasty/icons/12h-batch.svg"
+    },
+    "batch-delete": {
+      "name": "BatchDeleteIcon",
+      "file": "12i-batch-delete.svg",
+      "path": "assets/tasty/icons/12i-batch-delete.svg"
+    },
+    "delivered": {
+      "name": "DeliveredIcon",
+      "file": "12j-delivered.svg",
+      "path": "assets/tasty/icons/12j-delivered.svg"
+    },
+    "order-and-send": {
+      "name": "OrderAndSendIcon",
+      "file": "12k-order-and-send.svg",
+      "path": "assets/tasty/icons/12k-order-and-send.svg"
+    },
+    "print-and-mailed": {
+      "name": "PrintAndMailedIcon",
+      "file": "12l-print-and-mailed.svg",
+      "path": "assets/tasty/icons/12l-print-and-mailed.svg"
+    },
+    "letter-accepted": {
+      "name": "LetterAcceptedIcon",
+      "file": "12m-letter-accepted.svg",
+      "path": "assets/tasty/icons/12m-letter-accepted.svg"
+    },
+    "letter-rejected": {
+      "name": "LetterRejectedIcon",
+      "file": "12n-letter-rejected.svg",
+      "path": "assets/tasty/icons/12n-letter-rejected.svg"
+    },
+    "envelope": {
+      "name": "EnvelopeIcon",
+      "file": "12o-envelope.svg",
+      "path": "assets/tasty/icons/12o-envelope.svg"
+    },
+    "folder": {
+      "name": "FolderIcon",
+      "file": "12p-folder.svg",
+      "path": "assets/tasty/icons/12p-folder.svg"
+    },
+    "open-folder": {
+      "name": "OpenFolderIcon",
+      "file": "12q-open-folder.svg",
+      "path": "assets/tasty/icons/12q-open-folder.svg"
+    },
+    "logs": {
+      "name": "LogsIcon",
+      "file": "12r-logs.svg",
+      "path": "assets/tasty/icons/12r-logs.svg"
+    },
+    "attachment-add": {
+      "name": "AttachmentAddIcon",
+      "file": "12s-attachment-add.svg",
+      "path": "assets/tasty/icons/12s-attachment-add.svg"
+    },
+    "attachment-required": {
+      "name": "AttachmentRequiredIcon",
+      "file": "12t-attachment-required.svg",
+      "path": "assets/tasty/icons/12t-attachment-required.svg"
+    },
+    "attachment-added": {
+      "name": "AttachmentAddedIcon",
+      "file": "12u-attachment-added.svg",
+      "path": "assets/tasty/icons/12u-attachment-added.svg"
+    },
+    "finance-doc": {
+      "name": "FinanceDocIcon",
+      "file": "12v-finance-doc.svg",
+      "path": "assets/tasty/icons/12v-finance-doc.svg"
+    },
+    "remove-doc": {
+      "name": "RemoveDocIcon",
+      "file": "12w-remove-doc.svg",
+      "path": "assets/tasty/icons/12w-remove-doc.svg"
+    },
+    "mail-server": {
+      "name": "MailServerIcon",
+      "file": "12x-mail-server.svg",
+      "path": "assets/tasty/icons/12x-mail-server.svg"
+    },
+    "resend": {
+      "name": "ResendIcon",
+      "file": "12y-resend.svg",
+      "path": "assets/tasty/icons/12y-resend.svg"
+    },
+    "individual": {
+      "name": "IndividualIcon",
+      "file": "13a-individual.svg",
+      "path": "assets/tasty/icons/13a-individual.svg"
+    },
+    "email-individual": {
+      "name": "EmailIndividualIcon",
+      "file": "13b-email-individual.svg",
+      "path": "assets/tasty/icons/13b-email-individual.svg"
+    },
+    "find-individual": {
+      "name": "FindIndividualIcon",
+      "file": "13c-find-individual.svg",
+      "path": "assets/tasty/icons/13c-find-individual.svg"
+    },
+    "existing-account": {
+      "name": "ExistingAccountIcon",
+      "file": "13d-existing-account.svg",
+      "path": "assets/tasty/icons/13d-existing-account.svg"
+    },
+    "account-settings": {
+      "name": "AccountSettingsIcon",
+      "file": "13e-account-settings.svg",
+      "path": "assets/tasty/icons/13e-account-settings.svg"
+    },
+    "account-secure": {
+      "name": "AccountSecureIcon",
+      "file": "13f-account-secure.svg",
+      "path": "assets/tasty/icons/13f-account-secure.svg"
+    },
+    "add-account": {
+      "name": "AddAccountIcon",
+      "file": "13g-add-account.svg",
+      "path": "assets/tasty/icons/13g-add-account.svg"
+    },
+    "third-party": {
+      "name": "ThirdPartyIcon",
+      "file": "13h-third-party.svg",
+      "path": "assets/tasty/icons/13h-third-party.svg"
+    },
+    "add-group": {
+      "name": "AddGroupIcon",
+      "file": "13i-add-group.svg",
+      "path": "assets/tasty/icons/13i-add-group.svg"
+    },
+    "group": {
+      "name": "GroupIcon",
+      "file": "13j-group.svg",
+      "path": "assets/tasty/icons/13j-group.svg"
+    },
+    "receive-admin": {
+      "name": "ReceiveAdminIcon",
+      "file": "13k-receive-admin.svg",
+      "path": "assets/tasty/icons/13k-receive-admin.svg"
+    },
+    "send-admin": {
+      "name": "SendAdminIcon",
+      "file": "13l-send-admin.svg",
+      "path": "assets/tasty/icons/13l-send-admin.svg"
+    },
+    "learner": {
+      "name": "LearnerIcon",
+      "file": "13m-learner.svg",
+      "path": "assets/tasty/icons/13m-learner.svg"
+    },
+    "graduate": {
+      "name": "GraduateIcon",
+      "file": "13n-graduate.svg",
+      "path": "assets/tasty/icons/13n-graduate.svg"
+    },
+    "superstar": {
+      "name": "SuperstarIcon",
+      "file": "13o-superstar.svg",
+      "path": "assets/tasty/icons/13o-superstar.svg"
+    },
+    "training": {
+      "name": "TrainingIcon",
+      "file": "13p-training.svg",
+      "path": "assets/tasty/icons/13p-training.svg"
+    },
+    "acct-profile": {
+      "name": "AcctProfileIcon",
+      "file": "13q-acct-profile.svg",
+      "path": "assets/tasty/icons/13q-acct-profile.svg"
+    },
+    "touch-free": {
+      "name": "TouchFreeIcon",
+      "file": "13r-touch-free.svg",
+      "path": "assets/tasty/icons/13r-touch-free.svg"
+    },
+    "like": {
+      "name": "LikeIcon",
+      "file": "13s-like.svg",
+      "path": "assets/tasty/icons/13s-like.svg"
+    },
+    "inquire": {
+      "name": "InquireIcon",
+      "file": "13t-inquire.svg",
+      "path": "assets/tasty/icons/13t-inquire.svg"
+    },
+    "service": {
+      "name": "ServiceIcon",
+      "file": "13u-service.svg",
+      "path": "assets/tasty/icons/13u-service.svg"
+    },
+    "accessibility": {
+      "name": "AccessibilityIcon",
+      "file": "13v-accessibility.svg",
+      "path": "assets/tasty/icons/13v-accessibility.svg"
+    },
+    "move-grip": {
+      "name": "MoveGripIcon",
+      "file": "14a-move-grip.svg",
+      "path": "assets/tasty/icons/14a-move-grip.svg"
+    },
+    "corner-expand": {
+      "name": "CornerExpandIcon",
+      "file": "14b-corner-expand.svg",
+      "path": "assets/tasty/icons/14b-corner-expand.svg"
+    },
+    "local-pickup": {
+      "name": "LocalPickupIcon",
+      "file": "14c-local-pickup.svg",
+      "path": "assets/tasty/icons/14c-local-pickup.svg"
+    },
+    "records-added": {
+      "name": "RecordsAddedIcon",
+      "file": "14d-records-added.svg",
+      "path": "assets/tasty/icons/14d-records-added.svg"
+    },
+    "records-reviewed": {
+      "name": "RecordsReviewedIcon",
+      "file": "14e-records-reviewed.svg",
+      "path": "assets/tasty/icons/14e-records-reviewed.svg"
+    },
+    "records-issued": {
+      "name": "RecordsIssuedIcon",
+      "file": "14f-records-issued.svg",
+      "path": "assets/tasty/icons/14f-records-issued.svg"
+    },
+    "disable-account": {
+      "name": "DisableAccountIcon",
+      "file": "14g-disable-account.svg",
+      "path": "assets/tasty/icons/14g-disable-account.svg"
+    },
+    "credential-ai-fill": {
+      "name": "CredentialAiFillIcon",
+      "file": "14h-credential-ai-fill.svg",
+      "path": "assets/tasty/icons/14h-credential-ai-fill.svg"
+    },
+    "credential-ai-line": {
+      "name": "CredentialAiLineIcon",
+      "file": "14i-credential-ai-line.svg",
+      "path": "assets/tasty/icons/14i-credential-ai-line.svg"
+    },
+    "ai-stars-fill": {
+      "name": "AiStarsFillIcon",
+      "file": "14j-ai-stars-fill.svg",
+      "path": "assets/tasty/icons/14j-ai-stars-fill.svg"
+    },
+    "ai-stars-line": {
+      "name": "AiStarsLineIcon",
+      "file": "14k-ai-stars-line.svg",
+      "path": "assets/tasty/icons/14k-ai-stars-line.svg"
+    },
+    "more-menu": {
+      "name": "MoreMenuIcon",
+      "file": "14l-more-menu.svg",
+      "path": "assets/tasty/icons/14l-more-menu.svg"
+    },
+    "file-dl-csv": {
+      "name": "FileDlCsvIcon",
+      "file": "15a-file-dl-csv.svg",
+      "path": "assets/tasty/icons/15a-file-dl-csv.svg"
+    },
+    "file-dl-xlsx": {
+      "name": "FileDlXlsxIcon",
+      "file": "15b-file-dl-xlsx.svg",
+      "path": "assets/tasty/icons/15b-file-dl-xlsx.svg"
+    },
+    "file-dl-pdf": {
+      "name": "FileDlPdfIcon",
+      "file": "15c-file-dl-pdf.svg",
+      "path": "assets/tasty/icons/15c-file-dl-pdf.svg"
+    },
+    "file-dl-doc": {
+      "name": "FileDlDocIcon",
+      "file": "15d-file-dl-doc.svg",
+      "path": "assets/tasty/icons/15d-file-dl-doc.svg"
+    },
+    "file-dl-docx": {
+      "name": "FileDlDocxIcon",
+      "file": "15e-file-dl-docx.svg",
+      "path": "assets/tasty/icons/15e-file-dl-docx.svg"
+    },
+    "file-dl-png": {
+      "name": "FileDlPngIcon",
+      "file": "15f-file-dl-png.svg",
+      "path": "assets/tasty/icons/15f-file-dl-png.svg"
+    },
+    "file-dl-jpeg": {
+      "name": "FileDlJpegIcon",
+      "file": "15g-file-dl-jpeg.svg",
+      "path": "assets/tasty/icons/15g-file-dl-jpeg.svg"
+    },
+    "file-dl-tiff": {
+      "name": "FileDlTiffIcon",
+      "file": "15h-file-dl-tiff.svg",
+      "path": "assets/tasty/icons/15h-file-dl-tiff.svg"
+    },
+    "file-dl-txt": {
+      "name": "FileDlTxtIcon",
+      "file": "15i-file-dl-txt.svg",
+      "path": "assets/tasty/icons/15i-file-dl-txt.svg"
+    },
+    "file-dl-xml": {
+      "name": "FileDlXmlIcon",
+      "file": "15j-file-dl-xml.svg",
+      "path": "assets/tasty/icons/15j-file-dl-xml.svg"
+    },
+    "file-dl-edi": {
+      "name": "FileDlEdiIcon",
+      "file": "15k-file-dl-edi.svg",
+      "path": "assets/tasty/icons/15k-file-dl-edi.svg"
+    },
+    "file-dl-pesc": {
+      "name": "FileDlPescIcon",
+      "file": "15l-file-dl-pesc.svg",
+      "path": "assets/tasty/icons/15l-file-dl-pesc.svg"
+    },
+    "log": {
+      "name": "LogIcon",
+      "file": "15m-log.svg",
+      "path": "assets/tasty/icons/15m-log.svg"
+    },
+    "unclaimed": {
+      "name": "UnclaimedIcon",
+      "file": "15n-unclaimed.svg",
+      "path": "assets/tasty/icons/15n-unclaimed.svg"
+    },
+    "claimed": {
+      "name": "ClaimedIcon",
+      "file": "15o-claimed.svg",
+      "path": "assets/tasty/icons/15o-claimed.svg"
+    },
+    "assessment": {
+      "name": "AssessmentIcon",
+      "file": "15q-assessment.svg",
+      "path": "assets/tasty/icons/15q-assessment.svg"
+    },
+    "no-assessment": {
+      "name": "NoAssessmentIcon",
+      "file": "15r-no-assessment.svg",
+      "path": "assets/tasty/icons/15r-no-assessment.svg"
+    },
+    "in-progress-solid": {
+      "name": "InProgressSolidIcon",
+      "file": "16b-in-progress-solid.svg",
+      "path": "assets/tasty/icons/16b-in-progress-solid.svg"
+    },
+    "file-csv": {
+      "name": "FileCsvIcon",
+      "file": "17a-file-csv.svg",
+      "path": "assets/tasty/icons/17a-file-csv.svg"
+    },
+    "file-xlsx": {
+      "name": "FileXlsxIcon",
+      "file": "17b-file-xlsx.svg",
+      "path": "assets/tasty/icons/17b-file-xlsx.svg"
+    },
+    "file-pdf": {
+      "name": "FilePdfIcon",
+      "file": "17c-file-pdf.svg",
+      "path": "assets/tasty/icons/17c-file-pdf.svg"
+    },
+    "file-doc": {
+      "name": "FileDocIcon",
+      "file": "17d-file-doc.svg",
+      "path": "assets/tasty/icons/17d-file-doc.svg"
+    },
+    "file-docx": {
+      "name": "FileDocxIcon",
+      "file": "17e-file-docx.svg",
+      "path": "assets/tasty/icons/17e-file-docx.svg"
+    },
+    "file-png": {
+      "name": "FilePngIcon",
+      "file": "17f-file-png.svg",
+      "path": "assets/tasty/icons/17f-file-png.svg"
+    },
+    "file-jpeg": {
+      "name": "FileJpegIcon",
+      "file": "17g-file-jpeg.svg",
+      "path": "assets/tasty/icons/17g-file-jpeg.svg"
+    },
+    "file-tiff": {
+      "name": "FileTiffIcon",
+      "file": "17h-file-tiff.svg",
+      "path": "assets/tasty/icons/17h-file-tiff.svg"
+    },
+    "file-txt": {
+      "name": "FileTxtIcon",
+      "file": "17i-file-txt.svg",
+      "path": "assets/tasty/icons/17i-file-txt.svg"
+    },
+    "file-xml": {
+      "name": "FileXmlIcon",
+      "file": "17j-file-xml.svg",
+      "path": "assets/tasty/icons/17j-file-xml.svg"
+    },
+    "file-edi": {
+      "name": "FileEdiIcon",
+      "file": "17k-file-edi.svg",
+      "path": "assets/tasty/icons/17k-file-edi.svg"
+    },
+    "file-pesc": {
+      "name": "FilePescIcon",
+      "file": "17l-file-pesc.svg",
+      "path": "assets/tasty/icons/17l-file-pesc.svg"
+    },
+    "file-log": {
+      "name": "FileLogIcon",
+      "file": "17m-file-log.svg",
+      "path": "assets/tasty/icons/17m-file-log.svg"
+    },
+    "parchment": {
+      "name": "ParchmentIcon",
+      "file": "1a-parchment.svg",
+      "path": "assets/tasty/icons/1a-parchment.svg"
+    },
+    "in-network": {
+      "name": "InNetworkIcon",
+      "file": "1b-in-network.svg",
+      "path": "assets/tasty/icons/1b-in-network.svg"
+    },
+    "send": {
+      "name": "SendIcon",
+      "file": "1c-send.svg",
+      "path": "assets/tasty/icons/1c-send.svg"
+    },
+    "receive": {
+      "name": "ReceiveIcon",
+      "file": "1d-receive.svg",
+      "path": "assets/tasty/icons/1d-receive.svg"
+    },
+    "award": {
+      "name": "AwardIcon",
+      "file": "1e-award.svg",
+      "path": "assets/tasty/icons/1e-award.svg"
+    },
+    "analyze": {
+      "name": "AnalyzeIcon",
+      "file": "1f-analyze.svg",
+      "path": "assets/tasty/icons/1f-analyze.svg"
+    },
+    "credential-profile": {
+      "name": "CredentialProfileIcon",
+      "file": "1g-credential-profile.svg",
+      "path": "assets/tasty/icons/1g-credential-profile.svg"
+    },
+    "services": {
+      "name": "ServicesIcon",
+      "file": "1h-services.svg",
+      "path": "assets/tasty/icons/1h-services.svg"
+    },
+    "builder": {
+      "name": "BuilderIcon",
+      "file": "1i-builder.svg",
+      "path": "assets/tasty/icons/1i-builder.svg"
+    },
+    "databits": {
+      "name": "DatabitsIcon",
+      "file": "1j-databits.svg",
+      "path": "assets/tasty/icons/1j-databits.svg"
+    },
+    "premium": {
+      "name": "PremiumIcon",
+      "file": "1k-premium.svg",
+      "path": "assets/tasty/icons/1k-premium.svg"
+    },
+    "recruit": {
+      "name": "RecruitIcon",
+      "file": "1l-recruit.svg",
+      "path": "assets/tasty/icons/1l-recruit.svg"
+    },
+    "robo": {
+      "name": "RoboIcon",
+      "file": "1m-robo.svg",
+      "path": "assets/tasty/icons/1m-robo.svg"
+    },
+    "parchie-bot": {
+      "name": "ParchieBotIcon",
+      "file": "1n-parchie-bot.svg",
+      "path": "assets/tasty/icons/1n-parchie-bot.svg"
+    },
+    "subtract-2": {
+      "name": "Subtract2Icon",
+      "file": "1s-subtract-2.svg",
+      "path": "assets/tasty/icons/1s-subtract-2.svg"
+    },
+    "add-2": {
+      "name": "Add2Icon",
+      "file": "1t-add-2.svg",
+      "path": "assets/tasty/icons/1t-add-2.svg"
+    },
+    "menu": {
+      "name": "MenuIcon",
+      "file": "1u-menu.svg",
+      "path": "assets/tasty/icons/1u-menu.svg"
+    },
+    "minus": {
+      "name": "MinusIcon",
+      "file": "1v-minus.svg",
+      "path": "assets/tasty/icons/1v-minus.svg"
+    },
+    "plus": {
+      "name": "PlusIcon",
+      "file": "1w-plus.svg",
+      "path": "assets/tasty/icons/1w-plus.svg"
+    },
+    "broken-link": {
+      "name": "BrokenLinkIcon",
+      "file": "1x-broken-link.svg",
+      "path": "assets/tasty/icons/1x-broken-link.svg"
+    },
+    "subtract": {
+      "name": "SubtractIcon",
+      "file": "1x-subtract.svg",
+      "path": "assets/tasty/icons/1x-subtract.svg"
+    },
+    "add": {
+      "name": "AddIcon",
+      "file": "1y-add.svg",
+      "path": "assets/tasty/icons/1y-add.svg"
+    },
+    "cancel": {
+      "name": "CancelIcon",
+      "file": "1z-cancel.svg",
+      "path": "assets/tasty/icons/1z-cancel.svg"
+    },
+    "throbber-dark": {
+      "name": "ThrobberDarkIcon",
+      "file": "20a-throbber-dark.svg",
+      "path": "assets/tasty/icons/20a-throbber-dark.svg"
+    },
+    "throbber-light": {
+      "name": "ThrobberLightIcon",
+      "file": "20b-throbber-light.svg",
+      "path": "assets/tasty/icons/20b-throbber-light.svg"
+    },
+    "required-elements": {
+      "name": "RequiredElementsIcon",
+      "file": "20c-required-elements.svg",
+      "path": "assets/tasty/icons/20c-required-elements.svg"
+    },
+    "in-progress": {
+      "name": "InProgressIcon",
+      "file": "20l-in-progress.svg",
+      "path": "assets/tasty/icons/20l-in-progress.svg"
+    },
+    "linkedin": {
+      "name": "LinkedinIcon",
+      "file": "2a-linkedin.svg",
+      "path": "assets/tasty/icons/2a-linkedin.svg"
+    },
+    "facebook": {
+      "name": "FacebookIcon",
+      "file": "2b-facebook.svg",
+      "path": "assets/tasty/icons/2b-facebook.svg"
+    },
+    "twitter": {
+      "name": "TwitterIcon",
+      "file": "2c-twitter.svg",
+      "path": "assets/tasty/icons/2c-twitter.svg"
+    },
+    "blog": {
+      "name": "BlogIcon",
+      "file": "2d-blog.svg",
+      "path": "assets/tasty/icons/2d-blog.svg"
+    },
+    "rss": {
+      "name": "RssIcon",
+      "file": "2e-rss.svg",
+      "path": "assets/tasty/icons/2e-rss.svg"
+    },
+    "network": {
+      "name": "NetworkIcon",
+      "file": "2f-network.svg",
+      "path": "assets/tasty/icons/2f-network.svg"
+    },
+    "share": {
+      "name": "ShareIcon",
+      "file": "2g-share.svg",
+      "path": "assets/tasty/icons/2g-share.svg"
+    },
+    "global": {
+      "name": "GlobalIcon",
+      "file": "2h-global.svg",
+      "path": "assets/tasty/icons/2h-global.svg"
+    },
+    "cancel-large": {
+      "name": "CancelLargeIcon",
+      "file": "2t-cancel-large.svg",
+      "path": "assets/tasty/icons/2t-cancel-large.svg"
+    },
+    "back-caret": {
+      "name": "BackCaretIcon",
+      "file": "2u-back-caret.svg",
+      "path": "assets/tasty/icons/2u-back-caret.svg"
+    },
+    "double-caret": {
+      "name": "DoubleCaretIcon",
+      "file": "2v-double-caret.svg",
+      "path": "assets/tasty/icons/2v-double-caret.svg"
+    },
+    "arrow": {
+      "name": "ArrowIcon",
+      "file": "2w-arrow.svg",
+      "path": "assets/tasty/icons/2w-arrow.svg"
+    },
+    "revert": {
+      "name": "RevertIcon",
+      "file": "2x-revert.svg",
+      "path": "assets/tasty/icons/2x-revert.svg"
+    },
+    "pointer": {
+      "name": "PointerIcon",
+      "file": "2y-pointer.svg",
+      "path": "assets/tasty/icons/2y-pointer.svg"
+    },
+    "caret": {
+      "name": "CaretIcon",
+      "file": "2z-caret.svg",
+      "path": "assets/tasty/icons/2z-caret.svg"
+    },
+    "new-account": {
+      "name": "NewAccountIcon",
+      "file": "3a-new-account.svg",
+      "path": "assets/tasty/icons/3a-new-account.svg"
+    },
+    "sign-in": {
+      "name": "SignInIcon",
+      "file": "3b-sign-in.svg",
+      "path": "assets/tasty/icons/3b-sign-in.svg"
+    },
+    "sign-out": {
+      "name": "SignOutIcon",
+      "file": "3c-sign-out.svg",
+      "path": "assets/tasty/icons/3c-sign-out.svg"
+    },
+    "support": {
+      "name": "SupportIcon",
+      "file": "3d-support.svg",
+      "path": "assets/tasty/icons/3d-support.svg"
+    },
+    "how-it-works": {
+      "name": "HowItWorksIcon",
+      "file": "3e-how-it-works.svg",
+      "path": "assets/tasty/icons/3e-how-it-works.svg"
+    },
+    "search": {
+      "name": "SearchIcon",
+      "file": "3f-search.svg",
+      "path": "assets/tasty/icons/3f-search.svg"
+    },
+    "zoom-in": {
+      "name": "ZoomInIcon",
+      "file": "3g-zoom-in.svg",
+      "path": "assets/tasty/icons/3g-zoom-in.svg"
+    },
+    "zoom-out": {
+      "name": "ZoomOutIcon",
+      "file": "3h-zoom-out.svg",
+      "path": "assets/tasty/icons/3h-zoom-out.svg"
+    },
+    "preview": {
+      "name": "PreviewIcon",
+      "file": "3i-preview.svg",
+      "path": "assets/tasty/icons/3i-preview.svg"
+    },
+    "tip": {
+      "name": "TipIcon",
+      "file": "3j-tip.svg",
+      "path": "assets/tasty/icons/3j-tip.svg"
+    },
+    "tooltip": {
+      "name": "TooltipIcon",
+      "file": "3k-tooltip.svg",
+      "path": "assets/tasty/icons/3k-tooltip.svg"
+    },
+    "info": {
+      "name": "InfoIcon",
+      "file": "3l-info.svg",
+      "path": "assets/tasty/icons/3l-info.svg"
+    },
+    "warning": {
+      "name": "WarningIcon",
+      "file": "3m-warning.svg",
+      "path": "assets/tasty/icons/3m-warning.svg"
+    },
+    "warning-2": {
+      "name": "Warning2Icon",
+      "file": "3n-warning-2.svg",
+      "path": "assets/tasty/icons/3n-warning-2.svg"
+    },
+    "valid": {
+      "name": "ValidIcon",
+      "file": "3o-valid.svg",
+      "path": "assets/tasty/icons/3o-valid.svg"
+    },
+    "check": {
+      "name": "CheckIcon",
+      "file": "3p-check.svg",
+      "path": "assets/tasty/icons/3p-check.svg"
+    },
+    "check-open": {
+      "name": "CheckOpenIcon",
+      "file": "3q-check-open.svg",
+      "path": "assets/tasty/icons/3q-check-open.svg"
+    },
+    "scroll-arrow-left": {
+      "name": "ScrollArrowLeftIcon",
+      "file": "3x-scroll-arrow-left.svg",
+      "path": "assets/tasty/icons/3x-scroll-arrow-left.svg"
+    },
+    "scroll-arrow-open": {
+      "name": "ScrollArrowOpenIcon",
+      "file": "3x-scroll-arrow-open.svg",
+      "path": "assets/tasty/icons/3x-scroll-arrow-open.svg"
+    },
+    "scroll-arrow": {
+      "name": "ScrollArrowIcon",
+      "file": "3y-scroll-arrow.svg",
+      "path": "assets/tasty/icons/3y-scroll-arrow.svg"
+    },
+    "caret-solid": {
+      "name": "CaretSolidIcon",
+      "file": "3z-caret-solid.svg",
+      "path": "assets/tasty/icons/3z-caret-solid.svg"
+    },
+    "upload": {
+      "name": "UploadIcon",
+      "file": "4a-upload.svg",
+      "path": "assets/tasty/icons/4a-upload.svg"
+    },
+    "download": {
+      "name": "DownloadIcon",
+      "file": "4b-download.svg",
+      "path": "assets/tasty/icons/4b-download.svg"
+    },
+    "dl-electronic": {
+      "name": "DlElectronicIcon",
+      "file": "4c-dl-electronic.svg",
+      "path": "assets/tasty/icons/4c-dl-electronic.svg"
+    },
+    "dl-print": {
+      "name": "DlPrintIcon",
+      "file": "4d-dl-print.svg",
+      "path": "assets/tasty/icons/4d-dl-print.svg"
+    },
+    "dl-file": {
+      "name": "DlFileIcon",
+      "file": "4e-dl-file.svg",
+      "path": "assets/tasty/icons/4e-dl-file.svg"
+    },
+    "dl-batch": {
+      "name": "DlBatchIcon",
+      "file": "4f-dl-batch.svg",
+      "path": "assets/tasty/icons/4f-dl-batch.svg"
+    },
+    "refresh": {
+      "name": "RefreshIcon",
+      "file": "4g-refresh.svg",
+      "path": "assets/tasty/icons/4g-refresh.svg"
+    },
+    "rotate-left": {
+      "name": "RotateLeftIcon",
+      "file": "4h-rotate-left.svg",
+      "path": "assets/tasty/icons/4h-rotate-left.svg"
+    },
+    "rotate-right": {
+      "name": "RotateRightIcon",
+      "file": "4i-rotate-right.svg",
+      "path": "assets/tasty/icons/4i-rotate-right.svg"
+    },
+    "package": {
+      "name": "PackageIcon",
+      "file": "4j-package.svg",
+      "path": "assets/tasty/icons/4j-package.svg"
+    },
+    "open-package": {
+      "name": "OpenPackageIcon",
+      "file": "4k-open-package.svg",
+      "path": "assets/tasty/icons/4k-open-package.svg"
+    },
+    "returned-package": {
+      "name": "ReturnedPackageIcon",
+      "file": "4l-returned-package.svg",
+      "path": "assets/tasty/icons/4l-returned-package.svg"
+    },
+    "route": {
+      "name": "RouteIcon",
+      "file": "4m-route.svg",
+      "path": "assets/tasty/icons/4m-route.svg"
+    },
+    "credential-config": {
+      "name": "CredentialConfigIcon",
+      "file": "4n-credential-config.svg",
+      "path": "assets/tasty/icons/4n-credential-config.svg"
+    },
+    "member-config": {
+      "name": "MemberConfigIcon",
+      "file": "4o-member-config.svg",
+      "path": "assets/tasty/icons/4o-member-config.svg"
+    },
+    "in-app-message": {
+      "name": "InAppMessageIcon",
+      "file": "4p-in-app-message.svg",
+      "path": "assets/tasty/icons/4p-in-app-message.svg"
+    },
+    "sso": {
+      "name": "SsoIcon",
+      "file": "4q-sso.svg",
+      "path": "assets/tasty/icons/4q-sso.svg"
+    },
+    "api": {
+      "name": "ApiIcon",
+      "file": "4r-api.svg",
+      "path": "assets/tasty/icons/4r-api.svg"
+    },
+    "redownload": {
+      "name": "RedownloadIcon",
+      "file": "4s-redownload.svg",
+      "path": "assets/tasty/icons/4s-redownload.svg"
+    },
+    "hold": {
+      "name": "HoldIcon",
+      "file": "4y-hold.svg",
+      "path": "assets/tasty/icons/4y-hold.svg"
+    },
+    "validation-required": {
+      "name": "ValidationRequiredIcon",
+      "file": "4z-validation-required.svg",
+      "path": "assets/tasty/icons/4z-validation-required.svg"
+    },
+    "settings": {
+      "name": "SettingsIcon",
+      "file": "5a-settings.svg",
+      "path": "assets/tasty/icons/5a-settings.svg"
+    },
+    "preferences": {
+      "name": "PreferencesIcon",
+      "file": "5b-preferences.svg",
+      "path": "assets/tasty/icons/5b-preferences.svg"
+    },
+    "automation": {
+      "name": "AutomationIcon",
+      "file": "5c-automation.svg",
+      "path": "assets/tasty/icons/5c-automation.svg"
+    },
+    "reconfigure": {
+      "name": "ReconfigureIcon",
+      "file": "5d-reconfigure.svg",
+      "path": "assets/tasty/icons/5d-reconfigure.svg"
+    },
+    "edit": {
+      "name": "EditIcon",
+      "file": "5e-edit.svg",
+      "path": "assets/tasty/icons/5e-edit.svg"
+    },
+    "duplicate": {
+      "name": "DuplicateIcon",
+      "file": "5f-duplicate.svg",
+      "path": "assets/tasty/icons/5f-duplicate.svg"
+    },
+    "resize": {
+      "name": "ResizeIcon",
+      "file": "5g-resize.svg",
+      "path": "assets/tasty/icons/5g-resize.svg"
+    },
+    "delete": {
+      "name": "DeleteIcon",
+      "file": "5h-delete.svg",
+      "path": "assets/tasty/icons/5h-delete.svg"
+    },
+    "picker": {
+      "name": "PickerIcon",
+      "file": "5i-picker.svg",
+      "path": "assets/tasty/icons/5i-picker.svg"
+    },
+    "filter": {
+      "name": "FilterIcon",
+      "file": "5j-filter.svg",
+      "path": "assets/tasty/icons/5j-filter.svg"
+    },
+    "video-play": {
+      "name": "VideoPlayIcon",
+      "file": "5k-video-play.svg",
+      "path": "assets/tasty/icons/5k-video-play.svg"
+    },
+    "tool": {
+      "name": "ToolIcon",
+      "file": "5l-tool.svg",
+      "path": "assets/tasty/icons/5l-tool.svg"
+    },
+    "print": {
+      "name": "PrintIcon",
+      "file": "5m-print.svg",
+      "path": "assets/tasty/icons/5m-print.svg"
+    },
+    "reprint": {
+      "name": "ReprintIcon",
+      "file": "5n-reprint.svg",
+      "path": "assets/tasty/icons/5n-reprint.svg"
+    },
+    "print-manifest": {
+      "name": "PrintManifestIcon",
+      "file": "5o-print-manifest.svg",
+      "path": "assets/tasty/icons/5o-print-manifest.svg"
+    },
+    "scan-barcode": {
+      "name": "ScanBarcodeIcon",
+      "file": "5p-scan-barcode.svg",
+      "path": "assets/tasty/icons/5p-scan-barcode.svg"
+    },
+    "credit": {
+      "name": "CreditIcon",
+      "file": "5q-credit.svg",
+      "path": "assets/tasty/icons/5q-credit.svg"
+    },
+    "void": {
+      "name": "VoidIcon",
+      "file": "5r-void.svg",
+      "path": "assets/tasty/icons/5r-void.svg"
+    },
+    "open-new": {
+      "name": "OpenNewIcon",
+      "file": "5s-open-new.svg",
+      "path": "assets/tasty/icons/5s-open-new.svg"
+    },
+    "transaction-locked": {
+      "name": "TransactionLockedIcon",
+      "file": "5t-transaction-locked.svg",
+      "path": "assets/tasty/icons/5t-transaction-locked.svg"
+    },
+    "config-sliders": {
+      "name": "ConfigSlidersIcon",
+      "file": "5u-config-sliders.svg",
+      "path": "assets/tasty/icons/5u-config-sliders.svg"
+    },
+    "sis-error": {
+      "name": "SisErrorIcon",
+      "file": "5x-sis-error.svg",
+      "path": "assets/tasty/icons/5x-sis-error.svg"
+    },
+    "sis-happy": {
+      "name": "SisHappyIcon",
+      "file": "5y-sis-happy.svg",
+      "path": "assets/tasty/icons/5y-sis-happy.svg"
+    },
+    "sis-asleep": {
+      "name": "SisAsleepIcon",
+      "file": "5z-sis-asleep.svg",
+      "path": "assets/tasty/icons/5z-sis-asleep.svg"
+    },
+    "web-upload": {
+      "name": "WebUploadIcon",
+      "file": "6a-web-upload.svg",
+      "path": "assets/tasty/icons/6a-web-upload.svg"
+    },
+    "prepare-locally": {
+      "name": "PrepareLocallyIcon",
+      "file": "6b-prepare-locally.svg",
+      "path": "assets/tasty/icons/6b-prepare-locally.svg"
+    },
+    "credential-library": {
+      "name": "CredentialLibraryIcon",
+      "file": "6c-credential-library.svg",
+      "path": "assets/tasty/icons/6c-credential-library.svg"
+    },
+    "order-details": {
+      "name": "OrderDetailsIcon",
+      "file": "6d-order-details.svg",
+      "path": "assets/tasty/icons/6d-order-details.svg"
+    },
+    "attachment": {
+      "name": "AttachmentIcon",
+      "file": "6e-attachment.svg",
+      "path": "assets/tasty/icons/6e-attachment.svg"
+    },
+    "attach": {
+      "name": "AttachIcon",
+      "file": "6f-attach.svg",
+      "path": "assets/tasty/icons/6f-attach.svg"
+    },
+    "link": {
+      "name": "LinkIcon",
+      "file": "6g-link.svg",
+      "path": "assets/tasty/icons/6g-link.svg"
+    },
+    "calendar": {
+      "name": "CalendarIcon",
+      "file": "6h-calendar.svg",
+      "path": "assets/tasty/icons/6h-calendar.svg"
+    },
+    "electronic": {
+      "name": "ElectronicIcon",
+      "file": "6i-electronic.svg",
+      "path": "assets/tasty/icons/6i-electronic.svg"
+    },
+    "paper": {
+      "name": "PaperIcon",
+      "file": "6j-paper.svg",
+      "path": "assets/tasty/icons/6j-paper.svg"
+    },
+    "expedited": {
+      "name": "ExpeditedIcon",
+      "file": "6k-expedited.svg",
+      "path": "assets/tasty/icons/6k-expedited.svg"
+    },
+    "track": {
+      "name": "TrackIcon",
+      "file": "6l-track.svg",
+      "path": "assets/tasty/icons/6l-track.svg"
+    },
+    "bag": {
+      "name": "BagIcon",
+      "file": "6m-bag.svg",
+      "path": "assets/tasty/icons/6m-bag.svg"
+    },
+    "cart": {
+      "name": "CartIcon",
+      "file": "6n-cart.svg",
+      "path": "assets/tasty/icons/6n-cart.svg"
+    },
+    "location": {
+      "name": "LocationIcon",
+      "file": "6o-location.svg",
+      "path": "assets/tasty/icons/6o-location.svg"
+    },
+    "verified": {
+      "name": "VerifiedIcon",
+      "file": "6p-verified.svg",
+      "path": "assets/tasty/icons/6p-verified.svg"
+    },
+    "unverified": {
+      "name": "UnverifiedIcon",
+      "file": "6q-unverified.svg",
+      "path": "assets/tasty/icons/6q-unverified.svg"
+    },
+    "secure": {
+      "name": "SecureIcon",
+      "file": "6r-secure.svg",
+      "path": "assets/tasty/icons/6r-secure.svg"
+    },
+    "reset-password": {
+      "name": "ResetPasswordIcon",
+      "file": "6s-reset-password.svg",
+      "path": "assets/tasty/icons/6s-reset-password.svg"
+    },
+    "refund": {
+      "name": "RefundIcon",
+      "file": "6t-refund.svg",
+      "path": "assets/tasty/icons/6t-refund.svg"
+    },
+    "electronic-2": {
+      "name": "Electronic2Icon",
+      "file": "6u-electronic-2.svg",
+      "path": "assets/tasty/icons/6u-electronic-2.svg"
+    },
+    "locked": {
+      "name": "LockedIcon",
+      "file": "6v-locked.svg",
+      "path": "assets/tasty/icons/6v-locked.svg"
+    },
+    "unlocked": {
+      "name": "UnlockedIcon",
+      "file": "6w-unlocked.svg",
+      "path": "assets/tasty/icons/6w-unlocked.svg"
+    },
+    "authorized": {
+      "name": "AuthorizedIcon",
+      "file": "6x-authorized.svg",
+      "path": "assets/tasty/icons/6x-authorized.svg"
+    },
+    "unauthorized": {
+      "name": "UnauthorizedIcon",
+      "file": "6y-unauthorized.svg",
+      "path": "assets/tasty/icons/6y-unauthorized.svg"
+    },
+    "notification": {
+      "name": "NotificationIcon",
+      "file": "7a-notification.svg",
+      "path": "assets/tasty/icons/7a-notification.svg"
+    },
+    "dashboard": {
+      "name": "DashboardIcon",
+      "file": "7b-dashboard.svg",
+      "path": "assets/tasty/icons/7b-dashboard.svg"
+    },
+    "activity": {
+      "name": "ActivityIcon",
+      "file": "7c-activity.svg",
+      "path": "assets/tasty/icons/7c-activity.svg"
+    },
+    "peers": {
+      "name": "PeersIcon",
+      "file": "7d-peers.svg",
+      "path": "assets/tasty/icons/7d-peers.svg"
+    },
+    "address": {
+      "name": "AddressIcon",
+      "file": "7e-address.svg",
+      "path": "assets/tasty/icons/7e-address.svg"
+    },
+    "invalid-address": {
+      "name": "InvalidAddressIcon",
+      "file": "7f-invalid-address.svg",
+      "path": "assets/tasty/icons/7f-invalid-address.svg"
+    },
+    "directory": {
+      "name": "DirectoryIcon",
+      "file": "7g-directory.svg",
+      "path": "assets/tasty/icons/7g-directory.svg"
+    },
+    "records": {
+      "name": "RecordsIcon",
+      "file": "7h-records.svg",
+      "path": "assets/tasty/icons/7h-records.svg"
+    },
+    "tags": {
+      "name": "TagsIcon",
+      "file": "7i-tags.svg",
+      "path": "assets/tasty/icons/7i-tags.svg"
+    },
+    "regions": {
+      "name": "RegionsIcon",
+      "file": "7j-regions.svg",
+      "path": "assets/tasty/icons/7j-regions.svg"
+    },
+    "star": {
+      "name": "StarIcon",
+      "file": "7k-star.svg",
+      "path": "assets/tasty/icons/7k-star.svg"
+    },
+    "match": {
+      "name": "MatchIcon",
+      "file": "7l-match.svg",
+      "path": "assets/tasty/icons/7l-match.svg"
+    },
+    "image": {
+      "name": "ImageIcon",
+      "file": "7m-image.svg",
+      "path": "assets/tasty/icons/7m-image.svg"
+    },
+    "text": {
+      "name": "TextIcon",
+      "file": "7n-text.svg",
+      "path": "assets/tasty/icons/7n-text.svg"
+    },
+    "number": {
+      "name": "NumberIcon",
+      "file": "7o-number.svg",
+      "path": "assets/tasty/icons/7o-number.svg"
+    },
+    "new-1": {
+      "name": "New1Icon",
+      "file": "7p-new-1.svg",
+      "path": "assets/tasty/icons/7p-new-1.svg"
+    },
+    "new-2": {
+      "name": "New2Icon",
+      "file": "7q-new-2.svg",
+      "path": "assets/tasty/icons/7q-new-2.svg"
+    },
+    "disassociate": {
+      "name": "DisassociateIcon",
+      "file": "7r-disassociate.svg",
+      "path": "assets/tasty/icons/7r-disassociate.svg"
+    },
+    "star-open": {
+      "name": "StarOpenIcon",
+      "file": "7s-star-open.svg",
+      "path": "assets/tasty/icons/7s-star-open.svg"
+    },
+    "notification-bell": {
+      "name": "NotificationBellIcon",
+      "file": "7t-notification-bell.svg",
+      "path": "assets/tasty/icons/7t-notification-bell.svg"
+    },
+    "favorite": {
+      "name": "FavoriteIcon",
+      "file": "7u-favorite.svg",
+      "path": "assets/tasty/icons/7u-favorite.svg"
+    },
+    "favorite-solid": {
+      "name": "FavoriteSolidIcon",
+      "file": "7v-favorite-solid.svg",
+      "path": "assets/tasty/icons/7v-favorite-solid.svg"
+    },
+    "comments": {
+      "name": "CommentsIcon",
+      "file": "8a-comments.svg",
+      "path": "assets/tasty/icons/8a-comments.svg"
+    },
+    "conversation": {
+      "name": "ConversationIcon",
+      "file": "8b-conversation.svg",
+      "path": "assets/tasty/icons/8b-conversation.svg"
+    },
+    "quote": {
+      "name": "QuoteIcon",
+      "file": "8c-quote.svg",
+      "path": "assets/tasty/icons/8c-quote.svg"
+    },
+    "careers": {
+      "name": "CareersIcon",
+      "file": "8d-careers.svg",
+      "path": "assets/tasty/icons/8d-careers.svg"
+    },
+    "press-kit": {
+      "name": "PressKitIcon",
+      "file": "8e-press-kit.svg",
+      "path": "assets/tasty/icons/8e-press-kit.svg"
+    },
+    "rankings": {
+      "name": "RankingsIcon",
+      "file": "8f-rankings.svg",
+      "path": "assets/tasty/icons/8f-rankings.svg"
+    },
+    "webinars": {
+      "name": "WebinarsIcon",
+      "file": "8g-webinars.svg",
+      "path": "assets/tasty/icons/8g-webinars.svg"
+    },
+    "announcement": {
+      "name": "AnnouncementIcon",
+      "file": "8h-announcement.svg",
+      "path": "assets/tasty/icons/8h-announcement.svg"
+    },
+    "case-study": {
+      "name": "CaseStudyIcon",
+      "file": "8i-case-study.svg",
+      "path": "assets/tasty/icons/8i-case-study.svg"
+    },
+    "design": {
+      "name": "DesignIcon",
+      "file": "8j-design.svg",
+      "path": "assets/tasty/icons/8j-design.svg"
+    },
+    "time": {
+      "name": "TimeIcon",
+      "file": "8k-time.svg",
+      "path": "assets/tasty/icons/8k-time.svg"
+    },
+    "recent": {
+      "name": "RecentIcon",
+      "file": "8l-recent.svg",
+      "path": "assets/tasty/icons/8l-recent.svg"
+    },
+    "expired": {
+      "name": "ExpiredIcon",
+      "file": "8m-expired.svg",
+      "path": "assets/tasty/icons/8m-expired.svg"
+    },
+    "reprocess": {
+      "name": "ReprocessIcon",
+      "file": "8n-reprocess.svg",
+      "path": "assets/tasty/icons/8n-reprocess.svg"
+    },
+    "innovation": {
+      "name": "InnovationIcon",
+      "file": "8o-innovation.svg",
+      "path": "assets/tasty/icons/8o-innovation.svg"
+    },
+    "add-comment-fill": {
+      "name": "AddCommentFillIcon",
+      "file": "8q-add-comment-fill.svg",
+      "path": "assets/tasty/icons/8q-add-comment-fill.svg"
+    },
+    "add-comment-line": {
+      "name": "AddCommentLineIcon",
+      "file": "8r-add-comment-line.svg",
+      "path": "assets/tasty/icons/8r-add-comment-line.svg"
+    },
+    "chart-pie": {
+      "name": "ChartPieIcon",
+      "file": "9a-chart-pie.svg",
+      "path": "assets/tasty/icons/9a-chart-pie.svg"
+    },
+    "chart-line": {
+      "name": "ChartLineIcon",
+      "file": "9b-chart-line.svg",
+      "path": "assets/tasty/icons/9b-chart-line.svg"
+    },
+    "chart-bar": {
+      "name": "ChartBarIcon",
+      "file": "9c-chart-bar.svg",
+      "path": "assets/tasty/icons/9c-chart-bar.svg"
+    },
+    "chart-area": {
+      "name": "ChartAreaIcon",
+      "file": "9d-chart-area.svg",
+      "path": "assets/tasty/icons/9d-chart-area.svg"
+    },
+    "list": {
+      "name": "ListIcon",
+      "file": "9e-list.svg",
+      "path": "assets/tasty/icons/9e-list.svg"
+    },
+    "database": {
+      "name": "DatabaseIcon",
+      "file": "9f-database.svg",
+      "path": "assets/tasty/icons/9f-database.svg"
+    },
+    "visible": {
+      "name": "VisibleIcon",
+      "file": "9g-visible.svg",
+      "path": "assets/tasty/icons/9g-visible.svg"
+    },
+    "colors": {
+      "name": "ColorsIcon",
+      "file": "9h-colors.svg",
+      "path": "assets/tasty/icons/9h-colors.svg"
+    },
+    "notvisible": {
+      "name": "NotvisibleIcon",
+      "file": "9i-notvisible.svg",
+      "path": "assets/tasty/icons/9i-notvisible.svg"
+    },
+    "supportal": {
+      "name": "SupportalIcon",
+      "file": "supportal.svg",
+      "path": "assets/tasty/icons/supportal.svg"
+    },
+    "vg-6f-learner-school-welcome": {
+      "name": "Vg6fLearnerSchoolWelcomeIcon",
+      "file": "vg-6f-learner-school-welcome.svg",
+      "path": "assets/tasty/icons/vg-6f-learner-school-welcome.svg"
+    },
+    "vg-6g-generic-school": {
+      "name": "Vg6gGenericSchoolIcon",
+      "file": "vg-6g-generic-school.svg",
+      "path": "assets/tasty/icons/vg-6g-generic-school.svg"
+    },
+    "vg-6h-no-results-found": {
+      "name": "Vg6hNoResultsFoundIcon",
+      "file": "vg-6h-no-results-found.svg",
+      "path": "assets/tasty/icons/vg-6h-no-results-found.svg"
+    }
+  },
+  "graphic": {
+    "unmatched-learner-record-fill": {
+      "name": "UnmatchedLearnerRecordFillGraphic",
+      "file": "IG-10a-unmatched-learner-record-fill.svg",
+      "path": "assets/tasty/graphics/IG-10a-unmatched-learner-record-fill.svg"
+    },
+    "unmatched-learner-record-line": {
+      "name": "UnmatchedLearnerRecordLineGraphic",
+      "file": "IG-10b-unmatched-learner-record-line.svg",
+      "path": "assets/tasty/graphics/IG-10b-unmatched-learner-record-line.svg"
+    },
+    "college-search-fill": {
+      "name": "CollegeSearchFillGraphic",
+      "file": "IG-10c-college-search-fill.svg",
+      "path": "assets/tasty/graphics/IG-10c-college-search-fill.svg"
+    },
+    "college-search-line": {
+      "name": "CollegeSearchLineGraphic",
+      "file": "IG-10d-college-search-line.svg",
+      "path": "assets/tasty/graphics/IG-10d-college-search-line.svg"
+    },
+    "college-favorite-fill": {
+      "name": "CollegeFavoriteFillGraphic",
+      "file": "IG-10e-college-favorite-fill.svg",
+      "path": "assets/tasty/graphics/IG-10e-college-favorite-fill.svg"
+    },
+    "college-favorite-line": {
+      "name": "CollegeFavoriteLineGraphic",
+      "file": "IG-10f-college-favorite-line.svg",
+      "path": "assets/tasty/graphics/IG-10f-college-favorite-line.svg"
+    },
+    "college-details-fill": {
+      "name": "CollegeDetailsFillGraphic",
+      "file": "IG-10g-college-details-fill.svg",
+      "path": "assets/tasty/graphics/IG-10g-college-details-fill.svg"
+    },
+    "college-details-line": {
+      "name": "CollegeDetailsLineGraphic",
+      "file": "IG-10h-college-details-line.svg",
+      "path": "assets/tasty/graphics/IG-10h-college-details-line.svg"
+    },
+    "orders-fill": {
+      "name": "OrdersFillGraphic",
+      "file": "IG-10i-orders-fill.svg",
+      "path": "assets/tasty/graphics/IG-10i-orders-fill.svg"
+    },
+    "orders-line": {
+      "name": "OrdersLineGraphic",
+      "file": "IG-10j-orders-line.svg",
+      "path": "assets/tasty/graphics/IG-10j-orders-line.svg"
+    },
+    "confirm-fill": {
+      "name": "ConfirmFillGraphic",
+      "file": "IG-10k-confirm-fill.svg",
+      "path": "assets/tasty/graphics/IG-10k-confirm-fill.svg"
+    },
+    "confirm-line": {
+      "name": "ConfirmLineGraphic",
+      "file": "IG-10l-confirm-line.svg",
+      "path": "assets/tasty/graphics/IG-10l-confirm-line.svg"
+    },
+    "empty-inbox-fill": {
+      "name": "EmptyInboxFillGraphic",
+      "file": "IG-10m-empty-inbox-fill.svg",
+      "path": "assets/tasty/graphics/IG-10m-empty-inbox-fill.svg"
+    },
+    "empty-inbox-line": {
+      "name": "EmptyInboxLineGraphic",
+      "file": "IG-10n-empty-inbox-line.svg",
+      "path": "assets/tasty/graphics/IG-10n-empty-inbox-line.svg"
+    },
+    "transcript-fill": {
+      "name": "TranscriptFillGraphic",
+      "file": "IG-1a-transcript-fill.svg",
+      "path": "assets/tasty/graphics/IG-1a-transcript-fill.svg"
+    },
+    "transcript-line": {
+      "name": "TranscriptLineGraphic",
+      "file": "IG-1b-transcript-line.svg",
+      "path": "assets/tasty/graphics/IG-1b-transcript-line.svg"
+    },
+    "transcript-title-fill": {
+      "name": "TranscriptTitleFillGraphic",
+      "file": "IG-1c-transcript-title-fill.svg",
+      "path": "assets/tasty/graphics/IG-1c-transcript-title-fill.svg"
+    },
+    "transcript-title-line": {
+      "name": "TranscriptTitleLineGraphic",
+      "file": "IG-1d-transcript-title-line.svg",
+      "path": "assets/tasty/graphics/IG-1d-transcript-title-line.svg"
+    },
+    "diploma-fill": {
+      "name": "DiplomaFillGraphic",
+      "file": "IG-1e-diploma-fill.svg",
+      "path": "assets/tasty/graphics/IG-1e-diploma-fill.svg"
+    },
+    "diploma-line": {
+      "name": "DiplomaLineGraphic",
+      "file": "IG-1f-diploma-line.svg",
+      "path": "assets/tasty/graphics/IG-1f-diploma-line.svg"
+    },
+    "diploma-title-fill": {
+      "name": "DiplomaTitleFillGraphic",
+      "file": "IG-1g-diploma-title-fill.svg",
+      "path": "assets/tasty/graphics/IG-1g-diploma-title-fill.svg"
+    },
+    "diploma-title-line": {
+      "name": "DiplomaTitleLineGraphic",
+      "file": "IG-1h-diploma-title-line.svg",
+      "path": "assets/tasty/graphics/IG-1h-diploma-title-line.svg"
+    },
+    "certificate-fill": {
+      "name": "CertificateFillGraphic",
+      "file": "IG-1i-certificate-fill.svg",
+      "path": "assets/tasty/graphics/IG-1i-certificate-fill.svg"
+    },
+    "certificate-line": {
+      "name": "CertificateLineGraphic",
+      "file": "IG-1j-certificate-line.svg",
+      "path": "assets/tasty/graphics/IG-1j-certificate-line.svg"
+    },
+    "certificate-title-fill": {
+      "name": "CertificateTitleFillGraphic",
+      "file": "IG-1k-certificate-title-fill.svg",
+      "path": "assets/tasty/graphics/IG-1k-certificate-title-fill.svg"
+    },
+    "certificate-title-line": {
+      "name": "CertificateTitleLineGraphic",
+      "file": "IG-1l-certificate-title-line.svg",
+      "path": "assets/tasty/graphics/IG-1l-certificate-title-line.svg"
+    },
+    "badge-fill": {
+      "name": "BadgeFillGraphic",
+      "file": "IG-1m-badge-fill.svg",
+      "path": "assets/tasty/graphics/IG-1m-badge-fill.svg"
+    },
+    "badge-line": {
+      "name": "BadgeLineGraphic",
+      "file": "IG-1n-badge-line.svg",
+      "path": "assets/tasty/graphics/IG-1n-badge-line.svg"
+    },
+    "badge-title-fill": {
+      "name": "BadgeTitleFillGraphic",
+      "file": "IG-1o-badge-title-fill.svg",
+      "path": "assets/tasty/graphics/IG-1o-badge-title-fill.svg"
+    },
+    "badge-title-line": {
+      "name": "BadgeTitleLineGraphic",
+      "file": "IG-1p-badge-title-line.svg",
+      "path": "assets/tasty/graphics/IG-1p-badge-title-line.svg"
+    },
+    "clr-fill": {
+      "name": "ClrFillGraphic",
+      "file": "IG-1q-clr-fill.svg",
+      "path": "assets/tasty/graphics/IG-1q-clr-fill.svg"
+    },
+    "clr-line": {
+      "name": "ClrLineGraphic",
+      "file": "IG-1r-clr-line.svg",
+      "path": "assets/tasty/graphics/IG-1r-clr-line.svg"
+    },
+    "clr-title-fill": {
+      "name": "ClrTitleFillGraphic",
+      "file": "IG-1s-clr-title-fill.svg",
+      "path": "assets/tasty/graphics/IG-1s-clr-title-fill.svg"
+    },
+    "clr-title-line": {
+      "name": "ClrTitleLineGraphic",
+      "file": "IG-1t-clr-title-line.svg",
+      "path": "assets/tasty/graphics/IG-1t-clr-title-line.svg"
+    },
+    "verification-fill": {
+      "name": "VerificationFillGraphic",
+      "file": "IG-1u-verification-fill.svg",
+      "path": "assets/tasty/graphics/IG-1u-verification-fill.svg"
+    },
+    "verification-line": {
+      "name": "VerificationLineGraphic",
+      "file": "IG-1v-verification-line.svg",
+      "path": "assets/tasty/graphics/IG-1v-verification-line.svg"
+    },
+    "verification-title-fill": {
+      "name": "VerificationTitleFillGraphic",
+      "file": "IG-1w-verification-title-fill.svg",
+      "path": "assets/tasty/graphics/IG-1w-verification-title-fill.svg"
+    },
+    "verification-title-line": {
+      "name": "VerificationTitleLineGraphic",
+      "file": "IG-1x-verification-title-line.svg",
+      "path": "assets/tasty/graphics/IG-1x-verification-title-line.svg"
+    },
+    "import-badge-fill": {
+      "name": "ImportBadgeFillGraphic",
+      "file": "IG-1y-import-badge-fill.svg",
+      "path": "assets/tasty/graphics/IG-1y-import-badge-fill.svg"
+    },
+    "import-badge-line": {
+      "name": "ImportBadgeLineGraphic",
+      "file": "IG-1z-import-badge-line.svg",
+      "path": "assets/tasty/graphics/IG-1z-import-badge-line.svg"
+    },
+    "letter-fill": {
+      "name": "LetterFillGraphic",
+      "file": "IG-2a-letter-fill.svg",
+      "path": "assets/tasty/graphics/IG-2a-letter-fill.svg"
+    },
+    "letter-line": {
+      "name": "LetterLineGraphic",
+      "file": "IG-2b-letter-line.svg",
+      "path": "assets/tasty/graphics/IG-2b-letter-line.svg"
+    },
+    "immunization-fill": {
+      "name": "ImmunizationFillGraphic",
+      "file": "IG-2c-immunization-fill.svg",
+      "path": "assets/tasty/graphics/IG-2c-immunization-fill.svg"
+    },
+    "immunization-line": {
+      "name": "ImmunizationLineGraphic",
+      "file": "IG-2d-immunization-line.svg",
+      "path": "assets/tasty/graphics/IG-2d-immunization-line.svg"
+    },
+    "document-fill": {
+      "name": "DocumentFillGraphic",
+      "file": "IG-2e-document-fill.svg",
+      "path": "assets/tasty/graphics/IG-2e-document-fill.svg"
+    },
+    "document-line": {
+      "name": "DocumentLineGraphic",
+      "file": "IG-2f-document-line.svg",
+      "path": "assets/tasty/graphics/IG-2f-document-line.svg"
+    },
+    "select-document-fill": {
+      "name": "SelectDocumentFillGraphic",
+      "file": "IG-2g-select-document-fill.svg",
+      "path": "assets/tasty/graphics/IG-2g-select-document-fill.svg"
+    },
+    "select-document-line": {
+      "name": "SelectDocumentLineGraphic",
+      "file": "IG-2h-select-document-line.svg",
+      "path": "assets/tasty/graphics/IG-2h-select-document-line.svg"
+    },
+    "print-and-digital-transcript-fill": {
+      "name": "PrintAndDigitalTranscriptFillGraphic",
+      "file": "IG-2i-print-and-digital-transcript-fill.svg",
+      "path": "assets/tasty/graphics/IG-2i-print-and-digital-transcript-fill.svg"
+    },
+    "print-and-digital-transcript-line": {
+      "name": "PrintAndDigitalTranscriptLineGraphic",
+      "file": "IG-2j-print-and-digital-transcript-line.svg",
+      "path": "assets/tasty/graphics/IG-2j-print-and-digital-transcript-line.svg"
+    },
+    "print-and-digital-diploma-fill": {
+      "name": "PrintAndDigitalDiplomaFillGraphic",
+      "file": "IG-2k-print-and-digital-diploma-fill.svg",
+      "path": "assets/tasty/graphics/IG-2k-print-and-digital-diploma-fill.svg"
+    },
+    "print-and-digital-diploma-line": {
+      "name": "PrintAndDigitalDiplomaLineGraphic",
+      "file": "IG-2l-print-and-digital-diploma-line.svg",
+      "path": "assets/tasty/graphics/IG-2l-print-and-digital-diploma-line.svg"
+    },
+    "checklist-fill": {
+      "name": "ChecklistFillGraphic",
+      "file": "IG-2m-checklist-fill.svg",
+      "path": "assets/tasty/graphics/IG-2m-checklist-fill.svg"
+    },
+    "checklist-line": {
+      "name": "ChecklistLineGraphic",
+      "file": "IG-2n-checklist-line.svg",
+      "path": "assets/tasty/graphics/IG-2n-checklist-line.svg"
+    },
+    "calendar-fill": {
+      "name": "CalendarFillGraphic",
+      "file": "IG-2o-calendar-fill.svg",
+      "path": "assets/tasty/graphics/IG-2o-calendar-fill.svg"
+    },
+    "calendar-line": {
+      "name": "CalendarLineGraphic",
+      "file": "IG-2p-calendar-line.svg",
+      "path": "assets/tasty/graphics/IG-2p-calendar-line.svg"
+    },
+    "add-document-fill": {
+      "name": "AddDocumentFillGraphic",
+      "file": "IG-2q-add-document-fill.svg",
+      "path": "assets/tasty/graphics/IG-2q-add-document-fill.svg"
+    },
+    "add-document-line": {
+      "name": "AddDocumentLineGraphic",
+      "file": "IG-2r-add-document-line.svg",
+      "path": "assets/tasty/graphics/IG-2r-add-document-line.svg"
+    },
+    "add-credential-fill": {
+      "name": "AddCredentialFillGraphic",
+      "file": "IG-2s-add-credential-fill.svg",
+      "path": "assets/tasty/graphics/IG-2s-add-credential-fill.svg"
+    },
+    "add-credential-line": {
+      "name": "AddCredentialLineGraphic",
+      "file": "IG-2t-add-credential-line.svg",
+      "path": "assets/tasty/graphics/IG-2t-add-credential-line.svg"
+    },
+    "cloud-transcript-fill": {
+      "name": "CloudTranscriptFillGraphic",
+      "file": "IG-2u-cloud-transcript-fill.svg",
+      "path": "assets/tasty/graphics/IG-2u-cloud-transcript-fill.svg"
+    },
+    "cloud-transcript-line": {
+      "name": "CloudTranscriptLineGraphic",
+      "file": "IG-2v-cloud-transcript-line.svg",
+      "path": "assets/tasty/graphics/IG-2v-cloud-transcript-line.svg"
+    },
+    "credentials-fill": {
+      "name": "CredentialsFillGraphic",
+      "file": "IG-2w-credentials-fill.svg",
+      "path": "assets/tasty/graphics/IG-2w-credentials-fill.svg"
+    },
+    "credentials-line": {
+      "name": "CredentialsLineGraphic",
+      "file": "IG-2x-credentials-line.svg",
+      "path": "assets/tasty/graphics/IG-2x-credentials-line.svg"
+    },
+    "credential-arrow-fill": {
+      "name": "CredentialArrowFillGraphic",
+      "file": "IG-2y-credential-arrow-fill.svg",
+      "path": "assets/tasty/graphics/IG-2y-credential-arrow-fill.svg"
+    },
+    "credential-arrow-line": {
+      "name": "CredentialArrowLineGraphic",
+      "file": "IG-2z-credential-arrow-line.svg",
+      "path": "assets/tasty/graphics/IG-2z-credential-arrow-line.svg"
+    },
+    "k12-school-fill": {
+      "name": "K12SchoolFillGraphic",
+      "file": "IG-3a-k12-school-fill.svg",
+      "path": "assets/tasty/graphics/IG-3a-k12-school-fill.svg"
+    },
+    "k12-school-line": {
+      "name": "K12SchoolLineGraphic",
+      "file": "IG-3b-k12-school-line.svg",
+      "path": "assets/tasty/graphics/IG-3b-k12-school-line.svg"
+    },
+    "college-fill": {
+      "name": "CollegeFillGraphic",
+      "file": "IG-3c-college-fill.svg",
+      "path": "assets/tasty/graphics/IG-3c-college-fill.svg"
+    },
+    "college-line": {
+      "name": "CollegeLineGraphic",
+      "file": "IG-3d-college-line.svg",
+      "path": "assets/tasty/graphics/IG-3d-college-line.svg"
+    },
+    "school-district-fill": {
+      "name": "SchoolDistrictFillGraphic",
+      "file": "IG-3e-school-district-fill.svg",
+      "path": "assets/tasty/graphics/IG-3e-school-district-fill.svg"
+    },
+    "school-district-line": {
+      "name": "SchoolDistrictLineGraphic",
+      "file": "IG-3f-school-district-line.svg",
+      "path": "assets/tasty/graphics/IG-3f-school-district-line.svg"
+    },
+    "company-fill": {
+      "name": "CompanyFillGraphic",
+      "file": "IG-3g-company-fill.svg",
+      "path": "assets/tasty/graphics/IG-3g-company-fill.svg"
+    },
+    "company-line": {
+      "name": "CompanyLineGraphic",
+      "file": "IG-3h-company-line.svg",
+      "path": "assets/tasty/graphics/IG-3h-company-line.svg"
+    },
+    "state-fill": {
+      "name": "StateFillGraphic",
+      "file": "IG-3i-state-fill.svg",
+      "path": "assets/tasty/graphics/IG-3i-state-fill.svg"
+    },
+    "state-line": {
+      "name": "StateLineGraphic",
+      "file": "IG-3j-state-line.svg",
+      "path": "assets/tasty/graphics/IG-3j-state-line.svg"
+    },
+    "military-fill": {
+      "name": "MilitaryFillGraphic",
+      "file": "IG-3k-military-fill.svg",
+      "path": "assets/tasty/graphics/IG-3k-military-fill.svg"
+    },
+    "military-line": {
+      "name": "MilitaryLineGraphic",
+      "file": "IG-3l-military-line.svg",
+      "path": "assets/tasty/graphics/IG-3l-military-line.svg"
+    },
+    "university-pillar-fill": {
+      "name": "UniversityPillarFillGraphic",
+      "file": "IG-3m-university-pillar-fill.svg",
+      "path": "assets/tasty/graphics/IG-3m-university-pillar-fill.svg"
+    },
+    "university-pillar-line": {
+      "name": "UniversityPillarLineGraphic",
+      "file": "IG-3n-university-pillar-line.svg",
+      "path": "assets/tasty/graphics/IG-3n-university-pillar-line.svg"
+    },
+    "briefcase-fill": {
+      "name": "BriefcaseFillGraphic",
+      "file": "IG-3o-briefcase-fill.svg",
+      "path": "assets/tasty/graphics/IG-3o-briefcase-fill.svg"
+    },
+    "briefcase-line": {
+      "name": "BriefcaseLineGraphic",
+      "file": "IG-3p-briefcase-line.svg",
+      "path": "assets/tasty/graphics/IG-3p-briefcase-line.svg"
+    },
+    "toolbox-fill": {
+      "name": "ToolboxFillGraphic",
+      "file": "IG-3q-toolbox-fill.svg",
+      "path": "assets/tasty/graphics/IG-3q-toolbox-fill.svg"
+    },
+    "toolbox-line": {
+      "name": "ToolboxLineGraphic",
+      "file": "IG-3r-toolbox-line.svg",
+      "path": "assets/tasty/graphics/IG-3r-toolbox-line.svg"
+    },
+    "search-fill": {
+      "name": "SearchFillGraphic",
+      "file": "IG-3s-search-fill.svg",
+      "path": "assets/tasty/graphics/IG-3s-search-fill.svg"
+    },
+    "search-line": {
+      "name": "SearchLineGraphic",
+      "file": "IG-3t-search-line.svg",
+      "path": "assets/tasty/graphics/IG-3t-search-line.svg"
+    },
+    "search-docs-fill": {
+      "name": "SearchDocsFillGraphic",
+      "file": "IG-3u-search-docs-fill.svg",
+      "path": "assets/tasty/graphics/IG-3u-search-docs-fill.svg"
+    },
+    "search-docs-line": {
+      "name": "SearchDocsLineGraphic",
+      "file": "IG-3v-search-docs-line.svg",
+      "path": "assets/tasty/graphics/IG-3v-search-docs-line.svg"
+    },
+    "search-users-fill": {
+      "name": "SearchUsersFillGraphic",
+      "file": "IG-3w-search-users-fill.svg",
+      "path": "assets/tasty/graphics/IG-3w-search-users-fill.svg"
+    },
+    "search-users-line": {
+      "name": "SearchUsersLineGraphic",
+      "file": "IG-3x-search-users-line.svg",
+      "path": "assets/tasty/graphics/IG-3x-search-users-line.svg"
+    },
+    "update-settings-fill": {
+      "name": "UpdateSettingsFillGraphic",
+      "file": "IG-4a-update-settings-fill.svg",
+      "path": "assets/tasty/graphics/IG-4a-update-settings-fill.svg"
+    },
+    "update-settings-line": {
+      "name": "UpdateSettingsLineGraphic",
+      "file": "IG-4b-update-settings-line.svg",
+      "path": "assets/tasty/graphics/IG-4b-update-settings-line.svg"
+    },
+    "pricing-settings-fill": {
+      "name": "PricingSettingsFillGraphic",
+      "file": "IG-4c-pricing-settings-fill.svg",
+      "path": "assets/tasty/graphics/IG-4c-pricing-settings-fill.svg"
+    },
+    "pricing-settings-line": {
+      "name": "PricingSettingsLineGraphic",
+      "file": "IG-4d-pricing-settings-line.svg",
+      "path": "assets/tasty/graphics/IG-4d-pricing-settings-line.svg"
+    },
+    "enrollment-settings-fill": {
+      "name": "EnrollmentSettingsFillGraphic",
+      "file": "IG-4e-enrollment-settings-fill.svg",
+      "path": "assets/tasty/graphics/IG-4e-enrollment-settings-fill.svg"
+    },
+    "enrollment-settings-line": {
+      "name": "EnrollmentSettingsLineGraphic",
+      "file": "IG-4f-enrollment-settings-line.svg",
+      "path": "assets/tasty/graphics/IG-4f-enrollment-settings-line.svg"
+    },
+    "folder-fill": {
+      "name": "FolderFillGraphic",
+      "file": "IG-4g-folder-fill.svg",
+      "path": "assets/tasty/graphics/IG-4g-folder-fill.svg"
+    },
+    "folder-line": {
+      "name": "FolderLineGraphic",
+      "file": "IG-4h-folder-line.svg",
+      "path": "assets/tasty/graphics/IG-4h-folder-line.svg"
+    },
+    "secure-folder-fill": {
+      "name": "SecureFolderFillGraphic",
+      "file": "IG-4i-secure-folder-fill.svg",
+      "path": "assets/tasty/graphics/IG-4i-secure-folder-fill.svg"
+    },
+    "secure-folder-line": {
+      "name": "SecureFolderLineGraphic",
+      "file": "IG-4j-secure-folder-line.svg",
+      "path": "assets/tasty/graphics/IG-4j-secure-folder-line.svg"
+    },
+    "envelope-fill": {
+      "name": "EnvelopeFillGraphic",
+      "file": "IG-4k-envelope-fill.svg",
+      "path": "assets/tasty/graphics/IG-4k-envelope-fill.svg"
+    },
+    "envelope-line": {
+      "name": "EnvelopeLineGraphic",
+      "file": "IG-4l-envelope-line.svg",
+      "path": "assets/tasty/graphics/IG-4l-envelope-line.svg"
+    },
+    "secure-mail-fill": {
+      "name": "SecureMailFillGraphic",
+      "file": "IG-4m-secure-mail-fill.svg",
+      "path": "assets/tasty/graphics/IG-4m-secure-mail-fill.svg"
+    },
+    "secure-mail-line": {
+      "name": "SecureMailLineGraphic",
+      "file": "IG-4n-secure-mail-line.svg",
+      "path": "assets/tasty/graphics/IG-4n-secure-mail-line.svg"
+    },
+    "lock-and-key-fill": {
+      "name": "LockAndKeyFillGraphic",
+      "file": "IG-4o-lock-and-key-fill.svg",
+      "path": "assets/tasty/graphics/IG-4o-lock-and-key-fill.svg"
+    },
+    "lock-and-key-line": {
+      "name": "LockAndKeyLineGraphic",
+      "file": "IG-4p-lock-and-key-line.svg",
+      "path": "assets/tasty/graphics/IG-4p-lock-and-key-line.svg"
+    },
+    "secure-shield-fill": {
+      "name": "SecureShieldFillGraphic",
+      "file": "IG-4q-secure-shield-fill.svg",
+      "path": "assets/tasty/graphics/IG-4q-secure-shield-fill.svg"
+    },
+    "secure-shield-line": {
+      "name": "SecureShieldLineGraphic",
+      "file": "IG-4r-secure-shield-line.svg",
+      "path": "assets/tasty/graphics/IG-4r-secure-shield-line.svg"
+    },
+    "unverified-shield-fill": {
+      "name": "UnverifiedShieldFillGraphic",
+      "file": "IG-4s-unverified-shield-fill.svg",
+      "path": "assets/tasty/graphics/IG-4s-unverified-shield-fill.svg"
+    },
+    "unverified-shield-line": {
+      "name": "UnverifiedShieldLineGraphic",
+      "file": "IG-4t-unverified-shield-line.svg",
+      "path": "assets/tasty/graphics/IG-4t-unverified-shield-line.svg"
+    },
+    "history-fill": {
+      "name": "HistoryFillGraphic",
+      "file": "IG-4u-history-fill.svg",
+      "path": "assets/tasty/graphics/IG-4u-history-fill.svg"
+    },
+    "history-line": {
+      "name": "HistoryLineGraphic",
+      "file": "IG-4v-history-line.svg",
+      "path": "assets/tasty/graphics/IG-4v-history-line.svg"
+    },
+    "path-fill": {
+      "name": "PathFillGraphic",
+      "file": "IG-4w-path-fill.svg",
+      "path": "assets/tasty/graphics/IG-4w-path-fill.svg"
+    },
+    "path-line": {
+      "name": "PathLineGraphic",
+      "file": "IG-4x-path-line.svg",
+      "path": "assets/tasty/graphics/IG-4x-path-line.svg"
+    },
+    "parchment-network-fill": {
+      "name": "ParchmentNetworkFillGraphic",
+      "file": "IG-5a-parchment-network-fill.svg",
+      "path": "assets/tasty/graphics/IG-5a-parchment-network-fill.svg"
+    },
+    "parchment-network-line": {
+      "name": "ParchmentNetworkLineGraphic",
+      "file": "IG-5b-parchment-network-line.svg",
+      "path": "assets/tasty/graphics/IG-5b-parchment-network-line.svg"
+    },
+    "wifi-fill": {
+      "name": "WifiFillGraphic",
+      "file": "IG-5c-wifi-fill.svg",
+      "path": "assets/tasty/graphics/IG-5c-wifi-fill.svg"
+    },
+    "wifi-line": {
+      "name": "WifiLineGraphic",
+      "file": "IG-5d-wifi-line.svg",
+      "path": "assets/tasty/graphics/IG-5d-wifi-line.svg"
+    },
+    "parchment-cloud-fill": {
+      "name": "ParchmentCloudFillGraphic",
+      "file": "IG-5e-parchment-cloud-fill.svg",
+      "path": "assets/tasty/graphics/IG-5e-parchment-cloud-fill.svg"
+    },
+    "parchment-cloud-line": {
+      "name": "ParchmentCloudLineGraphic",
+      "file": "IG-5f-parchment-cloud-line.svg",
+      "path": "assets/tasty/graphics/IG-5f-parchment-cloud-line.svg"
+    },
+    "cloud-upload-fill": {
+      "name": "CloudUploadFillGraphic",
+      "file": "IG-5g-cloud-upload-fill.svg",
+      "path": "assets/tasty/graphics/IG-5g-cloud-upload-fill.svg"
+    },
+    "cloud-upload-line": {
+      "name": "CloudUploadLineGraphic",
+      "file": "IG-5h-cloud-upload-line.svg",
+      "path": "assets/tasty/graphics/IG-5h-cloud-upload-line.svg"
+    },
+    "cloud-download-fill": {
+      "name": "CloudDownloadFillGraphic",
+      "file": "IG-5i-cloud-download-fill.svg",
+      "path": "assets/tasty/graphics/IG-5i-cloud-download-fill.svg"
+    },
+    "cloud-download-line": {
+      "name": "CloudDownloadLineGraphic",
+      "file": "IG-5j-cloud-download-line.svg",
+      "path": "assets/tasty/graphics/IG-5j-cloud-download-line.svg"
+    },
+    "cloud-network-fill": {
+      "name": "CloudNetworkFillGraphic",
+      "file": "IG-5k-cloud-network-fill.svg",
+      "path": "assets/tasty/graphics/IG-5k-cloud-network-fill.svg"
+    },
+    "cloud-network-line": {
+      "name": "CloudNetworkLineGraphic",
+      "file": "IG-5l-cloud-network-line.svg",
+      "path": "assets/tasty/graphics/IG-5l-cloud-network-line.svg"
+    },
+    "cloud-data-fill": {
+      "name": "CloudDataFillGraphic",
+      "file": "IG-5m-cloud-data-fill.svg",
+      "path": "assets/tasty/graphics/IG-5m-cloud-data-fill.svg"
+    },
+    "cloud-data-line": {
+      "name": "CloudDataLineGraphic",
+      "file": "IG-5n-cloud-data-line.svg",
+      "path": "assets/tasty/graphics/IG-5n-cloud-data-line.svg"
+    },
+    "cloud-settings-fill": {
+      "name": "CloudSettingsFillGraphic",
+      "file": "IG-5o-cloud-settings-fill.svg",
+      "path": "assets/tasty/graphics/IG-5o-cloud-settings-fill.svg"
+    },
+    "cloud-settings-line": {
+      "name": "CloudSettingsLineGraphic",
+      "file": "IG-5p-cloud-settings-line.svg",
+      "path": "assets/tasty/graphics/IG-5p-cloud-settings-line.svg"
+    },
+    "cloud-network-connection-fill": {
+      "name": "CloudNetworkConnectionFillGraphic",
+      "file": "IG-5q-cloud-network-connection-fill.svg",
+      "path": "assets/tasty/graphics/IG-5q-cloud-network-connection-fill.svg"
+    },
+    "cloud-network-connection-line": {
+      "name": "CloudNetworkConnectionLineGraphic",
+      "file": "IG-5r-cloud-network-connection-line.svg",
+      "path": "assets/tasty/graphics/IG-5r-cloud-network-connection-line.svg"
+    },
+    "announcement-fill": {
+      "name": "AnnouncementFillGraphic",
+      "file": "IG-5s-announcement-fill.svg",
+      "path": "assets/tasty/graphics/IG-5s-announcement-fill.svg"
+    },
+    "announcement-line": {
+      "name": "AnnouncementLineGraphic",
+      "file": "IG-5t-announcement-line.svg",
+      "path": "assets/tasty/graphics/IG-5t-announcement-line.svg"
+    },
+    "notification-fill": {
+      "name": "NotificationFillGraphic",
+      "file": "IG-5u-notification-fill.svg",
+      "path": "assets/tasty/graphics/IG-5u-notification-fill.svg"
+    },
+    "notification-line": {
+      "name": "NotificationLineGraphic",
+      "file": "IG-5v-notification-line.svg",
+      "path": "assets/tasty/graphics/IG-5v-notification-line.svg"
+    },
+    "chat-fill": {
+      "name": "ChatFillGraphic",
+      "file": "IG-5w-chat-fill.svg",
+      "path": "assets/tasty/graphics/IG-5w-chat-fill.svg"
+    },
+    "chat-line": {
+      "name": "ChatLineGraphic",
+      "file": "IG-5x-chat-line.svg",
+      "path": "assets/tasty/graphics/IG-5x-chat-line.svg"
+    },
+    "support-call-fill": {
+      "name": "SupportCallFillGraphic",
+      "file": "IG-5y-support-call-fill.svg",
+      "path": "assets/tasty/graphics/IG-5y-support-call-fill.svg"
+    },
+    "support-call-line": {
+      "name": "SupportCallLineGraphic",
+      "file": "IG-5z-support-call-line.svg",
+      "path": "assets/tasty/graphics/IG-5z-support-call-line.svg"
+    },
+    "dual-enrollment-fill": {
+      "name": "DualEnrollmentFillGraphic",
+      "file": "IG-6a-dual-enrollment-fill.svg",
+      "path": "assets/tasty/graphics/IG-6a-dual-enrollment-fill.svg"
+    },
+    "dual-enrollment-line": {
+      "name": "DualEnrollmentLineGraphic",
+      "file": "IG-6b-dual-enrollment-line.svg",
+      "path": "assets/tasty/graphics/IG-6b-dual-enrollment-line.svg"
+    },
+    "agreement-fill": {
+      "name": "AgreementFillGraphic",
+      "file": "IG-6c-agreement-fill.svg",
+      "path": "assets/tasty/graphics/IG-6c-agreement-fill.svg"
+    },
+    "agreement-line": {
+      "name": "AgreementLineGraphic",
+      "file": "IG-6d-agreement-line.svg",
+      "path": "assets/tasty/graphics/IG-6d-agreement-line.svg"
+    },
+    "third-party-fill": {
+      "name": "ThirdPartyFillGraphic",
+      "file": "IG-6e-third-party-fill.svg",
+      "path": "assets/tasty/graphics/IG-6e-third-party-fill.svg"
+    },
+    "third-party-line": {
+      "name": "ThirdPartyLineGraphic",
+      "file": "IG-6f-third-party-line.svg",
+      "path": "assets/tasty/graphics/IG-6f-third-party-line.svg"
+    },
+    "recruit-fill": {
+      "name": "RecruitFillGraphic",
+      "file": "IG-6g-recruit-fill.svg",
+      "path": "assets/tasty/graphics/IG-6g-recruit-fill.svg"
+    },
+    "recruit-line": {
+      "name": "RecruitLineGraphic",
+      "file": "IG-6h-recruit-line.svg",
+      "path": "assets/tasty/graphics/IG-6h-recruit-line.svg"
+    },
+    "recruit-alt-fill": {
+      "name": "RecruitAltFillGraphic",
+      "file": "IG-6i-recruit-alt-fill.svg",
+      "path": "assets/tasty/graphics/IG-6i-recruit-alt-fill.svg"
+    },
+    "recruit-alt-line": {
+      "name": "RecruitAltLineGraphic",
+      "file": "IG-6j-recruit-alt-line.svg",
+      "path": "assets/tasty/graphics/IG-6j-recruit-alt-line.svg"
+    },
+    "analyze-data-fill": {
+      "name": "AnalyzeDataFillGraphic",
+      "file": "IG-6k-analyze-data-fill.svg",
+      "path": "assets/tasty/graphics/IG-6k-analyze-data-fill.svg"
+    },
+    "analyze-data-line": {
+      "name": "AnalyzeDataLineGraphic",
+      "file": "IG-6l-analyze-data-line.svg",
+      "path": "assets/tasty/graphics/IG-6l-analyze-data-line.svg"
+    },
+    "data-storage-fill": {
+      "name": "DataStorageFillGraphic",
+      "file": "IG-6m-data-storage-fill.svg",
+      "path": "assets/tasty/graphics/IG-6m-data-storage-fill.svg"
+    },
+    "data-storage-line": {
+      "name": "DataStorageLineGraphic",
+      "file": "IG-6n-data-storage-line.svg",
+      "path": "assets/tasty/graphics/IG-6n-data-storage-line.svg"
+    },
+    "exchange-fill": {
+      "name": "ExchangeFillGraphic",
+      "file": "IG-6o-exchange-fill.svg",
+      "path": "assets/tasty/graphics/IG-6o-exchange-fill.svg"
+    },
+    "exchange-line": {
+      "name": "ExchangeLineGraphic",
+      "file": "IG-6p-exchange-line.svg",
+      "path": "assets/tasty/graphics/IG-6p-exchange-line.svg"
+    },
+    "platform-settings-fill": {
+      "name": "PlatformSettingsFillGraphic",
+      "file": "IG-6q-platform-settings-fill.svg",
+      "path": "assets/tasty/graphics/IG-6q-platform-settings-fill.svg"
+    },
+    "platform-settings-line": {
+      "name": "PlatformSettingsLineGraphic",
+      "file": "IG-6r-platform-settings-line.svg",
+      "path": "assets/tasty/graphics/IG-6r-platform-settings-line.svg"
+    },
+    "parchment-network-alt-fill": {
+      "name": "ParchmentNetworkAltFillGraphic",
+      "file": "IG-6s-parchment-network-alt-fill.svg",
+      "path": "assets/tasty/graphics/IG-6s-parchment-network-alt-fill.svg"
+    },
+    "parchment-network-alt-line": {
+      "name": "ParchmentNetworkAltLineGraphic",
+      "file": "IG-6t-parchment-network-alt-line.svg",
+      "path": "assets/tasty/graphics/IG-6t-parchment-network-alt-line.svg"
+    },
+    "rocket-launch-fill": {
+      "name": "RocketLaunchFillGraphic",
+      "file": "IG-6u-rocket-launch-fill.svg",
+      "path": "assets/tasty/graphics/IG-6u-rocket-launch-fill.svg"
+    },
+    "rocket-launch-line": {
+      "name": "RocketLaunchLineGraphic",
+      "file": "IG-6v-rocket-launch-line.svg",
+      "path": "assets/tasty/graphics/IG-6v-rocket-launch-line.svg"
+    },
+    "cocosnaps-fill": {
+      "name": "CocosnapsFillGraphic",
+      "file": "IG-6w-cocosnaps-fill.svg",
+      "path": "assets/tasty/graphics/IG-6w-cocosnaps-fill.svg"
+    },
+    "cocosnaps-line": {
+      "name": "CocosnapsLineGraphic",
+      "file": "IG-6x-cocosnaps-line.svg",
+      "path": "assets/tasty/graphics/IG-6x-cocosnaps-line.svg"
+    },
+    "solution-fill": {
+      "name": "SolutionFillGraphic",
+      "file": "IG-7a-solution-fill.svg",
+      "path": "assets/tasty/graphics/IG-7a-solution-fill.svg"
+    },
+    "solution-line": {
+      "name": "SolutionLineGraphic",
+      "file": "IG-7b-solution-line.svg",
+      "path": "assets/tasty/graphics/IG-7b-solution-line.svg"
+    },
+    "problem-fill": {
+      "name": "ProblemFillGraphic",
+      "file": "IG-7c-problem-fill.svg",
+      "path": "assets/tasty/graphics/IG-7c-problem-fill.svg"
+    },
+    "problem-line": {
+      "name": "ProblemLineGraphic",
+      "file": "IG-7d-problem-line.svg",
+      "path": "assets/tasty/graphics/IG-7d-problem-line.svg"
+    },
+    "plan-fill": {
+      "name": "PlanFillGraphic",
+      "file": "IG-7e-plan-fill.svg",
+      "path": "assets/tasty/graphics/IG-7e-plan-fill.svg"
+    },
+    "plan-line": {
+      "name": "PlanLineGraphic",
+      "file": "IG-7f-plan-line.svg",
+      "path": "assets/tasty/graphics/IG-7f-plan-line.svg"
+    },
+    "repay-fill": {
+      "name": "RepayFillGraphic",
+      "file": "IG-7g-repay-fill.svg",
+      "path": "assets/tasty/graphics/IG-7g-repay-fill.svg"
+    },
+    "repay-line": {
+      "name": "RepayLineGraphic",
+      "file": "IG-7h-repay-line.svg",
+      "path": "assets/tasty/graphics/IG-7h-repay-line.svg"
+    },
+    "credit-card-fill": {
+      "name": "CreditCardFillGraphic",
+      "file": "IG-7i-credit-card-fill.svg",
+      "path": "assets/tasty/graphics/IG-7i-credit-card-fill.svg"
+    },
+    "credit-card-line": {
+      "name": "CreditCardLineGraphic",
+      "file": "IG-7j-credit-card-line.svg",
+      "path": "assets/tasty/graphics/IG-7j-credit-card-line.svg"
+    },
+    "piggy-bank-fill": {
+      "name": "PiggyBankFillGraphic",
+      "file": "IG-7k-piggy-bank-fill.svg",
+      "path": "assets/tasty/graphics/IG-7k-piggy-bank-fill.svg"
+    },
+    "piggy-bank-line": {
+      "name": "PiggyBankLineGraphic",
+      "file": "IG-7l-piggy-bank-line.svg",
+      "path": "assets/tasty/graphics/IG-7l-piggy-bank-line.svg"
+    },
+    "currency-dollar-fill": {
+      "name": "CurrencyDollarFillGraphic",
+      "file": "IG-7m-currency-dollar-fill.svg",
+      "path": "assets/tasty/graphics/IG-7m-currency-dollar-fill.svg"
+    },
+    "currency-dollar-line": {
+      "name": "CurrencyDollarLineGraphic",
+      "file": "IG-7n-currency-dollar-line.svg",
+      "path": "assets/tasty/graphics/IG-7n-currency-dollar-line.svg"
+    },
+    "currency-euro-fill": {
+      "name": "CurrencyEuroFillGraphic",
+      "file": "IG-7o-currency-euro-fill.svg",
+      "path": "assets/tasty/graphics/IG-7o-currency-euro-fill.svg"
+    },
+    "currency-euro-line": {
+      "name": "CurrencyEuroLineGraphic",
+      "file": "IG-7p-currency-euro-line.svg",
+      "path": "assets/tasty/graphics/IG-7p-currency-euro-line.svg"
+    },
+    "currency-pound-fill": {
+      "name": "CurrencyPoundFillGraphic",
+      "file": "IG-7q-currency-pound-fill.svg",
+      "path": "assets/tasty/graphics/IG-7q-currency-pound-fill.svg"
+    },
+    "currency-pound-line": {
+      "name": "CurrencyPoundLineGraphic",
+      "file": "IG-7r-currency-pound-line.svg",
+      "path": "assets/tasty/graphics/IG-7r-currency-pound-line.svg"
+    },
+    "currency-yen-fill": {
+      "name": "CurrencyYenFillGraphic",
+      "file": "IG-7s-currency-yen-fill.svg",
+      "path": "assets/tasty/graphics/IG-7s-currency-yen-fill.svg"
+    },
+    "currency-yen-line": {
+      "name": "CurrencyYenLineGraphic",
+      "file": "IG-7t-currency-yen-line.svg",
+      "path": "assets/tasty/graphics/IG-7t-currency-yen-line.svg"
+    },
+    "printer-fill": {
+      "name": "PrinterFillGraphic",
+      "file": "IG-8a-printer-fill.svg",
+      "path": "assets/tasty/graphics/IG-8a-printer-fill.svg"
+    },
+    "printer-line": {
+      "name": "PrinterLineGraphic",
+      "file": "IG-8b-printer-line.svg",
+      "path": "assets/tasty/graphics/IG-8b-printer-line.svg"
+    },
+    "screen-data-fill": {
+      "name": "ScreenDataFillGraphic",
+      "file": "IG-8c-screen-data-fill.svg",
+      "path": "assets/tasty/graphics/IG-8c-screen-data-fill.svg"
+    },
+    "screen-data-line": {
+      "name": "ScreenDataLineGraphic",
+      "file": "IG-8d-screen-data-line.svg",
+      "path": "assets/tasty/graphics/IG-8d-screen-data-line.svg"
+    },
+    "screen-ui-fill": {
+      "name": "ScreenUiFillGraphic",
+      "file": "IG-8e-screen-ui-fill.svg",
+      "path": "assets/tasty/graphics/IG-8e-screen-ui-fill.svg"
+    },
+    "screen-ui-line": {
+      "name": "ScreenUiLineGraphic",
+      "file": "IG-8f-screen-ui-line.svg",
+      "path": "assets/tasty/graphics/IG-8f-screen-ui-line.svg"
+    },
+    "screen-transcript-fill": {
+      "name": "ScreenTranscriptFillGraphic",
+      "file": "IG-8g-screen-transcript-fill.svg",
+      "path": "assets/tasty/graphics/IG-8g-screen-transcript-fill.svg"
+    },
+    "screen-transcript-line": {
+      "name": "ScreenTranscriptLineGraphic",
+      "file": "IG-8h-screen-transcript-line.svg",
+      "path": "assets/tasty/graphics/IG-8h-screen-transcript-line.svg"
+    },
+    "screen-diploma-fill": {
+      "name": "ScreenDiplomaFillGraphic",
+      "file": "IG-8i-screen-diploma-fill.svg",
+      "path": "assets/tasty/graphics/IG-8i-screen-diploma-fill.svg"
+    },
+    "screen-diploma-line": {
+      "name": "ScreenDiplomaLineGraphic",
+      "file": "IG-8j-screen-diploma-line.svg",
+      "path": "assets/tasty/graphics/IG-8j-screen-diploma-line.svg"
+    },
+    "screen-certificate-fill": {
+      "name": "ScreenCertificateFillGraphic",
+      "file": "IG-8k-screen-certificate-fill.svg",
+      "path": "assets/tasty/graphics/IG-8k-screen-certificate-fill.svg"
+    },
+    "screen-certificate-line": {
+      "name": "ScreenCertificateLineGraphic",
+      "file": "IG-8l-screen-certificate-line.svg",
+      "path": "assets/tasty/graphics/IG-8l-screen-certificate-line.svg"
+    },
+    "screen-badge-fill": {
+      "name": "ScreenBadgeFillGraphic",
+      "file": "IG-8m-screen-badge-fill.svg",
+      "path": "assets/tasty/graphics/IG-8m-screen-badge-fill.svg"
+    },
+    "screen-badge-line": {
+      "name": "ScreenBadgeLineGraphic",
+      "file": "IG-8n-screen-badge-line.svg",
+      "path": "assets/tasty/graphics/IG-8n-screen-badge-line.svg"
+    },
+    "screen-clr-fill": {
+      "name": "ScreenClrFillGraphic",
+      "file": "IG-8o-screen-clr-fill.svg",
+      "path": "assets/tasty/graphics/IG-8o-screen-clr-fill.svg"
+    },
+    "screen-clr-line": {
+      "name": "ScreenClrLineGraphic",
+      "file": "IG-8p-screen-clr-line.svg",
+      "path": "assets/tasty/graphics/IG-8p-screen-clr-line.svg"
+    },
+    "screen-people-fill": {
+      "name": "ScreenPeopleFillGraphic",
+      "file": "IG-8q-screen-people-fill.svg",
+      "path": "assets/tasty/graphics/IG-8q-screen-people-fill.svg"
+    },
+    "screen-people-line": {
+      "name": "ScreenPeopleLineGraphic",
+      "file": "IG-8r-screen-people-line.svg",
+      "path": "assets/tasty/graphics/IG-8r-screen-people-line.svg"
+    },
+    "computer-transfer-fill": {
+      "name": "ComputerTransferFillGraphic",
+      "file": "IG-8s-computer-transfer-fill.svg",
+      "path": "assets/tasty/graphics/IG-8s-computer-transfer-fill.svg"
+    },
+    "computer-transfer-line": {
+      "name": "ComputerTransferLineGraphic",
+      "file": "IG-8t-computer-transfer-line.svg",
+      "path": "assets/tasty/graphics/IG-8t-computer-transfer-line.svg"
+    },
+    "computer-download-upload-fill": {
+      "name": "ComputerDownloadUploadFillGraphic",
+      "file": "IG-8u-computer-download-upload-fill.svg",
+      "path": "assets/tasty/graphics/IG-8u-computer-download-upload-fill.svg"
+    },
+    "computer-download-upload-line": {
+      "name": "ComputerDownloadUploadLineGraphic",
+      "file": "IG-8v-computer-download-upload-line.svg",
+      "path": "assets/tasty/graphics/IG-8v-computer-download-upload-line.svg"
+    },
+    "computer-schools-fill": {
+      "name": "ComputerSchoolsFillGraphic",
+      "file": "IG-8w-computer-schools-fill.svg",
+      "path": "assets/tasty/graphics/IG-8w-computer-schools-fill.svg"
+    },
+    "computer-schools-line": {
+      "name": "ComputerSchoolsLineGraphic",
+      "file": "IG-8x-computer-schools-line.svg",
+      "path": "assets/tasty/graphics/IG-8x-computer-schools-line.svg"
+    },
+    "award-notification-fill": {
+      "name": "AwardNotificationFillGraphic",
+      "file": "IG-8y-award-notification-fill.svg",
+      "path": "assets/tasty/graphics/IG-8y-award-notification-fill.svg"
+    },
+    "award-notification-line": {
+      "name": "AwardNotificationLineGraphic",
+      "file": "IG-8z-award-notification-line.svg",
+      "path": "assets/tasty/graphics/IG-8z-award-notification-line.svg"
+    },
+    "add-dual-enrollment-fill": {
+      "name": "AddDualEnrollmentFillGraphic",
+      "file": "IG-9a-add-dual-enrollment-fill.svg",
+      "path": "assets/tasty/graphics/IG-9a-add-dual-enrollment-fill.svg"
+    },
+    "add-dual-enrollment-line": {
+      "name": "AddDualEnrollmentLineGraphic",
+      "file": "IG-9b-add-dual-enrollment-line.svg",
+      "path": "assets/tasty/graphics/IG-9b-add-dual-enrollment-line.svg"
+    },
+    "manage-learner-fill": {
+      "name": "ManageLearnerFillGraphic",
+      "file": "IG-9c-manage-learner-fill.svg",
+      "path": "assets/tasty/graphics/IG-9c-manage-learner-fill.svg"
+    },
+    "manage-learner-line": {
+      "name": "ManageLearnerLineGraphic",
+      "file": "IG-9d-manage-learner-line.svg",
+      "path": "assets/tasty/graphics/IG-9d-manage-learner-line.svg"
+    },
+    "add-learner-profile-fill": {
+      "name": "AddLearnerProfileFillGraphic",
+      "file": "IG-9e-add-learner-profile-fill.svg",
+      "path": "assets/tasty/graphics/IG-9e-add-learner-profile-fill.svg"
+    },
+    "add-learner-profile-line": {
+      "name": "AddLearnerProfileLineGraphic",
+      "file": "IG-9f-add-learner-profile-line.svg",
+      "path": "assets/tasty/graphics/IG-9f-add-learner-profile-line.svg"
+    },
+    "add-users-fill": {
+      "name": "AddUsersFillGraphic",
+      "file": "IG-9g-add-users-fill.svg",
+      "path": "assets/tasty/graphics/IG-9g-add-users-fill.svg"
+    },
+    "add-users-line": {
+      "name": "AddUsersLineGraphic",
+      "file": "IG-9h-add-users-line.svg",
+      "path": "assets/tasty/graphics/IG-9h-add-users-line.svg"
+    },
+    "ai-credential-fill": {
+      "name": "AiCredentialFillGraphic",
+      "file": "IG-9i-ai-credential-fill.svg",
+      "path": "assets/tasty/graphics/IG-9i-ai-credential-fill.svg"
+    },
+    "ai-credential-line": {
+      "name": "AiCredentialLineGraphic",
+      "file": "IG-9j-ai-credential-line.svg",
+      "path": "assets/tasty/graphics/IG-9j-ai-credential-line.svg"
+    },
+    "manage-user-fill": {
+      "name": "ManageUserFillGraphic",
+      "file": "IG-9k-manage-user-fill.svg",
+      "path": "assets/tasty/graphics/IG-9k-manage-user-fill.svg"
+    },
+    "manage-user-line": {
+      "name": "ManageUserLineGraphic",
+      "file": "IG-9l-manage-user-line.svg",
+      "path": "assets/tasty/graphics/IG-9l-manage-user-line.svg"
+    },
+    "invite-user-fill": {
+      "name": "InviteUserFillGraphic",
+      "file": "IG-9m-invite-user-fill.svg",
+      "path": "assets/tasty/graphics/IG-9m-invite-user-fill.svg"
+    },
+    "invite-user-line": {
+      "name": "InviteUserLineGraphic",
+      "file": "IG-9n-invite-user-line.svg",
+      "path": "assets/tasty/graphics/IG-9n-invite-user-line.svg"
+    },
+    "manage-multi-users-fill": {
+      "name": "ManageMultiUsersFillGraphic",
+      "file": "IG-9o-manage-multi-users-fill.svg",
+      "path": "assets/tasty/graphics/IG-9o-manage-multi-users-fill.svg"
+    },
+    "manage-multi-users-line": {
+      "name": "ManageMultiUsersLineGraphic",
+      "file": "IG-9p-manage-multi-users-line.svg",
+      "path": "assets/tasty/graphics/IG-9p-manage-multi-users-line.svg"
+    },
+    "invite-multi-users-fill": {
+      "name": "InviteMultiUsersFillGraphic",
+      "file": "IG-9q-invite-multi-users-fill.svg",
+      "path": "assets/tasty/graphics/IG-9q-invite-multi-users-fill.svg"
+    },
+    "invite-multi-users-line": {
+      "name": "InviteMultiUsersLineGraphic",
+      "file": "IG-9r-invite-multi-users-line.svg",
+      "path": "assets/tasty/graphics/IG-9r-invite-multi-users-line.svg"
+    }
+  },
+  "vector": {
+    "empty-receive-inbox": {
+      "name": "EmptyReceiveInboxVector",
+      "file": "VG-1a-empty-receive-inbox.svg",
+      "path": "assets/tasty/illustrations/VG-1a-empty-receive-inbox.svg"
+    },
+    "fedex-logo": {
+      "name": "FedexLogoVector",
+      "file": "VG-1b-fedex-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1b-fedex-logo.svg"
+    },
+    "fedex-express-logo": {
+      "name": "FedexExpressLogoVector",
+      "file": "VG-1c-fedex-express-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1c-fedex-express-logo.svg"
+    },
+    "usps-logo": {
+      "name": "UspsLogoVector",
+      "file": "VG-1d-usps-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1d-usps-logo.svg"
+    },
+    "ged-logo": {
+      "name": "GedLogoVector",
+      "file": "VG-1e-ged-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1e-ged-logo.svg"
+    },
+    "verified-by-parchment-logo": {
+      "name": "VerifiedByParchmentLogoVector",
+      "file": "VG-1f-verified-by-parchment-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1f-verified-by-parchment-logo.svg"
+    },
+    "secure-payment": {
+      "name": "SecurePaymentVector",
+      "file": "VG-1g-secure-payment.svg",
+      "path": "assets/tasty/illustrations/VG-1g-secure-payment.svg"
+    },
+    "personal-data": {
+      "name": "PersonalDataVector",
+      "file": "VG-1h-personal-data.svg",
+      "path": "assets/tasty/illustrations/VG-1h-personal-data.svg"
+    },
+    "no-search-results": {
+      "name": "NoSearchResultsVector",
+      "file": "VG-1j-no-search-results.svg",
+      "path": "assets/tasty/illustrations/VG-1j-no-search-results.svg"
+    },
+    "new-message": {
+      "name": "NewMessageVector",
+      "file": "VG-1k-new-message.svg",
+      "path": "assets/tasty/illustrations/VG-1k-new-message.svg"
+    },
+    "chase-logo": {
+      "name": "ChaseLogoVector",
+      "file": "VG-1l-chase-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1l-chase-logo.svg"
+    },
+    "authorize-logo": {
+      "name": "AuthorizeLogoVector",
+      "file": "VG-1m-authorize-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1m-authorize-logo.svg"
+    },
+    "parchment-logo": {
+      "name": "ParchmentLogoVector",
+      "file": "VG-1n-parchment-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1n-parchment-logo.svg"
+    },
+    "robo-logo": {
+      "name": "RoboLogoVector",
+      "file": "VG-1o-robo-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1o-robo-logo.svg"
+    },
+    "parchment-logoblk": {
+      "name": "ParchmentLogoblkVector",
+      "file": "VG-1p-parchment-logoblk.svg",
+      "path": "assets/tasty/illustrations/VG-1p-parchment-logoblk.svg"
+    },
+    "parchment-logowht": {
+      "name": "ParchmentLogowhtVector",
+      "file": "VG-1q-parchment-logowht.svg",
+      "path": "assets/tasty/illustrations/VG-1q-parchment-logowht.svg"
+    },
+    "parchiebot-color-logo": {
+      "name": "ParchiebotColorLogoVector",
+      "file": "VG-1r-parchiebot-color-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1r-parchiebot-color-logo.svg"
+    },
+    "parchiebot-color-icon": {
+      "name": "ParchiebotColorIconVector",
+      "file": "VG-1s-parchiebot-color-icon.svg",
+      "path": "assets/tasty/illustrations/VG-1s-parchiebot-color-icon.svg"
+    },
+    "congratulations": {
+      "name": "CongratulationsVector",
+      "file": "VG-1t-congratulations.svg",
+      "path": "assets/tasty/illustrations/VG-1t-congratulations.svg"
+    },
+    "sendedu-logo": {
+      "name": "SendeduLogoVector",
+      "file": "VG-1u-sendedu-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1u-sendedu-logo.svg"
+    },
+    "cc-visa-logo": {
+      "name": "CcVisaLogoVector",
+      "file": "VG-1v-cc-visa-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1v-cc-visa-logo.svg"
+    },
+    "cc-mastercard-logo-1": {
+      "name": "CcMastercardLogo1Vector",
+      "file": "VG-1w-cc-mastercard-logo-1.svg",
+      "path": "assets/tasty/illustrations/VG-1w-cc-mastercard-logo-1.svg"
+    },
+    "cc-mastercard-logo-2": {
+      "name": "CcMastercardLogo2Vector",
+      "file": "VG-1x-cc-mastercard-logo-2.svg",
+      "path": "assets/tasty/illustrations/VG-1x-cc-mastercard-logo-2.svg"
+    },
+    "cc-amex-logo": {
+      "name": "CcAmexLogoVector",
+      "file": "VG-1y-cc-amex-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1y-cc-amex-logo.svg"
+    },
+    "cc-discover-logo": {
+      "name": "CcDiscoverLogoVector",
+      "file": "VG-1z-cc-discover-logo.svg",
+      "path": "assets/tasty/illustrations/VG-1z-cc-discover-logo.svg"
+    },
+    "expired-credential-display": {
+      "name": "ExpiredCredentialDisplayVector",
+      "file": "VG-2a-expired-credential-display.svg",
+      "path": "assets/tasty/illustrations/VG-2a-expired-credential-display.svg"
+    },
+    "revoked-credential-display": {
+      "name": "RevokedCredentialDisplayVector",
+      "file": "VG-2b-revoked-credential-display.svg",
+      "path": "assets/tasty/illustrations/VG-2b-revoked-credential-display.svg"
+    },
+    "assessment-thumbnail": {
+      "name": "AssessmentThumbnailVector",
+      "file": "VG-2c-vg-assessment-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2c-vg-assessment-thumbnail.svg"
+    },
+    "badge-thumbnail": {
+      "name": "BadgeThumbnailVector",
+      "file": "VG-2d-vg-badge-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2d-vg-badge-thumbnail.svg"
+    },
+    "certificate-thumbnail": {
+      "name": "CertificateThumbnailVector",
+      "file": "VG-2e-vg-certificate-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2e-vg-certificate-thumbnail.svg"
+    },
+    "diploma-thumbnail": {
+      "name": "DiplomaThumbnailVector",
+      "file": "VG-2f-vg-diploma-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2f-vg-diploma-thumbnail.svg"
+    },
+    "experiential-thumbnail": {
+      "name": "ExperientialThumbnailVector",
+      "file": "VG-2g-vg-experiential-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2g-vg-experiential-thumbnail.svg"
+    },
+    "letter-of-rec-thumbnail": {
+      "name": "LetterOfRecThumbnailVector",
+      "file": "VG-2h-vg-letter-of-rec-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2h-vg-letter-of-rec-thumbnail.svg"
+    },
+    "other-thumbnail": {
+      "name": "OtherThumbnailVector",
+      "file": "VG-2i-vg-other-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2i-vg-other-thumbnail.svg"
+    },
+    "school-profile-thumbnail": {
+      "name": "SchoolProfileThumbnailVector",
+      "file": "VG-2j-vg-school-profile-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2j-vg-school-profile-thumbnail.svg"
+    },
+    "school-report-thumbnail": {
+      "name": "SchoolReportThumbnailVector",
+      "file": "VG-2k-vg-school-report-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2k-vg-school-report-thumbnail.svg"
+    },
+    "transcript-thumbnail": {
+      "name": "TranscriptThumbnailVector",
+      "file": "VG-2l-vg-transcript-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2l-vg-transcript-thumbnail.svg"
+    },
+    "verify-diploma-thumbnail": {
+      "name": "VerifyDiplomaThumbnailVector",
+      "file": "VG-2m-vg-verify-diploma-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2m-vg-verify-diploma-thumbnail.svg"
+    },
+    "verify-enrollment-thumbnail": {
+      "name": "VerifyEnrollmentThumbnailVector",
+      "file": "VG-2n-vg-verify-enrollment-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2n-vg-verify-enrollment-thumbnail.svg"
+    },
+    "verify-graduation-thumbnail": {
+      "name": "VerifyGraduationThumbnailVector",
+      "file": "VG-2o-vg-verify-graduation-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2o-vg-verify-graduation-thumbnail.svg"
+    },
+    "verify-dob-thumbnail": {
+      "name": "VerifyDobThumbnailVector",
+      "file": "VG-2p-vg-verify-dob-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2p-vg-verify-dob-thumbnail.svg"
+    },
+    "verify-medical-thumbnail": {
+      "name": "VerifyMedicalThumbnailVector",
+      "file": "VG-2q-vg-verify-medical-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2q-vg-verify-medical-thumbnail.svg"
+    },
+    "credential-thumbnail": {
+      "name": "CredentialThumbnailVector",
+      "file": "VG-2r-vg-credential-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2r-vg-credential-thumbnail.svg"
+    },
+    "verify-degree-thumbnail": {
+      "name": "VerifyDegreeThumbnailVector",
+      "file": "VG-2s-vg-verify-degree-thumbnail.svg",
+      "path": "assets/tasty/illustrations/VG-2s-vg-verify-degree-thumbnail.svg"
+    },
+    "inquiries-exchanged": {
+      "name": "InquiriesExchangedVector",
+      "file": "VG-2x-inquiries-exchanged.svg",
+      "path": "assets/tasty/illustrations/VG-2x-inquiries-exchanged.svg"
+    },
+    "inquiries-served": {
+      "name": "InquiriesServedVector",
+      "file": "VG-2y-inquiries-served.svg",
+      "path": "assets/tasty/illustrations/VG-2y-inquiries-served.svg"
+    },
+    "inquiries-network": {
+      "name": "InquiriesNetworkVector",
+      "file": "VG-2z-inquiries-network.svg",
+      "path": "assets/tasty/illustrations/VG-2z-inquiries-network.svg"
+    },
+    "method-electronic-off": {
+      "name": "MethodElectronicOffVector",
+      "file": "VG-3a-vg-method-electronic-off.svg",
+      "path": "assets/tasty/illustrations/VG-3a-vg-method-electronic-off.svg"
+    },
+    "method-electronic-on": {
+      "name": "MethodElectronicOnVector",
+      "file": "VG-3b-vg-method-electronic-on.svg",
+      "path": "assets/tasty/illustrations/VG-3b-vg-method-electronic-on.svg"
+    },
+    "method-paper-off": {
+      "name": "MethodPaperOffVector",
+      "file": "VG-3c-vg-method-paper-off.svg",
+      "path": "assets/tasty/illustrations/VG-3c-vg-method-paper-off.svg"
+    },
+    "method-paper-on": {
+      "name": "MethodPaperOnVector",
+      "file": "VG-3d-vg-method-paper-on.svg",
+      "path": "assets/tasty/illustrations/VG-3d-vg-method-paper-on.svg"
+    },
+    "account-search-off": {
+      "name": "AccountSearchOffVector",
+      "file": "VG-3e-vg-account-search-off.svg",
+      "path": "assets/tasty/illustrations/VG-3e-vg-account-search-off.svg"
+    },
+    "account-search-on": {
+      "name": "AccountSearchOnVector",
+      "file": "VG-3f-vg-account-search-on.svg",
+      "path": "assets/tasty/illustrations/VG-3f-vg-account-search-on.svg"
+    },
+    "account-new-off": {
+      "name": "AccountNewOffVector",
+      "file": "VG-3g-vg-account-new-off.svg",
+      "path": "assets/tasty/illustrations/VG-3g-vg-account-new-off.svg"
+    },
+    "account-new-on": {
+      "name": "AccountNewOnVector",
+      "file": "VG-3h-vg-account-new-on.svg",
+      "path": "assets/tasty/illustrations/VG-3h-vg-account-new-on.svg"
+    },
+    "flag-us": {
+      "name": "FlagUsVector",
+      "file": "VG-3k-vg-flag-us.svg",
+      "path": "assets/tasty/illustrations/VG-3k-vg-flag-us.svg"
+    },
+    "flag-ca": {
+      "name": "FlagCaVector",
+      "file": "VG-3l-vg-flag-ca.svg",
+      "path": "assets/tasty/illustrations/VG-3l-vg-flag-ca.svg"
+    },
+    "credential-claim": {
+      "name": "CredentialClaimVector",
+      "file": "VG-3o-credential-claim.svg",
+      "path": "assets/tasty/illustrations/VG-3o-credential-claim.svg"
+    },
+    "envelope": {
+      "name": "EnvelopeVector",
+      "file": "VG-3p-vg-envelope.svg",
+      "path": "assets/tasty/illustrations/VG-3p-vg-envelope.svg"
+    },
+    "envelope-back": {
+      "name": "EnvelopeBackVector",
+      "file": "VG-3q-vg-envelope-back.svg",
+      "path": "assets/tasty/illustrations/VG-3q-vg-envelope-back.svg"
+    },
+    "envelope-front": {
+      "name": "EnvelopeFrontVector",
+      "file": "VG-3r-vg-envelope-front.svg",
+      "path": "assets/tasty/illustrations/VG-3r-vg-envelope-front.svg"
+    },
+    "envelope-flap": {
+      "name": "EnvelopeFlapVector",
+      "file": "VG-3s-vg-envelope-flap.svg",
+      "path": "assets/tasty/illustrations/VG-3s-vg-envelope-flap.svg"
+    },
+    "cred-landscape": {
+      "name": "CredLandscapeVector",
+      "file": "VG-3t-vg-cred-landscape.svg",
+      "path": "assets/tasty/illustrations/VG-3t-vg-cred-landscape.svg"
+    },
+    "cred-portrait": {
+      "name": "CredPortraitVector",
+      "file": "VG-3u-vg-cred-portrait.svg",
+      "path": "assets/tasty/illustrations/VG-3u-vg-cred-portrait.svg"
+    },
+    "msg-alert": {
+      "name": "MsgAlertVector",
+      "file": "VG-3v-msg-alert.svg",
+      "path": "assets/tasty/illustrations/VG-3v-msg-alert.svg"
+    },
+    "msg-notice": {
+      "name": "MsgNoticeVector",
+      "file": "VG-3w-msg-notice.svg",
+      "path": "assets/tasty/illustrations/VG-3w-msg-notice.svg"
+    },
+    "msg-simple": {
+      "name": "MsgSimpleVector",
+      "file": "VG-3x-msg-simple.svg",
+      "path": "assets/tasty/illustrations/VG-3x-msg-simple.svg"
+    },
+    "card-cloud": {
+      "name": "CardCloudVector",
+      "file": "VG-4a-vg-card-cloud.svg",
+      "path": "assets/tasty/illustrations/VG-4a-vg-card-cloud.svg"
+    },
+    "card-cloud-dark": {
+      "name": "CardCloudDarkVector",
+      "file": "VG-4b-vg-card-cloud-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4b-vg-card-cloud-dark.svg"
+    },
+    "card-issue": {
+      "name": "CardIssueVector",
+      "file": "VG-4c-vg-card-issue.svg",
+      "path": "assets/tasty/illustrations/VG-4c-vg-card-issue.svg"
+    },
+    "card-issue-dark": {
+      "name": "CardIssueDarkVector",
+      "file": "VG-4d-vg-card-issue-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4d-vg-card-issue-dark.svg"
+    },
+    "card-send": {
+      "name": "CardSendVector",
+      "file": "VG-4e-vg-card-send.svg",
+      "path": "assets/tasty/illustrations/VG-4e-vg-card-send.svg"
+    },
+    "card-send-dark": {
+      "name": "CardSendDarkVector",
+      "file": "VG-4f-vg-card-send-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4f-vg-card-send-dark.svg"
+    },
+    "card-build": {
+      "name": "CardBuildVector",
+      "file": "VG-4g-vg-card-build.svg",
+      "path": "assets/tasty/illustrations/VG-4g-vg-card-build.svg"
+    },
+    "card-build-dark": {
+      "name": "CardBuildDarkVector",
+      "file": "VG-4h-vg-card-build-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4h-vg-card-build-dark.svg"
+    },
+    "card-addlearners": {
+      "name": "CardAddlearnersVector",
+      "file": "VG-4i-vg-card-addlearners.svg",
+      "path": "assets/tasty/illustrations/VG-4i-vg-card-addlearners.svg"
+    },
+    "card-addlearners-dark": {
+      "name": "CardAddlearnersDarkVector",
+      "file": "VG-4j-vg-card-addlearners-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4j-vg-card-addlearners-dark.svg"
+    },
+    "card-data": {
+      "name": "CardDataVector",
+      "file": "VG-4k-vg-card-data.svg",
+      "path": "assets/tasty/illustrations/VG-4k-vg-card-data.svg"
+    },
+    "card-data-dark": {
+      "name": "CardDataDarkVector",
+      "file": "VG-4l-vg-card-data-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4l-vg-card-data-dark.svg"
+    },
+    "supportal-mobile-lookup": {
+      "name": "SupportalMobileLookupVector",
+      "file": "VG-4m-vg-supportal-mobile-lookup.svg",
+      "path": "assets/tasty/illustrations/VG-4m-vg-supportal-mobile-lookup.svg"
+    },
+    "supportal-school-lookup": {
+      "name": "SupportalSchoolLookupVector",
+      "file": "VG-4n-vg-supportal-school-lookup.svg",
+      "path": "assets/tasty/illustrations/VG-4n-vg-supportal-school-lookup.svg"
+    },
+    "supportal-mobile-lookup-dark": {
+      "name": "SupportalMobileLookupDarkVector",
+      "file": "VG-4o-vg-supportal-mobile-lookup-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4o-vg-supportal-mobile-lookup-dark.svg"
+    },
+    "supportal-school-lookup-dark": {
+      "name": "SupportalSchoolLookupDarkVector",
+      "file": "VG-4p-vg-supportal-school-lookup-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4p-vg-supportal-school-lookup-dark.svg"
+    },
+    "supportal-learner-lookup": {
+      "name": "SupportalLearnerLookupVector",
+      "file": "VG-4q-vg-supportal-learner-lookup.svg",
+      "path": "assets/tasty/illustrations/VG-4q-vg-supportal-learner-lookup.svg"
+    },
+    "supportal-order-lookup": {
+      "name": "SupportalOrderLookupVector",
+      "file": "VG-4r-vg-supportal-order-lookup.svg",
+      "path": "assets/tasty/illustrations/VG-4r-vg-supportal-order-lookup.svg"
+    },
+    "supportal-learner-lookup-dark": {
+      "name": "SupportalLearnerLookupDarkVector",
+      "file": "VG-4s-vg-supportal-learner-lookup-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4s-vg-supportal-learner-lookup-dark.svg"
+    },
+    "supportal-order-lookup-dark": {
+      "name": "SupportalOrderLookupDarkVector",
+      "file": "VG-4t-vg-supportal-order-lookup-dark.svg",
+      "path": "assets/tasty/illustrations/VG-4t-vg-supportal-order-lookup-dark.svg"
+    },
+    "success-light": {
+      "name": "SuccessLightVector",
+      "file": "VG-5a-vg-success-light.svg",
+      "path": "assets/tasty/illustrations/VG-5a-vg-success-light.svg"
+    },
+    "success-dark": {
+      "name": "SuccessDarkVector",
+      "file": "VG-5b-vg-success-dark.svg",
+      "path": "assets/tasty/illustrations/VG-5b-vg-success-dark.svg"
+    },
+    "parchie-404": {
+      "name": "Parchie404Vector",
+      "file": "VG-5c-vg-parchie-404.svg",
+      "path": "assets/tasty/illustrations/VG-5c-vg-parchie-404.svg"
+    },
+    "thumbs-up": {
+      "name": "ThumbsUpVector",
+      "file": "VG-5d-vg-thumbs-up.svg",
+      "path": "assets/tasty/illustrations/VG-5d-vg-thumbs-up.svg"
+    },
+    "generic-error-parchie": {
+      "name": "GenericErrorParchieVector",
+      "file": "VG-5e-vg-generic-error-parchie.svg",
+      "path": "assets/tasty/illustrations/VG-5e-vg-generic-error-parchie.svg"
+    },
+    "access-denied-parchie": {
+      "name": "AccessDeniedParchieVector",
+      "file": "VG-5f-access-denied-parchie.svg",
+      "path": "assets/tasty/illustrations/VG-5f-access-denied-parchie.svg"
+    },
+    "gf-pricing-settings": {
+      "name": "GfPricingSettingsVector",
+      "file": "VG-6a-vg-gf-pricing-settings.svg",
+      "path": "assets/tasty/illustrations/VG-6a-vg-gf-pricing-settings.svg"
+    },
+    "gf-dual-enrollment": {
+      "name": "GfDualEnrollmentVector",
+      "file": "VG-6b-vg-gf-dual-enrollment.svg",
+      "path": "assets/tasty/illustrations/VG-6b-vg-gf-dual-enrollment.svg"
+    },
+    "de-no-learners": {
+      "name": "DeNoLearnersVector",
+      "file": "VG-6c-de-no-learners.svg",
+      "path": "assets/tasty/illustrations/VG-6c-de-no-learners.svg"
+    },
+    "de-no-schools": {
+      "name": "DeNoSchoolsVector",
+      "file": "VG-6d-de-no-schools.svg",
+      "path": "assets/tasty/illustrations/VG-6d-de-no-schools.svg"
+    },
+    "de-school-welcome": {
+      "name": "DeSchoolWelcomeVector",
+      "file": "VG-6e-de-school-welcome.svg",
+      "path": "assets/tasty/illustrations/VG-6e-de-school-welcome.svg"
+    },
+    "parchment-award-logo": {
+      "name": "ParchmentAwardLogoVector",
+      "file": "VG-7a-parchment-award-logo.svg",
+      "path": "assets/tasty/illustrations/VG-7a-parchment-award-logo.svg"
+    },
+    "parchment-pathways-logo": {
+      "name": "ParchmentPathwaysLogoVector",
+      "file": "VG-7b-parchment-pathways-logo.svg",
+      "path": "assets/tasty/illustrations/VG-7b-parchment-pathways-logo.svg"
+    },
+    "parchment-services-logo": {
+      "name": "ParchmentServicesLogoVector",
+      "file": "VG-7c-parchment-services-logo.svg",
+      "path": "assets/tasty/illustrations/VG-7c-parchment-services-logo.svg"
+    },
+    "parchment-digitary-logo": {
+      "name": "ParchmentDigitaryLogoVector",
+      "file": "VG-7d-parchment-digitary-logo.svg",
+      "path": "assets/tasty/illustrations/VG-7d-parchment-digitary-logo.svg"
+    },
+    "parchment-instructure-company-logo-full-color": {
+      "name": "ParchmentInstructureCompanyLogoFullColorVector",
+      "file": "VG-7e-parchment-instructure-company-logo-full-color.svg",
+      "path": "assets/tasty/illustrations/VG-7e-parchment-instructure-company-logo-full-color.svg"
+    },
+    "parchment-instructure-company-logo": {
+      "name": "ParchmentInstructureCompanyLogoVector",
+      "file": "VG-7f-parchment-instructure-company-logo.svg",
+      "path": "assets/tasty/illustrations/VG-7f-parchment-instructure-company-logo.svg"
+    },
+    "parchment-award-brand-logo-full-color": {
+      "name": "ParchmentAwardBrandLogoFullColorVector",
+      "file": "VG-7h-parchment-award-brand-logo-full-color.svg",
+      "path": "assets/tasty/illustrations/VG-7h-parchment-award-brand-logo-full-color.svg"
+    },
+    "parchment-pathways-brand-logo-full-color": {
+      "name": "ParchmentPathwaysBrandLogoFullColorVector",
+      "file": "VG-7i-parchment-pathways-brand-logo-full-color.svg",
+      "path": "assets/tasty/illustrations/VG-7i-parchment-pathways-brand-logo-full-color.svg"
+    },
+    "parchment-award-brand-logo-white": {
+      "name": "ParchmentAwardBrandLogoWhiteVector",
+      "file": "VG-7k-parchment-award-brand-logo-white.svg",
+      "path": "assets/tasty/illustrations/VG-7k-parchment-award-brand-logo-white.svg"
+    },
+    "parchment-pathways-brand-logo-white": {
+      "name": "ParchmentPathwaysBrandLogoWhiteVector",
+      "file": "VG-7l-parchment-pathways-brand-logo-white.svg",
+      "path": "assets/tasty/illustrations/VG-7l-parchment-pathways-brand-logo-white.svg"
+    },
+    "supportal-logo": {
+      "name": "SupportalLogoVector",
+      "file": "VG-7m-supportal-logo.svg",
+      "path": "assets/tasty/illustrations/VG-7m-supportal-logo.svg"
+    }
+  }
+}

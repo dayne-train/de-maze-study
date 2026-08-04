@@ -1,0 +1,388 @@
+/* styles/screens/dashboard.css — extracted from app.css (was lines 1289-1664). Cascade order preserved via index.html link order. */
+  /* ─── Dashboard screen ─── */
+  .dashboard-screen-wrap {
+    min-height: 100vh; background: var(--c-surface); display: flex; flex-direction: column;
+  }
+  .dashboard-body {
+    flex: 1; width: 100%;
+    padding: 50px max(50px, calc((100% - 1600px) / 2));
+    display: flex; flex-direction: column; gap: 32px;
+  }
+
+/* ─── Workspace Search Banner ─── */
+.ws-search-banner {
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-border);
+  padding: 24px 50px;
+  flex-shrink: 0;
+}
+.ws-search-inner {
+  max-width: 1600px; margin: 0 auto;
+  display: flex; align-items: center; gap: 28px;
+}
+.ws-search-meta {
+  display: flex; align-items: center; gap: 14px; flex-shrink: 0;
+}
+.ws-search-icon-wrap {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  background: var(--c-brand-bg); border: 1px solid var(--c-brand-border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-brand); font-size: 22px; flex-shrink: 0;
+}
+.ws-search-label {
+  font-size: 14px; font-weight: 700; color: var(--c-text-strong); margin: 0 0 2px;
+}
+.ws-search-sub {
+  font-size: 12px; color: var(--c-text-subtle); margin: 0;
+}
+.ws-search-form {
+  flex: 1; display: flex; min-width: 0; max-width: 600px;
+}
+.ws-search-input-wrap {
+  flex: 1; display: flex; align-items: center; position: relative;
+  border: 1px solid var(--c-border); border-right: none;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  background: var(--c-surface);
+  transition: border-color var(--t-quick);
+}
+.ws-search-input-wrap:focus-within { border-color: var(--c-brand); }
+.ws-search-icon-glyph {
+  position: absolute; left: 13px;
+  color: var(--c-text-subtle); font-size: var(--font-medium); pointer-events: none;
+}
+.ws-search-input {
+  flex: 1; height: 42px; border: none; outline: none;
+  background: transparent; font-family: var(--font-family);
+  font-size: 14px; color: var(--c-text); padding: 0 12px 0 38px;
+}
+.ws-search-btn {
+  height: 42px; padding: 0 24px;
+  background: var(--c-brand); color: #fff;
+  border: 1px solid var(--c-brand);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-family: var(--font-family); font-size: 14px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: background var(--t-quick);
+}
+.ws-search-btn:hover { background: var(--c-brand-dark); border-color: var(--c-brand-dark); }
+.ws-adv-link {
+  background: none; border: none; padding: 0;
+  font-family: var(--font-family); font-size: var(--font-small);
+  color: var(--c-brand); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 5px;
+  white-space: nowrap; flex-shrink: 0;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.ws-adv-link:hover { color: var(--c-brand-dark); }
+
+/* ─── Row 1: DE section header — identity left, search aligned right ─── */
+.de-page-identity {
+  display: flex; align-items: center; gap: 12px;
+  padding: 4px 0 20px;
+}
+/* Empty state — "No Applications" (edge case). Figma 2.3.8 No Applications View. */
+.de-empty-state {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: 20px; max-width: 760px; margin: 0 auto; padding: 50px 50px 30px;
+}
+.de-empty-title {
+  font-size: 40px; font-weight: 700; color: var(--body-font-strong);
+  margin: 0; line-height: 1.1;
+}
+.de-empty-text {
+  font-size: var(--font-large); color: var(--body-font-base); margin: 0; line-height: 1.4;
+}
+.de-empty-illus { width: 100px; height: 100px; }
+.de-empty-illus img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* Search group rides on the header baseline, pushed to the right edge */
+.de-header-search {
+  margin-left: auto; align-self: center; flex-shrink: 0;
+  display: flex; align-items: center;
+}
+/* Add Enrollment — primary action sitting to the right of the search group */
+.de-add-enrollment-btn {
+  align-self: center; flex-shrink: 0;
+  height: 50px; padding: 0 22px;
+  font-size: 15px; white-space: nowrap;
+}
+.de-add-enrollment-btn .ti { font-size: 18px; }
+
+/* ─── Row 2: NavToggle (segment control) keeps its own margin-bottom ─── */
+
+/* ─── Row 3: contextual quick filters (left) + export current view (right) ─── */
+.de-toolbar-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  margin-bottom: 14px;
+}
+.de-quick-filters {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+}
+.de-qf-divider {
+  width: 1px; height: 20px; background: var(--c-border); margin: 0 2px;
+}
+
+/* SortTag — Select-style dropdown trigger pill (Tasty SortTag) */
+.de-sort { position: relative; }
+.de-sort-trigger.tasty-sort-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 30px; padding: 0 10px;
+  border: 1px solid var(--c-border); border-radius: var(--radius-pill);
+  background: var(--c-surface); color: var(--c-text-strong);
+  font-family: var(--font-family); font-size: var(--font-small); font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  transition: border-color var(--t-quick), background var(--t-quick);
+}
+.de-sort-trigger.tasty-sort-tag:hover { border-color: var(--action-default); }
+.de-sort-trigger .ti-arrows-sort { font-size: 14px; color: var(--c-text-muted); }
+.de-sort-trigger .de-sort-caret { font-size: var(--font-small); color: var(--c-text-muted); transition: transform var(--t-quick); }
+.de-sort.is-open .de-sort-trigger { border-color: var(--action-default); }
+.de-sort.is-open .de-sort-caret { transform: rotate(180deg); }
+.de-sort-trigger:focus-visible {
+  outline: var(--focus-ring-thickness) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.de-sort-menu {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 40;
+  min-width: 210px; padding: 6px;
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-pop);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.de-sort-menu[hidden] { display: none; }
+.de-sort-opt {
+  display: flex; align-items: center;
+  padding: 9px 10px; border: 0; border-radius: var(--radius-sm);
+  background: transparent; cursor: pointer;
+  font-family: var(--font-family); font-size: 14px; font-weight: 500;
+  color: var(--c-text); text-align: left;
+}
+.de-sort-opt:hover { background: var(--c-surface-z1); }
+.de-sort-opt.is-selected { color: var(--c-brand); font-weight: 700; }
+.de-sort-opt.is-selected::after { content: "\2713"; margin-left: auto; color: var(--c-brand); }
+
+/* FilterTag — Select-style dropdown filter pills (Tasty FilterTag) */
+.de-filter { position: relative; }
+.de-filter-trigger.tasty-filter-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 30px; padding: 0 10px;
+  border: 1px solid var(--c-border); border-radius: var(--radius-pill);
+  background: var(--c-surface); color: var(--c-text-strong);
+  font-family: var(--font-family); font-size: var(--font-small); font-weight: 600;
+  cursor: pointer; white-space: nowrap;
+  transition: border-color var(--t-quick), background var(--t-quick), color var(--t-quick);
+}
+.de-filter-trigger.tasty-filter-tag:hover { border-color: var(--action-default); }
+.de-filter-trigger .de-filter-caret { font-size: var(--font-small); color: var(--c-text-muted); transition: transform var(--t-quick); }
+.de-filter-trigger .de-filter-value { color: var(--c-text-muted); font-weight: 600; }
+.de-filter.is-open .de-filter-trigger { border-color: var(--action-default); }
+.de-filter.is-open .de-filter-caret { transform: rotate(180deg); }
+/* Active (non-default) filter state */
+.de-filter.is-set .de-filter-trigger { border-color: var(--c-brand-dark); background: var(--c-brand-dark); color: #fff; }
+.de-filter.is-set .de-filter-value { color: #fff; }
+.de-filter.is-set .de-filter-caret { color: rgba(255,255,255,0.85); }
+.de-filter-trigger:focus-visible {
+  outline: var(--focus-ring-thickness) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+.de-filter-menu {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 40;
+  min-width: 180px; padding: 6px;
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-pop);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.de-filter-menu[hidden] { display: none; }
+.de-filter-opt {
+  display: flex; align-items: center;
+  padding: 9px 10px; border: 0; border-radius: var(--radius-sm);
+  background: transparent; cursor: pointer;
+  font-family: var(--font-family); font-size: 14px; font-weight: 500;
+  color: var(--c-text); text-align: left;
+}
+.de-filter-opt:hover { background: var(--c-surface-z1); }
+.de-filter-opt.is-selected { color: var(--c-brand); font-weight: 700; }
+.de-filter-opt.is-selected::after { content: "\2713"; margin-left: auto; color: var(--c-brand); }
+
+/* ─── Export icon button — right edge of the quick-filter row ─── */
+/* Icon-only export — Tasty Button Outline (is-bold is-ghost), Standard, sm.
+   Rectangle, square footprint so the lone icon sits centered. */
+.de-export-icon {
+  padding: 0;
+  width: 40px;
+  flex-shrink: 0;
+}
+.de-export-icon i { font-size: 18px; }
+
+/* ─── Options kebab — Row 1, right of Add Enrollment.
+   Trigger = Tasty icon button (.tasty-btn.is-icon); menu = canonical OptionsMenu
+   surface (.tasty-menu / .tasty-menu__item from the kit). Only positioning here. ─── */
+.de-options { position: relative; align-self: center; flex-shrink: 0; }
+.de-options-trigger { width: 44px; height: 50px; flex-shrink: 0; }
+.de-options-trigger i { font-size: var(--font-large); }
+.de-options .tasty-menu { top: calc(100% + 6px); right: 0; min-width: 200px; }
+.de-options .tasty-menu__item i { font-size: var(--font-medium); }
+  .dashboard-body-title {
+    font-size: var(--font-xSmall); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--c-text-subtle); margin: 0 0 16px;
+  }
+  /* ─── WORKSPACE section header — title + "Starting Screen" menu + rule
+     (Figma 1.0.3 Counselor Workspace, 16719:154727) ─── */
+  .ws-section { display: flex; flex-direction: column; width: 100%; }
+  .ws-section-head { display: flex; align-items: center; gap: 8px; padding: 10px 5px; }
+  .ws-section-title {
+    flex: 1; min-width: 0; margin: 0;
+    font-size: 16px; font-weight: 700; text-transform: uppercase; color: var(--c-text-strong);
+  }
+  /* Divider sits 5px under the title and hugs the cards (kit's .tasty-divider
+     ships margin: 2em 0 — override both ends). */
+  .ws-section hr.ws-section-rule { margin: 0 0 20px; width: 100%; }
+  .ws-starting { position: relative; flex-shrink: 0; }
+  .ws-starting-trigger { gap: 8px; }
+  .ws-starting-trigger i { font-size: 13px; }
+  .ws-starting .tasty-menu { top: calc(100% + 6px); right: 0; min-width: 280px; max-height: none; }
+  .ws-starting-hint {
+    margin: 0; padding: 10px 14px 8px;
+    font-size: var(--font-xSmall); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--c-text-subtle);
+  }
+  /* Toggle rows: menu item + Tasty checkbox. Label colour follows the item (white on hover). */
+  .ws-starting-opt { gap: 10px; color: var(--c-text); user-select: none; }
+  .ws-starting-opt .tasty-checkbox { pointer-events: none; font-size: inherit; }
+
+  /* ─── Workspace cards — a 3-column GRID (Figma: 3 per row, the 4th wrapping, 340 tall).
+     Grid rather than a wrapping flex row, because the columns are the point: a card
+     that wraps to the second row has to be exactly one column wide and line up under
+     the first card above it. Flex wrapping can't promise that — a lone card on a
+     wrapped row sizes itself from its own flex rules (it grew to its 540px max while
+     the row above sat at 428px each), so the grid was only ever incidental.
+     Column count steps down so a column never gets narrower than ~360px, which was
+     the old per-card min-width.
+     Separators are LEFT borders; .is-row-start (set in workspace.js) clears the
+     border on whichever card begins each visual row — still measured rather than
+     computed from nth-child, since hidden cards change which card starts a row. ─── */
+  .workspace-cards {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 20px; align-items: stretch; width: 100%;
+    background: var(--c-surface);
+  }
+  @media (max-width: 1200px) {
+    .workspace-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 840px) {
+    .workspace-cards { grid-template-columns: minmax(0, 1fr); }
+  }
+  .workspace-card {
+    min-width: 0; height: 340px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 20px 30px; gap: 10px;
+    border-left: 1px solid var(--c-border);
+  }
+  /* .is-graphic marks the two cards that carry a line-art graphic instead of a count
+     pill (Invite Learners · View All Applications). It is a CONTENT distinction only —
+     every workspace card sizes by the grid track, not by anything of its own. Figma
+     draws these two at a fixed 500px, but pinning them to `flex: 0 1 500px` made them
+     the only cards that never resized, and stranded them one per row below 1000px. */
+  .workspace-card:first-child, .workspace-card.is-row-start { border-left: none; }
+  /* A card can be hidden for two independent reasons, and they must not clobber
+     each other: .is-hidden is the user's own Starting Screen preference, while
+     .is-unavailable means the exchange config switched that capability off (no
+     invites on this network, no review step, etc). Config wins, and the preference
+     is remembered underneath it, so restoring the setting restores the card. */
+  .workspace-card.is-hidden,
+  .workspace-card.is-unavailable { display: none; }
+  .workspace-card-top {
+    height: 120px; width: 100%; display: flex; align-items: center; justify-content: center;
+  }
+  .workspace-count-pill {
+    background: var(--c-surface-z1); border-radius: 60px;
+    width: 100%; max-width: 280px; height: 120px; padding: 0 30px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .workspace-count { font-size: 80px; font-weight: 400; line-height: 1; color: var(--c-text-strong); }
+  .workspace-card-graphic {
+    width: 120px; height: 120px; display: flex; align-items: center; justify-content: center;
+  }
+  .workspace-card-graphic img { max-width: 100%; max-height: 100%; }
+  .workspace-card-mid {
+    flex: 1; min-height: 0; width: 100%;
+    display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
+  }
+  .workspace-card-title { font-size: 16px; font-weight: 700; color: var(--c-text-strong); margin: 0; }
+  .workspace-card-desc { font-size: 16px; color: var(--c-text); margin: 0; line-height: 1.4; }
+  .workspace-card-bottom { display: flex; align-items: center; justify-content: center; height: 60px; }
+
+  /* Banner info affordance — sits left of the search field (Figma) */
+  .ws-banner-info {
+    flex-shrink: 0; border: none; background: none; padding: 0; cursor: pointer;
+    color: var(--c-brand); font-size: 20px; line-height: 1;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  /* ─── Transcript viewer — shell uses the Tasty modal component (modals.css) ─── */
+  .transcript-doc {
+    border: 1px solid var(--c-border); border-radius: var(--radius-md); overflow: hidden;
+  }
+  .transcript-doc-head {
+    background: var(--c-surface-z1); border-bottom: 1px solid var(--c-border);
+    padding: 14px 20px; text-align: center;
+  }
+  .transcript-doc-head h4 { font-size: 14px; font-weight: 700; color: var(--c-text-strong); margin: 0 0 2px; }
+  .transcript-doc-head p { font-size: 10px; color: var(--c-text-subtle); margin: 0; text-transform: uppercase; letter-spacing: 0.06em; }
+  .transcript-doc-content { padding: 16px 20px; }
+  .transcript-student-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px;
+    margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--c-border);
+  }
+  .tr-key { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--c-text-subtle); margin: 0 0 2px; }
+  .tr-val { font-size: var(--font-small); font-weight: 600; color: var(--c-text-strong); margin: 0; }
+  .transcript-section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--c-text-muted); margin: 0 0 8px;
+  }
+  .transcript-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .transcript-table th {
+    background: var(--c-surface-z1); border: 1px solid var(--c-border);
+    padding: 5px 10px; text-align: left; font-weight: 600; color: var(--c-text-muted);
+  }
+  .transcript-table td { border: 1px solid var(--c-border); padding: 6px 10px; color: var(--c-text); }
+  .transcript-table tr:nth-child(even) td { background: var(--c-surface-z1); }
+  .transcript-gpa-line {
+    display: flex; justify-content: flex-end; align-items: baseline; gap: 12px;
+    margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--c-border);
+  }
+  .transcript-gpa-line span:first-child { font-size: var(--font-small); font-weight: 700; color: var(--c-text-muted); }
+  .transcript-gpa-line span:last-child { font-size: var(--font-large); font-weight: 700; color: var(--c-brand-dark); }
+
+  /* ─── NavToggleSet — Tasty Molecules II ─── */
+  /* ─────────────────────────────────────────────
+     SEGMENTED CONTROL — Needs Review / Invited / Active / Denied tabs
+  ───────────────────────────────────────────── */
+  /* Row holding the segmented control (left) + export button (right) */
+  .seg-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  /* Segment bucket tabs use the kit .tasty-navtoggle + .tasty-badge (true-source NavToggle).
+     One deliberate deviation: count chips HUG the number — the kit badge's fixed min-width
+     (36/44px) is BadgeCounter behavior we don't want on the tabs. */
+  .tasty-navtoggle .tasty-badge { min-width: 0; }
+  /* ─── Segment panels ─── */
+  .seg-panel { display: none; }
+  .seg-panel.active { display: block; }
+  /* ─── Empty state for placeholder segments ─── */
+  .seg-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px;
+    text-align: center;
+    color: var(--c-text-muted);
+  }
+  .seg-empty i { font-size: 40px; margin-bottom: 16px; color: var(--c-border); }
+  .seg-empty p { font-size: 14px; margin: 0; line-height: 1.6; }

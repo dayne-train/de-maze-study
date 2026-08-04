@@ -1,0 +1,27 @@
+/* styles/screens/deny.css — extracted from app.css (was lines 660-702). Cascade order preserved via index.html link order.
+   DENY SCREEN — Single and bulk denial flow
+   ───────────────────────────────────────────── */
+  /* Width + spacing match the bulk-approve column (review-figma.css .bulk-elig-wrap):
+     760px reading column, same generous top/side padding rhythm. */
+  .deny-page { max-width: 760px; width: 100%; margin: 0 auto; padding: 50px 50px 60px; }
+  /* Inside the single-app deny modal the modal body provides the chrome. */
+  .tasty-modal__body .deny-page { max-width: none; margin: 0; padding: 0; }
+  .deny-page-title { font-size: 22px; font-weight: 700; margin: 0 0 24px; color: var(--c-text-strong); }
+  .deny-student-card {
+    border: 1px solid var(--c-border); border-radius: var(--radius-md);
+    padding: 14px 18px; margin-bottom: 20px;
+    display: flex; gap: 14px; align-items: center;
+    background: var(--c-surface-subtle);
+  }
+  /* Avatars retired Jun 30 — now use the DS .tasty-persona-icon (single brand color, 40px). */
+  .deny-student-name { font-size: 14px; font-weight: 700; color: var(--c-text); margin: 0 0 2px; }
+  .deny-student-meta { font-size: 12px; color: var(--c-text-muted); margin: 0; }
+  /* Multi-learner list (Jul 1) reuses bulk-approve's .bulk-net / .bulk-elig-row card + row
+     styling (review-figma.css) instead of a bespoke dense list, so denial and approval read
+     as the same pattern. Standalone-screen action row also reuses .review-action-zone,
+     transparent + centered to match the bulk-approve workflow step. */
+  .deny-page .review-action-zone { background: transparent; padding: 8px 0 60px; }
+  /* Modal-context action row only (single deny) — standard compact modal footer, right-aligned. */
+  .deny-action-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+
+  /* ─────────────────────────────────────────────

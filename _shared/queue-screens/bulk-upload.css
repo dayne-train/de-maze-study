@@ -1,0 +1,141 @@
+/* ─────────────────────────────────────────────────────────────
+   Bulk CSV upload wizard — a centered form "card" (FormHeader +
+   ProgressTracker + form + submit). Built from Figma 07-01-03-01
+   AddLearners. Every control is a canonical kit component
+   (.tasty-progress-tracker / .tasty-dropzone / .tasty-radio /
+   .tasty-menu / .tasty-filter-tag / .tasty-field / .tasty-btn);
+   these rules only add the card shell + form layout. Shared by both
+   DE prototypes' Add-Multiple-Learners flow.
+   ───────────────────────────────────────────────────────────── */
+.bulk-card {
+  max-width: 760px; margin: 0 auto;
+  border: 1px solid var(--c-border); background: var(--c-surface);
+}
+/* FormHeader — gray title bar */
+.bulk-card__header {
+  height: 50px; display: flex; align-items: center; justify-content: center;
+  background: var(--white-space-z-index3);
+  font-size: 16px; font-weight: 700; color: var(--c-text-strong);
+  border-bottom: 1px solid var(--c-border);
+}
+.bulk-card__tracker { background: var(--c-surface-subtle); padding: 16px 32px; }
+.bulk-card__body {
+  background: var(--white-space-base, #fff); padding: 40px 80px 30px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.bulk-intro h1 { font-size: 30px; font-weight: 700; color: var(--c-text); margin: 0 0 6px; line-height: 1.15; }
+.bulk-intro p  { font-size: 16px; color: var(--c-text); margin: 0; line-height: 1.4; }
+.bulk-link { color: var(--c-brand); font-weight: 600; text-decoration: underline; cursor: pointer; }
+
+/* Dropzone content (kit .tasty-dropzone provides the dashed box) */
+.bulk-dz__req { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--c-danger, #b51a14); }
+.bulk-dz__prompt { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; color: var(--c-brand); text-decoration: underline; }
+/* Uploaded state — filename row replaces the prompt */
+.bulk-file { display: none; align-items: center; justify-content: center; gap: 10px; font-size: 15px; color: var(--c-text-strong); }
+.bulk-dropzone.is-filled { cursor: default; border-style: solid; }
+.bulk-dropzone.is-filled .bulk-dz__prompt,
+.bulk-dropzone.is-filled .bulk-dropzone__hint,
+.bulk-dropzone.is-filled .tasty-dropzone__types,
+.bulk-dropzone.is-filled .bulk-dz__req { display: none; }
+.bulk-dropzone.is-filled .bulk-file { display: flex; }
+.bulk-file__check { color: var(--c-success); }
+.bulk-file__remove { color: var(--c-brand); text-decoration: underline; cursor: pointer; font-size: 13px; }
+
+/* Fields — label + control */
+.bulk-field { display: flex; flex-direction: column; gap: 8px; }
+.bulk-field__label { font-size: 13px; font-weight: 600; color: var(--c-text-strong); }
+.bulk-radios { display: flex; flex-direction: column; gap: 8px; }
+
+/* Group select — a .tasty-input-styled trigger that opens a .tasty-menu */
+.bulk-group { position: relative; max-width: 100%; }
+.bulk-select {
+  width: 100%; height: 50px; padding: 0 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  background: var(--c-surface); border: 1px solid var(--interactive-border); border-radius: 5px;
+  font-family: inherit; font-size: 16px; color: var(--c-text-muted); cursor: pointer; text-align: left;
+}
+.bulk-select.is-selected { color: var(--c-text); }
+.bulk-select .tcon { color: var(--c-brand); flex: none; }
+.bulk-group .tasty-menu { top: calc(100% + 6px); left: 0; right: 0; min-width: 100%; }
+.bulk-group-chip { margin-top: 10px; }
+.bulk-newgroup { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.bulk-newgroup[hidden] { display: none; }   /* author display: flex would otherwise beat the [hidden] UA rule */
+.bulk-help { font-size: 13px; color: var(--c-text-muted); margin: 0; line-height: 1.4; }
+
+/* Submit section — gray footer */
+.bulk-card__foot {
+  background: var(--c-surface-subtle); padding: 40px 80px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  border-top: 1px solid var(--c-border);
+}
+.bulk-reqnote { font-size: 13px; color: var(--c-text-muted); margin: 0; }
+.bulk-reqnote .req, .bulk-field__label .req { color: var(--c-danger, #b51a14); font-weight: 700; }
+
+/* ── Step 2: Map Columns ── */
+.bulk-card.is-wide { max-width: 1340px; }
+.bulk-uploaded { display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px 0; font-size: 16px; font-weight: 600; color: var(--c-text-muted); }
+.bulk-uploaded__name { display: inline-flex; align-items: center; gap: 6px; color: var(--c-text); }
+/* neutral (gray) banner — reuses .tasty-banner anatomy (icon divider + title).
+   Compound selector so it beats the kit's default dark .tasty-banner background. */
+.tasty-banner.bulk-map-banner { background: var(--c-surface-subtle); color: var(--c-text); }
+.tasty-banner.bulk-map-banner .tasty-banner__title { color: var(--c-text-strong); }
+
+.bulk-map-table { width: 100%; }
+.bulk-map-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 50px; align-items: center; padding: 4px 10px; min-height: 50px; }
+.bulk-map-row.is-head { min-height: 48px; border-bottom: 2px solid var(--c-text-strong); font-size: 13px; font-weight: 600; color: var(--c-text-strong); }
+.bulk-map-row:not(.is-head) { border-bottom: 1px solid var(--c-border); }
+.bulk-map-field { font-size: 13px; font-weight: 600; color: var(--c-text); }
+.bulk-map-field .req { color: var(--c-danger, #b51a14); margin-right: 4px; }
+.bulk-map-sample { font-size: 13px; color: var(--c-text); word-break: break-word; }
+
+/* Mapping select — a kit input acting as a select; green "valid" when mapped */
+.bulk-map-cell { position: relative; }
+.bulk-map-select { position: relative; display: flex; align-items: center; gap: 8px; height: 40px; padding-right: 8px; border: 1px solid var(--interactive-border); border-radius: 4px; background: var(--c-surface); cursor: pointer; overflow: hidden; }
+.bulk-map-select__bar { display: none; width: 6px; align-self: stretch; background: var(--c-success); }
+.bulk-map-select__check { display: none; color: var(--c-success); margin-left: 8px; }
+.bulk-map-select__label { flex: 1; padding-left: 8px; font-size: 13px; font-weight: 600; color: var(--c-text-strong); }
+.bulk-map-select__label.is-placeholder { font-weight: 400; color: var(--c-text-muted); }
+.bulk-map-select__caret { color: var(--c-text-strong); flex: none; }
+.bulk-map-select.is-valid { background: var(--validation-base-valid); }
+.bulk-map-select.is-valid .bulk-map-select__bar,
+.bulk-map-select.is-valid .bulk-map-select__check { display: inline-flex; }
+.bulk-map-select.is-valid .bulk-map-select__label { padding-left: 0; }
+.bulk-map-cell .tasty-menu { top: calc(100% + 4px); left: 0; right: 0; min-width: 100%; max-height: 260px; overflow: auto; }
+
+/* ── Step 3: Validate Data (error / success) ── */
+.bulk-hero { display: flex; align-items: stretch; width: 600px; max-width: 100%; }
+.bulk-hero__badge { flex: none; width: 90px; min-height: 150px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 40px; }
+.bulk-hero.is-error .bulk-hero__badge { background: var(--context-error); }
+.bulk-hero.is-success .bulk-hero__badge { background: var(--context-success); }
+.bulk-hero__text { flex: 1; padding: 30px; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+.bulk-hero__count { margin: 0; font-weight: 700; font-size: 20px; line-height: 1.1; }
+.bulk-hero__count .big { font-size: 40px; }
+.bulk-hero__headline { margin: 4px 0 0; font-size: 20px; font-weight: 700; }
+.bulk-hero.is-error .bulk-hero__count, .bulk-hero.is-error .bulk-hero__headline { color: var(--context-error); }
+.bulk-hero.is-success .bulk-hero__count, .bulk-hero.is-success .bulk-hero__headline { color: var(--context-success); }
+.bulk-hero__sub { margin: 8px 0 0; font-size: 13px; color: var(--c-text); line-height: 1.5; }
+
+.bulk-err-table { width: 600px; max-width: 100%; margin-top: 24px; }
+.bulk-err-row { display: grid; grid-template-columns: 30px 60px 1fr; align-items: center; min-height: 49px; padding: 0 10px; border-bottom: 1px solid var(--c-border); }
+.bulk-err-row.is-head { min-height: 48px; border-bottom: 2px solid var(--c-text-strong); font-weight: 700; font-size: 13px; color: var(--c-text-strong); }
+.bulk-err-icon { color: var(--context-error); display: inline-flex; }
+.bulk-err-num { font-size: 13px; color: var(--c-text); padding-left: 10px; }
+.bulk-err-row.is-head .bulk-err-num { padding-left: 0; }
+.bulk-err-msg { font-size: 13px; color: var(--c-text); }
+
+.bulk-validate-foot { padding: 40px 80px; background: var(--c-surface-subtle); border-top: 1px solid var(--c-border); display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+.bulk-validate-foot .tasty-banner { width: 600px; max-width: 100%; }
+.bulk-validate-actions { display: flex; gap: 10px; width: 600px; max-width: 100%; }
+.bulk-validate-actions .tasty-btn { flex: 1; }
+
+/* ── Step 4: Finish ── */
+.bulk-finish-body { align-items: center; padding: 80px; gap: 30px; }
+.bulk-finish-count { text-align: center; color: var(--context-success); font-weight: 700; }
+.bulk-finish-count__num { display: block; font-size: 40px; line-height: 1.1; }
+.bulk-finish-count__lbl { display: block; font-size: 20px; }
+.bulk-finish-progress { width: 500px; max-width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.bulk-finish-progress__row { display: flex; align-items: center; gap: 10px; }
+.bulk-finish-pct { font-family: ui-monospace, 'Roboto Mono', monospace; font-weight: 700; font-size: 16px; color: var(--context-success); min-width: 44px; text-align: right; }
+.bulk-finish-note { margin: 0; text-align: center; font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--c-text-strong); }
+.bulk-finish-actions { display: flex; gap: 10px; width: 600px; max-width: 100%; }
+.bulk-finish-actions .tasty-btn { flex: 1; }

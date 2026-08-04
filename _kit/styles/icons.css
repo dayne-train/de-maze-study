@@ -1,0 +1,65 @@
+/* ════════════════════════════════════════════════════════════════════
+   TASTY ICONS — vendored from @parchment/tastysoft packages/Icons/svgs
+   ════════════════════════════════════════════════════════════════════
+   Two delivery modes:
+
+   1. .tcon — MONOCHROME line icons (the bare-number "Icon" family).
+      Rendered as a CSS mask so the glyph inherits the current text color
+      via `background: currentColor`. This means hover/active/disabled
+      states recolor automatically (just change `color`), exactly like
+      Tasty's <Icon> which paints with the theme font color.
+
+        <span class="tcon" style="--tcon:url(assets/tasty/icons/3p-check.svg)"></span>
+      or via the JS helper:  el.innerHTML = tastyIcon('check')
+
+   2. .tillus — FULL-COLOR graphics + illustrations (IG-/VG- families,
+      e.g. empty states, Parchie, brand logos). Rendered as <img>; colors
+      are baked into the SVG so they are NOT recolored.
+
+        <img class="tillus" src="assets/tasty/illustrations/VG-6c-de-no-learners.svg" alt="">
+      or:  el.innerHTML = tastyIllus('de-no-learners', { size: 160 })
+
+   NOTE: the existing Tabler webfont (<i class="ti ti-*">) is kept as the
+   generic UI-glyph layer — several Tabler glyphs (sort, archive, chevrons)
+   have no clean Tasty equivalent. Use .tcon/.tillus for Tasty-specific
+   marks (check, envelope, school, empty states, logos). See the
+   Tabler→Tasty map in tasty-component-reference.md.
+   ════════════════════════════════════════════════════════════════════ */
+
+.tcon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: none;
+  vertical-align: -0.125em;            /* baseline-align with text (Tasty contextType="text") */
+  background-color: currentColor;       /* recolor → inherits theme text/action color */
+  -webkit-mask: var(--tcon) no-repeat center / contain;
+          mask: var(--tcon) no-repeat center / contain;
+}
+
+/* Centered variant (Tasty contextType="image") — no baseline nudge. */
+.tcon--image { vertical-align: middle; }
+
+/* Helper-rendered icons (tastyIcon). Clean monochrome glyphs render as inline
+   <svg fill="currentColor"> and RECOLOR to the inherited text color (white on a
+   primary button, themed in dark/contrast) on any protocol — file:// included.
+   Multi-color / gradient / stroked glyphs fall back to <img> (shows everywhere,
+   doesn't recolor — correct). fill:currentColor is harmless on the <img> case. */
+.ticon { display: inline-block; flex: none; vertical-align: middle; fill: currentColor; }   /* size comes per-call from tastyIcon (width/height attr for px, inline style for `1em`) — do NOT set width/height here or it overrides every custom size */
+
+/* Full-color graphic / illustration. Width drives height (intrinsic ratio). */
+.tillus {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+/* Convenience size modifiers (icons size off font-size; illustrations off width). */
+.tcon.is-sm   { font-size: 14px; }
+.tcon.is-md   { font-size: 18px; }
+.tcon.is-lg   { font-size: 24px; }
+.tillus.is-sm { width: 80px; }
+.tillus.is-md { width: 140px; }
+.tillus.is-lg { width: 220px; }
