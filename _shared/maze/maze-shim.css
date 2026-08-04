@@ -3,6 +3,53 @@
    Loaded last, after the kit and each prototype's own stylesheet.
    ══════════════════════════════════════════════════════════════════════ */
 
+/* ── Boot: hide the deep-link jump ─────────────────────────────────────
+   The shim can only wrap showScreen AFTER every other wrapper has installed
+   (nav.js → boot.js → workspace.js → dev-drawer.js), so it boots on window
+   'load' + 50ms. The prototype therefore paints its OWN default screen first —
+   the service/path picker — and visibly jumps to the task's screen a moment
+   later. Participants read that as the prototype being broken, and it lands
+   before the first task instruction they act on.
+
+   html.maze-booting is set by an inline script in <head> (inject-tags.py), so
+   it applies before first paint. maze-shim.js removes it once the URL state has
+   been applied, with an unconditional failsafe timeout behind it — a stuck
+   class here means a permanently blank page, which is far worse than the flash.
+
+   Deliberately untitled: a "Loading prototype…" caption would frame the study
+   for the participant before the task copy gets to. This just reads as loading. */
+html.maze-booting body > * { visibility: hidden !important; }
+
+html.maze-booting::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 2147483646;
+}
+
+html.maze-booting::after {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 3px solid rgba(0, 0, 0, .12);
+  border-top-color: rgba(0, 0, 0, .38);
+  border-radius: 50%;
+  animation: maze-boot-spin .7s linear infinite;
+  z-index: 2147483647;
+}
+
+@keyframes maze-boot-spin { to { transform: rotate(360deg); } }
+
+/* Respect reduced-motion: hold the ring still rather than spin it. */
+@media (prefers-reduced-motion: reduce) {
+  html.maze-booting::after { animation: none; }
+}
+
 /* ── Dev drawer: hidden unless Cmd/Ctrl+D ──────────────────────────────
    The gear trigger (button.devdrawer-tab) is the FIRST CHILD of #devdrawer
    (dev-drawer.js:231-237), so hiding the parent hides both the drawer and its

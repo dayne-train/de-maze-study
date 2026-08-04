@@ -185,6 +185,28 @@
     }, true);                      // capture, so we beat the page's own handlers
   }
 
+  /* ── Boot cloak ────────────────────────────────────────────────────── */
+
+  /* html.maze-booting is set by an inline <head> script (inject-tags.py) and
+     hides the page until the deep link has landed, so participants never see
+     the prototype's own default screen flash past.
+
+     uncloak() is idempotent and runs from two places on purpose: the happy path
+     (end of start(), after apply()) and an unconditional timer. If apply() ever
+     threw before the happy-path call, a cloak with no failsafe would leave the
+     participant on a permanently blank page — strictly worse than the flash it
+     exists to prevent. Fail open, always. */
+  var uncloaked = false;
+  function uncloak() {
+    if (uncloaked) return;
+    uncloaked = true;
+    document.documentElement.classList.remove('maze-booting');
+  }
+  setTimeout(function () {
+    if (!uncloaked) log('boot cloak failsafe fired — apply() did not complete');
+    uncloak();
+  }, 4000);
+
   /* ── Boot ──────────────────────────────────────────────────────────── */
 
   function start() {
@@ -217,6 +239,13 @@
         root.showScreen.__mazeWrapped = true;
         try { desc.after(currentScreen()); } catch (e) { log('after() threw: ' + e.message); }
       }
+
+      /* Reveal only now: after apply() has landed the deep link AND after the
+         first desc.after() has prepopulated forms. Uncloaking any earlier would
+         show a half-filled application for one frame. requestAnimationFrame lets
+         that render settle before the page becomes visible. */
+      if (root.requestAnimationFrame) root.requestAnimationFrame(uncloak);
+      else uncloak();
     }, 50);
   }
 
