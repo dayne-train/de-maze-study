@@ -2,7 +2,7 @@
    configured. Read by all three DE prototypes (learner · HS admin · college admin) so
    their steppers, queues, forms, and copy never drift from one another.
 
-   The shape mirrors Corey's Configuration Explorer
+   The shape mirrors the PM's Configuration Explorer
    (knowledge-base/config-explorer/, and KB §10), which is the reference model for how
    configuration composes into a learner's path. Three kinds of setting:
 

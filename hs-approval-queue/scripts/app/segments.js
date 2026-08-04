@@ -1,4 +1,4 @@
-/* scripts/app/segments.js — module split from former scripts/app.js (one IIFE, now dissolved to shared global scope). Segmented control: Waiting/Active/Denied table renders, switchSegment. (Invited render + bulk resend relocated to invites-screen.js: Corey review #7.)
+/* scripts/app/segments.js — module split from former scripts/app.js (one IIFE, now dissolved to shared global scope). Segmented control: Waiting/Active/Denied table renders, switchSegment. (Invited render + bulk resend relocated to invites-screen.js: PM review #7.)
    Load order is fixed in index.html; do not reorder casually. */
   /* ─── Segmented control ─── */
   /* ─── Waiting tab render — counselor approved, awaiting consent and/or institution ─── */

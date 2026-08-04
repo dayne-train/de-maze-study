@@ -19,7 +19,7 @@
   var BULK_MAP_COLUMNS = ['First Name', 'Middle Name', 'Last Name', 'Email', 'Phone Number', 'Date of Birth'];
   var BULK_MAP_SAMPLE = {
     'First Name': 'David', 'Middle Name': 'J', 'Last Name': 'Abella',
-    'Email': 'davidabella80@gmail.com', 'Phone Number': '(480) 555-0148', 'Date of Birth': 'Jan 29, 2010'
+    'Email': 'd.abella@email.com', 'Phone Number': '(480) 555-0148', 'Date of Birth': 'Jan 29, 2010'
   };
   var BULK_MAP_FIELDS = [
     { field: 'First Name', req: true, col: 'First Name' },

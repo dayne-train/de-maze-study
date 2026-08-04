@@ -155,11 +155,11 @@
     // say in it: if this network requires high school approval, every application
     // needs it regardless of how the learner started — invited by the high school,
     // invited by the college, or self-applied. (Gates and entry points are separate
-    // axes, which is exactly how Corey's configuration explorer models them.)
+    // axes, which is exactly how the PM's configuration explorer models them.)
     // The old invite/open/combined enum wrongly emptied Needs Review whenever the
     // network was invite-only, on the assumption that an invited learner is
     // pre-vetted and so has nothing left to review. That assumption is wrong —
-    // confirmed with Dayne, July 30 — so it is gone rather than generalised.
+    // confirmed with the designer, July 30 — so it is gone rather than generalised.
     var hasReview = (window.DENetwork ? window.DENetwork.get('counselorApproval') : true) !== false;
 
     // ── Workspace offerings ──
@@ -175,7 +175,7 @@
     // ── Dual Enrollment segment tabs ──
     // Needs Review exists whenever the network requires high school approval;
     // Waiting / Registered / Closed depend on this org's visibility (below).
-    // (Invited left the segment set for its own top-level tab: Corey review #7.)
+    // (Invited left the segment set for its own top-level tab: PM review #7.)
     var reviewSeg  = document.getElementById('seg-btn-needs-review');
     if (reviewSeg)  reviewSeg.style.display  = hasReview ? '' : 'none';
 
@@ -183,7 +183,7 @@
     // A network can give an org its action queue WITHOUT the wider record: it works
     // what it must decide on, but doesn't get to browse who's waiting, who
     // registered, or who was closed. That's the amber "View applications" switch in
-    // Corey's explorer, and it's what gates the "View all applications" module.
+    // the PM's explorer, and it's what gates the "View all applications" module.
     // Needs Review is NOT part of this — it's the action queue, owned by the
     // approval gate — and neither is Invited, which follows the invite entry point
     // (invites you sent are yours to see and resend regardless).

@@ -4,7 +4,7 @@
      Needs Review here means "this college owes a decision". When institutionReview
      is off the college has no decision to make, so those applications aren't gone —
      they've simply cleared everything and are waiting on the learner to register.
-     That's the case Corey described: with college review off you still hold the
+     That's the case the PM described: with college review off you still hold the
      applications, when they were approved, and what happened to them.
 
      Derived on READ so the source arrays are never mutated: toggling the gate back
@@ -159,7 +159,7 @@
     // step, and it runs on every application regardless of how the learner got in —
     // an invited learner still needs the college to review them. What DOES remove it
     // is the network switching institution review off entirely (the independent
-    // he_review switch in Corey's configuration explorer, KB §10), in which case the
+    // he_review switch in the PM's configuration explorer, KB §10), in which case the
     // college keeps the record but owes no decision, so Needs Review has nothing to
     // hold. Mirrors the HS fork, which ands its review against counselorApproval.
     var hasReview = _netGate('institutionReview');
@@ -179,7 +179,7 @@
     // ── Dual Enrollment segment tabs ──
     // Needs Review stays in every model (see hasReview above); Waiting / Registered /
     // Closed always remain. (Invited left the segment set for its own top-level tab:
-    // Corey review #7.)
+    // PM review #7.)
     var reviewSeg  = document.getElementById('seg-btn-needs-review');
     if (reviewSeg)  reviewSeg.style.display  = hasReview ? '' : 'none';
 
@@ -187,7 +187,7 @@
     // A network can give an org its action queue WITHOUT the wider record: it works
     // what it must decide on, but doesn't get to browse who's waiting, who
     // registered, or who was closed. That's the amber "View applications" switch in
-    // Corey's explorer, and it's what gates the "View all applications" module.
+    // the PM's explorer, and it's what gates the "View all applications" module.
     // Needs Review is NOT part of this — it's the action queue, owned by the
     // approval gate — and neither is Invited, which follows the invite entry point
     // (invites you sent are yours to see and resend regardless).

@@ -28,7 +28,7 @@
     } else {
       /* Same card + row pattern as bulk-approve (bulk.js learnerRowHtml / .bulk-net),
          so denial and approval read as one visual language. No institution grouping here —
-         that's a separate, future ask (Corey review #3). */
+         that's a separate, future ask (PM review #3). */
       var rows = apps.map(function(a) {
         return '<div class="bulk-elig-row">' +
           '<span class="tasty-persona-icon">' + a.initials + '</span>' +

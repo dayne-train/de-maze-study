@@ -1,6 +1,6 @@
 /* scripts/app/bulk.js — Bulk-approve workflow step + bulk-bar wiring + per-institution
    requirements modal. NO eligibility gate (June 15 simplification): approving = attesting.
-   Network-first (Corey review #1, Jul 1): grouped by institution with a per-section
+   Network-first (PM review #1, Jul 1): grouped by institution with a per-section
    requirements link — leads with the exchange network, not a flat learner list. Chips/links
    open the per-institution requirements modal — single modal on top of a screen, no nesting.
    Load order is fixed in index.html; do not reorder casually. */

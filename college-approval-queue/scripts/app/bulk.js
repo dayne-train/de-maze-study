@@ -63,7 +63,7 @@
       '</div>';
 
     // ── Admit attestation (NOT eligibility — the admin is making an admission decision).
-    //    Neutral on registration: that's now the two-button choice below (Corey #8). ──
+    //    Neutral on registration: that's now the two-button choice below (the PM #8). ──
     var attest =
       '<div class="bulk-attest">' +
         '<i class="ti ti-shield-check"></i>' +
@@ -78,7 +78,7 @@
     // ── Flat list of learners ──────────────────────────────────────────────
     var list = '<div class="bulk-flat-list">' + apps.map(learnerRowHtml).join('') + '</div>';
 
-    // ── Action zone: the two admit paths (Figma-matched copy; Corey #8). No Cancel
+    // ── Action zone: the two admit paths (Figma-matched copy; the PM #8). No Cancel
     //    button here — the WorkflowHeader's "Back to Queue" is the exit for this
     //    full-screen confirm step. ──
     var actionZone =
@@ -122,7 +122,7 @@
   window.confirmBulkApprove = confirmBulkApprove;
 
   /* "Admit Only": admit the selection but HOLD the registration invites; learners land
-     in the Admitted bucket until unheld (Corey review #8). */
+     in the Admitted bucket until unheld (PM review #8). */
   function confirmBulkAdmitOnly() {
     var ids = (currentActionIds || []).slice();
     if (ids.length === 0) return;

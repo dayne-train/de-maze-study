@@ -395,7 +395,7 @@
      _kit/styles + the tasty-prototype-starter skill later. One reusable section, two Types:
        • Default       → plain HEADER (icon + title + sub) · divider · N ACTION CARDS
        • CallToAction  → media (illus|icon) + title/body + one button
-     COLOR RULE (confirmed w/ Dayne): everything is plain — status color lives in the MemberBox
+     COLOR RULE (confirmed w/ the designer): everything is plain — status color lives in the MemberBox
      status tag. The ONLY filled variant is the success-green "Register For Courses" CTA, shown
      when the learner can actually register. */
 

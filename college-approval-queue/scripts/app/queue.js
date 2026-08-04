@@ -297,7 +297,7 @@
       commitApproveFromQueue(id);
     }
   }
-  /* "Admit Only" twin: admit + hold, no registration invite (Corey review #8). */
+  /* "Admit Only" twin: admit + hold, no registration invite (PM review #8). */
   function commitAdmitOnlyFromQueue(id) {
     var app = activeApps.find(function(a) { return a.id === id; });
     if (!app) return;

@@ -1,4 +1,4 @@
-/* scripts/app/segments.js — module split from former scripts/app.js (one IIFE, now dissolved to shared global scope). Segmented control: Admitted/Waiting/Active/Denied table renders, admitted bulk invite-to-register, switchSegment. (Invited render + bulk resend relocated to invites-screen.js: Corey review #7.)
+/* scripts/app/segments.js — module split from former scripts/app.js (one IIFE, now dissolved to shared global scope). Segmented control: Admitted/Waiting/Active/Denied table renders, admitted bulk invite-to-register, switchSegment. (Invited render + bulk resend relocated to invites-screen.js: PM review #7.)
    Load order is fixed in index.html; do not reorder casually. */
   /* ─── Segmented control ─── */
   /* ─── Waiting tab render — WVCC reviewed; now blocked on the HS counselor
@@ -75,7 +75,7 @@
     waitingPag.renderControls(pg.total, pg.pages, pg.start, pg.end, _waiting.length);
   }
 
-  /* ─── Admitted tab render: admitted-on-hold learners (Corey review #8) ─── */
+  /* ─── Admitted tab render: admitted-on-hold learners (PM review #8) ─── */
   function renderAdmittedTable() {
     var t = searchTerm.toLowerCase();
     var filtered = ALL_ADMITTED_APPS.filter(function(a) {

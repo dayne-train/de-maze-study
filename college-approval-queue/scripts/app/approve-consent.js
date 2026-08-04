@@ -1,7 +1,7 @@
 /* scripts/app/approve-consent.js — Single-learner "Admit Now" workflow page (COLLEGE ADMIN).
    Every time the admin admits a single learner (from the queue row OR the review screen), this
    navigates to the full-screen #screen-admit-confirm step instead of a modal — per Figma
-   "2.1.3 - Admin Application Approval 05" (node 13572:121048). Two admit paths (Corey review #8):
+   "2.1.3 - Admin Application Approval 05" (node 13572:121048). Two admit paths (PM review #8):
    "Admit & Invite To Register For Courses" (the existing pipeline) vs "Admit Only" (park in the
    Admitted bucket until invited to register). Bulk approve has its own workflow step (bulk.js). */
 

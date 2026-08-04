@@ -1,4 +1,4 @@
-/* scripts/app/invites-screen.js — the Invites top-level tab (Corey review #7: an invite
+/* scripts/app/invites-screen.js — the Invites top-level tab (PM review #7: an invite
    isn't an application yet, so pending invites moved out of the Applications table onto
    their own screen). Render + bulk resend relocated verbatim from segments.js; same DOM
    ids, markup now lives in #screen-invites. The Applications quick-search no longer

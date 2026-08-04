@@ -1005,7 +1005,7 @@ function setActiveEnrollmentsVariant(v) {
 }
 window.setActiveEnrollmentsVariant = setActiveEnrollmentsVariant;
 
-/* "Show In Progress" — presentation-only, independent of the Canvas gating above: lets Dayne
+/* "Show In Progress" — presentation-only, independent of the Canvas gating above: lets the designer
    hide the whole In Progress bucket for PAC-demo pacing without touching the underlying data
    logic. Mirrors the body-class idiom used by show-hs/applyHsScope (core.js). */
 function setShowInProgress(on) {

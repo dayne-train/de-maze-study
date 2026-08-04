@@ -28,7 +28,7 @@
     } else {
       /* Same card + row pattern as bulk-approve (bulk.js learnerRowHtml / .bulk-net),
          so denial and approval read as one visual language. No institution grouping here —
-         that's a separate, future ask (Corey review #3). */
+         that's a separate, future ask (PM review #3). */
       var rows = apps.map(function(a) {
         return '<div class="bulk-elig-row">' +
           '<span class="tasty-persona-icon">' + a.initials + '</span>' +
@@ -160,7 +160,7 @@
   }
 
   /* "Admit Only" twin of doEndorse: admit + hold in the Admitted bucket, no
-     registration invite (Corey review #8). */
+     registration invite (PM review #8). */
   function doEndorseHold(ids) {
     var n = ids.length;
     var fromReview = (n === 1 && currentActionSource === 'review');

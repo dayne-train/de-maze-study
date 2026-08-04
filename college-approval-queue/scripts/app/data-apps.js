@@ -41,7 +41,7 @@
   ];
 
   /* Waiting = WVCC has no action right now; someone else does. Two positions in the
-     pipeline land here (Corey's roll-up folds both into "Waiting"):
+     pipeline land here (the PM's roll-up folds both into "Waiting"):
        1. BEFORE WVCC's review — still waiting on the HS side (counselor approval +
           guardian consent, which are CONCURRENT with each other, so an app can be
           waiting on either or both). It has NOT reached WVCC's review queue yet.
@@ -110,7 +110,7 @@
     },
   ];
 
-  /* Admitted, on hold (Corey review #8 "Admit Only"): WVCC has admitted these learners
+  /* Admitted, on hold (PM review #8 "Admit Only"): WVCC has admitted these learners
      but hasn't yet invited them to register. This is the college's own pacing decision
      (e.g. batching registration invites once a term opens), distinct from Waiting,
      which is blocked on EXTERNAL parties (guardian consent / counselor approval). */

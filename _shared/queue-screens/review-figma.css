@@ -340,7 +340,7 @@
 .bulk-summary-pill.is-ready { background: var(--c-success-bg); color: var(--c-success-text); border-color: var(--c-success-border); }
 .bulk-summary-pill.is-hold  { background: var(--c-warning-bg); color: var(--c-warning-text); border-color: var(--c-warning-border); }
 
-/* Network card — bulk approve is grouped by institution (network-first, Corey review #1) */
+/* Network card — bulk approve is grouped by institution (network-first, PM review #1) */
 .bulk-net {
   border: 1px solid var(--c-border); border-radius: var(--radius-md);
   margin: 0 0 16px; overflow: hidden; background: var(--c-surface);
