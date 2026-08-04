@@ -1,0 +1,41 @@
+<!--
+  The Maze universal snippet. Injected into the <head> of all four prototypes by
+  inject-tags.py on every build.
+
+  Comment blocks in this file are stripped before injection, so notes here are safe.
+
+  To build WITHOUT tracking (local checks that would otherwise fire real events at
+  the Maze project), comment the <script> out or empty this file, then rebuild.
+
+  The apiKey below is a public client-side identifier — it is meant to appear in
+  page source. It is not a secret, but it does tie this build to one Maze project,
+  so a second study needs its own key.
+-->
+<script>
+(function (m, a, z, e) {
+  var s, t, u, v;
+  try {
+    t = m.sessionStorage.getItem('maze-us');
+  } catch (err) {}
+
+  if (!t) {
+    t = new Date().getTime();
+    try {
+      m.sessionStorage.setItem('maze-us', t);
+    } catch (err) {}
+  }
+
+  u = document.currentScript || (function () {
+    var w = document.getElementsByTagName('script');
+    return w[w.length - 1];
+  })();
+  v = u && u.nonce;
+
+  s = a.createElement('script');
+  s.src = z + '?apiKey=' + e;
+  s.async = true;
+  if (v) s.setAttribute('nonce', v);
+  a.getElementsByTagName('head')[0].appendChild(s);
+  m.mazeUniversalSnippetApiKey = e;
+})(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'bf70bf5a-f819-443f-9895-f5a3e8314250');
+</script>
