@@ -78,7 +78,7 @@
     screens: [
       'path-select', 'dashboard', 'de-tab', 'entry', 'select-hs', 'select-college',
       'college-site', 'email-landing', 'email-entry', 'login', 'aer',
-      'confirm-email', 'de-app', 'aer-confirm', 'courses', 'registered'
+      'confirm-email', 'de-app', 'aer-confirm', 'courses', 'course-detail', 'registered'
     ],
 
     wrap: ['showScreen', 'startEntry', 'startCollegeSite', 'goToApplication',

@@ -488,145 +488,118 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
 .reg-course-title { flex: 1; color: var(--body-font-base); }
 .reg-course-credits { color: var(--body-font-weak); }
 
-/* ─── Course registration ─── */
-.courses-wrap { max-width: 1100px; }
-.courses-page-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: var(--space-lg);
-  gap: var(--space-md);
-  flex-wrap: wrap;
-}
-.courses-page-title {
-  font-size: var(--font-xLarge);
-  font-weight: var(--font-weight-bold);
-  color: var(--body-font-strong);
-  margin: 0 0 4px;
-}
-.courses-page-meta { font-size: var(--font-small); color: var(--body-font-weak); margin: 0; }
-.courses-cart-badge {
-  font-size: var(--font-small);
-  font-weight: var(--font-weight-semibold);
-  color: var(--body-font-weak);
-  white-space: nowrap;
-  padding-top: var(--space-xs);
-}
-.courses-layout {
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: var(--space-lg);
-  align-items: start;
-}
-@media (max-width: 960px) {
-  .courses-layout { grid-template-columns: 1fr; }
-}
-.courses-search-row { margin-bottom: var(--space-md); }
+/* ─── Course registration (Figma 13431-194273 · 13484-75159) ───
+   The panel-with-grey-header shell both course screens share, the college
+   identity card, the details two-column, and the processing spinner. Table,
+   pagination, buttons and modal all come from the kit — nothing rolled here. */
+.crs-wrap { max-width: 1240px; margin: 0 auto; }
 
-/* Course card */
-.course-item {
-  background: var(--white-space-z-index2);
+.crs-panel {
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
-  margin-bottom: var(--space-sm);
-  transition: border-color .15s;
+  background: var(--white);
 }
-.course-item.is-added { border-color: var(--context-success); }
-.course-item-head { display: flex; align-items: flex-start; gap: var(--space-md); }
-.course-item-info { flex: 1; min-width: 0; }
-.course-code { font-size: var(--font-small); font-weight: var(--font-weight-bold); color: var(--action-default); margin: 0 0 2px; }
-.course-name { font-weight: var(--font-weight-semibold); color: var(--body-font-strong); margin: 0 0 var(--space-xs); }
-.course-meta-row { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
-.course-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: var(--font-small);
-  color: var(--body-font-weak);
-}
-.course-item-action { flex-shrink: 0; }
-
-/* Cart */
-.cart-panel {
-  background: var(--white-space-z-index2);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
-  position: sticky;
-  top: 80px;
-}
-.cart-title {
-  font-size: var(--font-medium);
-  font-weight: var(--font-weight-bold);
-  color: var(--body-font-strong);
-  margin: 0 0 var(--space-md);
-  padding-bottom: var(--space-sm);
+.crs-panel__head {
+  background: var(--context-neutral, #f5f5f5);
   border-bottom: 1px solid var(--border-color);
-}
-.cart-empty {
-  font-size: var(--font-small);
-  color: var(--body-font-weak);
   text-align: center;
-  padding: var(--space-lg) 0;
-  margin: 0;
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-md);
 }
-.cart-row {
+
+/* College identity card — mark, name, city, website, "N Courses Offered". */
+.crs-college {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-xs) 0;
+  gap: var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--context-neutral, #f9f9f9);
   border-bottom: 1px solid var(--border-color);
-  font-size: var(--font-small);
 }
-.cart-row:last-child { border-bottom: none; }
-.cart-row-left { min-width: 0; }
-.cart-row-code { font-weight: var(--font-weight-semibold); color: var(--body-font-strong); }
-.cart-row-credits { font-size: var(--font-xSmall); color: var(--body-font-weak); }
-.cart-remove-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--body-font-weak);
-  padding: 2px 4px;
-  border-radius: 4px;
+.crs-college__mark {
+  width: 68px; height: 68px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-color);
+  background: var(--white);
+  font-size: 30px;
+  font-weight: var(--font-weight-bold);
+  color: #7b1113;
   flex-shrink: 0;
-  line-height: 0;
 }
-.cart-remove-btn:hover { color: var(--context-error); }
-.cart-foot {
-  padding-top: var(--space-md);
-  border-top: 1px solid var(--border-color);
+.crs-college__text { flex: 1; min-width: 0; }
+.crs-college__name { font-size: var(--font-large); font-weight: var(--font-weight-bold); color: var(--body-font-strong); }
+.crs-college__city { font-size: var(--font-small); color: var(--body-font-weak); }
+.crs-college__web  { font-size: var(--font-small); color: var(--action-default); text-decoration: none; }
+.crs-college__web:hover { text-decoration: underline; }
+.crs-college__badge {
+  display: inline-flex; align-items: center; gap: var(--space-xs);
+  font-size: var(--font-small); color: var(--body-font-base);
+  flex-shrink: 0;
+}
+.crs-college__count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 26px; height: 22px; padding: 0 6px;
+  border-radius: 11px;
+  background: var(--body-font-strong); color: var(--white);
+  font-size: var(--font-xSmall); font-weight: var(--font-weight-bold);
+}
+
+.crs-body { padding: var(--space-xl); }
+.crs-avail-title { font-size: var(--font-large); font-weight: var(--font-weight-bold); margin-bottom: var(--space-md); }
+.crs-row-actions { display: flex; gap: var(--space-sm); justify-content: flex-end; }
+.table-pagination.is-centered { justify-content: center; gap: var(--space-lg); }
+
+/* ── Course details ── */
+.crs-detail { display: flex; gap: var(--space-xl); padding: var(--space-xl); align-items: flex-start; }
+.crs-detail__main { flex: 1; min-width: 0; }
+.crs-detail__title { font-size: 28px; font-weight: var(--font-weight-bold); margin-bottom: var(--space-md); }
+.crs-detail__subhead { font-size: var(--font-base); font-weight: var(--font-weight-bold); margin-bottom: var(--space-xs); }
+.crs-detail__desc { color: var(--body-font-base); line-height: 1.6; margin-bottom: var(--space-lg); }
+.crs-detail__term { font-weight: var(--font-weight-semibold); margin-bottom: var(--space-sm); }
+
+.crs-section { border: 1px solid var(--border-color); padding: var(--space-lg); }
+.crs-section__crn { font-size: var(--font-small); color: var(--body-font-weak); }
+.crs-section__row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-md); }
+.crs-section__dates { font-size: var(--font-xLarge); font-weight: var(--font-weight-bold); }
+.crs-section__price { font-size: var(--font-large); font-weight: var(--font-weight-bold); }
+.crs-section__meta {
+  display: flex; flex-wrap: wrap; gap: var(--space-lg);
   margin-top: var(--space-sm);
+  font-size: var(--font-small); color: var(--body-font-base);
 }
-.cart-credits { font-size: var(--font-small); color: var(--body-font-weak); margin: 0 0 var(--space-sm); }
-.cart-register-btn { width: 100%; justify-content: center; }
-
-
-/* ── Stepper: align active node + condensed active dot with Figma (gold/note theme) ── */
-
-/* Full tracker — active node ring = sahara (note fg), clock glyph also sahara */
-.tasty-stepper__step.is-active .tasty-stepper__node {
-  border-color: var(--status-foreground-4);
-  color: var(--status-foreground-4);
+.crs-section__meta span { display: inline-flex; align-items: center; gap: 6px; }
+.crs-section__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--space-md); margin-top: var(--space-md); flex-wrap: wrap;
 }
+.crs-section__seats { font-size: var(--font-small); color: var(--body-font-base); }
+.crs-section__note { font-size: var(--font-xSmall); color: var(--body-font-weak); margin-top: var(--space-sm); }
 
-/* DE-tab tracker → desktop Stepper sizing (Figma 9952:43956): 50px nodes, 16px labels,
-   connector recentred on the larger node. Scoped to .de-stepper-area so the shared kit stepper
-   (30px) is untouched. KIT-GROWTH ▶ the kit needs a desktop/Format size variant of .tasty-stepper. */
-.de-stepper-area .tasty-stepper__node,
-.confirm-stepper .tasty-stepper__node { width: 50px; height: 50px; font-size: 16px; }
-.de-stepper-area .tasty-stepper__lbl,
-.confirm-stepper .tasty-stepper__lbl { font-size: 16px; font-weight: var(--font-weight-semibold); }
-.de-stepper-area .tasty-stepper:not(.is-vertical) .tasty-stepper__step:not(:last-child)::after,
-.confirm-stepper .tasty-stepper:not(.is-vertical) .tasty-stepper__step:not(:last-child)::after { top: 25px; }
+.crs-rail { width: 320px; flex-shrink: 0; }
+.crs-rail__title { font-size: var(--font-large); font-weight: var(--font-weight-bold); margin-bottom: var(--space-xs); }
+.crs-rail__price { font-size: var(--font-large); font-weight: var(--font-weight-bold); margin-bottom: var(--space-sm); }
+.crs-rail__note { font-size: var(--font-small); color: var(--body-font-base); line-height: 1.5; margin-bottom: var(--space-md); }
+.crs-rail__transfer { display: flex; align-items: center; gap: 6px; font-size: var(--font-small); margin-bottom: var(--space-lg); }
+.crs-rail__label { font-size: var(--font-xSmall); font-weight: var(--font-weight-bold); color: var(--body-font-weak); letter-spacing: .04em; margin-top: var(--space-md); }
+.crs-rail__value { font-size: var(--font-small); color: var(--body-font-base); }
 
-/* Upcoming step = a small gray dot centred in the (transparent) 50px node, not a numbered circle. */
-.tasty-stepper__step:not(.is-done):not(.is-active):not(.is-denied) .tasty-stepper__node { background: transparent; }
-.tasty-stepper__step:not(.is-done):not(.is-active):not(.is-denied) .tasty-stepper__node::before {
-  content: ""; display: block; width: 20px; height: 20px; border-radius: 50%; background: var(--border-color);
+/* ── Processing Enrollment (blocking modal) ── */
+.crs-processing { text-align: center; padding: var(--space-2xl) var(--space-lg); }
+.crs-spinner {
+  width: 56px; height: 56px; margin: 0 auto var(--space-md);
+  border: 5px solid var(--border-color);
+  border-top-color: var(--body-font-strong);
+  border-radius: 50%;
+  animation: crs-spin .9s linear infinite;
 }
+@keyframes crs-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .crs-spinner { animation: none; } }
+.crs-processing__label { color: var(--body-font-base); margin-bottom: var(--space-md); }
+.crs-processing__note  { font-weight: var(--font-weight-bold); }
 
+@media (max-width: 900px) {
+  .crs-detail { flex-direction: column; }
+  .crs-rail { width: 100%; }
+}
 
 /* ─── Dashboard invite / discovery row lead media ─── */
 .dst-row__lead { flex-shrink: 0; display: flex; align-items: center; }

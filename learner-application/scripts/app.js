@@ -16,7 +16,7 @@
    §7  Confirm member-box .... renderConfirmMemberBox
    §8  AER confirm ........... renderAerConfirm
    §9  Registered screen ..... renderRegisteredScreen
-   §10 Course registration ... renderCourseList · renderCart
+   §10 Course registration ... renderCourseList · renderCourseDetail · viewCourse · confirmRegistration
    §11 Flow navigation ⇐ ROUTING . startEntry(scenario,origin) · setNoAccountState · startCollegeSite · updateEmailLanding · startCollegeApply · startApplicationFlow · advanceEntryFlow · advanceFromHsSelect · advanceFromCollegeSelect · applyFromCollegeInvite · applyFromCounselorInvite · goToApplication · submitDeApp · selectHs · selectCollege · submitEmailEntry · completeSignIn ⇐ router · routeToApplication · submitConfirmEmail · submitAerForm · togglePw · toggleCheck · toggleCourse · registerCourses
    §12 Dev panel ............. initDevPanel · updateDevAxisButtons · applyDevState
    §13 Dev helpers (fillers) . devFillAccountForm · devFillDeApp · devDrawSignature · devCopyEmail · devInsertEmail · devSetEmail
@@ -30,8 +30,8 @@
   'use strict';
 
   /* ─── §1 · Persona / college / app constants ─── */
-  var COLLEGE = { name: 'West Valley Community College', abbr: 'WVCC', email: 'admissions@wvcc.edu', city: 'Phoenix, AZ' };
-  var APP     = { id: 'DE-2024-7831', term: 'Fall 2024', group: 'DE Scholars' };
+  var COLLEGE = { name: 'West Valley Community College', abbr: 'WVCC', email: 'admissions@wvcc.edu', city: 'Scottsdale, AZ', web: 'www.westvalleycc.edu' };
+  var APP     = { id: 'DE-2026-0440', term: 'Fall 2026', group: 'Math - Dual Enrollment Fall 2026' };
   /* accent = the MemberBox branded-strip color, kept in sync with this school's accent on the
      dashboard (HIGH_SCHOOLS Pioneer entry = --summer). The DE-tab strip is always this HS's color.
      KIT/DATA-GROWTH ▶ ideally HS and the HIGH_SCHOOLS Pioneer record share one source. */
@@ -55,12 +55,23 @@
     { name: 'Grand Canyon University',       abbr: 'GCU',  city: 'Phoenix, AZ',   terms: [] },
   ];
 
+  /* Courses offered by the college, per Figma 13431-194273 (Select A Course) and
+     13484-75159 (Course Details). Twelve rows so the table paginates 1–10 of 12
+     exactly as designed. MATH1D is the study's canonical pick — it is the course
+     on Jessica Cumberland's record in both admin queues. */
   var COURSES = [
-    { code: 'ENGL-1A',  title: 'English Composition',         credits: 3, type: 'In-person', time: 'MWF 9:00–9:50am',    instructor: 'Prof. Rivera',  seats: 4  },
-    { code: 'MATH-3A',  title: 'Calculus I',                  credits: 4, type: 'In-person', time: 'TTh 11:00–12:20pm',  instructor: 'Prof. Chen',    seats: 12 },
-    { code: 'PSYC-101', title: 'Introduction to Psychology',  credits: 3, type: 'Online',    time: 'Asynchronous',       instructor: 'Prof. Kim',     seats: 28 },
-    { code: 'HIST-17A', title: 'US History to 1877',          credits: 3, type: 'In-person', time: 'TTh 9:30–10:45am',   instructor: 'Prof. Johnson', seats: 7  },
-    { code: 'ART-1',    title: 'Intro to Drawing',            credits: 2, type: 'In-person', time: 'Fri 1:00–4:00pm',    instructor: 'Prof. Santos',  seats: 3  },
+    { id:'AVC169',  title:'2D Media Design',                  term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:2, location:'Pioneer High School',           crn:'10201', instructor:'Prof. Dana Whitfield',  modality:'On Campus', meets:'MW 10:00–11:15am', seats:8,  tuition:82.00,  transferrable:true,  units:'2.0 semester units', description:'An introduction to two-dimensional design principles: composition, color, typography and visual hierarchy, worked through studio projects in both analog and digital media.' },
+    { id:'AVC177',  title:'Digital Photographic Imaging I',   term:'Fall 2026', start:'SEP 15, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10214', instructor:'Prof. Ruben Ortega',    modality:'On Campus', meets:'TTh 1:00–2:20pm',  seats:5,  tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'Camera operation, exposure, and digital darkroom technique, with an emphasis on developing a personal visual vocabulary through weekly shooting assignments.' },
+    { id:'ENG101',  title:'First-Year Composition',           term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10228', instructor:'Prof. Alice Marchetti', modality:'On Campus', meets:'MWF 9:00–9:50am',  seats:12, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'College-level reading and writing: argument, evidence, revision, and research practice across a sequence of essays.' },
+    { id:'MATH1D',  title:'Calculus',                         term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:3, location:'West Valley Community College', crn:'10353', instructor:'Prof. Michael Angelone', modality:'On Campus', meets:'TBA',              seats:10, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'The focus and themes of the Introduction to Calculus course address the most important foundations for applications of mathematics in science, engineering and commerce. The course emphasizes the key ideas and historical motivation for calculus, while at the same time striking a balance between theory and application, leading to a mastery of key threshold concepts in foundational mathematics.' },
+    { id:'MAT241',  title:'Calculus With Analytic Geometry III', term:'Fall 2026', start:'AUG 28, 2026', end:'DEC 17, 2026', credits:4, location:'Pioneer High School',        crn:'10361', instructor:'Prof. Helen Brody',    modality:'On Campus', meets:'MWF 11:00–12:10pm', seats:6, tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Multivariable calculus: vectors, partial derivatives, multiple integrals and vector fields, with applications in physics and engineering.' },
+    { id:'MUP181',  title:'Chamber Music Ensembles',          term:'Fall 2026', start:'SEP 15, 2026', end:'DEC 17, 2026', credits:1, location:'West Valley Community College', crn:'10377', instructor:'Prof. Sofia Delacroix', modality:'On Campus', meets:'Th 4:00–5:30pm',  seats:4,  tuition:41.00,  transferrable:false, units:'1.0 semester unit',  description:'Small-ensemble performance for intermediate and advanced instrumentalists, culminating in an end-of-term recital. Audition required.' },
+    { id:'MUP131',  title:'Classic Piano I',                  term:'Fall 2026', start:'AUG 07, 2026', end:'DEC 17, 2026', credits:1, location:'West Valley Community College', crn:'10384', instructor:'Prof. Sofia Delacroix', modality:'On Campus', meets:'F 2:00–3:00pm',   seats:9,  tuition:41.00,  transferrable:false, units:'1.0 semester unit',  description:'Foundational keyboard technique, sight-reading and repertoire for students with little or no prior piano experience.' },
+    { id:'MAT151',  title:'College Algebra/Functions',        term:'Fall 2026', start:'AUG 28, 2026', end:'DEC 17, 2026', credits:4, location:'Online',                        crn:'10390', instructor:'Prof. Nathan Reyes',   modality:'Online',    meets:'Asynchronous',    seats:22, tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Functions, graphs, systems of equations and an introduction to modelling, preparing students for pre-calculus and statistics pathways.' },
+    { id:'HIS103',  title:'United States History To 1865',    term:'Fall 2026', start:'AUG 07, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10402', instructor:'Prof. Grace Okonkwo',  modality:'On Campus', meets:'TTh 9:30–10:45am', seats:14, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'The American past from pre-contact through Reconstruction, with attention to primary sources and competing historical interpretations.' },
+    { id:'SPA101',  title:'Elementary Spanish I',             term:'Fall 2026', start:'AUG 10, 2026', end:'DEC 17, 2026', credits:4, location:'Online',                        crn:'10418', instructor:'Prof. Carmen Villalobos', modality:'Online', meets:'Asynchronous',   seats:18, tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Introductory Spanish: everyday communication, present and past tenses, and cultural context across the Spanish-speaking world.' },
+    { id:'BIO156',  title:'Introductory Biology',             term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:4, location:'West Valley Community College', crn:'10425', instructor:'Prof. Amara Osei',     modality:'On Campus', meets:'MW 1:00–3:30pm',  seats:7,  tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Cell biology, genetics and evolution with a weekly laboratory. Meets the laboratory science requirement for most transfer pathways.' },
+    { id:'PSY101',  title:'Introduction to Psychology',       term:'Fall 2026', start:'AUG 10, 2026', end:'DEC 17, 2026', credits:3, location:'Online',                        crn:'10431', instructor:'Prof. Ellis Grant',    modality:'Online',    meets:'Asynchronous',    seats:26, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'A survey of psychological science: research methods, cognition, development, personality and psychological disorders.' },
   ];
 
   /* ─── Dev state ─── */
@@ -74,14 +85,13 @@
   };
 
   /* ─── Session state ─── */
-  var selectedCourses = [];
+  var registeredCourse = null;   // the single course the learner registered for
   var selectedHsId    = ALT_HS[0].id;
   var selectedCollege = ALT_COLLEGES[0].id;
   // When a COLLEGE invites the learner we already know the institution, so the
   // college-select screen is skipped. Open-enrollment (learner-initiated) leaves this
   // false so a learner whose HS is in 2+ exchanges still picks a college.
   var collegeKnown    = false;
-  var courseFilter    = '';
   /* Email-invite journey flag — true only while walking the no-account
      "Invited by your college" path (email-entry → aer → confirm-email →
      select-hs → de-app). Logged-in paths leave this false. */
@@ -519,7 +529,11 @@
       'dual-pending':           { title: 'Next Step: Parent/Guardian Consent',  sub: 'Diana Cumberland (diana.cumberland@email.com)', resend: true  },
       'college-review':         { title: 'Next Step: Institution Review',           sub: COLLEGE.name,                               resend: false },
       'approved':               { title: 'Approved — register for courses',     sub: 'Register by Apr 25',                       resend: false },
-      'registered':             { title: 'Registered for ' + APP.term,         sub: 'Classes start soon',                       resend: false },
+      /* Name the course, not just the term: the learner returns to the dashboard
+         to see WHAT they registered for. Falls back to the term before a course
+         has been chosen (deep link straight to the registered state). */
+      'registered':             { title: registeredCourse ? 'Registered for ' + registeredCourse.id + ' - ' + registeredCourse.title : 'Registered for ' + APP.term,
+                                  sub: registeredCourse ? registeredCourse.term + ' - ' + COLLEGE.name : 'Classes start soon', resend: false },
       'registered-in-session':  { title: 'Classes are in session',             sub: APP.term,                                   resend: false },
       'denied-counselor':       { title: 'Application Not Approved By High School', sub: 'Application denied on ' + STEP_DONE_TS,  resend: false },
       'denied-college':         { title: 'Application Not Accepted',           sub: 'Application denied on ' + STEP_DONE_TS,    resend: false },
@@ -993,18 +1007,14 @@
       if (typeof resolveTastyAssets === 'function') resolveTastyAssets(illusEl);
     }
     if (cardEl) {
-      var courseRows;
-      if (!selectedCourses.length) {
-        courseRows = '<p class="registered-empty">No courses registered.</p>';
-      } else {
-        courseRows = selectedCourses.map(function (c) {
-          return '<div class="registered-course-row">' +
-            '<span class="reg-course-code">' + esc(c.code) + '</span>' +
+      var c = registeredCourse;
+      var courseRows = c
+        ? '<div class="registered-course-row">' +
+            '<span class="reg-course-code">' + esc(c.id) + '</span>' +
             '<span class="reg-course-title">' + esc(c.title) + '</span>' +
             '<span class="reg-course-credits">' + c.credits + ' cr</span>' +
-            '</div>';
-        }).join('');
-      }
+          '</div>'
+        : '<p class="registered-empty">No course registered.</p>';
       var bodyHtml = '<div class="registered-card-body">' +
         '<p class="registered-card-meta">' + esc(COLLEGE.name) + ' &nbsp;·&nbsp; ' + esc(APP.term) + '</p>' +
         '<div class="registered-courses">' + courseRows + '</div>' +
@@ -1017,80 +1027,134 @@
   /* ════════════════════════════════════════
      §10 · COURSE REGISTRATION
   ════════════════════════════════════════ */
+  /* ── Select A Course (Figma 13431-194273) ────────────────────────────────
+     A real .tasty-table, not a card list: Figma's columns are Course ID · Title ·
+     Term · Start Date · Credits · Location · Actions, paginated 1–10 of 12. The
+     row actions (View Details / Select) appear on the focused row, matching the
+     design's single highlighted row. */
+
+  var coursePag = { page: 1, perPage: 10 };
+  var currentCourse = null;          // the course being viewed / registered
+
+  function collegeCardHTML(count) {
+    var badge = (count != null)
+      ? '<span class="crs-college__badge"><span class="crs-college__count">' + count + '</span> Courses Offered</span>'
+      : '';
+    return '<div class="crs-college__mark" aria-hidden="true">' + esc(COLLEGE.abbr.slice(0, 2)) + '</div>' +
+      '<div class="crs-college__text">' +
+        '<p class="crs-college__name">' + esc(COLLEGE.name) + '</p>' +
+        '<p class="crs-college__city">' + esc(COLLEGE.city) + '</p>' +
+        '<a class="crs-college__web" href="#" onclick="return false;">' + esc(COLLEGE.web) +
+          ' <i class="ti ti-external-link"></i></a>' +
+      '</div>' + badge;
+  }
+
   function renderCourseList() {
-    var list = document.getElementById('course-list');
-    if (!list) return;
-    var filter  = courseFilter.toLowerCase();
-    var visible = COURSES.filter(function (c) {
-      if (!filter) return true;
-      return c.code.toLowerCase().indexOf(filter) !== -1 ||
-             c.title.toLowerCase().indexOf(filter) !== -1 ||
-             c.instructor.toLowerCase().indexOf(filter) !== -1;
-    });
+    var head = document.getElementById('crs-college');
+    if (head) head.innerHTML = collegeCardHTML(COURSES.length);
 
-    if (!visible.length) {
-      list.innerHTML = '<p style="color:var(--body-font-weak);padding:var(--space-lg) 0;font-size:var(--font-small)">No courses match your search.</p>';
-      return;
-    }
+    var tbody = document.getElementById('crs-tbody');
+    if (!tbody) return;
 
-    list.innerHTML = visible.map(function (c) {
-      var added = selectedCourses.some(function (s) { return s.code === c.code; });
-      var addBtn = added
-        ? '<button type="button" class="tasty-btn is-ghost is-sm is-error" onclick="toggleCourse(\'' + c.code + '\')">Remove</button>'
-        : '<button type="button" class="tasty-btn is-primary is-sm" onclick="toggleCourse(\'' + c.code + '\')">Add</button>';
-      return '<div class="course-item' + (added ? ' is-added' : '') + '">' +
-        '<div class="course-item-head">' +
-        '<div class="course-item-info">' +
-        '<p class="course-code">' + esc(c.code) + '</p>' +
-        '<p class="course-name">' + esc(c.title) + '</p>' +
-        '<div class="course-meta-row">' +
-        '<span class="course-meta-item">' + tastyIcon('credit', { size: 13 }) + ' ' + c.credits + ' credits</span>' +
-        '<span class="course-meta-item">' + tastyIcon('time', { size: 13 }) + ' ' + esc(c.time) + '</span>' +
-        '<span class="course-meta-item">' + tastyIcon('learner', { size: 13 }) + ' ' + esc(c.instructor) + '</span>' +
-        '<span class="course-meta-item">' + tastyIcon('calendar', { size: 13 }) + ' ' + c.seats + ' seats left</span>' +
-        '</div>' +
-        '</div>' +
-        '<div class="course-item-action">' + addBtn + '</div>' +
-        '</div>' +
-        '</div>';
+    var total = COURSES.length;
+    var pages = Math.max(1, Math.ceil(total / coursePag.perPage));
+    if (coursePag.page > pages) coursePag.page = pages;
+    var start = (coursePag.page - 1) * coursePag.perPage;
+    var slice = COURSES.slice(start, start + coursePag.perPage);
+
+    tbody.innerHTML = slice.map(function (c) {
+      return '<tr class="tasty-table__row">' +
+        '<td class="tasty-table__td">' + esc(c.id) + '</td>' +
+        '<td class="tasty-table__td">' + esc(c.title) + '</td>' +
+        '<td class="tasty-table__td">' + esc(c.term) + '</td>' +
+        '<td class="tasty-table__td">' + esc(c.start) + '</td>' +
+        '<td class="tasty-table__td">' + c.credits + '</td>' +
+        '<td class="tasty-table__td">' + esc(c.location) + '</td>' +
+        '<td class="tasty-table__td col-actions">' +
+          '<div class="crs-row-actions">' +
+            '<button type="button" class="tasty-btn is-ghost is-sm" onclick="viewCourse(\'' + c.id + '\')">View Details</button>' +
+            '<button type="button" class="tasty-btn is-success is-sm" onclick="selectCourse(\'' + c.id + '\')">Select</button>' +
+          '</div>' +
+        '</td>' +
+      '</tr>';
     }).join('');
 
-    if (typeof resolveTastyAssets === 'function') resolveTastyAssets(list);
+    var label = document.getElementById('crs-results-label');
+    if (label) {
+      label.innerHTML = 'SHOWING <strong>' + (start + 1) + '-' + Math.min(start + coursePag.perPage, total) +
+                        '</strong> OF <strong>' + total + '</strong>';
+    }
+    var btns = document.getElementById('crs-page-buttons');
+    if (btns) {
+      var html = '<button class="tasty-pagination__item' + (coursePag.page <= 1 ? ' is-disabled' : '') + '"' +
+                 (coursePag.page <= 1 ? ' disabled' : '') + ' onclick="gotoCoursePage(' + (coursePag.page - 1) + ')" aria-label="Previous page"><i class="ti ti-arrow-left"></i></button>';
+      for (var i = 1; i <= pages; i++) {
+        html += '<button class="tasty-pagination__item' + (i === coursePag.page ? ' is-active' : '') +
+                '" onclick="gotoCoursePage(' + i + ')" aria-label="Page ' + i + '">' + i + '</button>';
+      }
+      html += '<button class="tasty-pagination__item' + (coursePag.page >= pages ? ' is-disabled' : '') + '"' +
+              (coursePag.page >= pages ? ' disabled' : '') + ' onclick="gotoCoursePage(' + (coursePag.page + 1) + ')" aria-label="Next page"><i class="ti ti-arrow-right"></i></button>';
+      btns.innerHTML = html;
+    }
+    var sel = document.getElementById('crs-perpage-select');
+    if (sel && sel.value !== String(coursePag.perPage)) sel.value = String(coursePag.perPage);
   }
 
-  function renderCart() {
-    var itemsEl   = document.getElementById('cart-items');
-    var footEl    = document.getElementById('cart-foot');
-    var creditsEl = document.getElementById('cart-credits');
-    var badgeEl   = document.getElementById('cart-badge');
+  /* ── Course Details (Figma 13484-75159) ──────────────────────────────────
+     Section card on the left (CRN, dates, modality, instructor, live seat count,
+     price, Register) and the Tuition & Fees rail on the right. */
+  function renderCourseDetail() {
+    var c = currentCourse;
+    if (!c) return;
+    var head = document.getElementById('cd-college');
+    if (head) head.innerHTML = collegeCardHTML(null);
 
-    if (!itemsEl) return;
+    var body = document.getElementById('cd-body');
+    if (!body) return;
 
-    if (!selectedCourses.length) {
-      itemsEl.innerHTML = '<p class="cart-empty">No courses selected yet.</p>';
-      if (footEl) footEl.hidden = true;
-    } else {
-      var total = selectedCourses.reduce(function (n, c) { return n + c.credits; }, 0);
-      itemsEl.innerHTML = selectedCourses.map(function (c) {
-        return '<div class="cart-row">' +
-          '<div class="cart-row-left">' +
-          '<div class="cart-row-code">' + esc(c.code) + '</div>' +
-          '<div class="cart-row-credits">' + c.credits + ' credits</div>' +
-          '</div>' +
-          '<button type="button" class="cart-remove-btn" onclick="toggleCourse(\'' + c.code + '\')" aria-label="Remove ' + c.code + '">' +
-          tastyIcon('cancel', { size: 14 }) + '</button>' +
-          '</div>';
-      }).join('');
-      if (typeof resolveTastyAssets === 'function') resolveTastyAssets(itemsEl);
-      if (footEl) footEl.hidden = false;
-      if (creditsEl) creditsEl.textContent = total + ' credit' + (total !== 1 ? 's' : '') + ' total';
-    }
+    var money = '$' + c.tuition.toFixed(2);
+    var transfer = c.transferrable
+      ? '<p class="crs-rail__transfer">' + tastyIcon('check', { size: 16 }) + ' Transferrable Credit</p>' : '';
 
-    if (badgeEl) {
-      var n = selectedCourses.length;
-      badgeEl.textContent = n + ' course' + (n !== 1 ? 's' : '') + ' selected';
-    }
+    var section = '<div class="crs-section">' +
+      '<p class="crs-section__crn">CRN ' + esc(c.crn) + '</p>' +
+      '<div class="crs-section__row">' +
+        '<h4 class="crs-section__dates">' + esc(c.start.replace(', 2026', '').replace(/^([A-Z]{3}) (\d+)$/, '$1 $2')) +
+          ' - ' + esc(c.end.replace(', 2026', '')) + '</h4>' +
+        '<span class="crs-section__price">' + money + '</span>' +
+      '</div>' +
+      '<div class="crs-section__meta">' +
+        '<span>' + tastyIcon('location', { size: 14 }) + ' ' + esc(c.modality) + '</span>' +
+        '<span>' + tastyIcon('time', { size: 14 }) + ' ' + esc(c.meets) + '</span>' +
+        '<span>' + tastyIcon('learner', { size: 14 }) + ' ' + esc(c.instructor) + '</span>' +
+      '</div>' +
+      '<div class="crs-section__foot">' +
+        '<p class="crs-section__seats"><strong>Live Seat Count:</strong> ' + c.seats + ' (a few minutes ago)*</p>' +
+        '<button type="button" class="tasty-btn is-success is-md" onclick="openRegConfirm()">Register For This Course</button>' +
+      '</div>' +
+    '</div>' +
+    '<p class="crs-section__note">* Seat counts change rapidly, these numbers may not reflect current seat availability.</p>';
+
+    body.innerHTML =
+      '<div class="crs-detail__main">' +
+        '<h1 class="crs-detail__title">' + esc(c.id) + ' - ' + esc(c.title) + '</h1>' +
+        '<h3 class="crs-detail__subhead">Course Description</h3>' +
+        '<p class="crs-detail__desc">' + esc(c.description) + '</p>' +
+        '<p class="crs-detail__term">' + esc(c.term) + ' - Semester</p>' +
+        section +
+      '</div>' +
+      '<aside class="crs-rail">' +
+        '<h3 class="crs-rail__title">Tuition &amp; Fees</h3>' +
+        '<p class="crs-rail__price">' + money + '</p>' +
+        '<p class="crs-rail__note">Tuition and mandatory fees only. Financial aid may apply. Please contact your local Financial Aid Office for details.</p>' +
+        transfer +
+        '<h4 class="crs-rail__label">LOCATION</h4><p class="crs-rail__value">' + esc(c.location) + '</p>' +
+        '<h4 class="crs-rail__label">UNITS</h4><p class="crs-rail__value">' + esc(c.units) + '</p>' +
+      '</aside>';
+
+    if (typeof resolveTastyAssets === 'function') resolveTastyAssets(body);
   }
+
 
   /* ════════════════════════════════════════
      §11 · FLOW NAVIGATION (globals)
@@ -1389,35 +1453,70 @@
     if (typeof showToast === 'function') showToast('Application cancelled', 'config');
   };
 
-  window.toggleCourse = function (code) {
-    var idx = selectedCourses.findIndex(function (c) { return c.code === code; });
-    if (idx === -1) {
-      var course = COURSES.find(function (c) { return c.code === code; });
-      if (course) selectedCourses.push(course);
-    } else {
-      selectedCourses.splice(idx, 1);
-    }
-    renderCourseList();
-    renderCart();
-  };
-
-  window.filterCourses = function (val) {
-    courseFilter = val || '';
+  window.setCoursePerPage = function (n) {
+    coursePag.perPage = parseInt(n, 10) || 10;
+    coursePag.page = 1;
     renderCourseList();
   };
 
+  window.gotoCoursePage = function (n) {
+    var pages = Math.max(1, Math.ceil(COURSES.length / coursePag.perPage));
+    coursePag.page = Math.min(Math.max(1, n), pages);
+    renderCourseList();
+  };
+
+  window.viewCourse = function (id) {
+    currentCourse = COURSES.find(function (c) { return c.id === id; }) || null;
+    if (!currentCourse) return;
+    renderCourseDetail();
+    showScreen('course-detail');
+  };
+
+  /* Select goes to the same place as View Details. Figma gives the row two
+     buttons but only one destination — the details page is where you register,
+     so "Select" cannot skip it without skipping the confirmation too. */
+  window.selectCourse = function (id) { window.viewCourse(id); };
+
+  window.openRegConfirm = function () {
+    if (!currentCourse) return;
+    var t = document.getElementById('reg-confirm-course');
+    if (t) t.textContent = currentCourse.id + ' - ' + currentCourse.title + '.';
+    var o = document.getElementById('reg-confirm-overlay');
+    if (o) o.classList.add('open');
+  };
+
+  window.closeRegConfirm = function () {
+    var o = document.getElementById('reg-confirm-overlay');
+    if (o) o.classList.remove('open');
+  };
+
+  /* Confirm → blocking "Processing Enrollment" → Registered.
+     Figma says the real thing can take up to five minutes; that copy is a product
+     truth about SIS round-trips, not a prototype instruction. Hold it long enough
+     to read that eligibility is being checked, not long enough to lose an
+     unmoderated participant. */
+  window.confirmRegistration = function () {
+    window.closeRegConfirm();
+    var proc = document.getElementById('reg-processing-overlay');
+    if (proc) proc.classList.add('open');
+    setTimeout(function () {
+      if (proc) proc.classList.remove('open');
+      registeredCourse = currentCourse;
+      DEV.appState = 'registered';
+      updateDevAxisButtons('appState', 'registered');
+      applyDevState();
+      renderRegisteredScreen();
+      showScreen('registered');
+    }, 2500);
+  };
+
+  /* Kept: the dev drawer and older deep links still call this. Registers the
+     course currently in view, or the canonical MATH1D if none was chosen. */
   window.registerCourses = function () {
-    if (!selectedCourses.length) {
-      if (typeof showToast === 'function') showToast('Select at least one course to register', 'warning');
-      return;
-    }
-    // Bump dev state to registered so dashboard + DE tab reflect it
-    DEV.appState = 'registered';
-    updateDevAxisButtons('appState', 'registered');
-    applyDevState();
-    renderRegisteredScreen();
-    showScreen('registered');
+    if (!currentCourse) currentCourse = COURSES.find(function (c) { return c.id === 'MATH1D'; });
+    window.confirmRegistration();
   };
+
 
   /* ════════════════════════════════════════
      §12 · DEV PANEL
@@ -1654,7 +1753,8 @@
     // Re-render dynamic screens when navigating to them
     if (id === 'dashboard') renderDashboard();
     if (id === 'de-tab')    renderDeTab();
-    if (id === 'courses')   { renderCourseList(); renderCart(); }
+    if (id === 'courses')   renderCourseList();
+    if (id === 'course-detail') renderCourseDetail();
     if (id === 'de-app')    { initSigPad(); applyNetworkGatesToForm(); }
     if (id === 'email-landing') updateEmailLanding();
     // Click-to-fill: click anywhere in these forms to fill them (demo convenience).
@@ -1744,7 +1844,6 @@
   window.addEventListener('DOMContentLoaded', function () {
     applyDevState();
     renderCourseList();
-    renderCart();
     renderAerConfirm();
     renderRegisteredScreen();
     populateDob();

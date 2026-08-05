@@ -1035,38 +1035,38 @@
          data-persona-org="Pioneer High School"
          data-org-initials="JC"
          data-lang="EN"></div>
+    <!-- Step 1 of the registration workflow: Cancel only, no Back. (WorkflowHeader
+         shows Cancel from step 1; Back appears only once you are deeper in.) -->
     <div data-component="workflow-header-mount"
-         data-back-label="Back to Dual Enrollment"
-         data-back-action="showScreen('de-tab')"></div>
+         data-cancel-label="Cancel"
+         data-cancel-action="showScreen('de-tab')"></div>
     <div class="page-content">
-      <div class="courses-wrap">
-        <div class="courses-page-head">
-          <div class="courses-page-head-left">
-            <h1 class="courses-page-title">Register for courses</h1>
-            <p class="courses-page-meta">West Valley Community College &nbsp;·&nbsp; Fall 2024 &nbsp;·&nbsp; DE Scholars</p>
-          </div>
-          <span class="courses-cart-badge" id="cart-badge">0 courses selected</span>
-        </div>
-        <div class="courses-layout">
-          <div class="courses-left">
-            <div class="courses-search-row">
-              <div class="tasty-search-group">
-                <input class="tasty-search" type="text" placeholder="Search by course name, code, or instructor…" id="course-search" oninput="filterCourses(this.value)">
-                <button type="button" class="tasty-btn is-md tasty-search-group__go">Search</button>
-              </div>
+      <div class="crs-wrap">
+        <div class="crs-panel">
+          <div class="crs-panel__head">Select A Course</div>
+          <div class="crs-college" id="crs-college"></div>
+          <div class="crs-body">
+            <h2 class="crs-avail-title">Available Courses</h2>
+            <div class="queue-table-wrap">
+              <table class="tasty-table" id="crs-table">
+                <thead>
+                  <tr>
+                    <th>Course ID</th>
+                    <th>Course Title</th>
+                    <th>Term</th>
+                    <th>Start Date</th>
+                    <th>Credits</th>
+                    <th>Location</th>
+                    <th class="col-actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="crs-tbody"></tbody>
+              </table>
             </div>
-            <div id="course-list"></div>
-          </div>
-          <div class="courses-right">
-            <div class="cart-panel">
-              <h2 class="cart-title">Selected courses</h2>
-              <div id="cart-items">
-                <p class="cart-empty">No courses selected yet.</p>
-              </div>
-              <div class="cart-foot" id="cart-foot" hidden>
-                <p class="cart-credits" id="cart-credits"></p>
-                <button type="button" class="tasty-btn is-primary is-md cart-register-btn" onclick="registerCourses()">Register</button>
-              </div>
+            <div class="table-pagination is-centered" id="crs-pagination">
+              <span class="pagination-range" id="crs-results-label"></span>
+              <div class="pagination-buttons" id="crs-page-buttons"></div>
+              <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="crs-perpage-select" onchange="setCoursePerPage(this.value)"><option>5</option><option selected>10</option><option>25</option></select></span>
             </div>
           </div>
         </div>
@@ -1075,6 +1075,73 @@
     <div data-component="page-footer-mount"></div>
   </div>
 </section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 8b — Course Details
+══════════════════════════════════════════════════════════ -->
+<section id="screen-course-detail" class="screen">
+  <div class="app-wrap">
+    <div data-component="page-header-mount"
+         data-persona-name="Jessica Cumberland"
+         data-persona-org="Pioneer High School"
+         data-org-initials="JC"
+         data-lang="EN"></div>
+    <div data-component="workflow-header-mount"
+         data-back-label="Back"
+         data-back-action="showScreen('courses')"
+         data-cancel-label="Cancel"
+         data-cancel-action="showScreen('de-tab')"></div>
+    <div class="page-content">
+      <div class="crs-wrap">
+        <div class="crs-panel">
+          <div class="crs-panel__head">Course Details</div>
+          <div class="crs-college" id="cd-college"></div>
+          <div class="crs-detail" id="cd-body"></div>
+        </div>
+      </div>
+    </div>
+    <div data-component="page-footer-mount"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MODAL — Registration Confirmation
+═══════════════════════════════════════════ -->
+<div class="tasty-modal-overlay" id="reg-confirm-overlay">
+  <div class="tasty-modal is-md">
+    <div class="tasty-modal__head">
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <i class="ti ti-info-circle" style="font-size:18px;"></i>
+        <span class="tasty-modal__title">Registration Confirmation</span>
+      </span>
+      <button type="button" class="tasty-modal__close" aria-label="Close" onclick="closeRegConfirm()">&times;</button>
+    </div>
+    <div class="tasty-modal__body">
+      <p>Please confirm your registration for: <strong id="reg-confirm-course">—</strong></p>
+      <p>After confirming, your registration will be processed and you will be enrolled in the course.</p>
+    </div>
+    <div class="tasty-modal__foot">
+      <button class="tasty-btn is-bold is-ghost is-sm" onclick="closeRegConfirm()">Cancel</button>
+      <button class="tasty-btn is-primary is-sm" onclick="confirmRegistration()">Continue With Registration</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL — Processing Enrollment (blocking: no close, no footer)
+═══════════════════════════════════════════ -->
+<div class="tasty-modal-overlay" id="reg-processing-overlay">
+  <div class="tasty-modal is-md">
+    <div class="tasty-modal__head">
+      <span class="tasty-modal__title">Processing Enrollment</span>
+    </div>
+    <div class="tasty-modal__body crs-processing">
+      <div class="crs-spinner" aria-hidden="true"></div>
+      <p class="crs-processing__label">Checking Student Eligibility</p>
+      <p class="crs-processing__note">This can take up to 5 minutes. Please don't close this page.</p>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════════════════════
      SCREEN 9 — Registered!
