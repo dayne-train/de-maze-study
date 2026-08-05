@@ -9,7 +9,7 @@
    ─────────────────────────────────────────────────────────────────────
    §1  State & data ......... persona/college/app constants · DEV state · session state
    §2  Tracker model ........ joinTerms · buildEnrollments · getTrackerSteps · getStepMeta · renderFullTracker
-   §3  DashboardStatusTracker renderDashboardStatusTracker(item) dispatch · renderDSTInvite (green) · renderDSTStatus (gray) · renderStatusTag · getCondensedStatus · getDSTNextStep · DynamicActionCardSection: getDacsHeader · renderDacsHeader · renderActionCard · renderDynamicActionCardSection
+   §3  DashboardStatusTracker renderDashboardStatusTracker(item) dispatch · renderDSTInvite (green) · renderDSTStatus (gray) · renderStatusTag · getDSTNextStep · DynamicActionCardSection: getDacsHeader · renderDacsHeader · renderActionCard · renderDynamicActionCardSection
    §4  Dashboard render ...... renderDashboard · renderHsCard · renderCredentialTile · renderHsDeSection · renderDeStatusPill · renderAnotherInstitution
    §5  DE Tab render ......... renderDeTab · instSectionHeader · renderDeInviteBox · renderDeAppBox · deBucket · switchDeTab
    §6  Entry / HS / college .. renderEntryScreen · renderHsSelect · renderCollegeSelect
@@ -193,7 +193,7 @@
   }
 
   /* Responsible-party name per step (index-aligned). idx0/idx4 = the learner. */
-  var STEP_PARTIES = ['Jessica Cumberland', 'David Cumberland', 'Morgan Lee', COLLEGE.name, 'Jessica Cumberland'];
+  var STEP_PARTIES = ['Jessica Cumberland', 'Diana Cumberland', 'Morgan Lee', COLLEGE.name, 'Jessica Cumberland'];
   /* Stamped when a step completes/decides. Single canonical timestamp matches the Figma frames. */
   var STEP_DONE_TS = 'MAR 20 at 12:20pm PST';
 
@@ -323,10 +323,21 @@
     mini += '</div>';
 
     // Action — canonical .tasty-btn (Button medium, transparent text variant).
-    // Resend when a party is owed; View Reason (error) when denied.
+    // Register when the learner can act; Resend when a party is owed; View Reason when denied.
+    //
+    // The approved state used to render NO action here: the condensed tracker said
+    // "Approved — register for courses" and gave the learner nothing to press, so the
+    // only route to registration was the DACS CallToAction on the DE tab — a screen
+    // away, and invisible from the dashboard they land on.
+    //
+    // Success-transparent, not filled, matching the invite variant's "Apply Now"
+    // (renderDSTInvite). The filled success button is the DACS CTA's variant; the
+    // DashboardStatusTracker keeps its actions as text buttons.
     var action = '';
     if (denied) {
       action = '<button type="button" class="tasty-btn is-md is-transparent is-error is-no-border is-full" onclick="showToast(\'Opening denial reason…\',\'config\')">View Reason</button>';
+    } else if (appState === 'approved') {
+      action = '<button type="button" class="tasty-btn is-md is-transparent is-success is-no-border is-full" onclick="showScreen(\'courses\')">Register For Courses</button>';
     } else if (nxt.resend) {
       action = '<button type="button" class="tasty-btn is-md is-transparent is-no-border is-full" onclick="showToast(\'Notification resent\',\'success\')">Resend Notification</button>';
     }
@@ -365,26 +376,6 @@
     var t = map[appState] || ['—', '', null];
     var icon = t[2] ? tastyIcon(t[2], { size: 14 }) : '';
     return '<span class="tasty-status-tag is-solid ' + t[1] + '">' + icon + esc(t[0]) + '</span>';
-  }
-
-  /* ─── Condensed status info ─── */
-  function getCondensedStatus(appState) {
-    var canReapply = DEV.reapply === 'on';
-    var map = {
-      'invited':                 { text: "You've been invited — start your application",   cta: 'Start application', action: "startApplicationFlow()" },
-      'open-enrollment':         { text: 'Open enrollment is available',                   cta: 'Apply now',         action: "startApplicationFlow()" },
-      'parent-consent-pending':  { text: 'Waiting for guardian consent',          cta: null },
-      'counselor-pending':       { text: 'Pending high school approval',                     cta: null },
-      'dual-pending':            { text: 'Awaiting guardian and high school approvals',        cta: null },
-      'college-review':          { text: 'In institution review',                              cta: null },
-      'approved':                { text: 'Approved — register for courses',                cta: 'Register now',      action: "showScreen('courses')" },
-      'registered':              { text: 'Registered for ' + APP.term,                    cta: 'View enrollment',   action: "showScreen('de-tab')" },
-      'registered-in-session':   { text: 'Classes are in session',                        cta: 'View enrollment',   action: "showScreen('de-tab')" },
-      'denied-counselor':        { text: 'Application not approved',                      cta: null },
-      'denied-college':          { text: 'Application not accepted',                      cta: null },
-      'cancelled':               { text: 'Application cancelled', cta: canReapply ? 'Apply again' : null, action: "startApplicationFlow()" },
-    };
-    return map[appState] || map['parent-consent-pending'];
   }
 
   /* ─── Banner inside DE member box ─── */
@@ -514,7 +505,7 @@
     var rows = [];
     var needsParent    = guardianOn()  && (appState === 'parent-consent-pending' || appState === 'dual-pending');
     var needsCounselor = counselorOn() && (appState === 'counselor-pending' || appState === 'dual-pending') && inviteSource !== 'counselor';
-    if (needsParent)    rows.push({ name: 'David Cumberland', role: 'Parent/Guardian', email: 'david.cumberland@email.com',          sent: STEP_DONE_TS });
+    if (needsParent)    rows.push({ name: 'Diana Cumberland', role: 'Parent/Guardian', email: 'diana.cumberland@email.com',          sent: STEP_DONE_TS });
     if (needsCounselor) rows.push({ name: 'Morgan Lee',       role: 'High School Admin', email: 'mlee@pioneerhs.edu', sent: STEP_DONE_TS });
     var cardsHtml = rows.length ? '<div class="tasty-dacs__divider"></div>' + rows.map(renderActionCard).join('') : '';
     return wrap(headerHtml + cardsHtml);
@@ -523,9 +514,9 @@
   /* ─── DashboardStatusTracker next-step info ─── */
   function getDSTNextStep(appState) {
     var m = {
-      'parent-consent-pending': { title: 'Next Step: Parent/Guardian Consent', sub: 'David Cumberland (david.cumberland@email.com)', resend: true  },
+      'parent-consent-pending': { title: 'Next Step: Parent/Guardian Consent', sub: 'Diana Cumberland (diana.cumberland@email.com)', resend: true  },
       'counselor-pending':      { title: 'Next Step: High School Approval',       sub: 'Morgan Lee (mlee@pioneerhs.edu)',     resend: true  },
-      'dual-pending':           { title: 'Next Step: Parent/Guardian Consent',  sub: 'David Cumberland (david.cumberland@email.com)', resend: true  },
+      'dual-pending':           { title: 'Next Step: Parent/Guardian Consent',  sub: 'Diana Cumberland (diana.cumberland@email.com)', resend: true  },
       'college-review':         { title: 'Next Step: Institution Review',           sub: COLLEGE.name,                               resend: false },
       'approved':               { title: 'Approved — register for courses',     sub: 'Register by Apr 25',                       resend: false },
       'registered':             { title: 'Registered for ' + APP.term,         sub: 'Classes start soon',                       resend: false },
@@ -1589,9 +1580,9 @@
     fill('State Student ID', 'AZ-10293847');
     fill('Current GPA', '3.85');
     // Parent / legal guardian
-    fill('Parent / Guardian First Name', 'David');
+    fill('Parent / Guardian First Name', 'Diana');
     fill('Parent / Guardian Last Name', 'Cumberland');
-    fill('Parent / Guardian Email', 'david.cumberland@email.com');
+    fill('Parent / Guardian Email', 'diana.cumberland@email.com');
     fill('Parent / Guardian Phone', '(480) 555-0188');
     // Counselor (Morgan Lee — the HS counselor persona)
     fill('Counselor First Name', 'Morgan');

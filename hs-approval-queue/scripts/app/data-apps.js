@@ -28,6 +28,13 @@
   ];
 
   const ALL_ACTIVE_APPS = [
+    /* ── The study's canonical applicant. Jessica is the learner in learner-application and the
+       student in parent-consent; Task 7 asks an admin to confirm she reached Registered, so she
+       must be HERE, in the fixture, at page load. Nothing the participant does in an earlier
+       task creates or moves this row — every Maze task is a fresh page load, and a task that
+       depended on the previous one's outcome would break the moment someone picked a different
+       student. First row so she is on page 1 of the Registered tab. ── */
+    { id:'DE-2026-0440', sisId:'STU-26-1000', lastName:'Cumberland', firstName:'Jessica',  initials:'JC', school:'Pioneer High School',  group:'Math - Dual Enrollment Fall 2026',              term:'FALL 2026',   course:'MATH1D — Calculus',            institution:'wvcc', enrolledDate:'Jul 30, 2026', enrollmentStatus:'in-progress', grade:null, credits:3, gradePosted:null },
     { id:'DE-2026-0388', sisId:'STU-26-1001', lastName:'Garcia',    firstName:'Maria',    initials:'MG', school:'Pioneer High School',  group:'English - Dual Enrollment Spring 2026',         term:'SPRING 2026', course:'ENGL 101 — Composition',       institution:'wvcc', enrolledDate:'Jun 26, 2026', enrollmentStatus:'completed', grade:'A-', credits:3, gradePosted:'Jun 28, 2026' },
     { id:'DE-2026-0389', sisId:'STU-26-1001', lastName:'Garcia',    firstName:'Maria',    initials:'MG', school:'Pioneer High School',  group:'Social Science - Dual Enrollment Spring 2026', term:'SPRING 2026', course:'SOC 110 — Intro Sociology',     institution:'wvcc', enrolledDate:'Jun 26, 2026', enrollmentStatus:'completed', grade:'B+', credits:3, gradePosted:'Jun 28, 2026' },
     /* Non-letter-graded courses — not every DE course reports an A–F grade. PE/wellness, CTE labs, and

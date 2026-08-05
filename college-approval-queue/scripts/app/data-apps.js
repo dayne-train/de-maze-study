@@ -60,6 +60,13 @@
   ];
 
   const ALL_ACTIVE_APPS = [
+    /* ── The study's canonical applicant. Jessica is the learner in learner-application and the
+       student in parent-consent; Task 7 asks an admin to confirm she reached Registered, so she
+       must be HERE, in the fixture, at page load. Nothing the participant does in an earlier
+       task creates or moves this row — every Maze task is a fresh page load, and a task that
+       depended on the previous one's outcome would break the moment someone picked a different
+       student. First row so she is on page 1 of the Registered tab. ── */
+    { id:'DE-2026-0440', sisId:'STU-26-1000', lastName:'Cumberland', firstName:'Jessica',  initials:'JC', school:'Pioneer High School',  group:'Math - Dual Enrollment Fall 2026',              term:'FALL 2026',   course:'MATH1D — Calculus',            institution:'wvcc', enrolledDate:'Jul 30, 2026', enrollmentStatus:'in-progress', grade:null, credits:3, gradePosted:null },
     { id:'DE-2026-0388', lastName:'Garcia',    firstName:'Maria',    initials:'MG', school:'Pioneer High School',  group:'English - Dual Enrollment Spring 2026',         term:'SPRING 2026', course:'ENGL 101 — Composition',       institution:'wvcc', counselor:'Morgan Lee',   enrolledDate:'Jun 26, 2026' },
     { id:'DE-2026-0392', lastName:'Kim',       firstName:'David',    initials:'DK', school:'Westview Academy',     group:'Engineering - Dual Enrollment Spring 2026',     term:'SPRING 2026', course:'CS 150 — Python Programming',   institution:'wvcc', counselor:'James Park',   enrolledDate:'Jun 19, 2026'  },
     { id:'DE-2026-0401', lastName:'Martinez',  firstName:'Ana',      initials:'AM', school:'Eastside High',        group:'Social Science - Dual Enrollment Spring 2026', term:'SPRING 2026', course:'PSYC 101 — Intro Psychology',   institution:'wvcc', counselor:'Renee Carter', enrolledDate:'Jun 11, 2026'  },
