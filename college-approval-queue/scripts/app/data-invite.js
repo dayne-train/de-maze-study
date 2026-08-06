@@ -28,38 +28,38 @@
      (the Pending Invites screen). Keep the two lists disjoint or the flow can only
      ever re-invite. */
   var LEARNER_ROSTER = [
-    { id:'20481', lastName:'Dawson',   firstName:'Emily',    middleName:'Rose',   initials:'ED', school:'Pioneer High School', classOf:2027, dob:'Mar 14, 2010', ssnLast4:'4821', missingData:false },
-    { id:'31752', lastName:'Escobar',  firstName:'Luis',     middleName:'',       initials:'LE', school:'Westview Academy',    classOf:2026, dob:'Jul 2, 2009',  ssnLast4:'7345', missingData:false },
-    { id:'48063', lastName:'Gao',      firstName:'Kevin',    middleName:'',       initials:'KG', school:'Eastside High',       classOf:2027, dob:'Dec 8, 2009',  ssnLast4:'n/o',  missingData:true  },
-    { id:'59314', lastName:'Herrera',  firstName:'Sofia',    middleName:'Isabel', initials:'SH', school:'Central High School', classOf:2026, dob:'Feb 21, 2010', ssnLast4:'2210', missingData:false },
-    { id:'60825', lastName:'Ibrahim',  firstName:'Yusuf',    middleName:'',       initials:'YI', school:'Pioneer High School', classOf:2026, dob:'Sep 5, 2009',  ssnLast4:'8804', missingData:false },
-    { id:'71536', lastName:'Kowalski', firstName:'Anna',     middleName:'Marie',  initials:'AK', school:'Westview Academy',    classOf:2027, dob:'May 30, 2010', ssnLast4:'1937', missingData:false },
-    { id:'82947', lastName:'Larsen',   firstName:'Peter',    middleName:'',       initials:'PL', school:'Eastside High',       classOf:2026, dob:'Oct 12, 2009', ssnLast4:'n/o',  missingData:true  },
-    { id:'93158', lastName:'Moreno',   firstName:'Isabella', middleName:'',       initials:'IM', school:'Central High School', classOf:2026, dob:'Jan 26, 2010', ssnLast4:'5568', missingData:false },
-    { id:'14269', lastName:'Novak',    firstName:'Daniel',   middleName:'James',  initials:'DN', school:'Pioneer High School', classOf:2027, dob:'Aug 17, 2010', ssnLast4:'3092', missingData:false },
-    { id:'25370', lastName:'Quinn',    firstName:'Maya',     middleName:'',       initials:'MQ', school:'Westview Academy',    classOf:2026, dob:'Apr 3, 2010',  ssnLast4:'6714', missingData:false },
+    { id:'20481', lastName:'Dawson',   firstName:'Emily',    middleName:'Rose',   initials:'ED', classOf:2027, dob:'Mar 14, 2010', ssnLast4:'4821', missingData:false },
+    { id:'31752', lastName:'Escobar',  firstName:'Luis',     middleName:'',       initials:'LE',    classOf:2026, dob:'Jul 2, 2009',  ssnLast4:'7345', missingData:false },
+    { id:'48063', lastName:'Gao',      firstName:'Kevin',    middleName:'',       initials:'KG',       classOf:2027, dob:'Dec 8, 2009',  ssnLast4:'n/o',  missingData:true  },
+    { id:'59314', lastName:'Herrera',  firstName:'Sofia',    middleName:'Isabel', initials:'SH', classOf:2026, dob:'Feb 21, 2010', ssnLast4:'2210', missingData:false },
+    { id:'60825', lastName:'Ibrahim',  firstName:'Yusuf',    middleName:'',       initials:'YI', classOf:2026, dob:'Sep 5, 2009',  ssnLast4:'8804', missingData:false },
+    { id:'71536', lastName:'Kowalski', firstName:'Anna',     middleName:'Marie',  initials:'AK',    classOf:2027, dob:'May 30, 2010', ssnLast4:'1937', missingData:false },
+    { id:'82947', lastName:'Larsen',   firstName:'Peter',    middleName:'',       initials:'PL',       classOf:2026, dob:'Oct 12, 2009', ssnLast4:'n/o',  missingData:true  },
+    { id:'93158', lastName:'Moreno',   firstName:'Isabella', middleName:'',       initials:'IM', classOf:2026, dob:'Jan 26, 2010', ssnLast4:'5568', missingData:false },
+    { id:'14269', lastName:'Novak',    firstName:'Daniel',   middleName:'James',  initials:'DN', classOf:2027, dob:'Aug 17, 2010', ssnLast4:'3092', missingData:false },
+    { id:'25370', lastName:'Quinn',    firstName:'Maya',     middleName:'',       initials:'MQ',    classOf:2026, dob:'Apr 3, 2010',  ssnLast4:'6714', missingData:false },
   ];
 
   /* College-initiated invites — Kathy/WVCC inviting learners across the
      exchange network to apply. Institution is constant (WVCC); the column
      shows the learner's high school. */
   var INVITED_FIXTURE = [
-    { id:'43536', lastName:'Abrams',    firstName:'Jessica',   college:'West Valley Community College', school:'Pioneer High School', group:'English - Dual Enrollment Fall 2026',         term:'FALL 2026',   course:null, dateInvited:'Jun 28, 2026' },
-    { id:'57587', lastName:'Adams',     firstName:'Matthew',   college:'West Valley Community College', school:'Pioneer High School', group:'Math - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 27, 2026' },
-    { id:'75088', lastName:'Adamson',   firstName:'Samantha',  college:'West Valley Community College', school:'Westview Academy',    group:'Science - Dual Enrollment Fall 2026',        term:'FALL 2026',   course:null,                     dateInvited:'Jun 25, 2026' },
-    { id:'05467', lastName:'Aitken',    firstName:'Triston',   college:'West Valley Community College', school:'Westview Academy',    group:'Engineering - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,   dateInvited:'Jun 23, 2026' },
-    { id:'84257', lastName:'Alexander', firstName:'Carter',    college:'West Valley Community College', school:'Eastside High',       group:'Math - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 21, 2026' },
-    { id:'65870', lastName:'Alexander', firstName:'David',     college:'West Valley Community College', school:'Eastside High',       group:'Engineering - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 19, 2026' },
-    { id:'42325', lastName:'Allan',     firstName:'Gloria',    college:'West Valley Community College', school:'Central High School', group:'Social Science - Dual Enrollment Fall 2026', term:'FALL 2026',   course:null,                     dateInvited:'Jun 17, 2026' },
-    { id:'21956', lastName:'Allan',     firstName:'Samuel',    college:'West Valley Community College', school:'Central High School', group:'English - Dual Enrollment Fall 2026',         term:'FALL 2026',   course:null,                     dateInvited:'Jun 15, 2026' },
-    { id:'53036', lastName:'Allison',   firstName:'Elizabeth', college:'West Valley Community College', school:'Pioneer High School', group:'Social Science - Dual Enrollment Fall 2026', term:'FALL 2026',   course:null,dateInvited:'Jun 12, 2026' },
-    { id:'17436', lastName:'Anderson',  firstName:'Jordan',    college:'West Valley Community College', school:'Westview Academy',    group:'English - Dual Enrollment Spring 2026',         term:'SPRING 2026', course:null,                     dateInvited:'Jun 10, 2026' },
-    { id:'29847', lastName:'Bailey',    firstName:'Morgan',    college:'West Valley Community College', school:'Northgate High',      group:'Science - Dual Enrollment Fall 2026',        term:'FALL 2026',   course:null,                     dateInvited:'Jun 8, 2026' },
-    { id:'38521', lastName:'Barnes',    firstName:'Taylor',    college:'West Valley Community College', school:'Northgate High',      group:'Math - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,  dateInvited:'Jun 5, 2026' },
-    { id:'47193', lastName:'Bennett',   firstName:'Alex',      college:'West Valley Community College', school:'Riverside Prep',      group:'Engineering - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 3, 2026' },
-    { id:'56284', lastName:'Brooks',    firstName:'Casey',     college:'West Valley Community College', school:'Riverside Prep',      group:'Math - Dual Enrollment Spring 2026',     term:'SPRING 2026', course:null,                     dateInvited:'May 30, 2026' },
-    { id:'63917', lastName:'Campbell',  firstName:'Riley',     college:'West Valley Community College', school:'Eastside High',       group:'Science - Dual Enrollment Spring 2026',        term:'SPRING 2026', course:null,                     dateInvited:'May 27, 2026' },
-    { id:'72048', lastName:'Carter',    firstName:'Jordan',    college:'West Valley Community College', school:'Central High School', group:'Social Science - Dual Enrollment Fall 2026', term:'FALL 2026',   course:null,                     dateInvited:'May 23, 2026' },
+    { id:'43536', lastName:'Abrams',    firstName:'Jessica',   college:'West Valley Community College', group:'English - Dual Enrollment Fall 2026',         term:'FALL 2026',   course:null, dateInvited:'Jun 28, 2026' },
+    { id:'57587', lastName:'Adams',     firstName:'Matthew',   college:'West Valley Community College', group:'Math - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 27, 2026' },
+    { id:'75088', lastName:'Adamson',   firstName:'Samantha',  college:'West Valley Community College',    group:'Science - Dual Enrollment Fall 2026',        term:'FALL 2026',   course:null,                     dateInvited:'Jun 25, 2026' },
+    { id:'05467', lastName:'Aitken',    firstName:'Triston',   college:'West Valley Community College',    group:'Engineering - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,   dateInvited:'Jun 23, 2026' },
+    { id:'84257', lastName:'Alexander', firstName:'Carter',    college:'West Valley Community College',       group:'Math - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 21, 2026' },
+    { id:'65870', lastName:'Alexander', firstName:'David',     college:'West Valley Community College',       group:'Engineering - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 19, 2026' },
+    { id:'42325', lastName:'Allan',     firstName:'Gloria',    college:'West Valley Community College', group:'Social Science - Dual Enrollment Fall 2026', term:'FALL 2026',   course:null,                     dateInvited:'Jun 17, 2026' },
+    { id:'21956', lastName:'Allan',     firstName:'Samuel',    college:'West Valley Community College', group:'English - Dual Enrollment Fall 2026',         term:'FALL 2026',   course:null,                     dateInvited:'Jun 15, 2026' },
+    { id:'53036', lastName:'Allison',   firstName:'Elizabeth', college:'West Valley Community College', group:'Social Science - Dual Enrollment Fall 2026', term:'FALL 2026',   course:null,dateInvited:'Jun 12, 2026' },
+    { id:'17436', lastName:'Anderson',  firstName:'Jordan',    college:'West Valley Community College',    group:'English - Dual Enrollment Spring 2026',         term:'SPRING 2026', course:null,                     dateInvited:'Jun 10, 2026' },
+    { id:'29847', lastName:'Bailey',    firstName:'Morgan',    college:'West Valley Community College',      group:'Science - Dual Enrollment Fall 2026',        term:'FALL 2026',   course:null,                     dateInvited:'Jun 8, 2026' },
+    { id:'38521', lastName:'Barnes',    firstName:'Taylor',    college:'West Valley Community College',      group:'Math - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,  dateInvited:'Jun 5, 2026' },
+    { id:'47193', lastName:'Bennett',   firstName:'Alex',      college:'West Valley Community College',      group:'Engineering - Dual Enrollment Fall 2026',     term:'FALL 2026',   course:null,                     dateInvited:'Jun 3, 2026' },
+    { id:'56284', lastName:'Brooks',    firstName:'Casey',     college:'West Valley Community College',      group:'Math - Dual Enrollment Spring 2026',     term:'SPRING 2026', course:null,                     dateInvited:'May 30, 2026' },
+    { id:'63917', lastName:'Campbell',  firstName:'Riley',     college:'West Valley Community College',       group:'Science - Dual Enrollment Spring 2026',        term:'SPRING 2026', course:null,                     dateInvited:'May 27, 2026' },
+    { id:'72048', lastName:'Carter',    firstName:'Jordan',    college:'West Valley Community College', group:'Social Science - Dual Enrollment Fall 2026', term:'FALL 2026',   course:null,                     dateInvited:'May 23, 2026' },
   ];
   /* inviteType: every pending invite today is an invite to APPLY. 'register' is a second
      flavor a later feature adds (admit-only hold, then invite to register); kept as a

@@ -105,6 +105,20 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
   transition: border-color .15s, box-shadow .15s, transform .15s;
 }
 .path-select-tile:hover { border-color: var(--action-default); box-shadow: var(--shadow-pop); transform: translateY(-2px); }
+/* Entry point switched off in the network config. The tile stays visible so the path is still
+   discoverable and the config's effect is legible; it just can't be started. */
+.path-select-tile.is-unavailable {
+  cursor: not-allowed; opacity: .55; box-shadow: none;
+  background: var(--white-space-z-index3);
+}
+.path-select-tile.is-unavailable:hover { border-color: var(--border-color); box-shadow: none; transform: none; }
+.path-select-tile.is-unavailable .path-select-tile-icon { color: var(--body-font-weak); }
+.path-select-tile-off {
+  margin-top: 2px; padding: 2px 8px; border-radius: 4px;
+  background: var(--white-space-z-index4); color: var(--body-font-weak);
+  font-size: var(--font-xSmall); font-weight: var(--font-weight-semibold);
+  text-transform: uppercase; letter-spacing: .05em;
+}
 .path-select-tile-icon {
   color: var(--action-default);
   display: flex; align-items: center; justify-content: center; margin-bottom: 4px;
@@ -851,7 +865,6 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
 }
 
 /* ─── DE-tab header actions (Figma 13497-73022) ─── */
-.de-tab-head--actions { display: flex; justify-content: flex-end; }
 
 /* ─── Confirm-email screen (#screen-confirm-email) ─── */
 .ce-workflow { max-width: 560px; }
@@ -1138,3 +1151,17 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
 }
 .eml-demo__body { flex: 1; }
 .eml-demo__link { background: none; border: 0; padding: 0; font: inherit; color: var(--action-default); cursor: pointer; text-decoration: underline; }
+
+/* ─── Change Email modal (Figma 4.3.2.1 · 15467:198298) ───
+   Layout only: the modal shell, field, buttons, and asterisk note are all canonical
+   (.tasty-modal*, .tasty-field, .tasty-btn, .aer-required-note). Figma's footer centers
+   a 600px-max pair of equal-width buttons above the required-items note. */
+.chg-email__heading { display: inline-flex; align-items: center; gap: var(--space-sm); }
+.chg-email__heading .ti { font-size: 20px; color: var(--body-font-strong); }
+.chg-email__body { display: flex; flex-direction: column; gap: var(--space-md); }
+.chg-email__current { margin: 0; font-size: var(--font-medium); color: var(--body-font-base); }
+.chg-email__current strong { font-weight: var(--font-weight-bold); }
+.chg-email__note { margin: 0; font-size: var(--font-medium); line-height: 1.25; color: var(--body-font-base); }
+.chg-email__foot { flex-direction: column; align-items: center; gap: var(--space-md); }
+.chg-email__buttons { display: flex; gap: 10px; width: 100%; max-width: 600px; }
+.chg-email__buttons .tasty-btn { flex: 1; }

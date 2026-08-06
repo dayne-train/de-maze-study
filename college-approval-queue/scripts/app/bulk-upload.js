@@ -493,9 +493,8 @@
   function _bulkGenPeople(n) {
     var F = ['Ava', 'Liam', 'Mia', 'Noah', 'Zoe', 'Ethan', 'Isla', 'Kai', 'Nora', 'Owen', 'Lila', 'Ravi', 'Sena', 'Theo', 'Uma', 'Vince'];
     var L = ['Bennett', 'Carter', 'Foster', 'Ramirez', 'Nguyen', 'Osei', 'Park', 'Silva', 'Turner', 'Walsh'];
-    var SCH = ['Pioneer High School', 'Westview Academy', 'Eastside High', 'Central High School'];
     var out = [];
-    for (var i = 0; i < n; i++) out.push({ id: String(70000 + i), first: F[i % F.length], last: L[i % L.length], school: SCH[i % SCH.length] });
+    for (var i = 0; i < n; i++) out.push({ id: String(70000 + i), first: F[i % F.length], last: L[i % L.length] });
     return out;
   }
 
@@ -505,7 +504,7 @@
     var ppl = _bulkGenPeople(n);
     if (typeof INVITED_FIXTURE !== 'undefined') {
       var rows = ppl.map(function (p) {
-        return { id: p.id, firstName: p.first, lastName: p.last, school: p.school, college: 'West Valley Community College', group: group || '—', term: 'FALL 2026', course: null, dateInvited: 'Jul 28, 2026', lastSent: 'Jul 28, 2026' };
+        return { id: p.id, firstName: p.first, lastName: p.last, college: 'West Valley Community College', group: group || '—', term: 'FALL 2026', course: null, dateInvited: 'Jul 28, 2026', lastSent: 'Jul 28, 2026' };
       });
       Array.prototype.unshift.apply(INVITED_FIXTURE, rows);
       if (typeof renderInvitedTable === 'function') renderInvitedTable();
@@ -520,7 +519,7 @@
     var ppl = _bulkGenPeople(n);
     if (typeof LEARNER_ROSTER !== 'undefined') {
       var rows = ppl.map(function (p) {
-        return { id: p.id, lastName: p.last, firstName: p.first, middleName: '', initials: (p.first.charAt(0) + p.last.charAt(0)).toUpperCase(), school: p.school, classOf: 2027, dob: '', ssnLast4: '', missingData: false };
+        return { id: p.id, lastName: p.last, firstName: p.first, middleName: '', initials: (p.first.charAt(0) + p.last.charAt(0)).toUpperCase(), classOf: 2027, dob: '', ssnLast4: '', missingData: false };
       });
       Array.prototype.unshift.apply(LEARNER_ROSTER, rows);
       if (typeof renderInviteLearners === 'function') renderInviteLearners();

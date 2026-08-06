@@ -38,7 +38,12 @@
       rows += '<td class="col-check"><input type="checkbox" class="row-checkbox invited-row-cb" data-id="' + e.id + '"' + (invSel ? ' checked' : '') + '></td>';
       // Invited learners have no application ID yet (created when the invite is accepted), so no sub-line.
       rows += nameCells(e);
-      rows += '<td style="font-size:13px;">' + (e.school || e.college) + '</td>';
+      /* The college never learns a learner's high school until they apply and pick it from the
+         exchange's schools, so on an invite it is genuinely not known yet — say so rather than
+         falling back to the college's own name, which used to read as if it were the school. */
+      rows += e.school
+        ? '<td style="font-size:13px;">' + e.school + '</td>'
+        : '<td style="font-size:13px;color:var(--c-text-muted);font-style:italic;">Not yet selected</td>';
       rows += '<td style="font-size:13px;">' + e.group + '</td>';
       rows += '<td style="font-size:12px;color:var(--c-text-muted);">' + e.dateInvited + '</td>';
       rows += '<td style="font-size:12px;color:var(--c-text-muted);">' + (e.lastSent || e.dateInvited) + '</td>';
@@ -63,7 +68,7 @@
     var header = ['Last Name', 'First Name', 'High School', 'Group', 'Date Invited', 'Last Sent', 'Status'];
     var lines = [header.map(esc).join(',')];
     rows.forEach(function(e) {
-      lines.push([e.lastName, e.firstName, (e.school || e.college || ''), e.group, e.dateInvited, (e.lastSent || e.dateInvited), 'Invited'].map(esc).join(','));
+      lines.push([e.lastName, e.firstName, (e.school || 'Not yet selected'), e.group, e.dateInvited, (e.lastSent || e.dateInvited), 'Invited'].map(esc).join(','));
     });
     if (typeof deDownloadCSV === 'function') deDownloadCSV(lines.join('\n'), 'pending-invites.csv');
     if (typeof showToast === 'function') showToast('Exported ' + rows.length + ' invite' + (rows.length === 1 ? '' : 's') + ' to CSV.', 'success');

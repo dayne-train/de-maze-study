@@ -49,7 +49,7 @@
     a = INVITED_FIXTURE.find(function(x){return x.id===id;});
     if (a) return { app: { id:a.id, firstName:a.firstName, lastName:a.lastName, initials:(a.firstName[0]+a.lastName[0]),
                            group:a.group, term:a.term, course:a.course, institution:(COLLEGE_NAME_TO_KEY[a.college]||'wvcc'),
-                           school:'Pioneer High School', dateInvited:a.dateInvited, lastSent:a.lastSent }, status:'invited' };
+                           school:a.school, dateInvited:a.dateInvited, lastSent:a.lastSent }, status:'invited' };   /* was hardcoded 'Pioneer High School', which lied whenever the multi-HS toggle was on */
     return null;
   }
 
@@ -88,6 +88,11 @@
       attachments: [ { name: app.lastName + '_Academic_Transcript.pdf', icon:'ti-file-text', kind:'transcript' } ],
     };
     if (h % 3 !== 0) d.attachments.push({ name: app.lastName + '_Immunization_Record.pdf', icon:'ti-vaccine', kind:'immunization' });
+    /* The DE application asks for Country, so the detail view has to be able to show it
+       (audited Aug 5, 2026). It does NOT ask who the high school admin is — approval routes to
+       the school's queue — so there is deliberately no adminName/adminEmail here; `counselor`
+       stays for the tracker, which legitimately knows who acted. */
+    d.country = 'United States';
     app.__detail = d;
     return d;
   }
@@ -132,14 +137,10 @@
     return s;
   }
 
-  /* Needs-Review queue progress — shown above the tracker + on the "Review Next" button.
-     excludeId shows "how many others besides the one you're looking at" (the per-app header,
-     since viewing an app shouldn't itself count against the remaining total); omitting it
-     shows the queue's full count (the post-action button, where nothing is currently "in focus"). */
-  function remainingQueueText(excludeId) {
-    var n = excludeId
-      ? reviewBucket().filter(function(a) { return a.id !== excludeId; }).length
-      : reviewBucket().length;
+  /* Needs-Review queue progress — the "Review Next" button's only. The detail header used to
+     carry this count too (excluding the app in focus); removed Aug 5, 2026 as rail clutter. */
+  function remainingQueueText() {
+    var n = reviewBucket().length;
     return n > 0 ? (n + ' remaining') : 'All caught up';
   }
 
@@ -236,7 +237,6 @@
     var learnerEmail = (app.firstName.charAt(0) + app.lastName).toLowerCase().replace(/[^a-z]/g,'') + '@pioneerhs.edu';
     var school       = app.school || 'Pioneer High School';
     var dateSent     = app.dateInvited || '\u2014';
-    var schoolMono   = (school || 'P').charAt(0).toUpperCase();
 
     var states   = ['complete','current','upcoming','upcoming','upcoming','upcoming'];
     var stepSubs = [ institution, learnerName, 'Parent/Guardian', COUNSELORS[currentCounselor].name, 'Admissions Team', learnerName ];
@@ -260,37 +260,55 @@
     function field(label, valueHtml) {
       return '<div class="appdetail-field"><span class="appdetail-field-label">' + label + '</span><span class="appdetail-field-value">' + valueHtml + '</span></div>';
     }
-    function metaRow(label, value) {
-      return '<div class="appdetail-meta-row"><span class="appdetail-meta-key">' + label + '</span><span class="appdetail-meta-val">' + value + '</span></div>';
-    }
 
     var html =
       '<div class="appdetail">' +
         '<div class="appdetail-main">' +
           '<div class="appdetail-head">' +
             '<div class="tasty-section-header" style="flex:1;width:auto;">' +
-              '<span class="tasty-section-header__graphic"><span data-tasty-illus="select-document-fill" alt=""></span></span>' +
+              /* Envelope, not a document: nothing has been submitted yet — this is an invitation
+                 waiting on the learner (Aug 5, 2026). The submitted detail keeps the document. */
+              '<span class="tasty-section-header__graphic"><span data-tasty-illus="envelope-fill" alt=""></span></span>' +
               '<div>' +
-                '<p class="appdetail-appid">Invitation sent</p>' +
                 '<div class="tasty-section-header__title">Invitation Pending</div>' +
                 '<div class="tasty-section-header__sub">' + escapeHtml(learnerName) + ' has been invited but hasn’t started their application yet.</div>' +
               '</div>' +
             '</div>' +
-            '<span class="tasty-status-tag is-md is-solid is-primary appdetail-status-tag">Invited</span>' +
           '</div>' +
 
           /* Same fields/layout as the application-details screen, minus everything we
              don't have data for until the learner accepts and completes the AER (SSN,
              State Student ID, GPA, guardian, signature, attachments). Group lives in the
-             right rail, and DOB/email in the person block \u2014 exactly as in app details. */
+             right rail. DOB + the invitation's own details used to sit in a rail person
+             block; since Aug 5, 2026 they're body fields like every other.
+             ORDER MATTERS: the invitation group leads, mirroring the submitted detail, whose
+             identity row (Application ID · Applying From · Applying To) also opens the body.
+             The learner's own profile follows. */
+          '<div class="appdetail-grid">' +
+            field('Applying From', escapeHtml(school)) +
+            field('Applying To', escapeHtml(institution)) +
+            field('Invitation Sent To', escapeHtml(learnerEmail)) +
+            field('Date Invited', escapeHtml(dateSent)) +
+            field('Last Sent', escapeHtml(app.lastSent || dateSent)) +
+          '</div>' +
+
+          '<hr class="appdetail-rule">' +
+
           '<div class="appdetail-grid">' +
             field('Current Name', escapeHtml(d.fullName)) +
             field('Address', escapeHtml(d.addrLine1) + '<br>' + escapeHtml(d.addrLine2)) +
             field('Phone Number', escapeHtml(d.phone)) +
+            field('Date of Birth', escapeHtml(d.dob)) +
           '</div>' +
         '</div>' +
 
         '<aside class="appdetail-side">' +
+          /* Status tag sits at the top of the rail above the stepper, the same place every
+             other status tag lives on a submitted application (moved out of the main
+             column's head, Aug 5, 2026). */
+          '<div class="appdetail-side-status">' +
+            '<span class="tasty-status-tag is-md is-solid is-primary appdetail-status-tag">Invited</span>' +
+          '</div>' +
           '<ul class="appdetail-stepper">' + stepHtml + '</ul>' +
 
           '<hr class="appdetail-rule">' +
@@ -298,21 +316,6 @@
           '<div class="appdetail-side-block">' +
             '<div class="appdetail-side-label"><i class="ti ti-users"></i> Group(s)</div>' +
             '<div class="appdetail-group-value">' + groupsValueHTML(app) + '</div>' +
-          '</div>' +
-
-          '<div class="appdetail-side-school">' +
-            '<span class="tasty-persona-icon">' + escapeHtml(schoolMono) + '</span>' +
-            '<span class="appdetail-school-name">' + escapeHtml(school) + '</span>' +
-          '</div>' +
-
-          '<div class="appdetail-side-person">' +
-            '<p class="appdetail-person-name"><i class="ti ti-user"></i> ' + escapeHtml(app.lastName + ', ' + app.firstName) + '</p>' +
-            '<div class="appdetail-meta">' +
-              metaRow('Invitation Sent To', escapeHtml(learnerEmail)) +
-              metaRow('Date Invited', escapeHtml(dateSent)) +
-              metaRow('Date of Birth', escapeHtml(d.dob)) +
-              metaRow('Last Sent', escapeHtml(app.lastSent || dateSent)) +
-            '</div>' +
           '</div>' +
 
           '<div class="appdetail-actions">' +
@@ -425,13 +428,9 @@
     var subtitle = status === 'pending'
       ? 'Please review the information that was submitted below.'
       : 'Review the information submitted for this application.';
-    var schoolMono = (d.school || 'P').charAt(0).toUpperCase();
 
     function field(label, valueHtml) {
       return '<div class="appdetail-field"><span class="appdetail-field-label">' + label + '</span><span class="appdetail-field-value">' + valueHtml + '</span></div>';
-    }
-    function metaRow(label, value) {
-      return '<div class="appdetail-meta-row"><span class="appdetail-meta-key">' + label + '</span><span class="appdetail-meta-val">' + value + '</span></div>';
     }
 
     var html =
@@ -449,8 +448,15 @@
             '</div>' +
           '</div>' +
 
+          /* Identity row: which record, and which two orgs it runs between. "Applying From"
+             is always the sending high school and "Applying To" the receiving institution, so
+             each fork reads its own org on one side and the counterparty on the other — the
+             informative half (many colleges for an HS admin, many high schools for a college).
+             This pair replaced a lone school chip that sat in the rail below Group(s). */
           '<div class="appdetail-grid">' +
             field('Application ID', escapeHtml(app.id)) +
+            field('Applying From', escapeHtml(d.school)) +
+            field('Applying To', escapeHtml(d.institution)) +
           '</div>' +
 
           '<hr class="appdetail-rule">' +
@@ -458,6 +464,10 @@
           '<div class="appdetail-grid">' +
             field('Current Name', escapeHtml(d.fullName)) +
             field('Address', escapeHtml(d.addrLine1) + '<br>' + escapeHtml(d.addrLine2)) +
+            field('Country', escapeHtml(d.country)) +
+            /* DOB comes from account sign-up rather than the DE application, but it belongs
+               with the identity fields an admin verifies — and the invited detail shows it. */
+            field('Date of Birth', escapeHtml(d.dob)) +
             field('Social Security Number',
               '<span class="appdetail-ssn">' +
                 '<span id="detail-ssn-value" data-mask="' + d.ssnMask + '" data-full="' + d.ssnFull + '">' + d.ssnMask + '</span>' +
@@ -485,7 +495,9 @@
             '<ul class="appdetail-certs">' +
               '<li><span class="tasty-checkbox is-checked is-disabled appdetail-cert-check" aria-hidden="true"><span class="tasty-checkbox__box"><span data-tasty-icon="check" data-size="14"></span></span></span><span>I certify under penalty of law that I am the individual identified above and am authorized to take this action.</span></li>' +
               '<li><span class="tasty-checkbox is-checked is-disabled appdetail-cert-check" aria-hidden="true"><span class="tasty-checkbox__box"><span data-tasty-icon="check" data-size="14"></span></span></span><span>I agree to have my personal information transferred from my high school to the teaching college as necessary to register for this course through the exchange.</span></li>' +
-              '<li><span class="tasty-checkbox is-checked is-disabled appdetail-cert-check" aria-hidden="true"><span class="tasty-checkbox__box"><span data-tasty-icon="check" data-size="14"></span></span></span><span>I agree to have my transcript sent from the teaching college to my high school upon completion of this course.</span></li>' +
+              /* Two certifications, matching the DE application form exactly. A third —
+                 transcript sent back from the college to the high school — used to render
+                 here but the form never asks for it (removed Aug 5, 2026). */
             '</ul>' +
           '</div>' +
 
@@ -499,8 +511,6 @@
         '<aside class="appdetail-side">' +
           '<div class="appdetail-side-status">' +
             '<span class="tasty-status-tag is-md ' + DETAIL_STATUS_BADGE[status] + ' appdetail-status-tag">' + detailStatusLabel(app, status) + '</span>' +
-            /* "N remaining" is the approval-queue count — only meaningful in Needs Review. */
-            (status === 'pending' ? '<span class="appdetail-remaining">' + remainingQueueText(app.id) + '</span>' : '') +
           '</div>' +
           '<ul class="appdetail-stepper">' + stepHtml + '</ul>' +
 
@@ -509,22 +519,6 @@
           '<div class="appdetail-side-block">' +
             '<div class="appdetail-side-label"><i class="ti ti-users"></i> Group(s) <button class="appdetail-group-edit" id="detail-group-edit" aria-label="Edit group"><i class="ti ti-edit"></i></button></div>' +
             '<div class="appdetail-group-value">' + groupsValueHTML(app) + '</div>' +
-          '</div>' +
-
-          '<div class="appdetail-side-school">' +
-            '<span class="tasty-persona-icon">' + escapeHtml(schoolMono) + '</span>' +
-            '<span class="appdetail-school-name">' + escapeHtml(d.school) + '</span>' +
-          '</div>' +
-
-          '<div class="appdetail-side-person">' +
-            '<p class="appdetail-person-name"><i class="ti ti-user"></i> ' + escapeHtml(app.lastName + ', ' + app.firstName) + '</p>' +
-            '<div class="appdetail-meta">' +
-              metaRow('Sent To', escapeHtml(d.learnerEmail)) +
-              metaRow('Date Sent', escapeHtml(d.dateSent)) +
-              metaRow('Date of Birth', escapeHtml(d.dob)) +
-              metaRow('Phone', escapeHtml(d.phone)) +
-              metaRow('Address', escapeHtml(d.addrLine1)) +
-            '</div>' +
           '</div>' +
 
           actions +
@@ -639,9 +633,6 @@
         void badge.offsetWidth;
         badge.style.animation = 'badgePop 0.35s ease-out';
       }
-      /* Queue just lost this app (moved to waiting/denied) — refresh the remaining count. */
-      var remainingEl = document.querySelector('#review-content .appdetail-remaining');
-      if (remainingEl) remainingEl.textContent = remainingQueueText(app.id);
     }, badgeDelay);
 
     /* ── Actions area ── */

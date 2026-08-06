@@ -124,7 +124,7 @@
         var lid = row.dataset.learnerId;
         var learner = LEARNER_ROSTER.find(function(l) { return l.id === lid; });
         if (!learner) { row.style.display = 'none'; return; }
-        var haystack = (learner.firstName + ' ' + learner.lastName + ' ' + learner.id + ' ' + learner.school).toLowerCase();
+        var haystack = (learner.firstName + ' ' + learner.lastName + ' ' + learner.id).toLowerCase();
         if (!t || haystack.indexOf(t) !== -1) {
           row.style.display = '';
           shown++;
@@ -388,7 +388,8 @@
       if (!learner) return;
       INVITED_FIXTURE.unshift({
         id: learner.id, lastName: learner.lastName, firstName: learner.firstName,
-        college: meta.name, school: learner.school,
+        college: meta.name,   /* no school: the college never asks for one, and the learner picks
+                                 theirs from the exchange's high schools when they apply */
         group: groupNames, term: selectedGroups.length ? selectedGroups[0].term : '',
         course: null, dateInvited: todayLabel(), lastSent: todayLabel(), inviteType: 'apply'
       });

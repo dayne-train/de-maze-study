@@ -922,6 +922,9 @@
   font-size: 14px; color: var(--c-text-muted);
   margin: 5px 0 0;
 }
+/* Both detail views now render this inside .appdetail-side-status, so the 6px head-context
+   offset below has no consumer (the Invited tag left the main column's head Aug 5, 2026).
+   Kept in case a tag returns to a header. */
 .appdetail-status-tag { flex-shrink: 0; margin-top: 6px; }
 
 /* ── Invited-state limited view ── */
@@ -1033,12 +1036,13 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
 }
 .appdetail-attach-view:hover { color: var(--c-brand-dark); }
 
-/* ── Right rail: status + queue progress, above the tracker (Jul 1) ── */
+/* ── Right rail: status tag above the tracker (Jul 1) ──
+   Held a "N remaining" queue count on its right until Aug 5, 2026; the tag is the lone
+   child now, so the row just left-aligns it. */
 .appdetail-side-status {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; margin-bottom: 20px;
 }
-.appdetail-remaining { font-size: 12.5px; font-weight: 600; color: var(--c-text-muted); }
 /* Reset the head-context margin-top (still used by the Invited-state status tag) so it centers cleanly here. */
 .appdetail-side-status .appdetail-status-tag { margin-top: 0; }
 
@@ -1098,22 +1102,15 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
 }
 .appdetail-group-course { font-size: 12.5px; font-weight: 400; color: var(--c-text-muted); }
 
+/* Rail school chip — NO current consumer (Aug 5, 2026): the school moved into the detail's
+   identity row as "Applying From". Rules kept, not deleted, in case the chip comes back. */
 .appdetail-side-school { display: flex; align-items: center; gap: 12px; margin-top: 24px; }
 /* .appdetail-school-mono retired Jun 30 — review-detail school monogram now uses .tasty-persona-icon (DS). */
 .appdetail-school-name { font-size: 14px; font-weight: 700; color: var(--c-text-strong); }
 
-.appdetail-side-person { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--c-border); }
-.appdetail-person-name {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 14px; font-weight: 700; color: var(--c-text-strong);
-  margin: 0 0 14px;
-}
-.appdetail-person-name i { color: var(--c-text-muted); }
-.appdetail-meta { display: flex; flex-direction: column; gap: 9px; }
-.appdetail-meta-row { display: flex; gap: 12px; font-size: 12.5px; }
-.appdetail-meta-key { width: 96px; flex-shrink: 0; color: var(--c-text-muted); }
-.appdetail-meta-val { color: var(--c-text-strong); font-weight: 600; word-break: break-word; }
-.appdetail-meta-id { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+/* .appdetail-side-person / -person-name / -meta* retired Aug 5, 2026 — the rail's learner-info
+   block is gone from both detail views. What it carried on the invited detail moved into the
+   body as ordinary .appdetail-field rows; the rest was already in the main column. */
 
 /* ── Right rail: contextual actions ── */
 .appdetail-actions {

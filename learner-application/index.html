@@ -90,12 +90,12 @@
     <h1 class="path-select-heading">How would you like to start?</h1>
     <p class="path-select-sub">Pick a starting point to explore the learner dual enrollment journey.</p>
     <div class="path-select-options">
-      <button class="path-select-tile" type="button" onclick="startEntry('open-enrollment','dashboard')">
+      <button class="path-select-tile" type="button" data-entry="dashboard" onclick="startEntry('open-enrollment','dashboard')">
         <span class="path-select-tile-icon"><span data-tasty-icon="add-learner-profile-fill" data-size="48"></span></span>
         <span class="path-select-tile-title">Apply on your own</span>
         <span class="path-select-tile-desc">Open enrollment — you sign in, discover dual enrollment on your dashboard, and start your application.</span>
       </button>
-      <div class="path-select-tile path-select-tile--dual">
+      <div class="path-select-tile path-select-tile--dual" data-entry="heInvite">
         <span class="path-select-tile-icon"><span data-tasty-icon="college-fill" data-size="48"></span></span>
         <span class="path-select-tile-title">Invited by your college</span>
         <span class="path-select-tile-desc">West Valley Community College invited you. You'll pick your high school as part of applying.</span>
@@ -104,7 +104,7 @@
           <button class="tasty-btn is-ghost is-sm" type="button" onclick="startEntry('invited-college','dashboard')">Start from dashboard</button>
         </span>
       </div>
-      <div class="path-select-tile path-select-tile--dual">
+      <div class="path-select-tile path-select-tile--dual" data-entry="hsInvite">
         <span class="path-select-tile-icon"><span data-tasty-icon="k12-school-fill" data-size="48"></span></span>
         <span class="path-select-tile-title">Invited by your high school</span>
         <span class="path-select-tile-desc">Your high school admin invited you to apply — their approval comes built in, and your high school is already known.</span>
@@ -113,7 +113,7 @@
           <button class="tasty-btn is-ghost is-sm" type="button" onclick="startEntry('invited-counselor','dashboard')">Start from dashboard</button>
         </span>
       </div>
-      <button class="path-select-tile" type="button" onclick="startCollegeSite()">
+      <button class="path-select-tile" type="button" data-entry="selfUrl" onclick="startCollegeSite()">
         <span class="path-select-tile-icon"><span data-tasty-icon="screen-ui-fill" data-size="48"></span></span>
         <span class="path-select-tile-title">Apply from a college's website</span>
         <span class="path-select-tile-desc">You found dual enrollment on the college's website and clicked Apply. Sign in or create an account, then pick your high school.</span>
@@ -885,7 +885,7 @@
               <label class="tasty-field">
                 <span class="tasty-field__label de-app-label-row">Social Security Number <span class="req">*</span> <a href="#" class="dont-have-link" onclick="return false">Don't have one?</a></span>
                 <span class="tasty-field__control aer-pw">
-                  <input class="tasty-input aer-pw__input" type="password" maxlength="9" data-validate="off">
+                  <input class="tasty-input aer-pw__input" type="password" maxlength="9" data-validate="required">
                   <button type="button" class="aer-pw__toggle" aria-label="Show Social Security Number" onclick="togglePw(this)"><span data-tasty-icon="visible" data-size="18" aria-hidden="true"></span></button>
                 </span>
               </label>
@@ -931,26 +931,9 @@
               </div>
             </div>
 
-            <!-- Counselor -->
-            <div class="de-app-section" id="de-app-counselor-section">
-              <p class="de-app-section-title">High School Admin Information</p>
-              <div class="tasty-form__row">
-                <label class="tasty-field">
-                  <span class="tasty-field__label">Admin First Name <span class="req">*</span></span>
-                  <input class="tasty-input" type="text" placeholder="First Name" data-validate="required">
-                </label>
-                <label class="tasty-field">
-                  <span class="tasty-field__label">Admin Last Name <span class="req">*</span></span>
-                  <input class="tasty-input" type="text" placeholder="Last Name" data-validate="required">
-                </label>
-              </div>
-              <div class="tasty-form__row">
-                <label class="tasty-field">
-                  <span class="tasty-field__label">Admin Email <span class="req">*</span></span>
-                  <input class="tasty-input" type="email" data-validate="required email">
-                </label>
-              </div>
-            </div>
+            <!-- High School Admin Information section removed Aug 5, 2026: approval routes to
+                 the high school's queue automatically, so the learner never names an admin.
+                 Selecting their school is the only routing input we need from them. -->
 
             <!-- Learner consent + signature -->
             <div class="de-app-consent">
@@ -1187,6 +1170,41 @@
     <div class="tasty-modal__foot">
       <button type="button" class="tasty-btn is-ghost is-md" onclick="document.getElementById('modal-cancel-overlay').classList.remove('open')">Keep editing</button>
       <button type="button" class="tasty-btn is-error is-md" onclick="confirmCancel()">Cancel application</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL — Change Email (Figma 4.3.2.1 · 15467:198298)
+     One modal for both notification parties; openChangeEmail(key) sets the
+     title + current address and points Save at that NOTIFY record.
+══════════════════════════════════════════════════════════ -->
+<div class="tasty-modal-overlay" id="modal-change-email">
+  <div class="tasty-modal" role="dialog" aria-modal="true" aria-labelledby="chg-email-title">
+    <div class="tasty-modal__head">
+      <span class="chg-email__heading">
+        <i class="ti ti-info-circle" aria-hidden="true"></i>
+        <span class="tasty-modal__title" id="chg-email-title">Change Email</span>
+      </span>
+      <button type="button" class="tasty-modal__x" aria-label="Close" onclick="closeChangeEmail()">&times;</button>
+    </div>
+    <div class="tasty-modal__body chg-email__body">
+      <p class="chg-email__current">Current email address on file: <strong id="chg-email-current">—</strong></p>
+      <label class="tasty-field">
+        <span class="tasty-field__label"><span class="req">*</span> New Email Address</span>
+        <span class="tasty-field__control">
+          <input class="tasty-input" type="email" id="chg-email-input" placeholder="hello@parchment.com"
+                 autocomplete="off" oninput="validateChangeEmail()">
+        </span>
+      </label>
+      <p class="chg-email__note">We'll send a fresh notification to this address. The old address will no longer receive reminders for this application.</p>
+    </div>
+    <div class="tasty-modal__foot chg-email__foot">
+      <div class="chg-email__buttons">
+        <button type="button" class="tasty-btn is-ghost is-md" onclick="closeChangeEmail()">Cancel</button>
+        <button type="button" class="tasty-btn is-primary is-md" id="chg-email-save" disabled onclick="saveChangeEmail()">Save</button>
+      </div>
+      <p class="aer-required-note"><span class="req">*</span> All items with a red asterisk are required.</p>
     </div>
   </div>
 </div>

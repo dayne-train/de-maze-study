@@ -81,6 +81,9 @@
     inviteSource: 'college',
     hsCount:      'single',
     collegeCount: 'single',
+    appMix:       'single',   /* 'single' = one application (the selected state) · 'multi' = a
+                                portfolio spanning all three DE-tab buckets, so the NavToggle,
+                                its bucket filtering and its count badges are all reachable */
     reapply:      'on',
   };
 
@@ -152,6 +155,27 @@
     var appState = DEV.appState;
     var multiCollege = DEV.collegeCount === 'multiple';
 
+    /* Multi-application portfolio — the only way to see the DE tab's three buckets at once
+       (in progress · Registered · Closed). The first entry still honours the State selector so
+       that control keeps working; the rest pin one bucket each, with a SECOND in-progress
+       application so at least one bucket holds more than one and the count badges appear.
+       Colleges vary so the member boxes are visually distinct. */
+    if (DEV.appMix === 'multi') {
+      var C = INVITE_COLLEGES;
+      var first = (appState === 'open-enrollment') ? { kind: 'discovery', college: C[0] }
+                : (appState === 'invited')         ? { kind: 'invite', inviteSource: DEV.inviteSource, college: C[0], terms: C[0].terms }
+                : { kind: 'app', appState: appState, inviteSource: DEV.inviteSource, college: C[0], appId: APP.id };
+      return [
+        first,
+        /* Invites and applications coexist — a learner can have an invite they haven't acted on
+           while other applications are mid-approval, registered, or closed. */
+        { kind: 'invite', inviteSource: 'college', college: C[1], terms: C[1].terms },
+        { kind: 'app', appState: 'counselor-pending', inviteSource: DEV.inviteSource, college: C[1], appId: '20263392' },
+        { kind: 'app', appState: 'registered',        inviteSource: DEV.inviteSource, college: C[2], appId: '20263408' },
+        { kind: 'app', appState: 'denied-college',    inviteSource: DEV.inviteSource, college: C[1], appId: '20263417' }
+      ];
+    }
+
     if (appState === 'open-enrollment') {
       return [{ kind: 'discovery', college: COLLEGE }];
     }
@@ -203,9 +227,40 @@
   }
 
   /* Responsible-party name per step (index-aligned). idx0/idx4 = the learner. */
-  var STEP_PARTIES = ['Jessica Cumberland', 'Diana Cumberland', 'Morgan Lee', COLLEGE.name, 'Jessica Cumberland'];
+  /* Responsible party per step. Step 2 is the SCHOOL, not a person: the learner never names
+     an admin, so showing one would imply a specific approver they didn't choose. */
+  var STEP_PARTIES = ['Jessica Cumberland', 'Diana Cumberland', HS.name, COLLEGE.name, 'Jessica Cumberland'];
   /* Stamped when a step completes/decides. Single canonical timestamp matches the Figma frames. */
   var STEP_DONE_TS = 'MAR 20 at 12:20pm PST';
+
+  /* ─── Notification recipients ───
+     The parties Parchment emails for a gate. MUTABLE and the single source for both the
+     address and the last-sent stamp: Change Email rewrites `email`, Resend Notification
+     restamps `sent`, and every surface that prints either (action-card sent line, the
+     DashboardStatusTracker sub-line, the active High School Approval step's line 2) reads
+     from here — so a resend or an address change can never leave one surface stale.
+     `noun` is the generic role used in toast copy ("resent to your parent/guardian"). */
+  var NOTIFY = {
+    guardian: { name: 'Diana Cumberland', role: 'Parent/Guardian',   noun: 'parent/guardian',
+                title: 'Change Parent/Guardian Email', email: 'diana.cumberland@email.com', sent: STEP_DONE_TS },
+    /* No named admin, and no address the learner owns: high school approval routes to the
+       school's queue automatically (Aug 5, 2026), so the learner sees the SCHOOL. A null
+       `email` is what marks a record as unaddressable — it drops the Change Email action and
+       the "(address)" suffix wherever a recipient is printed. */
+    hsadmin:  { name: HS.name,            role: 'High School',       noun: 'high school',
+                title: null,                     email: null,                              sent: STEP_DONE_TS }
+  };
+
+  /* "AUG 5 at 3:42pm PST" — same shape as STEP_DONE_TS, off the real clock, so a resend
+     visibly restamps the sent line instead of repeating the fixture timestamp. */
+  var TS_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  function nowStamp() {
+    var d = new Date();
+    var h = d.getHours();
+    var h12 = (h % 12) === 0 ? 12 : (h % 12);
+    var min = ('0' + d.getMinutes()).slice(-2);
+    return TS_MONTHS[d.getMonth()] + ' ' + d.getDate() + ' at ' + h12 + ':' + min + (h < 12 ? 'am' : 'pm') + ' PST';
+  }
 
   function getStepMeta(idx, st) {
     if (st === 'done') {
@@ -219,10 +274,9 @@
       return { line1: STEP_DONE_TS, line2: denial };
     }
     if (st === 'active') {
-      // line1 = responsible-party name; line2 = deadline (Register) or counselor email (Counselor).
-      var line2 = idx === 4 ? 'Register by APR 25'
-                : idx === 2 ? 'mlee@pioneerhs.edu'
-                : '';
+      // line1 = responsible party; line2 = deadline (Register only). The High School Approval
+      // step used to print the admin's email here — gone with the named admin (Aug 5, 2026).
+      var line2 = idx === 4 ? 'Register by APR 25' : '';
       return { line1: STEP_PARTIES[idx] || '', line2: line2 };
     }
     // pending — line1 = responsible-party name; line2 empty.
@@ -349,7 +403,7 @@
     } else if (appState === 'approved') {
       action = '<button type="button" class="tasty-btn is-md is-transparent is-success is-no-border is-full" onclick="showScreen(\'courses\')">Register For Courses</button>';
     } else if (nxt.resend) {
-      action = '<button type="button" class="tasty-btn is-md is-transparent is-no-border is-full" onclick="showToast(\'Notification resent\',\'success\')">Resend Notification</button>';
+      action = '<button type="button" class="tasty-btn is-md is-transparent is-no-border is-full" onclick="resendNotification(\'' + (nxt.notify || 'guardian') + '\')">Resend Notification</button>';
     }
     var buttons = action ? '<div class="tasty-dst-buttons">' + action + '</div>' : '';
 
@@ -429,17 +483,22 @@
       '</div></div>';
   }
 
-  /* One notification action card: who · role · sent-line + Change Email / Resend actions. */
-  function renderActionCard(r) {
+  /* One notification action card: who · role · sent-line + Change Email / Resend actions.
+     Takes a NOTIFY key, not a literal row, so both actions can mutate the shared record
+     (address, sent stamp) and every other surface picks the change up on re-render. */
+  function renderActionCard(key) {
+    var r = NOTIFY[key];
     return '<div class="tasty-action-card">' +
       '<div class="tasty-action-card__info">' +
         '<div class="tasty-action-card__name">' + esc(r.name) + '</div>' +
         '<div class="tasty-action-card__role">' + esc(r.role) + '</div>' +
-        '<div class="tasty-action-card__sent">Notification sent ' + esc(r.sent) + ' to <strong>' + esc(r.email) + '</strong></div>' +
+        '<div class="tasty-action-card__sent">Notification sent ' + esc(r.sent) + ' to <strong>' + esc(r.email || r.name) + '</strong></div>' +
       '</div>' +
       '<div class="tasty-action-card__actions">' +
-        '<button type="button" class="tasty-btn is-transparent is-sm" onclick="showToast(\'Email updated\',\'success\')">' + tastyIcon('edit', { size: 16 }) + 'Change Email</button>' +
-        '<button type="button" class="tasty-btn is-ghost is-sm" onclick="showToast(\'Notification resent\',\'success\')">' + tastyIcon('refresh', { size: 16 }) + 'Resend Notification</button>' +
+        /* Change Email only where the learner supplied the address. The high school's queue
+           isn't theirs to redirect, so that card offers Resend alone. */
+        (r.email ? '<button type="button" class="tasty-btn is-transparent is-sm" onclick="openChangeEmail(\'' + key + '\')">' + tastyIcon('edit', { size: 16 }) + 'Change Email</button>' : '') +
+        '<button type="button" class="tasty-btn is-ghost is-sm" onclick="resendNotification(\'' + key + '\')">' + tastyIcon('refresh', { size: 16 }) + 'Resend Notification</button>' +
       '</div>' +
     '</div>';
   }
@@ -515,8 +574,8 @@
     var rows = [];
     var needsParent    = guardianOn()  && (appState === 'parent-consent-pending' || appState === 'dual-pending');
     var needsCounselor = counselorOn() && (appState === 'counselor-pending' || appState === 'dual-pending') && inviteSource !== 'counselor';
-    if (needsParent)    rows.push({ name: 'Diana Cumberland', role: 'Parent/Guardian', email: 'diana.cumberland@email.com',          sent: STEP_DONE_TS });
-    if (needsCounselor) rows.push({ name: 'Morgan Lee',       role: 'High School Admin', email: 'mlee@pioneerhs.edu', sent: STEP_DONE_TS });
+    if (needsParent)    rows.push('guardian');
+    if (needsCounselor) rows.push('hsadmin');
     var cardsHtml = rows.length ? '<div class="tasty-dacs__divider"></div>' + rows.map(renderActionCard).join('') : '';
     return wrap(headerHtml + cardsHtml);
   }
@@ -524,9 +583,11 @@
   /* ─── DashboardStatusTracker next-step info ─── */
   function getDSTNextStep(appState) {
     var m = {
-      'parent-consent-pending': { title: 'Next Step: Parent/Guardian Consent', sub: 'Diana Cumberland (diana.cumberland@email.com)', resend: true  },
-      'counselor-pending':      { title: 'Next Step: High School Approval',       sub: 'Morgan Lee (mlee@pioneerhs.edu)',     resend: true  },
-      'dual-pending':           { title: 'Next Step: Parent/Guardian Consent',  sub: 'Diana Cumberland (diana.cumberland@email.com)', resend: true  },
+      /* `notify` names the NOTIFY record this step is waiting on: it supplies the sub-line
+         (name + current address) and the party the Resend button restamps. */
+      'parent-consent-pending': { title: 'Next Step: Parent/Guardian Consent', notify: 'guardian', resend: true  },
+      'counselor-pending':      { title: 'Next Step: High School Approval',    notify: 'hsadmin',  resend: true  },
+      'dual-pending':           { title: 'Next Step: Parent/Guardian Consent', notify: 'guardian', resend: true  },
       'college-review':         { title: 'Next Step: Institution Review',           sub: COLLEGE.name,                               resend: false },
       'approved':               { title: 'Approved — register for courses',     sub: 'Register by Apr 25',                       resend: false },
       /* Name the course, not just the term: the learner returns to the dashboard
@@ -539,7 +600,12 @@
       'denied-college':         { title: 'Application Not Accepted',           sub: 'Application denied on ' + STEP_DONE_TS,    resend: false },
       'cancelled':              { title: 'Application cancelled',              sub: null,                                       resend: false },
     };
-    return m[appState] || { title: '—', sub: null, resend: false };
+    var nxt = m[appState] || { title: '—', sub: null, resend: false };
+    if (nxt.notify && !nxt.sub) {
+      var n = NOTIFY[nxt.notify];
+      nxt.sub = n.email ? (n.name + ' (' + n.email + ')') : n.name;
+    }
+    return nxt;
   }
 
   /* Notification rows moved into renderDynamicActionCardSection (§3) as .tasty-action-card. */
@@ -647,19 +713,64 @@
   }
 
   /* DE section nested in the Pioneer box: invite banner (counselor/discovery) or status pill. */
+  /* Dashboard DE section for one high school (Figma 4.3.1.14.1 · 17155:264343).
+     INVITES ARE SEPARATE, one row each, and are never folded into the application count — an
+     invite isn't an application yet, and it carries its own Apply Now / Dismiss. Applications
+     then collapse: exactly one → its full DashboardStatusTracker; more than one → a single
+     summary row with View Details, since N stacked trackers would swamp the dashboard. */
   function renderHsDeSection(enrollments) {
-    var first = enrollments[0];
-    if (enrollments.length > 1) return renderDeStatusPill(null, enrollments.length);
-    return renderDashboardStatusTracker(first);
+    var invites = enrollments.filter(function (it) { return it.kind === 'invite' || it.kind === 'discovery'; });
+    var apps    = enrollments.filter(function (it) { return it.kind === 'app'; });
+    var html = invites.map(function (it) { return renderDashboardStatusTracker(it); }).join('');
+    if (apps.length === 1)     html += renderDashboardStatusTracker(apps[0]);
+    else if (apps.length > 1)  html += renderAppsSummaryRow(apps);
+    return html;
+  }
+
+  /* Multi-application summary — the DashboardStatusTracker shell reused neutral (same anatomy
+     as the invite variant: media · title · body · one action), NOT a bespoke row.
+     Copy stays honest: "in progress" only while every application really is, otherwise the
+     subtitle carries the actual breakdown. */
+  function renderAppsSummaryRow(apps) {
+    var counts = { 'in-progress': 0, 'enrolled': 0, 'closed': 0 };
+    apps.forEach(function (a) { counts[deBucket(a)]++; });
+    var allInProgress = counts['in-progress'] === apps.length;
+    var title = allInProgress
+      ? 'You have ' + apps.length + ' Dual Enrollment applications in progress.'
+      : 'You have ' + apps.length + ' Dual Enrollment applications.';
+    var parts = [];
+    if (counts['in-progress']) parts.push(counts['in-progress'] + ' in progress');
+    if (counts['enrolled'])    parts.push(counts['enrolled'] + ' registered');
+    if (counts['closed'])      parts.push(counts['closed'] + ' closed');
+    var body = allInProgress
+      ? 'You have multiple ongoing applications for this school. Click ‘View Details’ to get more information on how things are progressing.'
+      : parts.join(' · ') + '. Click ‘View Details’ to see how each one is progressing.';
+    return '<div class="tasty-dashboard-status-tracker">' +
+      '<div class="tasty-dst-content">' +
+        '<span class="tasty-dst-logo-illus" aria-hidden="true"><span data-tasty-illus="select-document-fill" data-size="50"></span></span>' +
+        '<div class="tasty-dst-text">' +
+          '<span class="tasty-dst-title">' + esc(title) + '</span>' +
+          '<span class="tasty-dst-sub tasty-dst-sub--wrap">' + esc(body) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="tasty-dst-buttons">' +
+        '<button type="button" class="tasty-btn is-md is-transparent is-no-border" onclick="showScreen(\'de-tab\')">View Details</button>' +
+      '</div>' +
+    '</div>';
   }
 
   /* In-progress DE status pill (condensed tracker). Pass appState OR a multi count. */
-  function renderDeStatusPill(appState, multiCount) {
+  function renderDeStatusPill(appState, multiCount, enrollments) {
     if (multiCount) {
+      /* "in progress" only holds when they ALL are. Once a portfolio spans buckets (one
+         registered, one closed, an invite not yet acted on) that claim is wrong, so fall back
+         to a plain count and let the DE tab carry the breakdown. */
+      var allInProgress = !enrollments || enrollments.every(function (it) { return deBucket(it) === 'in-progress'; });
+      var pillTitle = multiCount + (allInProgress ? ' applications in progress' : ' dual enrollment applications');
       return '<div class="de-pill">' +
         '<div class="de-inst-logo de-inst-logo--college de-pill__logo" aria-hidden="true">W</div>' +
         '<span class="de-pill__label">Dual Enrollment</span>' +
-        '<div class="de-pill__next"><span class="de-pill__next-title">' + multiCount + ' applications in progress</span></div>' +
+        '<div class="de-pill__next"><span class="de-pill__next-title">' + pillTitle + '</span></div>' +
         '<button type="button" class="tasty-btn is-ghost is-sm" onclick="showScreen(\'de-tab\')">View details</button>' +
       '</div>';
     }
@@ -685,31 +796,43 @@
 
     var enrollments = buildEnrollments();
 
-    // Bucket each enrollment; only show NavToggle tabs that actually have apps.
+    /* Bucket each enrollment. Three learner buckets: in progress (invited + working through
+       approvals) · Registered · Closed (cancelled, denied).
+       The NavToggle only earns its place once applications sit in MORE THAN ONE bucket — with
+       everything in one state it's a single tab that filters nothing, so it's noise. Same for
+       the count badges: they only appear when a bucket actually holds more than one
+       application, otherwise every tab would read "1". */
     var counts = { 'in-progress': 0, 'enrolled': 0, 'closed': 0 };
     enrollments.forEach(function (it) { counts[deBucket(it)]++; });
     var TABS = [['in-progress', 'In progress'], ['enrolled', 'Registered'], ['closed', 'Closed']]
       .filter(function (t) { return counts[t[0]] > 0; });
-    var activeTab = (TABS[0] && TABS[0][0]) || 'in-progress';
+    var showTabs   = TABS.length > 1;
+    var showCounts = TABS.some(function (t) { return counts[t[0]] > 1; });
 
-    var tabsHtml = TABS.length
+    // Keep the chosen tab if it still holds anything, else fall back to the first occupied one.
+    var occupied = TABS.map(function (t) { return t[0]; });
+    var activeTab = (occupied.indexOf(deTab) !== -1) ? deTab : (occupied[0] || 'in-progress');
+    deTab = activeTab;
+
+    var tabsHtml = showTabs
       ? '<div class="de-view-tabs"><ul class="tasty-navtoggle">' +
-          TABS.map(function (t) { return makeViewTab(t[0], t[1], counts[t[0]], activeTab); }).join('') +
+          TABS.map(function (t) { return makeViewTab(t[0], t[1], showCounts ? counts[t[0]] : null, activeTab); }).join('') +
         '</ul></div>'
       : '';
 
-    var headerHtml = '<div class="de-tab-head de-tab-head--actions">' +
-      '<button type="button" class="tasty-btn is-primary is-md" onclick="startApplicationFlow()">' +
-      tastyIcon('add', { size: 16 }) + 'New Application</button>' +
-      '</div>';
-
-    var contentHtml = enrollments.map(function (item) {
+    /* No "New Application" action here (removed Aug 5, 2026): a learner does not start a DE
+       application from this tab — it begins from an invite or from open enrollment, both of
+       which surface their own Apply CTA inside the member box below. */
+    /* With tabs showing, a tab has to actually filter, or clicking "Registered" would leave
+       the in-progress box on screen. Only reachable when 2+ buckets are occupied. */
+    var shown = showTabs ? enrollments.filter(function (it) { return deBucket(it) === activeTab; }) : enrollments;
+    var contentHtml = shown.map(function (item) {
       // invite + discovery (open enrollment) = no application yet → CTA box, NOT the tracker box.
       if (item.kind === 'invite' || item.kind === 'discovery') return renderDeInviteBox(item);
       return renderDeAppBox(item);
     }).join('');
 
-    mount.innerHTML = headerHtml + tabsHtml + contentHtml;
+    mount.innerHTML = tabsHtml + contentHtml;
     if (typeof resolveTastyAssets === 'function') resolveTastyAssets(mount);
   }
 
@@ -798,15 +921,16 @@
       '</button>' +
       '<div class="tasty-menu de-options-menu" role="listbox">' +
         '<div class="tasty-menu__item is-danger" role="option" tabindex="0" onclick="showCancelConfirm()">' + tastyIcon('cancel', { size: 16 }) + 'Cancel application</div>' +
-        '<div class="tasty-menu__item" role="option" tabindex="0" onclick="showToast(\'' + esc(COLLEGE.name) + ' Admissions · ' + esc(COLLEGE.email) + '\',\'config\')">' + tastyIcon('support', { size: 16 }) + 'Contact admissions</div>' +
       '</div>' +
     '</div>';
   }
 
+  /* count === null → no badge (every bucket holds exactly one, so a "1" says nothing). */
   function makeViewTab(id, label, count, activeId) {
     var cls = 'tasty-navtoggle__item' + (id === activeId ? ' is-active' : '');
+    var badge = (count === null || count === undefined) ? '' : ' <span class="tasty-badge">' + count + '</span>';
     return '<li class="' + cls + '" role="button" tabindex="0" onclick="switchDeTab(\'' + id + '\')">' + esc(label) +
-      ' <span class="tasty-badge">' + count + '</span></li>';
+      badge + '</li>';
   }
 
   /* Which DE-tab bucket an enrollment falls into. Invites/discovery = in-progress. */
@@ -817,10 +941,12 @@
     return 'in-progress';
   }
 
+  /* Remembered across re-renders so a dev-drawer change doesn't bounce you back to tab one. */
+  var deTab = 'in-progress';
+
   window.switchDeTab = function (id) {
-    document.querySelectorAll('.tasty-navtoggle__item').forEach(function (t) {
-      t.classList.toggle('is-active', t.getAttribute('onclick').indexOf("'" + id + "'") !== -1);
-    });
+    deTab = id;
+    renderDeTab();   // re-renders the boxes for this bucket AND restamps the active tab
   };
 
   /* ════════════════════════════════════════
@@ -1275,11 +1401,13 @@
 
   /* In-app launch screens (open enrollment, counselor invite) — a logged-in
      learner goes straight to the DE application. */
-  /* Show/hide the DE application's guardian + counselor sections to match the
-     network's gates. Hidden sections have their inputs neutralized (disabled +
-     data-validate off) so validateForm() won't block submit on fields we removed. */
+  /* Show/hide the DE application's guardian section to match the network's gates. Hidden
+     sections have their inputs neutralized (disabled + data-validate off) so validateForm()
+     won't block submit on fields we removed. The High School Admin section left the form
+     entirely on Aug 5, 2026 (approval auto-routes to the school), so there's nothing to gate
+     for counselorApproval here any more. */
   function applyNetworkGatesToForm() {
-    [['de-app-guardian-section', guardianOn()], ['de-app-counselor-section', counselorOn()]]
+    [['de-app-guardian-section', guardianOn()]]
       .forEach(function (pair) {
         var sec = document.getElementById(pair[0]);
         if (!sec) return;
@@ -1300,6 +1428,40 @@
       });
   }
   window.applyNetworkGatesToForm = applyNetworkGatesToForm;
+
+  /* ─── Entry points → the path-select tiles ───
+     The demo chooser's four tiles ARE the network's four entry points, one each:
+       Apply on your own → dashboard · Invited by your college → heInvite
+       High school invite → hsInvite · College website "Apply" → selfUrl
+     A switched-off entry point shows its tile as UNAVAILABLE rather than hiding it, so the
+     effect of the configuration is visible and a presenter can still see the path exists.
+     (`selfUrl` is OFF in the DENetwork defaults, matching the Configuration Explorer, so the
+     college-website tile starts unavailable until someone turns it on.) */
+  var ENTRY_TILE_REASON = 'Turned off for this network';
+  function entryOn(key) {
+    return (window.DENetwork ? window.DENetwork.get(key) : true) !== false;
+  }
+  function applyEntryPointsToPathSelect() {
+    var tiles = document.querySelectorAll('#screen-path-select [data-entry]');
+    Array.prototype.forEach.call(tiles, function (tile) {
+      var on = entryOn(tile.getAttribute('data-entry'));
+      tile.classList.toggle('is-unavailable', !on);
+      // The tile is either a <button> itself or a wrapper holding two origin buttons.
+      var btns = tile.tagName === 'BUTTON' ? [tile] : tile.querySelectorAll('button');
+      Array.prototype.forEach.call(btns, function (b) { b.disabled = !on; });
+      if (tile.tagName === 'BUTTON') tile.setAttribute('aria-disabled', on ? 'false' : 'true');
+      var note = tile.querySelector('.path-select-tile-off');
+      if (!on && !note) {
+        note = document.createElement('span');
+        note.className = 'path-select-tile-off';
+        note.textContent = ENTRY_TILE_REASON;
+        tile.appendChild(note);
+      } else if (on && note) {
+        note.parentNode.removeChild(note);
+      }
+    });
+  }
+  window.applyEntryPointsToPathSelect = applyEntryPointsToPathSelect;
 
   window.goToApplication = function () {
     showScreen('de-app');
@@ -1453,6 +1615,83 @@
     if (typeof showToast === 'function') showToast('Application cancelled', 'config');
   };
 
+  /* ════════════════════════════════════════
+     Notification actions — Resend / Change Email
+  ════════════════════════════════════════ */
+
+  /* Re-render every surface that prints a NOTIFY record. Only the dashboard and the DE tab
+     carry them, and both are cheap full re-renders, so restamp and redraw both. */
+  function refreshNotifySurfaces() {
+    renderDashboard();
+    renderDeTab();
+  }
+
+  /* Resend restamps the sent line off the real clock (so the date visibly moves) and names
+     the recipient's role in the toast — "resent" alone left the learner guessing who got it. */
+  window.resendNotification = function (key) {
+    var n = NOTIFY[key];
+    if (!n) return;
+    n.sent = nowStamp();
+    refreshNotifySurfaces();
+    if (typeof showToast === 'function') showToast('Notification resent to your ' + n.noun + '.', 'success');
+  };
+
+  /* ─── Change Email modal (Figma 4.3.2.1 · 15467:198298) ───
+     One modal serves both parties; openChangeEmail(key) retitles it and points Save at that
+     NOTIFY record. Save stays disabled until the field holds a plausible address. */
+  var changeEmailKey = null;
+
+  window.openChangeEmail = function (key) {
+    var n = NOTIFY[key];
+    /* Unaddressable records (a school queue, no learner-supplied address) have nothing to
+       change — no card offers the action, and this refuses it if one ever did. */
+    if (!n || !n.email) return;
+    changeEmailKey = key;
+    var overlay = document.getElementById('modal-change-email');
+    if (!overlay) return;
+    document.getElementById('chg-email-title').textContent   = n.title;
+    document.getElementById('chg-email-current').textContent = n.email;
+    var input = document.getElementById('chg-email-input');
+    input.value = '';
+    input.parentNode.parentNode.classList.remove('is-error');
+    validateChangeEmail();
+    overlay.classList.add('open');
+    input.focus();
+  };
+
+  window.closeChangeEmail = function () {
+    var overlay = document.getElementById('modal-change-email');
+    if (overlay) overlay.classList.remove('open');
+    changeEmailKey = null;
+  };
+
+  function changeEmailValue() {
+    var input = document.getElementById('chg-email-input');
+    return input ? input.value.trim() : '';
+  }
+
+  /* Same shape check the AER/login fields use: something@something.tld */
+  function validateChangeEmail() {
+    var ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(changeEmailValue());
+    var save = document.getElementById('chg-email-save');
+    if (save) save.disabled = !ok;
+    return ok;
+  }
+  window.validateChangeEmail = validateChangeEmail;
+
+  /* Save rewrites the address AND restamps `sent` — the modal's own copy promises a fresh
+     notification goes to the new address, so the sent line has to move with it. */
+  window.saveChangeEmail = function () {
+    if (!changeEmailKey || !validateChangeEmail()) return;
+    var n = NOTIFY[changeEmailKey];
+    n.email = changeEmailValue();
+    n.sent  = nowStamp();
+    var noun = n.noun;
+    closeChangeEmail();
+    refreshNotifySurfaces();
+    if (typeof showToast === 'function') showToast('Email updated. Notification sent to your ' + noun + '.', 'success');
+  };
+
   window.setCoursePerPage = function (n) {
     coursePag.perPage = parseInt(n, 10) || 10;
     coursePag.page = 1;
@@ -1529,6 +1768,12 @@
       setTheme: function (t) {
         if (typeof window.setTheme === 'function') window.setTheme(t);
         else document.documentElement.dataset.theme = t;
+      },
+      // Exchange-network entry points. Only the path-select chooser reacts (the four tiles
+      // ARE the four entry points); nothing downstream depends on them.
+      setEntry: function (key, on) {
+        if (window.DENetwork) window.DENetwork.set(key, on);
+        applyEntryPointsToPathSelect();
       },
       // Exchange-network approval gates. Flip a gate, keep appState valid, re-render.
       setGate: function (key, on) {
@@ -1674,7 +1919,8 @@
       var f = fieldByLabel(label); if (!f) return;
       var input = f.querySelector('input, select'); if (input) input.value = val;
     };
-    // Student fields that ship empty
+    // Student fields that ship empty. Address line 2 stays blank on purpose — most addresses
+    // don't have one, so a filled value would be the unusual case.
     fill('Social Security Number', '123456789');
     fill('State Student ID', 'AZ-10293847');
     fill('Current GPA', '3.85');
@@ -1683,10 +1929,6 @@
     fill('Parent / Guardian Last Name', 'Cumberland');
     fill('Parent / Guardian Email', 'diana.cumberland@email.com');
     fill('Parent / Guardian Phone', '(480) 555-0188');
-    // Counselor (Morgan Lee — the HS counselor persona)
-    fill('Counselor First Name', 'Morgan');
-    fill('Counselor Last Name', 'Lee');
-    fill('Counselor Email', 'mlee@pioneerhs.edu');
     // Learner consent — typed signature (first / middle / last), drawn signature, certs
     var sigCols = form.querySelector('#sig-name-cols');
     if (sigCols) {
@@ -1841,12 +2083,31 @@
     }
   }
 
+  /* ─── Entry-point default for THIS prototype ───
+     The learner prototype exists to demonstrate every way a learner can start, so all four
+     entry points default ON here. The shared DENetwork ships `selfUrl` OFF (matching the
+     Configuration Explorer), which left the college-website tile unavailable on boot.
+     Only applied when there is NO explicit configuration to respect — `DENetwork.hydrate()`
+     takes ?net= first, then the sessionStorage copy that carries a config between prototypes
+     in one sitting. Overriding either would undo a choice someone actually made. */
+  function hasExplicitNetworkConfig() {
+    if (/[?&]net=/.test(location.search || '')) return true;
+    try { return !!(window.sessionStorage && window.sessionStorage.getItem('de-network-config')); }
+    catch (e) { return false; }   // file:// or storage blocked
+  }
+  function applyLearnerEntryDefaults() {
+    if (!window.DENetwork || hasExplicitNetworkConfig()) return;
+    DENetwork.setMany({ heInvite: true, hsInvite: true, selfUrl: true, dashboard: true });
+  }
+
   window.addEventListener('DOMContentLoaded', function () {
+    applyLearnerEntryDefaults();
     applyDevState();
     renderCourseList();
     renderAerConfirm();
     renderRegisteredScreen();
     populateDob();
+    applyEntryPointsToPathSelect();
     initDevPanel();
   });
 

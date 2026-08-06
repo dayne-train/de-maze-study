@@ -183,6 +183,8 @@
      exchange model sets body.show-hs). Hidden everywhere else (college-admin never sets show-hs). */
   .col-hs { display: none; }
   body.show-hs .col-hs { display: table-cell; }
+  /* No consumer since Aug 5, 2026 — the invited detail's "Invitation sent" eyebrow was removed
+     (its title already says "Invitation Pending"). Kept in case an eyebrow returns. */
   .appdetail-appid { font-size: 12px; font-weight: 600; color: var(--c-text-subtle); letter-spacing: 0.04em; margin: 0 0 4px; font-variant-numeric: tabular-nums; }
   .student-alert { display: flex; align-items: center; gap: 4px; font-size: var(--font-xSmall); color: var(--c-warning); margin-top: 3px; font-weight: 500; }
 

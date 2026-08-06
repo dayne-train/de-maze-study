@@ -10,6 +10,7 @@
   function dev() { return window.__dev || {}; }
   function axis(a, v) { if (dev().setAxis) dev().setAxis(a, v); }
   function gate(k, on) { if (dev().setGate) dev().setGate(k, on); }
+  function entry(k, on) { if (dev().setEntry) dev().setEntry(k, on); }
   function go(s) { if (window.showScreen) window.showScreen(s); }
 
   var APP_STATES = [
@@ -30,6 +31,14 @@
       p.toggle('Parent / guardian consent', true, function (on) { gate('guardianConsent', on); });
       p.toggle('Counselor approval', true, function (on) { gate('counselorApproval', on); });
       p.toggle('Institution review', true, function (on) { gate('institutionReview', on); });
+      /* The four entry points map one-to-one onto the path-select tiles; switching one off
+         shows its tile as unavailable. Same wording + order as the two admin drawers.
+         Application URL is off by default, matching the DENetwork defaults. */
+      p.note('Entry points — how a learner can start');
+      p.toggle('College invite', true, function (on) { entry('heInvite', on); });
+      p.toggle('High school invite', true, function (on) { entry('hsInvite', on); });
+      p.toggle('Application URL', true, function (on) { entry('selfUrl', on); });   /* on by default HERE (see applyLearnerEntryDefaults); the shared default is off */
+      p.toggle('Learner dashboard', true, function (on) { entry('dashboard', on); });
       p.note('Entry path');
       p.segmented([['College URL', 'college-url'], ['Email invite', 'email-invite']], 'college-url', function (v) { axis('entryPath', v); });
       p.note('Invite source');
@@ -40,6 +49,11 @@
 
       p.section('State');
       p.select(APP_STATES, 'parent-consent-pending', function (v) { axis('appState', v); });
+      /* 'Several' spans all three DE-tab buckets at once, which is the only way to see the
+         NavToggle, its filtering and its count badges. The State selector above still drives
+         the first application. */
+      p.note('Applications');
+      p.segmented([['One', 'single'], ['Several (all buckets)', 'multi']], 'single', function (v) { axis('appMix', v); });
       p.toggle('Reapply after cancel', true, function (on) { axis('reapply', on ? 'on' : 'off'); });
 
       p.section('Appearance');
