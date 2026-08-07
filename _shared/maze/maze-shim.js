@@ -178,19 +178,31 @@
 
   /* HOW LONG TO WAIT BETWEEN THE CLICK AND THE NAVIGATION.
 
-     Measured, finally, by /pathtest5/: 200ms, 120ms, 60ms and 0ms hops were ALL
-     recorded. So the delay is not the variable — the PATH CHANGE is, and that is
-     the one condition that has held in every round.
+     300, and do not lower it without re-testing IN A PROTOTYPE.
 
-     Round 1 appeared to show an immediate navigation failing. Best reading: that
-     hop started from a page Maze had not recorded either (the query-only one),
-     so there was nothing upstream to attach it to. The path was already broken
-     before that click.
+     /pathtest5/ measured 200 / 120 / 60 / 0ms hops and every one recorded, so
+     this was set to 0. That was wrong, and the way it was wrong is worth
+     keeping: the control was a trivial page — click, navigate, nothing in
+     between. A prototype renders an entire screen between the two, and at 0 the
+     bulk-approve step stopped being recorded even though the browser navigated
+     correctly and the participant saw the right page.
 
-     0 means the participant gets no artificial wait at all — a step costs a page
-     load and nothing more. If steps ever stop recording, this is the first thing
-     to raise, and /pathtest5/ is how to re-measure rather than guess. */
-  var NAV_DELAY_MS = 0;
+     So the control measured the wrong thing. It proved a short delay is enough
+     when the main thread is idle, which is not the condition that matters. What
+     matters is the delay a real click has AFTER the prototype has finished
+     re-rendering, and that is not something a blank page can tell you.
+
+     300 is the only value observed working in an actual task. The failure mode
+     is SILENT — the page navigates, the participant sees the right screen, and
+     only the recorded path is missing a step — so this errs high deliberately.
+
+     ?navdelay=N overrides it for testing, so a value can be tried against a real
+     task without a rebuild. Test in Maze's path creator, not by eye: by eye
+     every value looks identical. */
+  var NAV_DELAY_MS = (function () {
+    var v = parseInt(new URLSearchParams(root.location.search).get('navdelay'), 10);
+    return (isFinite(v) && v >= 0 && v <= 5000) ? v : 300;
+  })();
 
   function navigate(params) {
     if (!hardNav) {

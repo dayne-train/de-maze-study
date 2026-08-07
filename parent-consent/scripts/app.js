@@ -14,6 +14,7 @@
     window.scrollTo(0, 0);
     if (id === 'consent') initSigPad();     // canvas must be sized while visible
     if (id === 'consent' && window.pcPrefillIdentity) window.pcPrefillIdentity();
+    if (id === 'find-enrollment' && window.pcPrefillLookup) window.pcPrefillLookup();
   };
 
   /* ── Custom checkbox toggle (ported from learner) ───────── */
@@ -108,6 +109,26 @@
      controls are live, they simply start satisfied. submitConsent() has no hard
      gate, so nothing here blocks the flow either way.
   ════════════════════════════════════════════════════════ */
+  /* The lookup that finds the student: last name + date of birth. Prefilled for
+     the same reason as everything else in this build — the participant is playing
+     Diana, and a guardian looking up their own child knows the answer without
+     being tested on it. Left blank it is not a task, it is a memory quiz about a
+     student who does not exist. Jessica's DOB matches the roster row seeded into
+     the HS prototype, so the two prototypes agree if anyone checks. */
+  window.pcPrefillLookup = function () {
+    var pane = document.getElementById('pane-dob');
+    if (!pane) return;
+    var inputs = pane.querySelectorAll('input.tasty-input');
+    var vals = ['Cumberland', '09 / 09 / 2009'];
+    inputs.forEach(function (el, i) {
+      if (vals[i] === undefined || el.value) return;
+      el.value = vals[i];
+      if (window.validateField) {
+        var f = el.closest('.tasty-field'); if (f) window.validateField(f);
+      }
+    });
+  };
+
   window.pcPrefillIdentity = function () {
     var cols = document.querySelectorAll('#screen-consent .de-app-cols input');
     ['Diana', 'L', 'Cumberland'].forEach(function (v, i) { if (cols[i]) cols[i].value = v; });

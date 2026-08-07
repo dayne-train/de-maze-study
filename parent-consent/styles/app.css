@@ -1225,7 +1225,18 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
 .pc-thankyou__h { font-size: 30px; font-weight: var(--font-weight-bold); color: var(--context-success, #0b874b); margin: 0 0 6px; }
 .pc-thankyou__sub { color: var(--body-font-strong); font-weight: var(--font-weight-semibold); margin: 0 0 2px; }
 .pc-thankyou__note { color: var(--body-font-weak); margin: 0; }
-.pc-success-tracker { max-width: 900px; margin: 0 auto 34px; }
+/* 1140, not 900. The tracker is a FIVE-step horizontal stepper and the kit gives
+   each step a 220px minimum, so it needs 1100px before it will lay out. At 900 the
+   wrapper's own `overflow-x: auto` took over and the tracker scrolled instead —
+   clipping the first and last steps and putting a scrollbar under a page that is
+   otherwise a full-width summary. It failed quietly rather than visibly, which is
+   why it survived: nothing overflowed the page, it just silently became a
+   horizontally scrolling strip.
+
+   Wider than the 1040px page content on purpose — 1100 is a floor set by the
+   component, not a choice. Narrower would need the steps themselves to shrink,
+   which is a design-system decision rather than a page one. */
+.pc-success-tracker { max-width: 1140px; margin: 0 auto 34px; }
 .pc-close-wrap { text-align: center; }
 
 @media (max-width: 760px) {
