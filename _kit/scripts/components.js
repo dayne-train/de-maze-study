@@ -32,6 +32,7 @@
      window.rerenderChrome
      window.setTheme('default'|'light')
      window.togglePersonaMenu
+     window.toggleNavMenu
    ════════════════════════════════════════════════════════════════════ */
 
 (function () {
@@ -123,18 +124,57 @@
       ];
     }
 
+    /* Below mediumMax the tab row collapses to a hamburger + the current
+       section's label, which is what Navbar.tsx does upstream (HamburgerMobile
+       is display:flex by default and display:none above the breakpoint). The
+       tabs stay in the DOM inside .parch-nav__tabs and become a drop panel, so
+       nothing is unreachable and existing `.parch-nav .nav-tab` selectors in
+       prototypes keep matching. Chrome.css owns which of the two is visible. */
+    var current = '';
     var html = '<nav class="parch-nav" data-component="nav-tabs">';
+    html += '<button class="parch-nav__burger" type="button" aria-label="Menu" aria-expanded="false" ' +
+              'onclick="toggleNavMenu(this)">' + BURGER_SVG + '</button>';
+    var tabsHtml = '<div class="parch-nav__tabs">';
     for (var i = 0; i < tabs.length; i++) {
       var t = tabs[i];
-      var activeCls = t.id === activeId ? ' active' : '';
+      var isActive = t.id === activeId;
+      if (isActive) current = t.label;
+      var activeCls = isActive ? ' active' : '';
       var click = t.screen ? ' onclick="showScreen(\'' + t.screen + '\')"' : '';
-      html += '<button class="nav-tab' + activeCls + '" data-tab-id="' + escapeHtml(t.id) + '"' + click + '>' +
+      tabsHtml += '<button class="nav-tab' + activeCls + '" data-tab-id="' + escapeHtml(t.id) + '"' + click + '>' +
                 escapeHtml(t.label) +
               '</button>';
     }
-    html += '</nav>';
+    tabsHtml += '</div>';
+    html += '<span class="parch-nav__current">' + escapeHtml(current || (tabs[0] && tabs[0].label) || '') + '</span>';
+    html += tabsHtml + '</nav>';
     el.outerHTML = html;
   }
+
+  /* Inline so the chrome stays dependency-free (no icon font, no manifest
+     lookup) — same reasoning as the dev drawer's gear. */
+  var BURGER_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" aria-hidden="true" focusable="false">' +
+    '<path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+
+  /* Opened/closed by the burger; also closes when a tab inside it is chosen,
+     since choosing a section is the end of the interaction. */
+  window.toggleNavMenu = function (btn) {
+    var nav = btn.closest('.parch-nav');
+    if (!nav) return;
+    var open = !nav.classList.contains('is-open');
+    nav.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+  };
+  document.addEventListener('click', function (e) {
+    var nav = document.querySelector('.parch-nav.is-open');
+    if (!nav) return;
+    if (e.target.closest('.parch-nav__tabs .nav-tab') || !e.target.closest('.parch-nav')) {
+      nav.classList.remove('is-open');
+      var b = nav.querySelector('.parch-nav__burger');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    }
+  });
 
 
   /* ────────────────────────────────────────────────────────────────

@@ -250,3 +250,118 @@
   if (d.readyState === 'loading') d.addEventListener('DOMContentLoaded', function () { w.tastyBindValidation(); });
   else w.tastyBindValidation();
 })(window, document);
+
+/* ════════════════════════════════════════════════════════════════════
+   NavToggle carousel — ports NavToggle.tsx's arrow buttons.
+   The CSS already makes .tasty-navtoggle scroll (overflow-x:auto, smooth,
+   scrollbar hidden). This adds the two arrows the DS renders either side, and
+   shows them ONLY when the strip actually overflows, so a 3-tab control on a
+   wide screen looks exactly as it always has. Progressive enhancement: it wraps
+   existing markup, so no prototype has to change a single tag.
+   ════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+  var ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+
+  function enhance(strip) {
+    if (strip.__carousel) return;
+    strip.__carousel = true;
+    var wrap = document.createElement('div');
+    wrap.className = 'tasty-navtoggle-carousel';
+    strip.parentNode.insertBefore(wrap, strip);
+    var prev = document.createElement('button');
+    prev.type = 'button'; prev.className = 'tasty-navtoggle-carousel__arrow is-prev';
+    prev.setAttribute('aria-label', 'Scroll left'); prev.innerHTML = ARROW;
+    var next = document.createElement('button');
+    next.type = 'button'; next.className = 'tasty-navtoggle-carousel__arrow is-next';
+    next.setAttribute('aria-label', 'Scroll right'); next.innerHTML = ARROW;
+    next.style.transform = 'translateY(-50%) rotate(180deg)';
+    wrap.appendChild(prev); wrap.appendChild(strip); wrap.appendChild(next);
+
+    function step(dir) { strip.scrollBy({ left: dir * Math.max(120, strip.clientWidth * 0.6), behavior: 'smooth' }); }
+    prev.addEventListener('click', function () { step(-1); });
+    next.addEventListener('click', function () { step(1); });
+
+    /* An arrow exists only while that direction has somewhere to go. */
+    function sync() {
+      var over = strip.scrollWidth - strip.clientWidth;
+      var canPrev = over > 2 && strip.scrollLeft > 1;
+      var canNext = over > 2 && strip.scrollLeft < over - 1;
+      prev.classList.toggle('is-shown', canPrev);
+      next.classList.toggle('is-shown', canNext);
+      wrap.classList.toggle('can-prev', canPrev);
+      wrap.classList.toggle('can-next', canNext);
+    }
+    strip.addEventListener('scroll', sync, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(sync).observe(strip);
+    window.addEventListener('resize', sync);
+    sync();
+  }
+
+  function scan(root) {
+    (root || document).querySelectorAll('.tasty-navtoggle').forEach(enhance);
+  }
+  window.enhanceNavToggles = scan;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { scan(); });
+  else scan();
+})();
+
+/* ════════════════════════════════════════════════════════════════════
+   Stacked table rows — the DS TableBasic "Mobile" format.
+   ════════════════════════════════════════════════════════════════════
+   A wide table cannot be made narrow by dropping columns without losing data,
+   and left alone it either scrolls (you see a quarter of a row) or crushes. The
+   DS answer (99-01 Templates, TableBasic Format=Mobile) is to turn each ROW into
+   a stacked section: the checkbox on its own line, then one label/value pair per
+   column with the column header as the label, then the row's actions, closed by
+   a 2px rule. Every column survives; only the axis changes.
+
+   Labels are read from the table's own <thead> at runtime rather than hand-typed
+   onto each <td>, so a table never has to be edited to gain this, and a header
+   rename can never leave a stale label behind. Re-run after any re-render.
+
+   Opt in with class .tasty-table or .is-stackable; the CSS does the rest below
+   the breakpoint.
+   ════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  function label(th) {
+    var inner = th.querySelector('.th-inner') || th;
+    return (inner.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function stack(table) {
+    var head = table.tHead;
+    if (!head || !head.rows.length) return;
+    var headCells = head.rows[head.rows.length - 1].cells;
+    var labels = [].map.call(headCells, label);
+    var slugs = labels.map(function (t) {
+      return t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    });
+    [].forEach.call(headCells, function (th, i) { if (slugs[i]) th.setAttribute('data-col', slugs[i]); });
+    [].forEach.call(table.tBodies, function (body) {
+      [].forEach.call(body.rows, function (row) {
+        [].forEach.call(row.cells, function (cell, i) {
+          var text = labels[i] || '';
+          if (text) cell.setAttribute('data-label', text);
+          else cell.removeAttribute('data-label');
+          /* Slug of the header, so CSS can address a column by NAME instead of
+             nth-child. That is what lets a narrow layout shed specific columns
+             before falling back to stacking, without every <td> emitter having
+             to grow a class. */
+          if (slugs[i]) cell.setAttribute('data-col', slugs[i]);
+        });
+      });
+    });
+    table.classList.add('is-stacked-rows');
+  }
+
+  function scan(root) {
+    (root || document).querySelectorAll('table.tasty-table, table.is-stackable').forEach(stack);
+  }
+  window.stackTableRows = scan;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { scan(); });
+  else scan();
+})();

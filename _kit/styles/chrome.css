@@ -372,3 +372,112 @@
 }
 .page-subtitle { font-size: 13px; color: var(--c-text-muted); margin: 0; }
 .page-title-actions { display: flex; gap: 8px; flex-shrink: 0; padding-top: 4px; }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   RESPONSIVE — chrome below the desktop breakpoint
+   ════════════════════════════════════════════════════════════════════
+   This file shipped with ZERO media queries, which made .parch-header a hard
+   777px floor: 166px logo + 32 + ~179px language + 32 + 350px persona + 100px
+   of side padding, none of it shrinkable. Every screen of every kit prototype
+   scrolled sideways below 777px (387px of overflow at phone width, still 9px
+   at 768px), which also breaks desktop users at 200% browser zoom.
+
+   The upstream DS applies both offenders CONDITIONALLY; the kit had kept only
+   the desktop branch of each:
+     · PersonaMenu.tsx:288  width:350px      inside @media (min-width: largeMin/961)
+     · Header.tsx:241       padding: 0 50px  inside @media (min-width: mediumMax/960)
+     · Navbar.tsx:160-171   HamburgerMobile is display:flex by default and
+                            display:none above mediumMax — the nav COLLAPSES to a
+                            hamburger + current-section label. It does not scroll.
+
+   Breakpoints are the DS's own (Globals/src/constants.ts): smallMax 480,
+   mediumMin 481, mediumMax 960, largeMin 961. Do not invent 768 or 1024.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* The tab wrapper needs its OWN desktop layout. Wrapping the buttons in a div
+   made them a single flex item of .parch-nav, so the 40px gap applied between
+   [burger][current][wrapper] instead of between the tabs — they rendered as one
+   run-on string ("WORKSPACEAPPLICATIONSPENDING INVITES"). The wrapper carries
+   the row below the breakpoint it becomes a drop panel. */
+.parch-nav__tabs { display: flex; align-items: center; gap: 40px; }
+
+/* ─── Hamburger + current-section label (desktop hides both) ─── */
+.parch-nav__burger {
+  display: none;
+  align-items: center; justify-content: center;
+  width: 40px; height: 40px; margin-left: -8px; padding: 0;
+  background: none; border: 0; border-radius: 5px;
+  cursor: pointer; color: var(--c-nav-inactive);
+}
+.parch-nav__burger:hover { color: var(--c-nav-active); }
+.parch-nav__burger:focus-visible { outline: 4px solid var(--focus-ring); outline-offset: 2px; }
+.parch-nav__burger svg { width: 22px; height: 22px; }
+.parch-nav__current {
+  display: none;
+  margin-left: 12px;
+  padding: 12px 0 8px;
+  font-size: 16px; font-weight: 700; text-transform: uppercase;
+  color: var(--c-nav-active);
+  border-bottom: 4px solid var(--c-nav-active);
+  font-family: var(--font-family);
+}
+
+@media (max-width: 960px) {
+  /* The content gutter follows the header's. 50px a side spends 100px of a
+     768px viewport on nothing, which is what pushed tables into scrolling one
+     tier earlier than they needed to. */
+  .page-content { padding: 32px 20px 48px; }
+  .parch-header { padding: 8px 20px; }
+  .parch-header__logo { width: 120px; }
+  .parch-header__right { gap: 12px; }
+
+  /* Same component, less content — the pill keeps its avatar and caret and
+     drops the greeting/name/org, exactly as PersonaMenu does upstream. */
+  .parch-header__persona { width: auto; height: 48px; padding: 6px 10px; }
+  .parch-header__persona-text { display: none; }
+
+  /* Language selector keeps its globe, drops the label. */
+  .parch-header__lang-label { display: none; }
+  .parch-header__lang { padding: 8px 10px; }
+
+  /* ─── Nav collapses to hamburger + current section ─── */
+  .parch-nav { padding: 0 20px; gap: 0; align-items: center; position: relative; }
+  .parch-nav__burger { display: inline-flex; }
+  .parch-nav__current { display: inline-block; }
+
+  /* The tab row becomes a drop panel opened by the burger. Absolutely
+     positioned so it never adds height to the bar. */
+  .parch-nav__tabs {
+    display: none;
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 60;
+    flex-direction: column; gap: 0;
+    padding: 4px 20px 8px;
+    background: var(--c-nav-bar);
+    border-bottom: 1px solid var(--c-nav-bar-border);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+  }
+  .parch-nav.is-open .parch-nav__tabs { display: flex; }
+  .parch-nav__tabs .nav-tab {
+    width: 100%; text-align: left;
+    padding: 12px 0 12px 12px;
+    border-bottom: 1px solid var(--c-nav-bar-border);
+    border-left: 4px solid transparent;
+  }
+  .parch-nav__tabs .nav-tab:last-child { border-bottom: 0; }
+  .parch-nav__tabs .nav-tab.active {
+    border-bottom-color: var(--c-nav-bar-border);
+    border-left-color: var(--c-nav-active);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-content { padding: 24px 16px 40px; }
+  .parch-header { padding: 8px 16px; }
+  .parch-header__logo { width: 104px; }
+  /* Below smallMax the globe is the first thing to go: the persona menu is the
+     only header control a learner actually needs at this width. */
+  .parch-header__lang { display: none; }
+  .parch-nav { padding: 0 16px; }
+  .parch-nav__tabs { padding-left: 16px; padding-right: 16px; }
+}

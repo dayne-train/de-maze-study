@@ -244,7 +244,7 @@
     var stepHtml = _vis.map(function(i) {
       var title = _STEP_DEFS[i];
       var stt = states[i];
-      var marker = stt === 'complete' ? '<i class="ti ti-check"></i>' : stt === 'current' ? '<i class="ti ti-clock"></i>' : '';
+      var marker = stt === 'complete' ? '<span data-tasty-icon="check-open" data-size="14"></span>' : stt === 'current' ? '<span data-tasty-icon="time" data-size="14"></span>' : '';
       var meta = '';
       if (stt === 'complete' && i === 0) meta = '<span class="appdetail-step-meta">Sent ' + escapeHtml(dateSent) + '</span>';
       else if (stt === 'current') meta = '<span class="appdetail-step-meta">Awaiting learner</span>';
@@ -353,9 +353,9 @@
     var stepHtml = _vis.map(function(i) {
       var title = _STEP_DEFS[i];
       var stt  = states[i];
-      var marker = stt === 'complete' ? '<i class="ti ti-check"></i>'
-                 : stt === 'current'  ? '<i class="ti ti-clock"></i>'
-                 : stt === 'denied'   ? '<i class="ti ti-x"></i>'
+      var marker = stt === 'complete' ? '<span data-tasty-icon="check-open" data-size="14"></span>'
+                 : stt === 'current'  ? '<span data-tasty-icon="time" data-size="14"></span>'
+                 : stt === 'denied'   ? '<span data-tasty-icon="cancel" data-size="14"></span>'
                  : '';
       var dateLine = '';
       if (stepDates[i]) {
@@ -597,20 +597,13 @@
           allCls.forEach(function(c) { marker.classList.remove(c); });
           marker.classList.add('is-' + newState);
 
-          /* Swap the icon inside the marker */
-          var icon = marker.querySelector('i');
-          if (newState === 'complete') {
-            if (!icon) { icon = document.createElement('i'); marker.appendChild(icon); }
-            icon.className = 'ti ti-check';
-          } else if (newState === 'current') {
-            if (!icon) { icon = document.createElement('i'); marker.appendChild(icon); }
-            icon.className = 'ti ti-clock';
-          } else if (newState === 'denied') {
-            if (!icon) { icon = document.createElement('i'); marker.appendChild(icon); }
-            icon.className = 'ti ti-x';
-          } else {
-            if (icon) icon.remove();
-          }
+          /* Swap the icon inside the marker. Tasty glyphs are inline SVG, so this
+             re-renders rather than restyling a font <i>. */
+          var _slug = newState === 'complete' ? 'check-open'
+                    : newState === 'current'  ? 'time'
+                    : newState === 'denied'   ? 'cancel' : '';
+          marker.innerHTML = _slug ? '<span data-tasty-icon="' + _slug + '" data-size="14"></span>' : '';
+          if (_slug && typeof resolveTastyAssets === 'function') resolveTastyAssets(marker);
 
           /* Pop only markers that actually changed */
           if (changed) {

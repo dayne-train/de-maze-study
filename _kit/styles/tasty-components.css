@@ -676,23 +676,74 @@
       spec. NOTE: Tasty's *ProgressTracker* is a DIFFERENT component — a
       clickable ≤4-step wizard nav (completed/active/incomplete, onClick) — and
       is NOT built here. Don't conflate the two. ── */
-.tasty-stepper { display: flex; gap: 0; }
-.tasty-stepper.is-vertical { flex-direction: column; }
-.tasty-stepper__step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); position: relative; text-align: center; }
-.tasty-stepper.is-vertical .tasty-stepper__step { flex-direction: row; align-items: flex-start; text-align: left; }
-.tasty-stepper__node { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: var(--font-weight-bold); background: var(--border-color); color: var(--white); flex: none; z-index: 1; }
-.tasty-stepper__lbl { font-size: 13px; color: var(--body-font-base); }
-.tasty-stepper__meta { font-size: 13px; color: var(--body-font-weak); margin-top: -2px; }   /* tighten lbl→meta gap; gap applies uniformly so offset meta up */
+/* Ported 1:1 from the Figma Stepper component (02.30.01 Dual Enrollment,
+   15581:69204 "Default Theme" — Desktop / Tablet / Mobile x 9 states).
+   Rebuilt Aug 6, 2026; the previous port was off on several counts:
+     · indicator was 30px, spec is 50px (desktop) / 20px (vertical)
+     · upcoming rendered as a full-size gray disc; spec is an EMPTY indicator
+       holding a 20px dot
+     · done used --context-success; the DS uses --status-foreground-2 (same hex
+       in the default theme, different in dark)
+     · no red connector into a denied step
+     · the vertical form factor reused the desktop geometry
+   Desktop: 50px indicator / 30px glyph / 16px semibold label / 5px stack gap.
+   Vertical (tablet + mobile): 20px indicator / 13px glyph / 13px label,
+   30px rail column, 8px column gap, 60px min row height. */
+/* Horizontal steps don't wrap — a broken row reads as two separate trackers and
+   orphans the connectors — so steps hold their 220px minimum and the CONTAINER
+   scrolls (see .de-stepper-area, which has carried overflow-x: auto all along).
+   Treat that as a stopgap rather than the responsive answer: the DS specs a
+   separate VERTICAL form factor for tablet and mobile (.is-vertical below), and
+   the real fix is swapping layout at those widths instead of scrolling or
+   shrinking the horizontal one. No breakpoint is wired yet; consumers opt in by
+   adding .is-vertical themselves. */
+/* MOBILE-FIRST. The vertical form factor is the BASE and the horizontal row is
+   the desktop enhancement, gated on largeMin (961). Written the other way round
+   the horizontal row imposed an unconditional 1100px floor (5 steps x 220px
+   minimum, no wrap), so every learner and admin screen scrolled sideways at
+   tablet, phone, and 200% browser zoom. The DS treats layout as a prop
+   (ProgressTracker.tsx:52) and specs a separate vertical form factor for tablet
+   and mobile, so this is a form-factor switch, not a component swap.
+   Opt out per instance with .is-vertical (always vertical) or .is-horizontal
+   (always horizontal, e.g. inside an already-scrolling container). */
+.tasty-stepper { display: flex; flex-direction: column; align-items: stretch; }
+.tasty-stepper__node { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: var(--font-medium); font-weight: var(--font-weight-bold); background: transparent; color: var(--context-neutral); flex: none; z-index: 1; }
+.tasty-stepper__node > * { width: 13px; height: 13px; flex: none; }
+.tasty-stepper__node:empty::before { content: ""; width: 20px; height: 20px; border-radius: 50%; background: var(--border-color); }
+.tasty-stepper__lbl { font-size: var(--font-small); font-weight: var(--font-weight-semibold); color: var(--body-font-base); }
+.tasty-stepper__meta { font-size: var(--font-small); color: var(--body-font-weak); }
+.tasty-stepper__step.is-done .tasty-stepper__node { background: var(--status-foreground-2); }
+.tasty-stepper__step.is-done .tasty-stepper__lbl { color: var(--status-foreground-2); }
 .tasty-stepper__step.is-active .tasty-stepper__node { background: var(--status-base-4); border: 1px solid var(--border-color); color: var(--status-foreground-4); }
-.tasty-stepper__step.is-done .tasty-stepper__node { background: var(--context-success); }
-.tasty-stepper__step.is-done .tasty-stepper__lbl { color: var(--context-success); }
 .tasty-stepper__step.is-denied .tasty-stepper__node { background: var(--context-error); }
 .tasty-stepper__step.is-denied .tasty-stepper__lbl { color: var(--context-error); }
-/* connector */
 .tasty-stepper__step:not(:last-child)::after { content: ""; position: absolute; background: var(--border-color); }
-.tasty-stepper:not(.is-vertical) .tasty-stepper__step:not(:last-child)::after { top: 15px; left: 50%; width: 100%; height: 2px; }
-.tasty-stepper.is-vertical .tasty-stepper__step:not(:last-child)::after { left: 15px; top: 30px; width: 2px; height: 100%; }
-.tasty-stepper__step.is-done::after { background: var(--context-success); }
+.tasty-stepper__step.is-done::after { background: var(--status-foreground-2); }
+.tasty-stepper__step:has(+ .tasty-stepper__step.is-denied)::after { background: var(--context-error); }
+/* vertical geometry (base) — 30px rail, 20px indicator, 13px glyph */
+.tasty-stepper__step { display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: var(--space-sm); row-gap: 4px; align-items: start; position: relative; min-height: 60px; padding-bottom: var(--space-sm); text-align: left; }
+.tasty-stepper__node { grid-column: 1; grid-row: 1 / -1; align-self: start; justify-self: center; }
+.tasty-stepper__lbl, .tasty-stepper__meta { grid-column: 2; }
+.tasty-stepper__meta + .tasty-stepper__meta { margin-top: -4px; }
+.tasty-stepper__step:not(:last-child)::after { left: 14px; top: 20px; width: 2px; height: 100%; }
+
+/* Desktop (largeMin) — the horizontal row: 50px indicator, 30px glyph, 16px label */
+@media (min-width: 961px) {
+  .tasty-stepper:not(.is-vertical) { flex-direction: row; flex-wrap: nowrap; align-items: flex-start; justify-content: center; }
+  .tasty-stepper:not(.is-vertical) .tasty-stepper__step { display: flex; flex: 1 0 0; min-width: 220px; max-width: 330px; flex-direction: column; align-items: center; gap: 5px; min-height: 0; padding-bottom: 0; text-align: center; }
+  .tasty-stepper:not(.is-vertical) .tasty-stepper__node { width: 50px; height: 50px; }
+  .tasty-stepper:not(.is-vertical) .tasty-stepper__node > * { width: 30px; height: 30px; }
+  .tasty-stepper:not(.is-vertical) .tasty-stepper__lbl { font-size: var(--font-medium); }
+  .tasty-stepper:not(.is-vertical) .tasty-stepper__meta + .tasty-stepper__meta { margin-top: -5px; }
+  .tasty-stepper:not(.is-vertical) .tasty-stepper__step:not(:last-child)::after { top: 25px; left: 50%; width: 100%; height: 2px; }
+}
+/* Force horizontal at any width (opt-in, for containers that already scroll) */
+.tasty-stepper.is-horizontal { flex-direction: row; flex-wrap: nowrap; align-items: flex-start; justify-content: center; }
+.tasty-stepper.is-horizontal .tasty-stepper__step { display: flex; flex: 1 0 0; min-width: 220px; max-width: 330px; flex-direction: column; align-items: center; gap: 5px; min-height: 0; padding-bottom: 0; text-align: center; }
+.tasty-stepper.is-horizontal .tasty-stepper__node { width: 50px; height: 50px; }
+.tasty-stepper.is-horizontal .tasty-stepper__node > * { width: 30px; height: 30px; }
+.tasty-stepper.is-horizontal .tasty-stepper__lbl { font-size: var(--font-medium); }
+.tasty-stepper.is-horizontal .tasty-stepper__step:not(:last-child)::after { top: 25px; left: 50%; width: 100%; height: 2px; }
 
 
 /* ════════════════════════════════════════════════════════════════════
@@ -705,7 +756,41 @@
 /* NavToggle — navToggleConstants: pill container alabaster + 1px alto, radius 24,
    4px pad, 10px gap. Segments transparent; ACTIVE fills tealBlue + near-white;
    HOVER fills deepCerulean. Optional count badge (solid grey → white-on-active). */
-.tasty-navtoggle { display: inline-flex; width: fit-content; align-self: flex-start; gap: 10px; padding: 4px; margin: 0; list-style: none; background: var(--white-space-z-index2); border: 1px solid var(--border-color); border-radius: 24px; }   /* hugs content — inline-flex alone stretches edge-to-edge in a flex-column parent */
+/* CAROUSEL, not a plain row. NavToggle.tsx is a carousel upstream: Root carries
+   four responsive max-widths (:332-347) and CarouselContent (:350-363) is
+   overflow-x:auto + scroll-behavior:smooth with the scrollbar hidden, flanked by
+   arrow buttons. The kit had shipped a non-wrapping inline-flex with no cap and
+   no overflow, so a 5-bucket segment control measured 566px and its last tabs
+   were unreachable below ~565px. Arrows are injected by tasty-interactions.js. */
+.tasty-navtoggle { display: flex; width: fit-content; max-width: 100%; align-self: flex-start; gap: 10px; padding: 4px; margin: 0; list-style: none; background: var(--white-space-z-index2); border: 1px solid var(--border-color); border-radius: 24px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; }
+.tasty-navtoggle::-webkit-scrollbar { display: none; }
+@media (min-width: 0px)   and (max-width: 324px) { .tasty-navtoggle { max-width: 310px; } }
+@media (min-width: 325px) and (max-width: 480px) { .tasty-navtoggle { max-width: 400px; } }
+@media (min-width: 481px) and (max-width: 960px) { .tasty-navtoggle { max-width: 800px; } }
+@media (min-width: 961px) { .tasty-navtoggle { max-width: 900px; } }
+/* Arrows sit INSIDE the pill, pinned to its left and right edges, so the control
+   stays one object instead of growing side rails. Each arrow is present only
+   while there is something to scroll to in that direction — at the start there
+   is no left arrow at all, at the end no right arrow — rather than a disabled
+   stub, which would claim space and read as broken. */
+.tasty-navtoggle-carousel { position: relative; display: inline-flex; max-width: 100%; }
+.tasty-navtoggle-carousel__arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+  display: none; align-items: center; justify-content: center;
+  width: 30px; height: 30px; padding: 0;
+  border: 1px solid var(--border-color); border-radius: 50%;
+  background: var(--white-space-base); color: var(--body-font-base);
+  cursor: pointer; box-shadow: 0 0 6px 4px var(--white-space-base);
+}
+.tasty-navtoggle-carousel__arrow.is-prev { left: 4px; }
+.tasty-navtoggle-carousel__arrow.is-next { right: 4px; }
+.tasty-navtoggle-carousel__arrow.is-shown { display: inline-flex; }
+.tasty-navtoggle-carousel__arrow:hover { background: var(--action-default); border-color: var(--action-default); color: var(--white-space-z-index1); }
+.tasty-navtoggle-carousel__arrow:focus-visible { outline: 4px solid var(--focus-ring); outline-offset: 2px; }
+.tasty-navtoggle-carousel__arrow svg { width: 13px; height: 13px; }
+/* Keep the first/last pill clear of the arrow that overlays it. */
+.tasty-navtoggle-carousel.can-prev .tasty-navtoggle { scroll-padding-left: 38px; }
+.tasty-navtoggle-carousel.can-next .tasty-navtoggle { scroll-padding-right: 38px; }
 .tasty-navtoggle__item { display: inline-flex; align-items: center; gap: 6px; justify-content: center; padding: 8px 14px; border: 0; border-radius: 24px; background: transparent; color: var(--body-font-base); font-family: var(--font-family-base); font-size: 13px; white-space: nowrap; cursor: pointer; }
 .tasty-navtoggle__item:hover { background: var(--action-default); color: var(--white-space-z-index1); }   /* fg = whiteSpace.zIndex1 (fog default / black dark), NOT literal white — NavToggle.tsx :hover */
 .tasty-navtoggle__item:hover .tasty-badge { background: var(--white-space-base); color: var(--context-bold); border-color: var(--white-space-base); }   /* badge flips to ghost on hover (NavToggle.tsx [data-nav-badge]) */
@@ -763,18 +848,24 @@
 .tasty-hamburger-menu__item.is-disabled:hover { background: var(--border-color); color: var(--body-font-disabled); }
 
 /* SectionHeaderTitle — graphic + title + subtitle row. */
-.tasty-section-header { display: flex; align-items: center; gap: 10px; width: 100%; }
+/* SectionHeaderTitle — sizes come from the SCALE, not from the viewport.
+   GRAPHIC_SIZE_BY_SCALE: xSmall/small 20px · medium 50px · large 80px · xLarge 110px,
+   and SectionHeaderTitle.tsx renders the SAME size for mobile, tablet and desktop
+   at a given scale (MobileGraphic/TabletGraphic/DesktopGraphic differ only for the
+   large tiers). The kit had taken the SMALL scale's values as its base and gated
+   medium behind 961, so every header shrank its graphic 50 -> 20px and its title
+   25 -> 20px below the desktop breakpoint — the icons read as too small on phones
+   and at 200% zoom. Medium is the base now; .is-small opts into the small scale. */
+.tasty-section-header { display: flex; align-items: center; gap: 15px; width: 100%; }
 .tasty-section-header.has-border { padding-bottom: 10px; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
-.tasty-section-header__graphic { flex: none; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; color: var(--action-default); }
+.tasty-section-header__graphic { flex: none; width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center; font-size: 40px; color: var(--action-default); }
 .tasty-section-header__graphic img, .tasty-section-header__graphic svg { width: 100%; height: 100%; object-fit: contain; display: block; }   /* illustration/graphic fills the responsive graphic box */
-.tasty-section-header__title { font-size: 20px; font-weight: var(--font-weight-bold); color: var(--body-font-strong); }
+.tasty-section-header__title { font-size: 25px; font-weight: var(--font-weight-bold); color: var(--body-font-strong); }
 .tasty-section-header__sub { font-size: 13px; font-weight: var(--font-weight-semibold); color: var(--body-font-weak); }
-/* responsive: medium scale at >=961 — title 20->25, graphic 20->50 (icon 16->40), gap 10->15 (SECTION_HEADER_*_BY_SCALE) */
-@media (min-width: 961px) {
-  .tasty-section-header { gap: 15px; }
-  .tasty-section-header__graphic { width: 50px; height: 50px; font-size: 40px; }
-  .tasty-section-header__title { font-size: 25px; }
-}
+/* small scale (SECTION_HEADER_FONT_SIZE_BY_SCALE.small / GRAPHIC_SIZE_BY_SCALE.small) */
+.tasty-section-header.is-small { gap: 10px; }
+.tasty-section-header.is-small .tasty-section-header__graphic { width: 20px; height: 20px; font-size: 16px; }
+.tasty-section-header.is-small .tasty-section-header__title { font-size: 20px; }
 
 /* ═══════════════ DISPLAY & DATA ═══════════════ */
 
@@ -1088,9 +1179,140 @@
 .tasty-dst-sub--wrap { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.45; }
 .tasty-dst-buttons.is-row { width: auto; flex-direction: row; gap: var(--space-sm); align-items: center; }
 .tasty-dashboard-status-tracker.is-invite .tasty-dst-dismiss { color: var(--body-font-base); }
-@media (max-width: 760px) {
-  .tasty-dashboard-status-tracker { height: auto; flex-wrap: wrap; border-radius: var(--space-lg); }
-  .tasty-dst-content { flex-basis: 100%; flex-wrap: wrap; }
-  .tasty-mini-status-tracker { width: 100%; }
-  .tasty-dst-buttons { width: auto; }
+/* ── DashboardStatusTracker responsive (Learner Actions 15467:156523) ───────
+   The component ships three form factors, and the kit had one crude wrap rule.
+
+   Desktop  one row: logo · label · mini tracker · next-step text · action
+   Tablet   logo on the left; label, tracker and next-step stack in a column
+            beside it; the action stays right, vertically centred
+   Mobile   fully stacked and left-aligned: logo, label, tracker, next step,
+            then the action full width. Corner radius drops from the desktop
+            pill to 16px, and the mini tracker's indicators come down from 20px
+            to 15px (upcoming dots 10px).
+
+   Laid out with grid rather than flex-wrap: the label and the content block are
+   SIBLINGS in the markup, and the tablet form needs them in one column beside
+   the logo, which wrapping cannot express without extra elements. */
+@media (max-width: 960px) {
+  .tasty-dashboard-status-tracker {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    height: auto;
+    gap: var(--space-sm) var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--space-md);
+  }
+  .tasty-dashboard-status-tracker > .tasty-member-logo,
+  .tasty-dashboard-status-tracker > .tasty-dst-logo-illus { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+  .tasty-dst-label   { grid-column: 2; grid-row: 1; }
+  .tasty-dst-content { grid-column: 2; grid-row: 2; flex-direction: column; align-items: stretch; gap: var(--space-sm); padding: 0; }
+  .tasty-dst-buttons { grid-column: 3; grid-row: 1 / span 2; width: auto; align-items: stretch; }
+  .tasty-mini-status-tracker { width: 100%; height: auto; }
+  .tasty-dst-title, .tasty-dst-sub { white-space: normal; }
+}
+
+/* The INVITE variant has no label and no mini tracker — just artwork, a block of
+   copy and two actions — so the status variant's three-column grid does not fit
+   it. Left alone, the buttons column held 208px and squeezed the copy to 114px.
+   It gets its own progression: content beside the artwork on one row, then the
+   actions drop to a full-width row of their own, then they stack. */
+@media (max-width: 960px) {
+  .tasty-dashboard-status-tracker.is-invite { grid-template-rows: auto; }
+  .tasty-dashboard-status-tracker.is-invite .tasty-dst-content { grid-row: 1; }
+  .tasty-dashboard-status-tracker.is-invite .tasty-dst-buttons { grid-row: 1; align-self: center; }
+}
+/* Once the actions have a row to themselves they take the mobile form from the
+   spec (15756:167148): STACKED, each full width, with room to breathe and a
+   bottom inset so the last one is not sitting on the card edge. Two 109px
+   buttons floating side by side under a full-width block of copy read as
+   leftovers from the desktop row. This is at 600 rather than 480 deliberately:
+   the actions have already left the content row by then, and desktop browsers
+   cannot be resized below ~500px, so a 480 rule is unreachable in review. */
+@media (max-width: 600px) {
+  .tasty-dashboard-status-tracker.is-invite { padding-bottom: var(--space-md); }
+  .tasty-dashboard-status-tracker.is-invite .tasty-dst-buttons {
+    grid-column: 1 / -1; grid-row: auto; width: 100%;
+  }
+  .tasty-dashboard-status-tracker.is-invite .tasty-dst-buttons.is-row {
+    flex-direction: column; align-items: stretch; gap: var(--space-md);
+  }
+  .tasty-dashboard-status-tracker.is-invite .tasty-dst-buttons .tasty-btn { width: 100%; }
+  /* The status variant's single action follows the same rule. */
+  .tasty-dashboard-status-tracker .tasty-dst-buttons .tasty-btn { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .tasty-dashboard-status-tracker {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    justify-items: start;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg) var(--space-sm);
+  }
+  .tasty-dashboard-status-tracker > .tasty-member-logo,
+  .tasty-dashboard-status-tracker > .tasty-dst-logo-illus,
+  .tasty-dst-label, .tasty-dst-content, .tasty-dst-buttons {
+    grid-column: 1; grid-row: auto; width: 100%;
+  }
+  .tasty-dst-buttons .tasty-btn { width: 100%; }
+  /* Indicators step down with the form factor (15px, upcoming 10px). */
+  .tasty-mini-status-tracker__indicator { width: 15px; height: 15px; }
+  .tasty-mini-status-tracker__indicator:not(.is-done):not(.is-active):not(.is-denied) { width: 10px; height: 10px; }
+  .tasty-mini-status-tracker__indicator > * { width: 10px; height: 10px; }
+}
+}
+
+/* ── TableBasic, Mobile format: each row becomes a stacked section ──────────
+   Ports 99-01 Templates TableBasic Format=Mobile (4473:227085). Row anatomy
+   there: a 50px Checkbox line, then Row Cells as 62px label/value pairs (label
+   26px on top, value 28px under it), then an Actions block, closed by a 2px
+   Bottom Rule; the table itself carries a 2px Top Rule. Labels come from the
+   header via data-label, stamped by tasty-interactions.js.
+   A cell with no label (checkbox, actions) renders as a plain full-width block,
+   which is how the Figma hides the label on those rows. */
+@media (max-width: 700px) {
+  .tasty-table.is-stacked-rows,
+  .tasty-table.is-stacked-rows tbody,
+  .tasty-table.is-stacked-rows tr,
+  .tasty-table.is-stacked-rows td { display: block; width: auto; }
+  .tasty-table.is-stacked-rows { border-top: 2px solid var(--body-font-base); }
+  .tasty-table.is-stacked-rows thead { display: none; }   /* the labels moved into the rows */
+  /* height:auto is load-bearing: a table row with a fixed height does not grow
+     when it becomes a block, so its stacked cells overflow into the row beneath
+     and the table renders as overlapping text. */
+  .tasty-table.is-stacked-rows tbody tr {
+    height: auto;
+    border-bottom: 2px solid var(--body-font-base);
+    padding: var(--space-sm) 0 var(--space-md);
+  }
+  .tasty-table.is-stacked-rows td { height: auto; vertical-align: baseline; }
+  .tasty-table.is-stacked-rows td {
+    border: 0;
+    padding: 4px 0;
+    text-align: left !important;   /* beats the right-aligned action column */
+    white-space: normal;
+  }
+  .tasty-table.is-stacked-rows td[data-label] { padding: 4px 0 8px; border-bottom: 1px solid var(--border-color); }
+  .tasty-table.is-stacked-rows tr td[data-label]:last-of-type { border-bottom: 0; }
+  /* A cell with no label is the checkbox or the actions. Actions become the
+     section's full-width footer, and their buttons take a real touch size —
+     .is-sm is 30px below largeMin, which is too small to be a row's only
+     affordance on a phone. */
+  .tasty-table.is-stacked-rows td:not([data-label]):last-child {
+    display: flex; flex-wrap: wrap; gap: var(--space-sm); padding-top: 14px;
+  }
+  .tasty-table.is-stacked-rows td:not([data-label]):last-child .tasty-btn {
+    flex: 1 1 auto; min-width: 130px; height: 44px; padding: 0 16px;
+    font-size: var(--font-medium); justify-content: center;
+  }
+  .tasty-table.is-stacked-rows td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: var(--font-small);
+    font-weight: var(--font-weight-semibold);
+    color: var(--action-default);
+  }
 }

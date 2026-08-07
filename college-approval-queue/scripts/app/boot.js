@@ -112,6 +112,45 @@
 
   // Apply the current no-apps flag to the Applications screen: hides the header row,
   // segment tabs, and all segment tables, showing the centered empty state instead.
+  /* ─────────────────────────────────────────────────────────────────
+     Group the header's trailing actions so they wrap as ONE unit.
+     .de-page-identity is a wrap container holding [header][search][primary]
+     [kebab]. Flex wraps items individually, so at a band of widths around
+     560px the search and primary fitted on a line and the kebab alone spilled
+     to the next — a lone floating kebab under the row. Wrapping the primary +
+     kebab in .de-header-actions makes them a single flex item: either they fit
+     beside the search or they move down together, which is the Templates
+     paradigm's third row.
+
+     Done here rather than in the markup because every screen builds this row a
+     little differently (some have a primary, some only the kebab) and both
+     admin forks share this file — one normalisation covers all of them.
+     Idempotent: a row already grouped is skipped. ───────────────────────── */
+  /* Opt every queue table into the DS's mobile row-stacking, and re-stamp the
+     labels after a render since the rows are rebuilt from scratch each time. */
+  function enableStackedTables() {
+    document.querySelectorAll('table.queue-table').forEach(function (t) { t.classList.add('is-stackable'); });
+    if (typeof stackTableRows === 'function') stackTableRows();
+  }
+  window.enableStackedTables = enableStackedTables;
+
+  function groupHeaderActions(root) {
+    (root || document).querySelectorAll('.de-page-identity').forEach(function (row) {
+      if (row.querySelector(':scope > .de-header-actions')) return;
+      var actions = [].filter.call(row.children, function (c) {
+        return c.classList.contains('de-add-enrollment-btn') || c.classList.contains('de-options');
+      });
+      if (actions.length < 2) return;   // nothing to group; a lone item cannot strand
+      var wrap = document.createElement('div');
+      wrap.className = 'de-header-actions';
+      actions[0].parentNode.insertBefore(wrap, actions[0]);
+      actions.forEach(function (a) { wrap.appendChild(a); });
+    });
+  }
+  window.groupHeaderActions = groupHeaderActions;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { groupHeaderActions(); enableStackedTables(); });
+  else { groupHeaderActions(); enableStackedTables(); }
+
   // Called on every showScreen('de') so navigating away and back re-applies it.
   // Note: the segment row is owned by applyDeMode (it depends on review mode too),
   // which factors in __noApps — so we don't touch .seg-row here.

@@ -1065,12 +1065,15 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
   background: var(--c-surface);
 }
 .appdetail-step-marker i { font-size: 15px; line-height: 1; }
+/* Tasty glyphs (check-open / time / cancel) replaced the Tabler <i> markers Aug 6, 2026 —
+   the DS mobile StepIndicator uses the same icons as the desktop stepper. */
+.appdetail-step-marker svg { width: 14px; height: 14px; display: block; }
 .appdetail-step-marker.is-complete { background: var(--c-success); }
-.appdetail-step-marker.is-complete i { color: #fff; font-size: 14px; }
+.appdetail-step-marker.is-complete i, .appdetail-step-marker.is-complete svg { color: #fff; font-size: 14px; }
 .appdetail-step-marker.is-current { background: var(--c-note-bg); border: 2px solid var(--c-note); }
-.appdetail-step-marker.is-current i { color: var(--c-note); font-size: var(--font-small); }
+.appdetail-step-marker.is-current i, .appdetail-step-marker.is-current svg { color: var(--c-note); font-size: var(--font-small); }
 .appdetail-step-marker.is-denied { background: var(--c-danger); }
-.appdetail-step-marker.is-denied i { color: #fff; font-size: 14px; }
+.appdetail-step-marker.is-denied i, .appdetail-step-marker.is-denied svg { color: #fff; font-size: 14px; }
 .appdetail-step-marker.is-upcoming::after {
   content: ""; width: 14px; height: 14px; border-radius: 50%;
   background: var(--c-border-strong);
@@ -1081,6 +1084,12 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
 .appdetail-step.is-upcoming .appdetail-step-title { color: var(--c-text-muted); font-weight: 600; }
 .appdetail-step-sub { font-size: 12.5px; color: var(--c-text-muted); }
 .appdetail-step-meta { font-size: 11.5px; color: var(--c-text-subtle); margin-top: 1px; }
+/* Denied step — the marker alone used to carry the red, so a denied step read as
+   neutral text next to a red dot. The horizontal stepper reddens its label
+   (.tasty-stepper__step.is-denied .tasty-stepper__lbl) and the Figma brief shows
+   the vertical layout doing the same, so this was drift, not a variant. */
+.appdetail-step.is-denied .appdetail-step-title { color: var(--c-danger); }
+.appdetail-step.is-denied .appdetail-step-meta { color: var(--c-danger); font-weight: 600; }
 
 /* ── Right rail: meta blocks ── */
 .appdetail-side-label {

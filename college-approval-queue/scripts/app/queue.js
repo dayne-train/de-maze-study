@@ -131,6 +131,8 @@
     updateBadges();
     updateBulkBar();
     updateSelectAllCheckbox();
+  
+    if (typeof stackTableRows === 'function') stackTableRows();   /* rows were rebuilt; re-stamp the stacked labels */
   }
 
   /* ─── Badge / label helpers ─── */

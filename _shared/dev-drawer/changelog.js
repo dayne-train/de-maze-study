@@ -4,6 +4,26 @@
    A prototype only shows items scoped to it (its key) or to 'all'. Keep items terse and dated;
    add a new dated block at the TOP at the end of each work session. */
 window.DEV_CHANGELOG = [
+  { date: 'Aug 6, 2026', items: [
+    { text: 'The prototypes work at narrow widths now. Every screen used to scroll sideways below about 780px \u2014 on a phone, and equally on a laptop at 200% browser zoom \u2014 because the header alone could not go narrower than that. Nothing scrolls sideways any more.', scope: ['all'] },
+    { text: 'The header truncates instead of overflowing: below the desktop breakpoint the persona pill keeps its avatar and caret and drops the greeting, and the language selector drops its label, then disappears on a phone.', scope: ['all'] },
+    { text: 'The navigation collapses to a hamburger with the current section named beside it, and the tabs drop down when you tap it. Nothing is unreachable.', scope: ['all'] },
+    { text: 'The application tracker switches to its vertical layout below the desktop breakpoint rather than staying horizontal and running off the screen. That vertical form is a real design system layout, not a fallback.', scope: ['all'] },
+    { text: 'The bucket tabs (Needs Review, Invited, Waiting\u2026) scroll inside themselves with arrows at each end when they do not fit, so the later buckets stay reachable. An arrow only appears when there is somewhere to go in that direction.', scope: ['hs', 'college'] },
+    { text: 'This drawer overlays the page on a narrow screen instead of shoving it aside. Pushing the content over by a fixed amount left about 70px of usable page, which made it impossible to change a setting and see the result.', scope: ['all'] },
+    { text: 'Page headers follow the design system template: the title sits on its own line, the search grows into what is left, and the button and menu keep their size beside it. On a phone the search takes a full line and the button fills the line under it.', scope: ['hs', 'college'] },
+    { text: 'The search field now matches the buttons next to it. It stayed at its desktop size while every button around it stepped down a size.', scope: ['hs', 'college'] },
+    { text: 'Section header icons stopped shrinking on small screens. They were dropping from 50px to 20px, which was a size choice being applied as if it were a screen size.', scope: ['all'] },
+    { text: 'Denied steps in the application detail turn the step name and date red, not just the marker. The horizontal tracker had always done this.', scope: ['hs', 'college'] },
+    { text: 'The tracker icons come from the design system now (a circled check, a clock, a cross) instead of a separate icon font, so both the learner and admin views draw from one set.', scope: ['all'] },
+    { text: 'Tables no longer make you scroll sideways. They drop their least-referenced columns first (Group, then Institution and the date), and below about 700px each row becomes its own stacked section with every column back as a labelled field. Nothing is lost, it just changes direction.', scope: ['hs', 'college'] },
+    { text: 'Row actions (View, Approve, Resend) are a proper size on a phone instead of the small size they take in a dense table row.', scope: ['hs', 'college'] },
+    { text: 'Page headers put the title on its own line and let the search grow beside the button and menu; on a phone the search takes a full line and the button fills the line under it.', scope: ['hs', 'college'] },
+    { text: 'The dashboard status tracker has its three real layouts now: one row on desktop, logo beside a stacked column on a tablet, and fully stacked on a phone with the actions full width.', scope: ['learner'] },
+    { text: 'The Dual Enrollment tab puts the status, application ID and menu above the two school names on a narrow screen, and the school names come down a size so they stop breaking to one word per line.', scope: ['learner'] },
+    { text: 'Dismissing an invitation now actually dismisses it from your dashboard. It stays on your Dual Enrollment tab, because dismissing is tidying your dashboard, not turning the invitation down.', scope: ['learner'] },
+    { text: 'Fixed: the page gutter ate 100px of a 360px screen, which is why things felt cramped before anything else went wrong.', scope: ['all'] }
+  ] },
   { date: 'Aug 5, 2026', items: [
     { text: 'Change Email is a real modal now, built to the design: it shows the address currently on file, takes a new one, and explains that a fresh notification goes to the new address and the old one stops getting reminders. Save stays greyed out until the address looks valid. It used to be a button that only raised a toast.', scope: ['learner'] },
     { text: 'Resend Notification says who it went to: "Notification resent to your parent/guardian" rather than a bare "Notification resent".', scope: ['learner'] },

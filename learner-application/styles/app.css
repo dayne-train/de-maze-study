@@ -1165,3 +1165,68 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
 .chg-email__foot { flex-direction: column; align-items: center; gap: var(--space-md); }
 .chg-email__buttons { display: flex; gap: 10px; width: 100%; max-width: 600px; }
 .chg-email__buttons .tasty-btn { flex: 1; }
+
+/* ════════════════════════════════════════════════════════════════════
+   DE-tab application header — narrow widths
+   ════════════════════════════════════════════════════════════════════
+   Matches the responsive frames on the Learner Actions page: below the desktop
+   breakpoint the status tag, Application ID and OptionsMenu lift ABOVE the two
+   institution headers and sit right-aligned on their own line, and the headers
+   themselves come down a scale. Inline right-alignment only works while there is
+   width to spare beside two full-size SectionHeaders; there is not, and the
+   result was the headers crushing to a word per line.
+   ════════════════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .de-inst-header { flex-wrap: wrap; row-gap: var(--space-sm); }
+  /* order:-1 puts the aside on the first line; 100% keeps it there alone.
+     BOTH asides are covered. An application box uses .de-app-aside (status tag +
+     App ID + kebab); an invite box uses the shared .de-member-aside (the Invited
+     tag). Scoped to .de-inst-header so the shared class keeps its own behaviour
+     on the dashboard, where it is not in a member-box header. */
+  .de-inst-header .de-app-aside,
+  .de-inst-header .de-member-aside {
+    order: -1; flex: 1 1 100%; margin-left: 0; justify-content: flex-end;
+  }
+
+  /* Institution headers step down a scale (16px title = the DS xSmall size).
+     The graphic stays 40px rather than that scale's 20px: these are institution
+     logos and crests, and at 20px they stop being recognisable, which is the one
+     thing they are for. */
+  .de-inst-header .tasty-section-header.de-inst-sh { gap: var(--space-sm); }
+  .de-inst-sh .tasty-section-header__title { font-size: var(--font-medium); }
+  .de-inst-sh .tasty-section-header__sub { font-size: var(--font-xSmall); }
+  .de-inst-sh .tasty-section-header__graphic { width: 40px; height: 40px; }
+  .de-inst-sh .de-sh-letter { width: 40px; height: 40px; font-size: 15px; }
+}
+
+/* Mobile stacks the two institutions with the arrow turned to point down, the
+   way the Figma mobile frame shows it. */
+@media (max-width: 480px) {
+  .de-inst-header { flex-direction: column; align-items: stretch; }
+  .de-inst-header .tasty-section-header.de-inst-sh { flex: 0 0 auto; }
+  .de-inst-arrow { transform: rotate(90deg); align-self: flex-start; margin-left: 12px; }
+  .de-inst-header .de-app-aside,
+  .de-inst-header .de-member-aside { order: -1; align-items: flex-end; }
+}
+
+
+/* The action card's buttons are flex-shrink:0 in a nowrap row, so a two-button
+   card (e.g. Change Email + Resend Notification) ran past the card at phone
+   width. They wrap and share the line instead. */
+@media (max-width: 600px) {
+  .tasty-action-card__actions { flex-wrap: wrap; flex-shrink: 1; width: 100%; }
+  .tasty-action-card__actions .tasty-btn { flex: 1 1 auto; min-width: 0; justify-content: center; }
+}
+
+/* The learner shell restates .page-content's gutter, so the kit's responsive
+   step-down never reached it — 100px of a 360px viewport went to margin, and
+   nested padding (.hs-de-wrap's 32px a side, the tracker's own 24px) left the
+   DashboardStatusTracker 194px to work in. Each level steps down together. */
+@media (max-width: 960px) {
+  .page-content { padding: var(--space-lg) var(--space-lg); }
+  .hs-de-wrap { padding: 0 var(--space-md) var(--space-md); }
+}
+@media (max-width: 480px) {
+  .page-content { padding: var(--space-md) var(--space-md); }
+  .hs-de-wrap { padding: 0 var(--space-sm) var(--space-sm); }
+}

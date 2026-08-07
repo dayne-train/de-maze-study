@@ -140,7 +140,7 @@
      bg → validation-base-focus on focus, box-shadow 3px instBlue ring        */
   .search-wrap { display: flex; flex: 1; }
   .search-input-wrap {
-    flex: 1; display: flex; align-items: center;
+    flex: 1; min-width: 0; display: flex; align-items: center;
     border: 1px solid var(--interactive-border);
     border-radius: var(--radius-md) 0 0 var(--radius-md);
     background: var(--white-space-base);
@@ -155,7 +155,9 @@
     color: var(--body-font-weak); font-size: var(--font-large); pointer-events: none;
   }
   .search-input {
-    flex: 1; height: 50px; border: none; outline: none; background: transparent;
+    /* min-width:0 — without it the input holds its intrinsic ~197px and drags the
+       whole search group wider than its container at narrow widths. */
+    flex: 1; min-width: 0; height: 50px; border: none; outline: none; background: transparent;
     font-family: var(--font-family-base); font-size: var(--font-medium); font-weight: 400;
     color: var(--body-font-base); padding: 0 10px 0 44px;
   }

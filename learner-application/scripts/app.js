@@ -290,11 +290,12 @@
     activeSteps().forEach(function (i) {
       var st = steps[i];
       var mod = st === 'active' ? ' is-active' : st === 'done' ? ' is-done' : st === 'denied' ? ' is-denied' : '';
-      // Desktop Stepper (Figma 9952:43956): 50px node → 24px glyph; upcoming = a small gray dot
-      // (rendered via CSS on the empty node), NOT a number.
-      var nodeContent = st === 'done'   ? tastyIcon('check',  { size: 24 })
-                      : st === 'denied' ? tastyIcon('cancel', { size: 24 })
-                      : st === 'active' ? tastyIcon('time',   { size: 24 })
+      // Desktop Stepper (Figma 9952:43956): 50px node → 30px glyph; upcoming = a small gray dot
+      // (rendered via CSS on the empty node), NOT a number. Glyph was 24px against a
+      // 30px node until Aug 6, 2026, when both were corrected to the DS geometry.
+      var nodeContent = st === 'done'   ? tastyIcon('check-open', { size: 30 })
+                      : st === 'denied' ? tastyIcon('cancel', { size: 30 })
+                      : st === 'active' ? tastyIcon('time',   { size: 30 })
                       : '';
       var meta = getStepMeta(i, st);
       html += '<div class="tasty-stepper__step' + mod + '">';
@@ -356,7 +357,7 @@
       '</div>' +
       '<div class="tasty-dst-buttons is-row">' +
         '<button type="button" class="tasty-btn is-md is-transparent is-success is-no-border" onclick="' + apply + '">Apply Now</button>' +
-        '<button type="button" class="tasty-btn is-md is-transparent is-no-border tasty-dst-dismiss" onclick="showToast(\'Invitation dismissed\',\'config\')">Dismiss</button>' +
+        '<button type="button" class="tasty-btn is-md is-transparent is-no-border tasty-dst-dismiss" onclick="dismissInvite(\'' + inviteKey(item) + '\')">Dismiss</button>' +
       '</div>' +
     '</div>';
   }
@@ -372,7 +373,7 @@
     var mini = '<div class="tasty-mini-status-tracker" aria-hidden="true">';
     vis.forEach(function (st, i) {
       var cls   = st === 'done' ? ' is-done' : st === 'active' ? ' is-active' : st === 'denied' ? ' is-denied' : '';
-      var glyph = st === 'done'   ? tastyIcon('check',  { size: 13 })
+      var glyph = st === 'done'   ? tastyIcon('check-open', { size: 13 })
                 : st === 'denied' ? tastyIcon('cancel', { size: 13 })
                 : st === 'active' ? tastyIcon('time',   { size: 13 })
                 : '';
@@ -637,8 +638,14 @@
        the boxes. Counselor invites + in-progress render INSIDE the Pioneer box. */
     var collegeInvite = first.kind === 'invite' && first.inviteSource === 'college';
 
+    /* A COLLEGE invite renders standalone above the member boxes; a counselor
+       invite renders inside the Pioneer box via renderHsDeSection. Both paths
+       have to honour a dismissal — filtering only the second one is why Dismiss
+       appeared to do nothing on the common (college invite) case. */
+    var collegeInviteShown = collegeInvite && !isDismissed(first);
+
     var html = '';
-    if (collegeInvite) html += '<div class="de-dst-standalone">' + renderDashboardStatusTracker(first) + '</div>';
+    if (collegeInviteShown) html += '<div class="de-dst-standalone">' + renderDashboardStatusTracker(first) + '</div>';
     HIGH_SCHOOLS.forEach(function (hs) {
       var deSection = (hs.hasDE && !collegeInvite) ? renderHsDeSection(enrollments) : '';
       html += renderHsCard(hs, deSection);
@@ -712,6 +719,27 @@
     '</div>';
   }
 
+
+  /* ─── Dismissing an invitation ──────────────────────────────────────────
+     Dismiss clears the invite from the DASHBOARD only. It does not decline it:
+     the invitation is still live and still sits on the Dual Enrollment tab,
+     where the learner can act on it whenever they like. The dashboard is a
+     "what needs me today" surface, so letting someone clear a tile there is
+     housekeeping, not a decision — and a decision is not ours to infer from a
+     dismiss. Kept in memory only, which is right for a prototype: a reload
+     brings it back, so nobody can lose a path while demoing.
+     ─────────────────────────────────────────────────────────────────────── */
+  var dismissedInvites = {};
+  function inviteKey(item) {
+    return (item.kind || 'invite') + ':' + ((item.college && item.college.name) || 'unknown');
+  }
+  function isDismissed(item) { return !!dismissedInvites[inviteKey(item)]; }
+  window.dismissInvite = function (key) {
+    dismissedInvites[key] = true;
+    renderDashboard();
+    showToast('Invitation dismissed. It is still on your Dual Enrollment tab.', 'config');
+  };
+
   /* DE section nested in the Pioneer box: invite banner (counselor/discovery) or status pill. */
   /* Dashboard DE section for one high school (Figma 4.3.1.14.1 · 17155:264343).
      INVITES ARE SEPARATE, one row each, and are never folded into the application count — an
@@ -719,7 +747,9 @@
      then collapse: exactly one → its full DashboardStatusTracker; more than one → a single
      summary row with View Details, since N stacked trackers would swamp the dashboard. */
   function renderHsDeSection(enrollments) {
-    var invites = enrollments.filter(function (it) { return it.kind === 'invite' || it.kind === 'discovery'; });
+    var invites = enrollments.filter(function (it) {
+      return (it.kind === 'invite' || it.kind === 'discovery') && !isDismissed(it);
+    });
     var apps    = enrollments.filter(function (it) { return it.kind === 'app'; });
     var html = invites.map(function (it) { return renderDashboardStatusTracker(it); }).join('');
     if (apps.length === 1)     html += renderDashboardStatusTracker(apps[0]);

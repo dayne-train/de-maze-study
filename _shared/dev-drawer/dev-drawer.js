@@ -48,7 +48,13 @@
    ════════════════════════════════════════════════════════════════════════════ */
 (function () {
   if (window.DevDrawer) return;
-  var W = 320; // drawer width (px) — also the content push distance
+  var W = 320; // drawer width (px) — also the content push distance on desktop
+  /* Below this the drawer OVERLAYS instead of pushing. Pushing by a fixed 320px
+     at a 390px viewport left 70px of usable page, and since the drawer is how
+     every prototype state is switched, a narrow-width reviewer could not change
+     state and see the result at the same time. Overlaying keeps the page intact
+     behind it. */
+  var PUSH_MIN = 900;
   /* Inline so the drawer stays dependency-free: it has to render identically on
      file:// and on the claude.ai/design upload, with or without an icon font. */
   var GEAR_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ' +
@@ -59,7 +65,8 @@
   function injectCSS() {
     if (document.getElementById('devdrawer-css')) return;
     var css = [
-      'html.devdrawer-open body{padding-right:' + W + 'px;}',
+      '@media (min-width:' + PUSH_MIN + 'px){html.devdrawer-open body{padding-right:' + W + 'px;}}' +
+      '@media (max-width:' + (PUSH_MIN - 1) + 'px){.devdrawer{width:min(' + W + 'px,88vw);box-shadow:-8px 0 28px rgba(0,0,0,.22);}}',
       'body{transition:padding-right .22s cubic-bezier(.3,.7,.4,1);}',
       '.devdrawer{position:fixed;top:0;right:0;height:100vh;width:' + W + 'px;z-index:2147483646;',
         'background:#fff;border-left:1px solid #e6e6e6;box-shadow:-8px 0 28px rgba(0,0,0,.12);',

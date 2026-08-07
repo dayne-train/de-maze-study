@@ -281,3 +281,88 @@
 .appdetail-group-line { display: block; }
 .appdetail-group-line + .appdetail-group-line { margin-top: 4px; }
 .appdetail-group-term { color: var(--c-text-muted); font-weight: 400; }
+
+  /* ── Shed columns before stacking ─────────────────────────────────────
+     Stacking every row is the last resort, not the first: it is much taller and
+     turns a scannable list into a sequence of records. Between desktop and that
+     point the table sheds its least load-bearing columns and stays a table.
+
+     Order is by the designer's rule — keep what tells you WHOSE application it is,
+     WHERE it stands, and the detail someone would quote on the phone:
+       first out   Group           (~236px, the widest and the least referenced)
+       then        Institution / High School, and the date column
+     What always survives: name, Application ID, Status, Actions. Everything shed
+     is one tap away in the detail view, and returns as a labelled field the
+     moment the row stacks.
+
+     Column names come from data-col, stamped from each table's own <thead> by
+     tasty-interactions.js, so the date column is addressed by whichever label
+     that bucket uses rather than by position. */
+  @media (max-width: 1200px) {
+    .queue-table [data-col="group"] { display: none; }
+  }
+  @media (max-width: 1024px) {
+    .queue-table [data-col="institution"],
+    .queue-table [data-col="high-school"],
+    .queue-table [data-col="submission-date"],
+    .queue-table [data-col="date-invited"],
+    .queue-table [data-col="enrolled"],
+    .queue-table [data-col="closed"],
+    .queue-table [data-col="last-sent"] { display: none; }
+  }
+
+  /* ── Stacked rows (DS TableBasic mobile format) — queue-table specifics ──
+     The kit owns the generic stacking; these are the bits only this table has.
+     Re-asserting the hidden columns matters: the kit sets `td { display:block }`,
+     which out-specifies `.col-hs { display:none }` and would bring a hidden
+     column back as a stacked field. */
+  @media (max-width: 700px) {
+    .queue-table.is-stacked-rows,
+    .queue-table.is-stacked-rows tbody,
+    .queue-table.is-stacked-rows tr,
+    .queue-table.is-stacked-rows td { display: block; width: auto; }
+    .queue-table.is-stacked-rows thead { display: none; }
+    .queue-table.is-stacked-rows { border-top: 2px solid var(--c-text-strong); }
+    /* height:auto is load-bearing. `.queue-table tbody tr` is pinned to 50px; as a
+       block that height does NOT grow with the stacked cells, so every row's
+       content overflowed into the row beneath it and the whole table rendered as
+       overlapping text. Same for the cells' fixed vertical-align/height. */
+    .queue-table.is-stacked-rows tbody tr {
+      height: auto;
+      border-bottom: 2px solid var(--c-text-strong);
+      padding: 8px 0 14px;
+    }
+    .queue-table.is-stacked-rows td {
+      border: 0; padding: 4px 0; text-align: left !important; white-space: normal;
+      height: auto; vertical-align: baseline;
+    }
+    .queue-table.is-stacked-rows td[data-label] { padding: 4px 0 8px; border-bottom: 1px solid var(--c-border); }
+    .queue-table.is-stacked-rows td[data-label]:last-of-type { border-bottom: 0; }
+    .queue-table.is-stacked-rows td[data-label]::before {
+      content: attr(data-label);
+      display: block; margin-bottom: 2px;
+      font-size: var(--font-small); font-weight: 600; color: var(--c-brand);
+    }
+    /* Checkbox leads the section; actions close it, full width. */
+    .queue-table.is-stacked-rows td.col-check { width: auto; padding: 0 0 6px; }
+    /* Actions close the section as a full-width block (the DS gives it 80px).
+       The buttons are .is-sm, which is 30px below largeMin — fine as a trailing
+       cell in a dense table row, far too small as the row's only affordance on a
+       phone. They take the md height here and split the width between them.
+       display:contents on .row-actions promotes the buttons to flex items of the
+       cell so one-button and two-button rows lay out the same way. */
+    .queue-table.is-stacked-rows td.col-actions {
+      display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 0 0;
+    }
+    .queue-table.is-stacked-rows td.col-actions .row-actions { display: contents; }
+    .queue-table.is-stacked-rows td.col-actions .tasty-btn {
+      flex: 1 1 auto; min-width: 130px; height: 44px; padding: 0 16px;
+      font-size: var(--font-medium); justify-content: center;
+    }
+    /* Every shed column comes BACK as a labelled field once stacked — that is the
+       point of stacking, no data is lost. Only col-hs stays governed by its own
+       multi-school toggle. */
+    .queue-table.is-stacked-rows [data-col] { display: block; }
+    .queue-table.is-stacked-rows .col-hs { display: none; }
+    body.show-hs .queue-table.is-stacked-rows .col-hs { display: block; }
+  }

@@ -386,3 +386,100 @@
   }
   .seg-empty i { font-size: 40px; margin-bottom: 16px; color: var(--c-border); }
   .seg-empty p { font-size: 14px; margin: 0; line-height: 1.6; }
+
+
+/* ════════════════════════════════════════════════════════════════════
+   .de-searchbanner — ONE responsive contract for every SearchBanner
+   ════════════════════════════════════════════════════════════════════
+   The workspace banner (.search-banner) and the Applications / Pending Invites
+   identity row (.de-page-identity) are the same DS component — SectionHeader on
+   the left, actions on the right — rendered two ways. They had drifted into two
+   layouts with two sets of bugs, so both now carry .de-searchbanner and inherit
+   this one contract. Add the class to any future header of this shape.
+
+   Follows the DS SearchBanner's three formats (Organisms 6293:10850):
+     Desktop  icon + title + subtitle ......... [info] [input][Search]
+     Tablet   row 1 header;  row 2 actions, full width
+     Mobile   row 1 header + info (no subtitle);  row 2 actions, sm scale
+
+   Lives in dashboard.css, not base.css: this sheet defines .de-header-search
+   with flex-shrink:0 and loads AFTER base, so the same rules in base lose the
+   cascade at equal specificity no matter what media query wraps them.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* .de-header-actions — the primary button + kebab, grouped by boot.js so a
+   flex-wrap row cannot split them. It needs its OWN base layout: a bare div is
+   display:block, which stacked the button above the kebab on desktop. (Second
+   time a wrapper shipped without one — see .parch-nav__tabs.) */
+.de-page-identity .de-header-actions { display: flex; align-items: center; gap: 12px; }
+
+/* ── Tablet (<= mediumMax) ────────────────────────────────────────────
+   Row 1  the SectionHeader, alone.
+   Row 2  search + primary + kebab, IF the search can still hold a usable width
+          beside them. It carries a 260px floor rather than shrinking to a bare
+          magnifier, so when the row cannot fit all three the search FLOWS DOWN
+          to its own line and the actions follow on the next — the same
+          arrangement as mobile, arrived at by measurement rather than a second
+          breakpoint guess.
+   The SearchInput also steps to the DS sm scale here, not at mobile: the kit's
+   whole button ladder drops a tier below largeMin (tasty-btn and friends are
+   40px under 961), so a 50px field beside 40px buttons was mismatched at every
+   tablet width. If the buttons change size the field changes with them. */
+@media (max-width: 960px) {
+  .de-searchbanner { flex-wrap: wrap; row-gap: 12px; align-items: flex-start; }
+  .de-searchbanner .tasty-section-header { flex: 1 1 100%; min-width: 0; }
+  .de-searchbanner .search-banner-left { flex: 1 1 100%; min-width: 0; }
+  .de-searchbanner .search-banner-right,
+  .de-searchbanner .de-header-search {
+    margin-left: 0; flex: 1 1 260px; min-width: 260px; justify-content: flex-start; order: 2;
+  }
+  .de-searchbanner .search-wrap { flex: 1 1 auto; min-width: 0; }
+  .de-searchbanner .search-input-wrap { flex: 1 1 auto; min-width: 0; }
+  .de-searchbanner .de-header-actions { order: 3; flex: none; }
+  .de-searchbanner .de-add-enrollment-btn { order: 3; flex: none; }
+  .de-searchbanner .de-options { order: 4; margin-left: 0; flex: none; }
+  .search-banner.de-searchbanner { padding: 24px; min-height: 0; }
+
+  /* SearchInput at the DS sm scale, matching the buttons beside it. */
+  .de-searchbanner .search-input { height: 40px; font-size: var(--font-small); padding-left: 40px; }
+  .de-searchbanner .search-icon { left: 12px; font-size: var(--font-medium); }
+  .de-searchbanner .search-filter-btn { font-size: var(--font-medium); padding: 0 10px; }
+  .de-searchbanner .search-btn { height: 40px; padding: 0 20px; font-size: var(--font-small); }
+  .de-searchbanner .de-add-enrollment-btn { height: 40px; font-size: var(--font-small); padding: 0 16px; }
+}
+
+/* ── Once the actions have their own line, the primary FILLS it ───────
+   Below this width the search no longer fits beside the actions (its 260px
+   floor plus a ~214px action group needs about 586px of content box), so the
+   group lands on a line of its own — and a natural-width button floating on an
+   otherwise empty row reads as unfinished. The primary stretches to the line
+   and the kebab keeps its fixed size at the end.
+
+   600px is measured, not guessed: it is just above where our content wraps.
+   If the action group grows a button, re-measure and move it. */
+@media (max-width: 600px) {
+  .de-searchbanner .de-header-actions { flex: 1 1 100%; }
+  .de-searchbanner .de-add-enrollment-btn { flex: 1 1 auto; min-width: 0; }
+  .de-searchbanner .de-options { flex: none; }
+}
+
+/* ── Mobile (<= smallMax) ─────────────────────────────────────────────
+   Row 1  header (subtitle dropped, info icon lifted onto the title row).
+   Row 2  search, full width on its own line.
+   Row 3  the primary button FILLS the remaining width; the kebab stays fixed.
+   The third row is gated on there BEING a primary action — screens with only
+   search + export would otherwise strand their kebab alone on a row, so there
+   the search drops its floor and shares the line with it instead. */
+@media (max-width: 480px) {
+  .de-searchbanner .tasty-section-header__sub { display: none; }
+  .de-searchbanner .de-header-search { min-width: 0; }
+  .de-searchbanner:has(.de-add-enrollment-btn) .de-header-search { flex: 1 1 100%; }
+  .de-searchbanner .de-header-actions { flex: 1 1 100%; }
+  .de-searchbanner .de-add-enrollment-btn { flex: 1 1 auto; min-width: 0; }
+
+  .search-banner.de-searchbanner { padding: 16px; gap: 12px; }
+  .search-banner.de-searchbanner .search-banner-right { display: contents; }
+  .search-banner.de-searchbanner .search-banner-left { order: 1; flex: 1 1 auto; }
+  .search-banner.de-searchbanner .ws-banner-info { order: 2; flex: none; }
+  .search-banner.de-searchbanner .search-wrap { order: 3; flex: 1 1 100%; min-width: 0; }
+}
