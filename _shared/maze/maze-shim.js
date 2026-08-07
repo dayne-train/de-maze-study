@@ -169,7 +169,22 @@
      through writeUrl/replaceState and never reload — reloading there would loop. */
   var hardNav = false;
   var navigating = false;
-  var NAV_DELAY_MS = 300;
+
+  /* HOW LONG TO WAIT BETWEEN THE CLICK AND THE NAVIGATION.
+
+     Measured, finally, by /pathtest5/: 200ms, 120ms, 60ms and 0ms hops were ALL
+     recorded. So the delay is not the variable — the PATH CHANGE is, and that is
+     the one condition that has held in every round.
+
+     Round 1 appeared to show an immediate navigation failing. Best reading: that
+     hop started from a page Maze had not recorded either (the query-only one),
+     so there was nothing upstream to attach it to. The path was already broken
+     before that click.
+
+     0 means the participant gets no artificial wait at all — a step costs a page
+     load and nothing more. If steps ever stop recording, this is the first thing
+     to raise, and /pathtest5/ is how to re-measure rather than guess. */
+  var NAV_DELAY_MS = 0;
 
   function navigate(params) {
     if (!hardNav) {
@@ -243,7 +258,15 @@
       }
     }, NAV_DELAY_MS + 3000);
 
-    root.setTimeout(function () { root.location.assign(target.href); }, NAV_DELAY_MS);
+    /* At 0 the assign is synchronous — the same shape /pathtest5/ tested and the
+       browser recorded. Going through setTimeout(…, 0) instead would defer to
+       the next task, which can land after a paint and reintroduce the flicker
+       the cloak above exists to prevent. */
+    if (NAV_DELAY_MS > 0) {
+      root.setTimeout(function () { root.location.assign(target.href); }, NAV_DELAY_MS);
+    } else {
+      root.location.assign(target.href);
+    }
   }
 
   /* ── Current state ─────────────────────────────────────────────────── */
