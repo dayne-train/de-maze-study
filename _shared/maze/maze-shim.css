@@ -100,3 +100,27 @@ html:not(.maze-dev).devdrawer-open body { padding-right: 0 !important; }
    instead — see config/learner-application.js.                              */
 .demo-fill-soft { cursor: inherit !important; }
 .demo-fill-soft:hover { outline: none !important; box-shadow: none !important; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   KIT BUG — horizontal stepper: node pinned left, connector drawn centre.
+
+   .tasty-stepper__node carries `align-self: start`, which is correct for the
+   VERTICAL layout (grid, node in a 30px first column). The horizontal layout is
+   a column flexbox, where align-self controls the CROSS axis — i.e. horizontal —
+   so the same declaration pins the circle to the left edge of its step and
+   overrides the container's `align-items: center`.
+
+   The connector is unaffected: it is drawn from `left: 50%`, the step's centre.
+   So on a 268px step the circle sits at 0–50 and the line starts at 134 — an
+   84px gap, and the tracker reads as disconnected illustrations with floating
+   lines between them.
+
+   THIS IS A KIT BUG, NOT A STUDY ONE. It is in
+   design-agent-skills/generator/parchment-tasty-kit and therefore in every
+   published DE prototype, not only this build. Fixing it there is the real fix;
+   this override only stops participants reporting it as a broken design.
+   ══════════════════════════════════════════════════════════════════════ */
+@media (min-width: 961px) {
+  .tasty-stepper:not(.is-vertical) .tasty-stepper__node { align-self: center; }
+}
+.tasty-stepper.is-horizontal .tasty-stepper__node { align-self: center; }

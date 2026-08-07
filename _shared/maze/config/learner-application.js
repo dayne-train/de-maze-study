@@ -44,7 +44,17 @@
   function fillOnce(key, fn) {
     if (filled[key]) return;
     filled[key] = true;
-    if (typeof fn === 'function') fn();
+    if (typeof fn !== 'function') return;
+    /* The fillers end with showToast('DE application filled') — a dev-helper
+       confirmation aimed at whoever clicked the dev drawer. Here nobody clicked
+       anything: the form is prepopulated on arrival, so the participant lands on
+       a screen announcing an action they did not take, in language about a
+       "DE application" being "filled". Suppress the toast for the duration of
+       the fill rather than after it, so it never paints. */
+    var orig = window.showToast;
+    if (typeof orig === 'function') window.showToast = function () {};
+    try { fn(); }
+    finally { if (typeof orig === 'function') window.showToast = orig; }
   }
 
   /* ── Existing-account branch ────────────────────────────────────────────
@@ -185,6 +195,55 @@
     window.viewCourse.__mazeCourse = true;
   })();
 
+  /* ── The state the learner is in AFTER submitting ───────────────────────
+     submitDeApp() sets DEV.appState to whatever the network still owes, so the
+     confirmation tracker AND the dashboard behind it reflect what was just
+     submitted. Then it navigates — and the page load throws DEV away, so
+     "Continue to your Parchment account" landed on a dashboard still showing
+     "you've been invited": an invitation the participant had already accepted
+     and acted on two screens ago.
+
+     DEV.appState is IIFE-scoped with no getter, so it cannot be read back.
+     Recomputing it here instead, from the same inputs submitDeApp uses:
+     DENetwork's gates (global) and whether this was a counselor invite (the
+     journey, which the shim already carries). A counselor invite auto-completes
+     counselor approval, so only guardian consent remains.
+
+     Kept in step with submitDeApp deliberately — if that logic changes, this
+     must too, and the symptom would be a dashboard one state behind. */
+  var postSubmitState = null;
+
+  function gateOn(key) {
+    return (window.DENetwork ? window.DENetwork.get(key) : true) !== false;
+  }
+
+  function computePostSubmit() {
+    var journey = new URLSearchParams(location.search).get('journey') ||
+                  (MazeShim.state && MazeShim.state().journey) || '';
+    var owesGuardian  = gateOn('guardianConsent');
+    var owesCounselor = gateOn('counselorApproval') && journey.indexOf('invited-counselor') !== 0;
+    return owesGuardian && owesCounselor ? 'dual-pending'
+         : owesGuardian                  ? 'parent-consent-pending'
+         : owesCounselor                 ? 'counselor-pending'
+         :                                 'college-review';
+  }
+
+  (function captureSubmit() {
+    if (typeof window.submitDeApp !== 'function' || window.submitDeApp.__mazeSubmit) return;
+    var orig = window.submitDeApp;
+    window.submitDeApp = function () {
+      /* BEFORE the call, not after. submitDeApp ends with showScreen(), which
+         is what schedules the navigation — and the URL for that navigation is
+         built from observe(). Setting the state afterwards loses the race and
+         writes a URL without it, which is exactly the bug this exists to fix.
+         Computing first is safe: it reads the network gates and the journey,
+         neither of which the submit changes. */
+      postSubmitState = computePostSubmit();
+      return orig.apply(this, arguments);
+    };
+    window.submitDeApp.__mazeSubmit = true;
+  })();
+
   MazeShim.init({
     proto: 'learner-application',
     defaultScreen: 'dashboard',
@@ -211,7 +270,23 @@
       var el = document.querySelector('.screen.active');
       var id = el && el.id;
       var onCourse = id === 'screen-course-detail' || id === 'screen-registered';
-      return { course: onCourse ? lastCourse : null };
+
+      /* OMIT keys we cannot report, do not report them as null.
+         collect() layers observe() OVER the shim's remembered write-only params,
+         so a null here does not mean "no opinion" — it ERASES the remembered
+         value. Both of these are write-only by nature (currentCourse and
+         DEV.appState are IIFE-scoped with no getter), so on any page where they
+         were not just set by the participant, observe() has nothing to say and
+         the remembered value must win.
+
+         Reporting them as null instead cost the whole mechanism: the state
+         reached the destination URL and was then stripped by the destination's
+         own boot rewrite, and Task 6's ?state=approved would have evaporated
+         after a single step. */
+      var out = {};
+      if (onCourse && lastCourse) out.course = lastCourse;
+      if (postSubmitState) out.state = postSubmitState;
+      return out;
     },
 
     apply: function (p) {
