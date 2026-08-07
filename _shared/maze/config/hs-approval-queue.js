@@ -23,6 +23,99 @@
     catch (e) { return false; }
   }
 
+  /* ── ?chapter= — put Jessica where her story is, for this task ──────────
+     The study follows ONE applicant end to end: Jessica Cumberland,
+     DE-2026-0440, the learner in learner-application and the student in
+     parent-consent. A task that approves somebody else breaks the thread the
+     whole study is built on — the participant has just spent two tasks as
+     Jessica and her family, and is then asked to act on a stranger.
+
+     But she cannot sit in two buckets at once. Task 4 needs her awaiting HS
+     approval; task 7 asks an admin to confirm she reached Registered, so there
+     she must already be Registered. The fixture cannot satisfy both.
+
+     It does not have to. Every task is a fresh page load with its own clean
+     state, so the fixture can open at the chapter that task is in:
+
+       (no param)            she is Registered — the authored fixture, task 7
+       ?chapter=hs-approval  she is in Needs Review, awaiting this admin
+
+     Note what this is NOT: task 4 does not "cause" her to be approved for task
+     7. Nothing carries between tasks, deliberately — a task that depended on the
+     previous one's outcome would break the moment a participant picked a
+     different student, or did the tasks out of order, or dropped out halfway.
+     Each task opens at the right page of the same story.
+
+     Runs at PARSE time, before boot.js paints anything. core.js has already
+     taken activeApps = ALL_APPS.slice() by now, so both have to be updated —
+     mutating only the fixture would seed a queue nothing renders from. */
+  var JESSICA = 'DE-2026-0440';
+
+  function seedChapter() {
+    var chapter = new URLSearchParams(location.search).get('chapter');
+    if (chapter !== 'hs-approval') return;
+    try {
+      /* Out of Registered, or she appears twice — once as a pending applicant
+         and once as an enrolled student, which is exactly the kind of detail a
+         DE coordinator notices immediately. */
+      var i = ALL_ACTIVE_APPS.findIndex(function (a) { return a.id === JESSICA; });
+      var enrolled = i !== -1 ? ALL_ACTIVE_APPS.splice(i, 1)[0] : null;
+      if (ALL_APPS.some(function (a) { return a.id === JESSICA; })) return;
+
+      /* A pending row is a different shape from an enrolled one: submitted date
+         and eligibility evidence rather than enrolment status and credits. Built
+         from her enrolled row so name, school, group, term and institution stay
+         identical to what the participant saw in the earlier tasks. */
+      var pending = {
+        id: JESSICA,
+        lastName: 'Cumberland', firstName: 'Jessica', initials: 'JC',
+        school: (enrolled && enrolled.school) || 'Pioneer High School',
+        group: (enrolled && enrolled.group) || 'Math - Dual Enrollment Fall 2026',
+        term: (enrolled && enrolled.term) || 'FALL 2026',
+        course: null,                       /* dropped from the table, still searchable */
+        submitted: 'Jul 28, 2026',          /* after the other pending rows: she just applied */
+        gradDate: 'May 2028',               /* a junior in 2026 graduates in 2028 */
+        counselor: 'Morgan Lee',
+        hasAlert: false,
+        gpa: 3.8, grade: 11, prereqMet: true, transcriptAttached: true,
+        sisId: (enrolled && enrolled.sisId) || 'STU-26-1000',
+        institution: (enrolled && enrolled.institution) || 'wvcc',
+        groupIds: ['wvcc-g1', 'wvcc-g2']
+      };
+      ALL_APPS.unshift(pending);            /* first row: findable without paging */
+      if (typeof activeApps !== 'undefined') activeApps.unshift(pending);
+    } catch (e) {
+      /* A seeding failure must not take the prototype down with it. The task
+         still works, it just opens on the authored fixture. */
+      if (window.console) console.warn('[maze-shim] chapter seed failed: ' + e.message);
+    }
+  }
+
+  /* Task 1 invites her, so she has to be on the roster the invite table renders
+     from — and that roster is authored without her, because until this study
+     followed one applicant end to end there was no reason for her to be there.
+
+     UNCONDITIONAL, not chapter-gated. The roster is "learners at this school",
+     which she is in every chapter; gating it would mean she vanishes from the
+     school's own roster the moment she applies. First row so she is findable
+     without searching, same as in the queue. */
+  function seedRoster() {
+    try {
+      if (typeof LEARNER_ROSTER === 'undefined') return;
+      if (LEARNER_ROSTER.some(function (l) { return l.lastName === 'Cumberland'; })) return;
+      LEARNER_ROSTER.unshift({
+        id: '20440', lastName: 'Cumberland', firstName: 'Jessica', middleName: 'Anne',
+        initials: 'JC', school: 'Pioneer High School', classOf: 2028,
+        dob: 'Sep 9, 2009', ssnLast4: '3312', missingData: false
+      });
+    } catch (e) {
+      if (window.console) console.warn('[maze-shim] roster seed failed: ' + e.message);
+    }
+  }
+
+  seedChapter();
+  seedRoster();
+
   /* ── Mutations that must survive a page load ────────────────────────────
      Approving moves app objects between three arrays: out of `activeApps`
      (Needs Review), into `WAITING_APPS`, and denials into `ALL_DENIED_APPS`.

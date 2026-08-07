@@ -21,9 +21,85 @@
     catch (e) { return false; }
   }
 
+  /* ── ?chapter= — put Jessica where her story is ─────────────────────────
+     Same mechanism and same reasoning as the HS fork: the study follows one
+     applicant end to end, and a task that admits somebody else breaks the
+     thread. See hs-approval-queue.js for the full note on why this is not a
+     cross-task dependency.
+
+       (no param)                she is Registered — the authored fixture
+       ?chapter=college-review   she is awaiting this college's decision
+
+     The pending row is deliberately identical in shape to the HS fork's, because
+     it is the same application seen from the other side of the exchange. */
+  var JESSICA = 'DE-2026-0440';
+
+  function seedChapter() {
+    if (new URLSearchParams(location.search).get('chapter') !== 'college-review') return;
+    try {
+      var i = ALL_ACTIVE_APPS.findIndex(function (a) { return a.id === JESSICA; });
+      var enrolled = i !== -1 ? ALL_ACTIVE_APPS.splice(i, 1)[0] : null;
+      if (ALL_APPS.some(function (a) { return a.id === JESSICA; })) return;
+      var pending = {
+        id: JESSICA,
+        lastName: 'Cumberland', firstName: 'Jessica', initials: 'JC',
+        school: (enrolled && enrolled.school) || 'Pioneer High School',
+        group: (enrolled && enrolled.group) || 'Math - Dual Enrollment Fall 2026',
+        term: (enrolled && enrolled.term) || 'FALL 2026',
+        course: null,
+        submitted: 'Jul 28, 2026',
+        gradDate: 'May 2028',
+        counselor: 'Morgan Lee',
+        hasAlert: false,
+        gpa: 3.8, grade: 11, prereqMet: true, transcriptAttached: true,
+        sisId: (enrolled && enrolled.sisId) || 'STU-26-1000',
+        institution: (enrolled && enrolled.institution) || 'wvcc',
+        groupIds: ['wvcc-g1', 'wvcc-g2']
+      };
+      ALL_APPS.unshift(pending);
+      if (typeof activeApps !== 'undefined') activeApps.unshift(pending);
+    } catch (e) {
+      if (window.console) console.warn('[maze-shim] chapter seed failed: ' + e.message);
+    }
+  }
+
+  seedChapter();
+
+  /* ── Mutations that must survive a page load ────────────────────────────
+     As the HS fork, plus ALL_ADMITTED_APPS: this fork has a fifth bucket
+     (Admit Only), so an admit decision can land in either Admitted or Waiting
+     depending on which button was pressed. Missing it would lose exactly the
+     outcome task 5 is measuring. */
+  function snapshot() {
+    var out = {};
+    try { out.active = activeApps; } catch (e) {}
+    try { out.waiting = WAITING_APPS; } catch (e) {}
+    try { out.admitted = ALL_ADMITTED_APPS; } catch (e) {}
+    try { out.denied = ALL_DENIED_APPS; } catch (e) {}
+    return out;
+  }
+
+  function refill(arr, next) {
+    if (!arr || !next) return;
+    arr.length = 0;
+    next.forEach(function (x) { arr.push(x); });
+  }
+
+  function restore(data) {
+    if (!data) return;
+    if (data.active) { try { activeApps = data.active; } catch (e) {} }
+    try { refill(WAITING_APPS, data.waiting); } catch (e) {}
+    try { refill(ALL_ADMITTED_APPS, data.admitted); } catch (e) {}
+    try { refill(ALL_DENIED_APPS, data.denied); } catch (e) {}
+    try { if (typeof renderTable === 'function') renderTable(); } catch (e) {}
+    try { if (typeof renderWaitingTable === 'function') renderWaitingTable(); } catch (e) {}
+  }
+
   MazeShim.init({
     proto: 'college-approval-queue',
     defaultScreen: 'dashboard',
+    snapshot: snapshot,
+    restore: restore,
 
     screens: [
       'path-select', 'email', 'login', 'service-select', 'dashboard', 'de',
