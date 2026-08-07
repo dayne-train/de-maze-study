@@ -1,0 +1,75 @@
+<!DOCTYPE html><meta charset="utf-8">
+<script>
+(function (m, a, z, e) {
+  var s, t, u, v;
+  try {
+    t = m.sessionStorage.getItem('maze-us');
+  } catch (err) {}
+
+  if (!t) {
+    t = new Date().getTime();
+    try {
+      m.sessionStorage.setItem('maze-us', t);
+    } catch (err) {}
+  }
+
+  u = document.currentScript || (function () {
+    var w = document.getElementsByTagName('script');
+    return w[w.length - 1];
+  })();
+  v = u && u.nonce;
+
+  s = a.createElement('script');
+  s.src = z + '?apiKey=' + e;
+  s.async = true;
+  if (v) s.setAttribute('nonce', v);
+  a.getElementsByTagName('head')[0].appendChild(s);
+  m.mazeUniversalSnippetApiKey = e;
+})(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'bf70bf5a-f819-443f-9895-f5a3e8314250');
+</script>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Step 1 - path test 4</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;margin:0;min-height:100vh}
+.wrap{position:relative;z-index:1;margin:12vh auto;max-width:34rem;padding:0 1.5rem}
+h1{font-size:1.4rem}code{background:#eee;padding:.1em .35em;border-radius:3px}
+a,button{display:inline-block;margin-top:1.5rem;font:inherit;padding:.7em 1.2em;border:1px solid #333;
+border-radius:6px;background:#fff;color:#111;text-decoration:none;cursor:pointer}
+.tag{display:inline-block;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;
+background:#111;color:#fff;padding:.2em .5em;border-radius:3px;margin-bottom:.75rem}
+.q{background:#b30000}
+/* Watermark fills the WHOLE viewport, not a band through the middle: the box is
+   oversized so its corners still cover after rotation, rows start at the top and
+   run past the bottom, and enough tiles are emitted to fill the largest plausible
+   screen. Purely so a glance or a screenshot says which step you were on. */
+#wm{position:fixed;top:-60%;left:-60%;width:220%;height:220%;z-index:0;
+pointer-events:none;user-select:none;display:flex;flex-wrap:wrap;
+align-content:flex-start;justify-content:center;gap:1.4rem 3rem;
+transform:rotate(-24deg);opacity:.09;overflow:hidden}
+#wm span{font:800 2.4rem/1 system-ui,sans-serif;white-space:nowrap;letter-spacing:.06em}
+#badge{position:fixed;top:0;right:0;z-index:2;background:#111;color:#fff;
+font:800 1.1rem/1 system-ui,sans-serif;letter-spacing:.08em;padding:.9rem 1.1rem;
+border-bottom-left-radius:8px}</style>
+<body data-step="1">
+<div id="wm"></div><div id="badge"></div>
+<div class="wrap">
+<h1>Step 1 - instant redraw, then a new path</h1>
+<span class="tag q">the question</span><p>Clicking replaces what is on screen <em>immediately</em>, then 300ms later the browser goes to a different <strong>folder</strong>. This is exactly what the prototypes do, and it is the one combination no earlier round tested.</p><button id="go">Continue</button>
+<p style="margin-top:2rem;color:#777;font-size:.85rem">Diagnostic page. Not part of the study.</p>
+</div>
+<script>
+(function () {
+  var n = document.body.getAttribute('data-step');
+  document.getElementById('badge').textContent = 'STEP ' + n;
+  var out = '';
+  for (var i = 0; i < 420; i++) out += '<span>STEP ' + n + '</span>';
+  document.getElementById('wm').innerHTML = out;
+  document.title = 'Step ' + n + ' - path test 4';
+})();
+</script><script>var TARGET='s2/';</script><script>
+document.getElementById('go').onclick = function () {
+  document.querySelector('.wrap').innerHTML =
+    '<h1>Navigating...</h1><p>Content already swapped. The URL changes shortly.</p>';
+  setTimeout(function () { location.assign(TARGET); }, 300);
+};
+</script>
