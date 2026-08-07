@@ -313,6 +313,13 @@
         lastCourse = p.course;
         if (p.screen === 'course-detail') { window.viewCourse(p.course); return; }
         window.viewCourse(p.course);   /* sets currentCourse for 'registered' */
+        /* The registered screen renders ONCE, on DOMContentLoaded — before this
+           runs — so restoring the course is not enough on its own. Without the
+           re-render the card kept its empty state ("No course registered")
+           under a headline announcing the learner is registered. */
+        if (p.screen === 'registered' && typeof window.renderRegisteredScreen === 'function') {
+          window.renderRegisteredScreen();
+        }
       }
 
       if (p.screen) {

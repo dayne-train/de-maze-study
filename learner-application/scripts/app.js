@@ -1163,7 +1163,14 @@
       if (typeof resolveTastyAssets === 'function') resolveTastyAssets(illusEl);
     }
     if (cardEl) {
-      var c = registeredCourse;
+      /* Falls back to currentCourse. registeredCourse is only set by
+         confirmRegistration(), so ANY re-render that is not a fresh
+         registration -- a deep link to this screen, a state restore, a dev-drawer
+         jump -- found it null and rendered "No course registered." underneath a
+         headline saying the learner is registered. currentCourse is the course
+         they were viewing when they registered, so it is the same course in
+         every path that can reach this screen. */
+      var c = registeredCourse || currentCourse;
       var courseRows = c
         ? '<div class="registered-course-row">' +
             '<span class="reg-course-code">' + esc(c.id) + '</span>' +
@@ -1179,6 +1186,12 @@
       if (typeof resolveTastyAssets === 'function') resolveTastyAssets(cardEl);
     }
   }
+
+  /* Exposed so the screen can be re-rendered after its inputs change. It runs
+     once on DOMContentLoaded, before anything that restores state from a URL has
+     had a chance to run, so a deep link to this screen rendered it from an empty
+     currentCourse and never revisited it. */
+  window.renderRegisteredScreen = renderRegisteredScreen;
 
   /* ════════════════════════════════════════
      §10 · COURSE REGISTRATION
