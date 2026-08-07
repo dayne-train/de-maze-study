@@ -216,6 +216,33 @@
 
     if (target.href === root.location.href) return;   // no step; would loop
     navigating = true;                                // suppress writes mid-unload
+
+    /* ── Hide the intermediate render ──────────────────────────────────
+       Without this the participant sees the destination TWICE: the prototype
+       swaps the screen synchronously inside the click handler, then 300ms later
+       the real document load paints the same screen again. It reads as the page
+       glitching, which is exactly the kind of thing that gets reported as a
+       broken prototype rather than as a study artifact.
+
+       This runs in schedule()'s microtask, which the browser drains BEFORE it
+       paints — so the swapped-in screen never reaches the glass. The
+       participant sees the screen they were on, then the loading cloak, then
+       the destination. One transition.
+
+       The cloak is the same one the destination raises before its own first
+       paint (inline <head> script), so the white is CONTINUOUS across the
+       navigation rather than flashing off and on at the document boundary.
+
+       Failsafe, as everywhere else the cloak is used: if the navigation never
+       happens, uncover rather than leave the participant on a blank page. */
+    document.documentElement.classList.add('maze-booting');
+    root.setTimeout(function () {
+      if (root.location.href !== target.href) {
+        log('navigation to ' + target.href + ' did not happen — uncovering');
+        document.documentElement.classList.remove('maze-booting');
+      }
+    }, NAV_DELAY_MS + 3000);
+
     root.setTimeout(function () { root.location.assign(target.href); }, NAV_DELAY_MS);
   }
 

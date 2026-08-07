@@ -17,7 +17,14 @@
    class here means a permanently blank page, which is far worse than the flash.
 
    Deliberately untitled: a "Loading prototype…" caption would frame the study
-   for the participant before the task copy gets to. This just reads as loading. */
+   for the participant before the task copy gets to. This just reads as loading.
+
+   USED TWICE. maze-shim.js also raises this class when it is about to navigate
+   between screen folders, to hide the prototype's own instant screen swap —
+   otherwise the participant sees the destination render, then sees it render
+   again 300ms later when the real document loads. Because the destination
+   raises the same class before ITS first paint, the white is continuous across
+   the document boundary instead of flashing off and back on. */
 html.maze-booting body > * { visibility: hidden !important; }
 
 html.maze-booting::before {
