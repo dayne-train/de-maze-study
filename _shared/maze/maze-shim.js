@@ -39,8 +39,13 @@
      wizard. It is a PAYLOAD param, not a step: two participants who select
      different rows are doing the same thing and belong on the same path, so it
      must never become part of a folder slug. */
+  /* `modal` is a step that is not a screen. A modal renders OVER whatever screen
+     is active, so `.screen.active` keeps reporting the screen behind it and the
+     router would otherwise see no change at all — which is why an approval
+     confirmed in a modal was invisible to Maze. Naming the open modal makes it
+     addressable without turning it into a page. */
   var OWNED = ['screen', 'seg', 'mode', 'app', 'journey', 'state', 'step', 'variant',
-               'sel', 'col', 'grp', 'course'];
+               'sel', 'col', 'grp', 'course', 'modal'];
 
   var desc = null;        // the active prototype descriptor
   var applying = false;   // true while WE are driving; suppresses pushState
@@ -96,7 +101,20 @@
      CONTRADICT the live state is not a candidate at all. */
   function routeFor(params) {
     var best = null, bestScore = -1;
-    routes().forEach(function (r) {
+    var all = routes();
+
+    /* A MODAL OUTRANKS THE SCREEN BEHIND IT. With a modal open, the screen
+       params still describe the page underneath, so a screen route would score
+       higher on raw key count and win — the modal would never get its own
+       address. When a modal is named, only routes declaring that modal are
+       candidates. */
+    if (params.modal) {
+      var modalRoutes = all.filter(function (r) { return r.params && r.params.modal === params.modal; });
+      if (modalRoutes.length) all = modalRoutes;
+      else log('no route for modal "' + params.modal + '" — falling back to the screen behind it');
+    }
+
+    all.forEach(function (r) {
       var score = 0;
       for (var k in r.params) {
         if (String(params[k]) !== String(r.params[k])) return;   // contradiction

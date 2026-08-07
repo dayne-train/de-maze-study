@@ -54,7 +54,11 @@
         gpa: 3.8, grade: 11, prereqMet: true, transcriptAttached: true,
         sisId: (enrolled && enrolled.sisId) || 'STU-26-1000',
         institution: (enrolled && enrolled.institution) || 'wvcc',
-        groupIds: ['wvcc-g1', 'wvcc-g2']
+        /* wvcc-g2 IS 'Math - Dual Enrollment Fall 2026' — her group, and the one
+           MATH1D sits in. The screens that show a group read it from groupIds,
+           NOT from the `group` string, so seeding both g1 and g2 made the admit
+           workflow announce her as English while every other screen said Math. */
+        groupIds: ['wvcc-g2']
       };
       ALL_APPS.unshift(pending);
       if (typeof activeApps !== 'undefined') activeApps.unshift(pending);
@@ -166,14 +170,69 @@
     observe: function () {
       var screen = document.querySelector('.screen.active');
       var onDe = screen && screen.id === 'screen-de';
-      return {
+      var id = screen && screen.id;
+      /* The Admit workflow page and the bulk screens all render from
+         currentActionIds, which showScreen receives as an ARGUMENT and holds
+         only in memory. */
+      var sel = null;
+      if (id === 'screen-admit-confirm' || id === 'screen-bulk-approve' || id === 'screen-deny') {
+        try {
+          if (currentActionIds && currentActionIds.length) sel = currentActionIds.join(',');
+        } catch (e) {}
+      }
+      var out = {
         seg:  onDe ? activeSeg() : null,
         mode: onDe ? (window.deScreenMode === 'review' ? 'review' : 'all') : null,
         app:  window.currentReviewId || null
       };
+      if (sel) out.sel = sel;
+      return out;
     },
 
     apply: function (p) {
+      /* ── The Admit workflow page ──────────────────────────────────────
+         renderAdmitConfirmScreen() reads currentActionIds and, finding none
+         after a page load, renders an EMPTY mount — the participant clicks
+         "Admit Now" and lands on a blank workflow page. Worse, the two commit
+         callbacks (_approveConsentOnRegister / _approveConsentOnHold) are
+         module-scoped and also gone, so even with the ids restored both buttons
+         would do nothing.
+
+         Restoring both by re-entering through the prototype's own
+         requestApproveConsent(), with the same commit functions the queue
+         passes. That rebuilds the ids, the callbacks and the screen in one call
+         — and it is the path the product actually uses, so the page cannot
+         drift from it.
+
+         requestApproveConsent() calls showScreen('admit-confirm') itself, which
+         is why this returns rather than falling through. Safe inside apply():
+         the shim suppresses navigation while it is applying state. */
+      if (p.screen === 'admit-confirm' && p.sel) {
+        var admitId = p.sel.split(',')[0];
+        var admitApp = knownApp(admitId) && window.findAppAnywhere(admitId);
+        if (admitApp && typeof window.requestApproveConsent === 'function') {
+          window.requestApproveConsent(
+            admitId, admitApp.institution,
+            admitApp.firstName + ' ' + admitApp.lastName,
+            function () { commitApproveFromQueue(admitId); },
+            function () { commitAdmitOnlyFromQueue(admitId); }
+          );
+          return;
+        }
+        console.warn('[maze-shim] admit-confirm without a known application — falling back to the queue');
+        window.showScreen('de');
+        return;
+      }
+
+      /* Bulk screens: hand the ids back the way showScreen() expects them. */
+      if ((p.screen === 'bulk-approve' || p.screen === 'deny') && p.sel) {
+        var ids = p.sel.split(',').filter(Boolean);
+        try { ids.forEach(function (i) { selectedIds.add(i); }); } catch (e) {}
+        if (p.screen === 'bulk-approve') window.showScreen('bulk-approve', ids);
+        else window.showScreen('deny', { ids: ids, from: 'queue' });
+        return;
+      }
+
       if (p.mode === 'review' && typeof window.enterReviewWorkflow === 'function') {
         window.enterReviewWorkflow();
       } else if (p.mode === 'all' && typeof window.showAllApplications === 'function') {

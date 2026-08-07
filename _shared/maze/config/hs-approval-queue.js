@@ -101,7 +101,11 @@
         gpa: 3.8, grade: 11, prereqMet: true, transcriptAttached: true,
         sisId: (enrolled && enrolled.sisId) || 'STU-26-1000',
         institution: (enrolled && enrolled.institution) || 'wvcc',
-        groupIds: ['wvcc-g1', 'wvcc-g2']
+        /* wvcc-g2 IS 'Math - Dual Enrollment Fall 2026' — her group, and the one
+           MATH1D sits in. The screens that show a group read it from groupIds,
+           NOT from the `group` string, so seeding both g1 and g2 made the admit
+           workflow announce her as English while every other screen said Math. */
+        groupIds: ['wvcc-g2']
       };
       ALL_APPS.unshift(pending);            /* first row: findable without paging */
       if (typeof activeApps !== 'undefined') activeApps.unshift(pending);
@@ -255,6 +259,40 @@
     try { if (typeof renderInvitedTable === 'function') renderInvitedTable(); } catch (e) {}
   }
 
+  /* ── The single-approve attestation modal ──────────────────────────────
+     Approving one learner fires a non-skippable attestation modal over the
+     queue (or over the detail screen). It changes no screen and, on confirm,
+     leaves the participant exactly where they were — so the whole decision was
+     invisible: no step for the modal, and none for the outcome.
+
+     requestApproveConsent() does NOT receive the application id on this fork
+     (only institution + display name), so the id is captured from the caller
+     instead. approveFromQueue(id) is the queue path; the detail path sets
+     currentActionIds, which is read as a fallback. */
+  var approvingId = null;
+
+  (function captureApprove() {
+    if (typeof window.approveFromQueue !== 'function' || window.approveFromQueue.__mazeApprove) return;
+    var orig = window.approveFromQueue;
+    window.approveFromQueue = function (id) {
+      approvingId = id;
+      return orig.apply(this, arguments);
+    };
+    window.approveFromQueue.__mazeApprove = true;
+  })();
+
+  function approveModalOpen() {
+    var o = document.getElementById('approve-consent-overlay');
+    return !!(o && o.classList.contains('open'));
+  }
+
+  function approveModalId() {
+    if (approvingId) return approvingId;
+    try { if (currentActionIds && currentActionIds.length === 1) return currentActionIds[0]; }
+    catch (e) {}
+    return null;
+  }
+
   MazeShim.init({
     proto: 'hs-approval-queue',
     defaultScreen: 'dashboard',
@@ -271,8 +309,15 @@
          showScreen('adv-search'). A cold link yields a blank Global Search page. */
     ],
 
+    /* requestApproveConsent and approveFromQueue open the attestation modal
+       WITHOUT changing screen, so neither triggers a wrapped showScreen and the
+       router never notices. Both are wrapped so opening the modal schedules a
+       URL write like any other navigation — requestApproveConsent because every
+       path into the modal goes through it, approveFromQueue because it is the
+       one that knows the application id. */
     wrap: ['showScreen', 'switchSegment', 'enterReviewWorkflow',
-           'showAllApplications', 'viewApplication'],
+           'showAllApplications', 'viewApplication',
+           'requestApproveConsent', 'approveFromQueue'],
 
     observe: function () {
       var screen = document.querySelector('.screen.active');
@@ -300,7 +345,7 @@
           if (inviteState.selectedGroupIds.size) grp = Array.from(inviteState.selectedGroupIds).join(',');
         } catch (e) {}
       }
-      return {
+      var out = {
         seg:  onDe ? activeSeg() : null,
         mode: onDe ? (window.deScreenMode === 'review' ? 'review' : 'all') : null,
         app:  window.currentReviewId || null,
@@ -308,6 +353,15 @@
         col:  col,
         grp:  grp
       };
+      /* Reported ONLY while the attestation modal is actually open. Reporting it
+         after it closed would pin the participant on the modal's address once
+         they had left it, and the next navigation would look like a no-op. */
+      if (approveModalOpen()) {
+        out.modal = 'approve';
+        var mid = approveModalId();
+        if (mid) out.app = mid;
+      }
+      return out;
     },
 
     apply: function (p) {
@@ -320,6 +374,23 @@
         window.enterReviewWorkflow();
       } else if (p.mode === 'all' && typeof window.showAllApplications === 'function') {
         window.showAllApplications();
+      }
+
+      /* Re-open the attestation modal after the page load that gave it its own
+         address. Re-entered through the prototype's own approveFromQueue(),
+         which rebuilds the modal AND its commit callback — the callback is
+         module-scoped and would otherwise be gone, leaving a modal whose
+         Confirm button does nothing. */
+      if (p.modal === 'approve') {
+        var target = p.app;
+        if (target && knownApp(target) && typeof window.approveFromQueue === 'function') {
+          window.showScreen('de');
+          window.approveFromQueue(target);
+          return;
+        }
+        console.warn('[maze-shim] approve modal without a known application — showing the queue');
+        window.showScreen('de');
+        return;
       }
 
       /* Invite wizard: refill the accumulating selection BEFORE showing the

@@ -86,6 +86,12 @@ window.MAZE_ROUTES = {
     },
     {
       "params": {
+        "modal": "approve"
+      },
+      "slug": "approve-confirm"
+    },
+    {
+      "params": {
         "screen": "deny"
       },
       "slug": "deny"
