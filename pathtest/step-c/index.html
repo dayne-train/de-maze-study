@@ -29,13 +29,13 @@
 </script>
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Path test — Step 4 — click, then navigate 300ms later</title>
+<title>Path test — Step 5 — synthetic click on a real link</title>
 <style>body{font:16px/1.6 system-ui,sans-serif;margin:12vh auto;max-width:34rem;padding:0 1.5rem}
 h1{font-size:1.4rem}code{background:#eee;padding:.1em .35em;border-radius:3px}
 a,button{display:inline-block;margin-top:1.5rem;font:inherit;padding:.7em 1.2em;border:1px solid #333;
 border-radius:6px;background:#fff;color:#111;text-decoration:none;cursor:pointer}
 .tag{display:inline-block;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;
 background:#111;color:#fff;padding:.2em .5em;border-radius:3px;margin-bottom:.75rem}</style>
-<h1>Step 4 — click, then navigate 300ms later</h1>
-<p>A button that navigates with <code>location.assign()</code>, but only after a short delay, so the click has time to be recorded before the page unloads.</p><button id="go">Continue</button><script>document.getElementById("go").onclick=function(){setTimeout(function(){location.assign("../step-c/");},300);};</script>
+<h1>Step 5 — synthetic click on a real link</h1>
+<p>A button that builds a genuine anchor element and clicks it in code. Real link, real navigation, but the click is dispatched by script rather than by a person.</p><button id="go">Continue</button><script>document.getElementById("go").onclick=function(){var a=document.createElement("a");a.href="../step-d/";document.body.appendChild(a);a.click();};</script>
 <p style="margin-top:2rem;color:#777;font-size:.85rem">Diagnostic page. Not part of the study.</p>
