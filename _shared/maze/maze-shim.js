@@ -194,6 +194,25 @@
   var hardNav = false;
   var navigating = false;
 
+  /* ?cloak=off — author paths without the loading cover.
+     The cover is up for the whole navigation delay on the page being left, plus
+     the first frames of the destination. That is roughly the window Maze uses to
+     capture a step's thumbnail while a path is being created, so some steps come
+     back as blank screenshots and others do not, depending on where the capture
+     lands. The path still records correctly; only the picture is blank.
+
+     The cover is for PARTICIPANTS — it hides the prototype's default screen
+     flashing past before the deep link lands, and the double-render when a step
+     is a real page load. Neither matters to whoever is authoring the study, so
+     it can simply be switched off for that. Author with ?cloak=off to get real
+     thumbnails, and leave it off the participant URLs. */
+  var cloakOff = new URLSearchParams(root.location.search).get('cloak') === 'off';
+
+  function raiseCloak() {
+    if (cloakOff) return;
+    document.documentElement.classList.add('maze-booting');
+  }
+
   /* HOW LONG TO WAIT BETWEEN THE CLICK AND THE NAVIGATION.
 
      300, and do not lower it without re-testing IN A PROTOTYPE.
@@ -295,7 +314,7 @@
 
        Failsafe, as everywhere else the cloak is used: if the navigation never
        happens, uncover rather than leave the participant on a blank page. */
-    document.documentElement.classList.add('maze-booting');
+    raiseCloak();
     root.setTimeout(function () {
       if (root.location.href !== target.href) {
         log('navigation to ' + target.href + ' did not happen — uncovering');
@@ -613,6 +632,9 @@
   root.MazeShim = {
     init: function (descriptor) {
       desc = descriptor;
+      /* Drop the cover the inline <head> script raised, before boot rather than
+         after — with ?cloak=off there is nothing to hide behind. */
+      if (cloakOff) document.documentElement.classList.remove('maze-booting');
       hardNav = new URLSearchParams(root.location.search).get('nav') === 'load';
       installBaseGuard();
       installDevHotkey();
