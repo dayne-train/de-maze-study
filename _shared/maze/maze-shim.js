@@ -89,9 +89,23 @@
      it causes without any extra plumbing.
 
      Machine-driven writes (boot restore, popstate, config eviction) still go
-     through writeUrl/replaceState and never reload — reloading there would loop. */
+     through writeUrl/replaceState and never reload — reloading there would loop.
+
+     THE DELAY IS LOAD-BEARING. Navigating in the same tick as the click loses the
+     step: the document unloads before Maze's snippet has flushed the click, and
+     its path creator reports "we didn't detect any clicks on this page" — which
+     is exactly what a real document load with a changed URL was still producing.
+     Established by control (site/pathtest2, Aug 7): an immediate location.assign
+     was NOT recorded; the same navigation 300ms after the click WAS. Two other
+     techniques also worked (synthetic anchor click, real anchor with prevented
+     default) but both cost more and buy nothing extra.
+
+     300 is the value that was actually tested. Do not trim it to feel snappier
+     without re-running the control — the failure mode is silent, and it does not
+     surface until someone tries to define a success path. */
   var hardNav = false;
   var navigating = false;
+  var NAV_DELAY_MS = 300;
 
   function navigate(params) {
     var u = buildUrl(params);
@@ -102,7 +116,7 @@
       return;
     }
     navigating = true;          // suppress any further writes mid-unload
-    root.location.assign(u.href);
+    root.setTimeout(function () { root.location.assign(u.href); }, NAV_DELAY_MS);
   }
 
   /* ── Current state ─────────────────────────────────────────────────── */
