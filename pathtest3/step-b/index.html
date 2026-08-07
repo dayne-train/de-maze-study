@@ -29,13 +29,32 @@
 </script>
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Path test — Step 6 — real link, default prevented</title>
+<title>Path test 3 - step 5</title>
 <style>body{font:16px/1.6 system-ui,sans-serif;margin:12vh auto;max-width:34rem;padding:0 1.5rem}
 h1{font-size:1.4rem}code{background:#eee;padding:.1em .35em;border-radius:3px}
 a,button{display:inline-block;margin-top:1.5rem;font:inherit;padding:.7em 1.2em;border:1px solid #333;
 border-radius:6px;background:#fff;color:#111;text-decoration:none;cursor:pointer}
 .tag{display:inline-block;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;
-background:#111;color:#fff;padding:.2em .5em;border-radius:3px;margin-bottom:.75rem}</style>
-<h1>Step 6 — real link, default prevented</h1>
-<p>A genuine link the participant clicks, whose default is cancelled so script performs the navigation instead. This is what a prototype control would look like if every navigating element became an anchor.</p><a href="../step-e/" id="go">Continue</a><script>document.getElementById("go").onclick=function(e){e.preventDefault();location.assign(this.href);};</script>
+background:#111;color:#fff;padding:.2em .5em;border-radius:3px;margin-bottom:.75rem}
+.q{background:#b30000}
+/* Watermark: the step number, tiled across the viewport and repeated in a
+   corner badge, so a screenshot or a glance is enough to say which step you
+   were on when something did or did not record. */
+body{position:relative;z-index:1}
+#wm{position:fixed;inset:-25%;z-index:0;pointer-events:none;user-select:none;
+display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1.2rem 2.5rem;
+transform:rotate(-22deg);opacity:.10;overflow:hidden}
+#wm span{font:800 2.4rem/1 system-ui,sans-serif;white-space:nowrap;letter-spacing:.06em}
+#badge{position:fixed;top:0;right:0;z-index:2;background:#111;color:#fff;
+font:800 1.1rem/1 system-ui,sans-serif;letter-spacing:.08em;padding:.9rem 1.1rem;
+border-bottom-left-radius:8px}</style>
+
+<div id="wm"></div><div id="badge">STEP 5</div>
+<h1>Step 5 - done</h1>
+<p>End of the control. Report which step numbers Maze captured.</p>
 <p style="margin-top:2rem;color:#777;font-size:.85rem">Diagnostic page. Not part of the study.</p>
+<script>
+var wm = document.getElementById('wm'), out = '';
+for (var i = 0; i < 72; i++) out += '<span>STEP 5</span>';
+wm.innerHTML = out;
+</script>
