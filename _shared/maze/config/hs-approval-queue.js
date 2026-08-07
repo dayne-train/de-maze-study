@@ -134,8 +134,33 @@
     }
   }
 
+  /* ── One institution in the invite wizard ───────────────────────────────
+     The wizard offers three tiles (West Valley CC, ASU, Mesa CC) but the whole
+     study runs on one exchange: the college prototype is WVCC-fixed, Jessica's
+     course is MATH1D at WVCC, and every fixture application names wvcc. Two
+     institutions nobody can reach are a decision the participant has to make
+     and then discover was never real.
+
+     The step itself stays. One tile still says "you are inviting these students
+     TO an institution", which is the thing worth understanding, and it keeps a
+     recorded step in task 1's path. Skipping it outright would remove both.
+
+     Safe to trim: the QUEUE renders institution names from COLLEGES (data-apps),
+     not from this map. COLLEGE_META is invite-flow display data, and its only
+     other reader (edit-groups.js) already falls back when a key is missing. */
+  function seedSingleInstitution() {
+    try {
+      Object.keys(COLLEGE_META).forEach(function (k) {
+        if (k !== 'wvcc') delete COLLEGE_META[k];
+      });
+    } catch (e) {
+      if (window.console) console.warn('[maze-shim] institution trim failed: ' + e.message);
+    }
+  }
+
   seedChapter();
   seedRoster();
+  seedSingleInstitution();
 
   /* ── Mutations that must survive a page load ────────────────────────────
      Approving moves app objects between three arrays: out of `activeApps`
