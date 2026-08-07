@@ -159,6 +159,32 @@
     });
   }
 
+  /* ── Which course is being registered ──────────────────────────────────
+     `currentCourse` is IIFE-scoped with no getter, like everything else in this
+     prototype, so it cannot be read back out. But viewCourse(id) IS exposed and
+     is the only way onto the detail screen — so wrapping it records the id on
+     the way past, which is enough.
+
+     Without this, the participant picks a course, the page loads, and the
+     detail screen has no course: registerCourses() falls back to the canonical
+     MATH1D regardless of what they chose. That fallback exists for deep links
+     and the dev drawer, and it would have quietly made every participant look
+     like they picked the same course.
+
+     Wrapped at parse time so the shim's own wrapper goes on the outside and
+     still sees the navigation. */
+  var lastCourse = null;
+
+  (function captureCourse() {
+    if (typeof window.viewCourse !== 'function' || window.viewCourse.__mazeCourse) return;
+    var orig = window.viewCourse;
+    window.viewCourse = function (id) {
+      lastCourse = id;
+      return orig.apply(this, arguments);
+    };
+    window.viewCourse.__mazeCourse = true;
+  })();
+
   MazeShim.init({
     proto: 'learner-application',
     defaultScreen: 'dashboard',
@@ -170,7 +196,7 @@
     ],
 
     wrap: ['showScreen', 'startEntry', 'startCollegeSite', 'goToApplication',
-           'startApplicationFlow', 'completeSignIn'],
+           'startApplicationFlow', 'completeSignIn', 'viewCourse'],
 
     /* Both are honoured on the way in and unreadable on the way out: `journey`
        sets entryOrigin/inviteFlow and `state` sets DEV.appState, all of which are
@@ -178,7 +204,15 @@
        subsequent navigations instead of silently dropping out of the URL. */
     writeOnly: ['journey', 'state'],
 
-    observe: function () { return {}; },
+    observe: function () {
+      /* Only meaningful on the two screens that depend on a chosen course.
+         Reporting it everywhere would append ?course= to every URL in the
+         learner flow for no benefit. */
+      var el = document.querySelector('.screen.active');
+      var id = el && el.id;
+      var onCourse = id === 'screen-course-detail' || id === 'screen-registered';
+      return { course: onCourse ? lastCourse : null };
+    },
 
     apply: function (p) {
       /* ORDER: journey → state → screen. Journey sets entryOrigin/inviteFlow and
@@ -195,6 +229,15 @@
 
       if (p.state && window.__dev && typeof window.__dev.setAxis === 'function') {
         window.__dev.setAxis('appState', p.state);
+      }
+
+      /* Restore the chosen course before landing on a screen that renders from
+         it. viewCourse() sets currentCourse, renders the detail and navigates,
+         so it does the whole job — no separate showScreen call for this case. */
+      if (p.course && typeof window.viewCourse === 'function') {
+        lastCourse = p.course;
+        if (p.screen === 'course-detail') { window.viewCourse(p.course); return; }
+        window.viewCourse(p.course);   /* sets currentCourse for 'registered' */
       }
 
       if (p.screen) {

@@ -39,7 +39,8 @@
      wizard. It is a PAYLOAD param, not a step: two participants who select
      different rows are doing the same thing and belong on the same path, so it
      must never become part of a folder slug. */
-  var OWNED = ['screen', 'seg', 'mode', 'app', 'journey', 'state', 'step', 'variant', 'sel'];
+  var OWNED = ['screen', 'seg', 'mode', 'app', 'journey', 'state', 'step', 'variant',
+               'sel', 'col', 'grp', 'course'];
 
   var desc = null;        // the active prototype descriptor
   var applying = false;   // true while WE are driving; suppresses pushState

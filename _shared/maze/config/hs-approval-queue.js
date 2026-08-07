@@ -8,6 +8,12 @@
      belong to the Grades concept and must never be confused with these. */
   var SEGS = ['needs-review', 'waiting', 'active', 'denied'];
 
+  /* The four screens of the invite wizard, which share one accumulating
+     selection. `screen-invites` (Pending Invites) is NOT one of them — it is
+     where the wizard lands after sending, and by then the selection is spent. */
+  var INVITE_SCREENS = ['screen-invite-learners', 'screen-invite-college',
+                        'screen-invite-groups'];
+
   function activeSeg() {
     var panels = document.querySelectorAll('.seg-panel.active');
     for (var i = 0; i < panels.length; i++) {
@@ -53,6 +59,21 @@
 
   function seedChapter() {
     var chapter = new URLSearchParams(location.search).get('chapter');
+
+    /* Task 1 invites her, which happens BEFORE she applies — so at that point
+       she should not be in the queue at all, in any bucket. The authored
+       fixture has her Registered, and an admin being asked to invite a student
+       who is already enrolled in the course is a fair thing to be confused by. */
+    if (chapter === 'invite') {
+      try {
+        var j = ALL_ACTIVE_APPS.findIndex(function (a) { return a.id === JESSICA; });
+        if (j !== -1) ALL_ACTIVE_APPS.splice(j, 1);
+      } catch (e) {
+        if (window.console) console.warn('[maze-shim] invite chapter seed failed: ' + e.message);
+      }
+      return;
+    }
+
     if (chapter !== 'hs-approval') return;
     try {
       /* Out of Registered, or she appears twice — once as a pending applicant
@@ -185,17 +206,31 @@
          receives as an ARGUMENT and holds only in memory. A page load loses it,
          and the screen then shows an empty selection with a live Approve button
          — worse than an error, because it looks like it worked. */
-      var sel = null;
+      var sel = null, col = null, grp = null;
       if (id === 'screen-bulk-approve' || id === 'screen-deny') {
         try {
           if (currentActionIds && currentActionIds.length) sel = currentActionIds.join(',');
+        } catch (e) {}
+      }
+      /* THE INVITE WIZARD accumulates across four screens: learners, then the
+         institution, then groups, then send. All of it lives in one in-memory
+         object, so without carrying it the participant picks their students,
+         the page loads, and the next screen has nothing selected — the wizard
+         silently forgets everything on the way to its own second step. */
+      if (INVITE_SCREENS.indexOf(id) !== -1) {
+        try {
+          if (inviteState.selectedLearnerIds.size) sel = Array.from(inviteState.selectedLearnerIds).join(',');
+          if (inviteState.collegeKey) col = inviteState.collegeKey;
+          if (inviteState.selectedGroupIds.size) grp = Array.from(inviteState.selectedGroupIds).join(',');
         } catch (e) {}
       }
       return {
         seg:  onDe ? activeSeg() : null,
         mode: onDe ? (window.deScreenMode === 'review' ? 'review' : 'all') : null,
         app:  window.currentReviewId || null,
-        sel:  sel
+        sel:  sel,
+        col:  col,
+        grp:  grp
       };
     },
 
@@ -209,6 +244,26 @@
         window.enterReviewWorkflow();
       } else if (p.mode === 'all' && typeof window.showAllApplications === 'function') {
         window.showAllApplications();
+      }
+
+      /* Invite wizard: refill the accumulating selection BEFORE showing the
+         screen. showScreen() is what triggers renderInviteLearners /
+         renderInviteCollege / renderInviteGroups (boot.js), and each renders
+         its ticks straight from inviteState — so restoring after the navigation
+         would paint an empty wizard and leave it that way. */
+      if (p.screen && p.screen.indexOf('invite-') === 0) {
+        try {
+          if (p.sel) {
+            inviteState.selectedLearnerIds = new Set(p.sel.split(',').filter(Boolean));
+          }
+          if (p.col) inviteState.collegeKey = p.col;
+          if (p.grp) {
+            /* AFTER collegeKey. inviteSelectCollege() resets the group selection
+               whenever the institution changes, so groups restored first would
+               be wiped by the college restore that followed. */
+            inviteState.selectedGroupIds = new Set(p.grp.split(',').filter(Boolean));
+          }
+        } catch (e) {}
       }
 
       /* Bulk screens: hand the ids back the way showScreen() expects them, and
