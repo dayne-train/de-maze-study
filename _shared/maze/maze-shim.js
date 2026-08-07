@@ -207,6 +207,40 @@
      it can simply be switched off for that. Author with ?cloak=off to get real
      thumbnails, and leave it off the participant URLs. */
   var cloakOff = new URLSearchParams(root.location.search).get('cloak') === 'off';
+  var prevScreenEl = null;
+
+  /* ── Put the outgoing screen back ──────────────────────────────────────
+     A step is a real page load, and the prototype swaps the screen
+     synchronously inside the click handler — so between the click and the load
+     the OUTGOING page is already showing the DESTINATION. Two problems: the
+     participant sees the destination render twice, and Maze captures that page
+     while creating a path, so its thumbnail shows the wrong screen.
+
+     Covering it was the first fix, and it traded one problem for another: the
+     capture then landed on a blank cover instead. Authoring with the cover off
+     is not an option either, because the recorded path has to match the URL
+     participants actually use.
+
+     So put the screen back rather than hiding it. This runs in schedule()'s
+     microtask, which the browser drains BEFORE it paints, so the swap never
+     reaches the glass and the page keeps showing exactly what the participant
+     was looking at until the navigation replaces it.
+
+     CLASS SWAP ONLY, deliberately — no re-render. The document is about to be
+     thrown away, so anything more is wasted work, and re-rendering could fire
+     the very handlers that scheduled this navigation.
+
+     A modal opening does not change .screen.active, so the modal case is a
+     no-op here and the modal stays visible, which is correct: that IS the step
+     being recorded. */
+  function restoreOutgoingScreen() {
+    if (!prevScreenEl) return false;
+    var now = document.querySelector('.screen.active');
+    if (!now || now === prevScreenEl) return false;
+    now.classList.remove('active');
+    prevScreenEl.classList.add('active');
+    return true;
+  }
 
   function raiseCloak() {
     if (cloakOff) return;
@@ -314,7 +348,10 @@
 
        Failsafe, as everywhere else the cloak is used: if the navigation never
        happens, uncover rather than leave the participant on a blank page. */
-    raiseCloak();
+    /* Cover only if the screen could not be put back — a blank page is better
+       than the destination rendering twice, but it is the fallback, not the
+       plan. */
+    if (!restoreOutgoingScreen()) raiseCloak();
     root.setTimeout(function () {
       if (root.location.href !== target.href) {
         log('navigation to ' + target.href + ' did not happen — uncovering');
@@ -384,7 +421,11 @@
     if (typeof orig !== 'function') { log('cannot wrap missing function "' + name + '"'); return; }
     if (orig.__mazeWrapped) return;
     var wrapped = function () {
+      /* Remembered BEFORE the call so a hard navigation can put it back — see
+         restoreOutgoingScreen(). */
+      var before = document.querySelector('.screen.active');
       var r = orig.apply(this, arguments);
+      if (before) prevScreenEl = before;
       schedule();
       return r;
     };
