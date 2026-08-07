@@ -92,32 +92,47 @@
   }
 
   /* ════════════════════════════════════════════════════════
-     STUDY BUILD — identity prefill only.
+     STUDY BUILD — full prefill of the consent act.
 
-     Replaces the demo's pcFillConsent(), which filled the ENTIRE consent act
-     (name, date, both checkboxes, and the signature) on a click anywhere in the
-     form. That was a presenter convenience and, in an unmoderated study, it
-     would have completed the task on the participant's behalf.
+     Every data-entry field on this screen arrives filled: name-as-signed, date,
+     both certification checkboxes, and the signature. The task copy tells the
+     participant their details have been filled in for them.
 
-     What we prefill: name-as-signed and date. Those are facts the system already
-     holds about the guardian, so typing them measures nothing.
+     Why the whole thing and not just identity: this study is walking admins
+     through the end-to-end product so they can see and comment on each step. The
+     guardian screen is load-bearing to that story and cannot be cut, but it is
+     not the screen we are measuring. Asking an admin to invent a signature and a
+     consent date adds friction to a step whose value here is being SEEN.
 
-     What we deliberately do NOT prefill: the two consent checkboxes and the
-     signature. Those ARE the task — whether a guardian understands what they are
-     agreeing to, and whether they will agree to it. Prefilling them would leave
-     the study with nothing to observe on this screen.
+     A participant can still untick a box or clear and redraw the signature; the
+     controls are live, they simply start satisfied. submitConsent() has no hard
+     gate, so nothing here blocks the flow either way.
   ════════════════════════════════════════════════════════ */
   window.pcPrefillIdentity = function () {
     var cols = document.querySelectorAll('#screen-consent .de-app-cols input');
     ['Diana', 'L', 'Cumberland'].forEach(function (v, i) { if (cols[i]) cols[i].value = v; });
     markColsFilled(document.getElementById('screen-consent'));
-    var dateField = document.querySelector('#screen-consent .de-app-consent .tasty-field input');
+    /* Target the date input by its placeholder. ".de-app-consent .tasty-field input"
+       looks right but matches the First Name column first — the name row is itself
+       a .tasty-field nested inside .de-app-consent — so it wrote the date into the
+       name and left Date empty. */
+    var dateField = document.querySelector('#screen-consent .de-app-consent input[placeholder*="MM"]');
     if (dateField) {
       dateField.value = '03 / 22 / 2026';
       if (window.validateField) {
         var f = dateField.closest('.tasty-field'); if (f) window.validateField(f);
       }
     }
+
+    /* Both certification checkboxes. Set the class directly rather than calling
+       toggleCheck(), which flips — re-entering the screen would untick them. */
+    document.querySelectorAll('#screen-consent .cert-check').forEach(function (el) {
+      el.classList.add('is-checked');
+    });
+
+    /* The signature. drawSignature() clears the canvas first, so re-entering the
+       screen redraws rather than scribbling over the previous stroke. */
+    drawSignature();
   };
 
   /* Multi-column name rows (First/Middle/Last) are separate .tasty-field columns;

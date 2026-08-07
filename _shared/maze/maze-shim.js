@@ -53,15 +53,56 @@
     return out;
   }
 
-  function writeUrl(params, push) {
+  function buildUrl(params) {
     var u = new URL(root.location.href);
     OWNED.forEach(function (k) { u.searchParams.delete(k); });
     Object.keys(params).forEach(function (k) {
       var v = params[k];
       if (v !== null && v !== undefined && v !== '') u.searchParams.set(k, v);
     });
+    return u;
+  }
+
+  function writeUrl(params, push) {
+    var u = buildUrl(params);
     if (u.href === root.location.href) return;
     history[push ? 'pushState' : 'replaceState']({ maze: params }, '', u.href);
+  }
+
+  /* ── Hard navigation (?nav=load) ────────────────────────────────────────
+     Maze does NOT register a pushState-only URL change. Their own guidance for
+     SPA prototypes is "the browser should go to a new page and the URL should
+     change (not a single page application)", so a success path needs a real
+     document load per step, not a History API call.
+
+     ?nav=load turns participant-initiated navigation into location.assign().
+     Opt-in PER TASK, by putting it in that task's start URL, because a reload
+     throws away everything the prototype holds in memory. That is harmless for a
+     task that only moves between screens, and destructive for one that
+     accumulates state across screens (the invite wizard's selections, a
+     bulk-approve row selection, an approval that has not been re-derived from a
+     fixture). Those need their state carried in the URL before they can be
+     switched on.
+
+     `nav` is deliberately NOT in OWNED: unowned params are preserved verbatim on
+     every write and carried across prototypes by url(), so it survives the reload
+     it causes without any extra plumbing.
+
+     Machine-driven writes (boot restore, popstate, config eviction) still go
+     through writeUrl/replaceState and never reload — reloading there would loop. */
+  var hardNav = false;
+  var navigating = false;
+
+  function navigate(params) {
+    var u = buildUrl(params);
+    /* Identical URL: no step to record, and assigning it would reload forever. */
+    if (u.href === root.location.href) return;
+    if (!hardNav) {
+      history.pushState({ maze: params }, '', u.href);
+      return;
+    }
+    navigating = true;          // suppress any further writes mid-unload
+    root.location.assign(u.href);
   }
 
   /* ── Current state ─────────────────────────────────────────────────── */
@@ -99,12 +140,12 @@
   /* Debounced so a showScreen()+switchSegment() pair produces ONE history entry
      rather than two. Fires on the next microtask. */
   function schedule() {
-    if (pending || !booted) return;
+    if (pending || !booted || navigating) return;
     pending = true;
     Promise.resolve().then(function () {
       pending = false;
-      if (applying) return;             // machine-driven; apply() writes its own
-      writeUrl(collect(), true);
+      if (applying || navigating) return;   // machine-driven; apply() writes its own
+      navigate(collect());
     });
   }
 
@@ -252,6 +293,7 @@
   root.MazeShim = {
     init: function (descriptor) {
       desc = descriptor;
+      hardNav = new URLSearchParams(root.location.search).get('nav') === 'load';
       installDevHotkey();
       if (document.readyState === 'complete') start();
       else root.addEventListener('load', start);

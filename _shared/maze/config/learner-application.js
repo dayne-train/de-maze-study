@@ -47,7 +47,95 @@
     if (typeof fn === 'function') fn();
   }
 
+  /* ── Existing-account branch ────────────────────────────────────────────
+     Study decision: Jessica already has a Parchment account, so the whole
+     "create your account" chain is out. The invite email goes straight to a
+     prefilled sign-in screen:
+
+         email-landing → login → de-app          (was)
+         email-landing → email-entry → login | aer → confirm-email → de-app
+
+     submitEmailEntry() checked the typed address against KNOWN_ACCOUNTS —
+     jcumberland@pioneerhs.edu got sign-in, ANY other address got account
+     creation. The task copy tells participants to use dummy details, so nearly
+     all of them took the long branch, and the same task produced two different
+     routes.
+
+     Two things are patched, deliberately belt-and-braces:
+       1. Every route INTO email-entry is repointed at login (below).
+       2. email-entry itself is left prefilled and forced to sign-in, so if any
+          route we missed still lands there, it is a one-click pass-through
+          rather than a dead end. It stays in the screens allowlist for the
+          same reason.                                                        */
+  var forcedSignIn = false;
+
+  /* Fill sign-in before showing it, so the screen is never briefly empty. */
+  function goToSignIn() {
+    var le = document.getElementById('login-email');
+    if (le && !le.value) le.value = 'jcumberland@pioneerhs.edu';
+    window.showScreen('login');
+  }
+
+  /* The invite email's "Accept Invite" button carries an inline
+     onclick="showScreen('email-entry')". Repoint the element rather than
+     wrapping showScreen: the shim, the after() hook and the prototype already
+     form a wrapper chain around it, and inserting another link that redirects
+     mid-chain would make the recorded URL depend on wrapper order. */
+  function repointInviteCta() {
+    var cta = document.querySelector('#screen-email-landing .email-notif-cta');
+    if (!cta || cta.__mazeRepointed) return;
+    cta.__mazeRepointed = true;
+    cta.onclick = goToSignIn;
+  }
+
+  function forceSignInBranch() {
+    if (forcedSignIn || typeof window.submitEmailEntry !== 'function') return;
+    forcedSignIn = true;
+    window.submitEmailEntry = function () {
+      var form = document.getElementById('email-entry-form');
+      if (form && typeof window.validateForm === 'function' && !window.validateForm(form)) return;
+      var input = document.getElementById('email-entry-input');
+      var login = document.getElementById('login-email');
+      if (login && input) login.value = input.value;
+      window.showScreen('login');
+    };
+  }
+
+  function prepareEmailEntry() {
+    var input = document.getElementById('email-entry-input');
+    if (input && !input.value) {
+      input.value = 'jcumberland@pioneerhs.edu';
+      if (window.validateField) {
+        var f = input.closest('.tasty-field'); if (f) window.validateField(f);
+      }
+    }
+    /* The "Demo" hint offers a second address that lands on account creation —
+       a signpost to a branch this build no longer has. */
+    var hint = document.querySelector('#screen-email-entry .eml-demo');
+    if (hint) hint.style.display = 'none';
+    /* "Create your account for dual enrollment" is now wrong: the account exists
+       and Continue goes to sign-in. */
+    var title = document.querySelector('#screen-email-entry .aer-hero__title');
+    if (title) title.textContent = 'Continue to your dual enrollment application';
+    forceSignInBranch();
+  }
+
   function prepopulate(screen) {
+    /* The college-website path's Apply CTA feeds the same chain. Patched on every
+       navigation rather than on its own screen, so it is already redirected
+       whichever screen the participant reaches it from. */
+    if (typeof window.startCollegeApply === 'function' && !window.startCollegeApply.__mazePatched) {
+      window.startCollegeApply = goToSignIn;
+      window.startCollegeApply.__mazePatched = true;
+    }
+    if (screen === 'email-landing') repointInviteCta();
+    if (screen === 'email-entry') prepareEmailEntry();
+    if (screen === 'login') {
+      /* Password already ships with a value; carry the email across for anyone
+         who deep-links straight to sign-in. */
+      var le = document.getElementById('login-email');
+      if (le && !le.value) le.value = 'jcumberland@pioneerhs.edu';
+    }
     if (screen === 'de-app') {
       fillOnce('de-app', window.devFillDeApp);
       /* setAxis() does not re-run the gate pass; only setGate() does. Without
