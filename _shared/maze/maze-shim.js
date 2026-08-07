@@ -47,9 +47,58 @@
 
   /* ── URL read/write ────────────────────────────────────────────────── */
 
+  /* Screen state arrives two ways. A screen FOLDER declares it in a meta tag
+     stamped by the build; the query string can still carry it (and always
+     carries the payload params the folders deliberately do not encode). Folder
+     first, query string on top, so ?app=… still selects the application while
+     the folder decides which screen. */
   function readParams() {
-    var p = new URLSearchParams(root.location.search), out = {};
+    var out = {};
+    var meta = document.querySelector('meta[name="maze-route"]');
+    if (meta) {
+      new URLSearchParams(meta.getAttribute('content') || '').forEach(function (v, k) {
+        if (OWNED.indexOf(k) !== -1) out[k] = v;
+      });
+    }
+    var p = new URLSearchParams(root.location.search);
     OWNED.forEach(function (k) { if (p.has(k)) out[k] = p.get(k); });
+    return out;
+  }
+
+  /* ── Route table ───────────────────────────────────────────────────────
+     window.MAZE_ROUTES is emitted by the build from patches/shim/routes/*.json,
+     the same file it generates the folders from — one source, so a folder can
+     never exist without a way to reach it or vice versa. */
+  function routes() {
+    return (root.MAZE_ROUTES && root.MAZE_ROUTES.routes) || [];
+  }
+
+  /* Best match wins: the route agreeing on the most params, so
+     {screen:de, seg:active} beats a bare {screen:de}. A route whose params
+     CONTRADICT the live state is not a candidate at all. */
+  function routeFor(params) {
+    var best = null, bestScore = -1;
+    routes().forEach(function (r) {
+      var score = 0;
+      for (var k in r.params) {
+        if (String(params[k]) !== String(r.params[k])) return;   // contradiction
+        score++;
+      }
+      if (score > bestScore) { bestScore = score; best = r; }
+    });
+    return best;
+  }
+
+  /* Params a route already encodes in its folder must NOT be repeated in the
+     query string — the URL would carry the same fact twice and drift the moment
+     one of them changed. Everything else (app, journey, state) stays. */
+  function payloadFor(params, route) {
+    var out = {};
+    Object.keys(params).forEach(function (k) {
+      if (route && k in route.params) return;
+      var v = params[k];
+      if (v !== null && v !== undefined && v !== '') out[k] = v;
+    });
     return out;
   }
 
@@ -70,53 +119,80 @@
   }
 
   /* ── Hard navigation (?nav=load) ────────────────────────────────────────
-     Maze does NOT register a pushState-only URL change. Their own guidance for
-     SPA prototypes is "the browser should go to a new page and the URL should
-     change (not a single page application)", so a success path needs a real
-     document load per step, not a History API call.
+     WHAT MAZE ACTUALLY RECORDS, established by four control rounds against the
+     live Pages site (build.sh generated them under /pathtest1..4/):
 
-     ?nav=load turns participant-initiated navigation into location.assign().
-     Opt-in PER TASK, by putting it in that task's start URL, because a reload
-     throws away everything the prototype holds in memory. That is harmless for a
-     task that only moves between screens, and destructive for one that
-     accumulates state across screens (the invite wizard's selections, a
-     bulk-approve row selection, an approval that has not been re-derived from a
-     fixture). Those need their state carried in the URL before they can be
-     switched on.
+       link,   PATH change                     RECORDS
+       button + 300ms delay, PATH change       RECORDS
+       button, immediate,    PATH change       does NOT record
+       link,   QUERY-only change               does NOT record
+       button + 300ms delay, QUERY-only        does NOT record
+       instant screen redraw then QUERY-only   does NOT record
+       instant screen redraw then PATH change  RECORDS
+
+     Two requirements, both necessary, neither sufficient alone:
+       1. the PATH must change — a query-string change records nothing, whatever
+          Maze's own documentation says about parameters counting as steps;
+       2. the navigation must not fire in the same tick as the click, or the
+          document unloads before the snippet flushes it.
+
+     Hence: one folder per screen (route table above, folders stamped by the
+     build) and a 300ms delay. 300 is the value that was actually tested — do not
+     trim it to feel snappier without re-running a control, because the failure
+     is silent and does not surface until someone tries to define a success path.
+
+     ?nav=load is what turns this on, opt-in PER TASK via the start URL, because
+     every step becomes a real page load and a reload throws away everything the
+     prototype holds in memory. Harmless for a task that only moves between
+     screens; destructive for one that accumulates state across screens (the
+     invite wizard's selections, a bulk-approve row selection, an approval not
+     re-derived from a fixture). Those need their state carried in the URL first.
+     With nav=load off, navigation stays a pushState and records nothing — which
+     is correct for a task not yet ready to be path-measured.
 
      `nav` is deliberately NOT in OWNED: unowned params are preserved verbatim on
-     every write and carried across prototypes by url(), so it survives the reload
-     it causes without any extra plumbing.
+     every write, so it survives the reload it causes without extra plumbing.
 
      Machine-driven writes (boot restore, popstate, config eviction) still go
-     through writeUrl/replaceState and never reload — reloading there would loop.
-
-     THE DELAY IS LOAD-BEARING. Navigating in the same tick as the click loses the
-     step: the document unloads before Maze's snippet has flushed the click, and
-     its path creator reports "we didn't detect any clicks on this page" — which
-     is exactly what a real document load with a changed URL was still producing.
-     Established by control (site/pathtest2, Aug 7): an immediate location.assign
-     was NOT recorded; the same navigation 300ms after the click WAS. Two other
-     techniques also worked (synthetic anchor click, real anchor with prevented
-     default) but both cost more and buy nothing extra.
-
-     300 is the value that was actually tested. Do not trim it to feel snappier
-     without re-running the control — the failure mode is silent, and it does not
-     surface until someone tries to define a success path. */
+     through writeUrl/replaceState and never reload — reloading there would loop. */
   var hardNav = false;
   var navigating = false;
   var NAV_DELAY_MS = 300;
 
   function navigate(params) {
-    var u = buildUrl(params);
-    /* Identical URL: no step to record, and assigning it would reload forever. */
-    if (u.href === root.location.href) return;
     if (!hardNav) {
+      var u = buildUrl(params);
+      if (u.href === root.location.href) return;
       history.pushState({ maze: params }, '', u.href);
       return;
     }
-    navigating = true;          // suppress any further writes mid-unload
-    root.setTimeout(function () { root.location.assign(u.href); }, NAV_DELAY_MS);
+
+    var route = routeFor(params);
+    if (!route) {
+      /* No folder for this state. Fall back to a same-document write rather than
+         navigating somewhere that does not exist — a missing route costs one
+         unrecorded step; a bad location.assign costs the whole session. */
+      log('no route for ' + JSON.stringify(params) + ' — staying put');
+      writeUrl(params, true);
+      return;
+    }
+
+    /* Screen folders are siblings, and every one of them carries <base href="../">
+       pointing at the prototype root, so a bare slug resolves correctly from any
+       of them AND from the prototype's own index.html. */
+    var target = new URL(route.slug + '/', document.baseURI);
+    var payload = payloadFor(params, route);
+    Object.keys(payload).forEach(function (k) { target.searchParams.set(k, payload[k]); });
+    /* Carry the unowned params forward: nav=load itself, ?net=, anything Maze
+       appends. Without this the second step would silently drop out of hard-nav
+       mode and stop recording. */
+    new URLSearchParams(root.location.search).forEach(function (v, k) {
+      if (OWNED.indexOf(k) === -1) target.searchParams.set(k, v);
+    });
+
+    if (target.href === root.location.href) return;   // no step; would loop
+    navigating = true;                                // suppress writes mid-unload
+    root.setTimeout(function () { root.location.assign(target.href); }, NAV_DELAY_MS);
   }
 
   /* ── Current state ─────────────────────────────────────────────────── */
@@ -230,6 +306,27 @@
 
   /* ── Dev drawer: hidden unless Cmd/Ctrl+D ──────────────────────────── */
 
+  /* ── <base> guard ──────────────────────────────────────────────────────
+     Screen folders carry <base href="../"> so one copy of a prototype can sit a
+     directory deeper and still find its stylesheets. The side effect: href="#"
+     no longer means "this page". It resolves against the BASE, so every
+     placeholder anchor in the prototype — menu toggles, "Set Your Preferences",
+     anything that is a link only for the cursor — becomes a live navigation to
+     the prototype root. Most call return false and are fine; the ones that do
+     not would silently throw the participant out of the screen folder.
+
+     Cancelling the default for empty-fragment anchors costs nothing (they were
+     never meant to navigate) and removes the whole class of failure. Capture
+     phase, so it runs before the page's own handlers. */
+  function installBaseGuard() {
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (href === '#' || href === '') e.preventDefault();
+    }, true);
+  }
+
   function installDevHotkey() {
     document.addEventListener('keydown', function (e) {
       if (!(e.metaKey || e.ctrlKey)) return;
@@ -308,6 +405,7 @@
     init: function (descriptor) {
       desc = descriptor;
       hardNav = new URLSearchParams(root.location.search).get('nav') === 'load';
+      installBaseGuard();
       installDevHotkey();
       if (document.readyState === 'complete') start();
       else root.addEventListener('load', start);
@@ -325,7 +423,12 @@
        forward. Assign this to location.href: same tab, full page load. Opening a
        new tab would break the single-tab Maze session (build.sh asserts none). */
     url: function (proto, params) {
-      var u = new URL('../' + proto + '/index.html', root.location.href);
+      /* Resolved against document.baseURI, NOT location.href. Inside a screen
+         folder those differ by one level: <base href="../"> pins baseURI to the
+         prototype root, so '../<proto>/' is right from a screen folder and from
+         the prototype's own index.html alike. Using location.href would land one
+         directory too deep from every screen folder. */
+      var u = new URL('../' + proto + '/index.html', document.baseURI);
       var cur = new URLSearchParams(root.location.search);
       cur.forEach(function (v, k) { if (OWNED.indexOf(k) === -1) u.searchParams.set(k, v); });
       Object.keys(params || {}).forEach(function (k) {
