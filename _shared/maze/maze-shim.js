@@ -73,6 +73,18 @@
     return (root.MAZE_ROUTES && root.MAZE_ROUTES.routes) || [];
   }
 
+  /* Which screen folder is this document sitting in? The last path segment IS
+     the slug — /hs-approval-queue/applications-registered/ → that route — and
+     the prototype's own index.html matches nothing, which is correct: it is not
+     a screen folder. */
+  function currentRoute() {
+    var parts = root.location.pathname.split('/').filter(Boolean);
+    var slug = parts.length ? parts[parts.length - 1] : '';
+    var found = null;
+    routes().forEach(function (r) { if (r.slug === slug) found = r; });
+    return found;
+  }
+
   /* Best match wins: the route agreeing on the most params, so
      {screen:de, seg:active} beats a bare {screen:de}. A route whose params
      CONTRADICT the live state is not a candidate at all. */
@@ -174,6 +186,18 @@
          unrecorded step; a bad location.assign costs the whole session. */
       log('no route for ' + JSON.stringify(params) + ' — staying put');
       writeUrl(params, true);
+      return;
+    }
+
+    /* ALREADY IN THE RIGHT FOLDER → never navigate. Compare the SLUG, not the
+       full href: the href also carries payload and dev params, so an href
+       comparison reports "different" for a state that is on the correct screen
+       and reloads it. That is a redirect loop, and it is not self-limiting —
+       each reload re-derives the same mismatch. Only a folder change is a step;
+       a payload change on the same screen is a same-document write. */
+    var here = currentRoute();
+    if (here && here.slug === route.slug) {
+      writeUrl(payloadFor(params, route), true);
       return;
     }
 
@@ -301,7 +325,16 @@
         log('requested ' + k + '="' + params[k] + '" but landed on "' + got[k] + '"');
       }
     });
-    writeUrl(got, false);   // replaceState — boot restore is not user intent
+    /* replaceState — boot restore is not user intent.
+
+       In folder mode, write ONLY the payload. The folder already states the
+       screen, and repeating it in the query string is not merely redundant: the
+       next navigation compares its target against this URL, sees /workspace/
+       against /workspace/?screen=dashboard, calls them different and reloads —
+       which re-derives the same mismatch on the next document. That is the
+       redirect loop. The folder is the single statement of which screen this is. */
+    var route = hardNav ? currentRoute() : null;
+    writeUrl(route ? payloadFor(got, route) : got, false);
   }
 
   /* ── Dev drawer: hidden unless Cmd/Ctrl+D ──────────────────────────── */
@@ -367,11 +400,18 @@
        first, and the debounced writer handles the second. */
     setTimeout(function () {
       (desc.wrap || []).forEach(wrapFn);
-      booted = true;
 
       var params = readParams();
       if (!params.screen && desc.defaultScreen) params.screen = desc.defaultScreen;
       apply(params);
+
+      /* AFTER apply(), not before. schedule() is called synchronously by every
+         wrapped function apply() invokes, and its microtask runs once apply()
+         has returned — by which time `applying` is already false, so the guard
+         there does not catch it. With `booted` set first, the boot render itself
+         scheduled a navigation: in folder mode that is a location.assign on page
+         load, i.e. a reload loop before the participant touches anything. */
+      booted = true;
 
       root.addEventListener('popstate', function () {
         var p = readParams();
