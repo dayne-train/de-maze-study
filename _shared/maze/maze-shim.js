@@ -34,7 +34,12 @@
 
   /* Params the shim owns. Everything else in the query string — ?net=, ?v=, and
      anything Maze appends — is preserved untouched on every write. */
-  var OWNED = ['screen', 'seg', 'mode', 'app', 'journey', 'state', 'step', 'variant'];
+  /* `sel` carries a multi-selection (comma-joined ids) across the page load —
+     the rows ticked before a bulk action, the learners picked in the invite
+     wizard. It is a PAYLOAD param, not a step: two participants who select
+     different rows are doing the same thing and belong on the same path, so it
+     must never become part of a folder slug. */
+  var OWNED = ['screen', 'seg', 'mode', 'app', 'journey', 'state', 'step', 'variant', 'sel'];
 
   var desc = null;        // the active prototype descriptor
   var applying = false;   // true while WE are driving; suppresses pushState
@@ -229,6 +234,15 @@
       if (OWNED.indexOf(k) === -1) target.searchParams.set(k, v);
     });
 
+    /* Snapshot mutations before leaving. Minted here rather than at boot so a
+       task that never mutates anything never grows a token, and a start URL
+       stays clean enough to paste into a Maze mission. */
+    if (desc && typeof desc.snapshot === 'function') {
+      var token = sessionToken() || mintToken();
+      target.searchParams.set(SESSION_PARAM, token);
+      saveState(token);
+    }
+
     if (target.href === root.location.href) return;   // no step; would loop
     navigating = true;                                // suppress writes mid-unload
 
@@ -389,6 +403,74 @@
 
   /* ── Dev drawer: hidden unless Cmd/Ctrl+D ──────────────────────────── */
 
+  /* ── Carrying state across the page load ───────────────────────────────
+     Every step is now a real document load, which discards everything the
+     prototype held in memory. Free for a task that only moves between screens;
+     destructive for one that accumulates state — an approval that moved records
+     between buckets, a wizard's selections, a multi-select before a bulk action.
+
+     TWO DIFFERENT PROBLEMS, deliberately solved differently:
+
+       SELECTIONS  → the URL. Which rows, which learners, which course. They are
+                     small, they are what the next screen renders from, and
+                     putting them in the query string means a step is
+                     reproducible from its address alone. Handled by the payload
+                     params, not here.
+
+       MUTATIONS   → here. An approval rewrites activeApps / WAITING_APPS /
+                     ALL_DENIED_APPS. There is no sensible URL for "these three
+                     records moved bucket", and if it does not survive the load
+                     the participant approves three applications, returns to the
+                     queue, and finds them still sitting there. That reads as the
+                     approval having failed.
+
+     A descriptor opts in by defining snapshot() and restore(). Prototypes that
+     never mutate anything (parent-consent) define neither and pay nothing.
+
+     SCOPED BY A SESSION TOKEN, not just by prototype. Maze runs tasks in one
+     tab, so sessionStorage persists across them — without a token, task 7 would
+     open onto task 4's approvals and the queue would be wrong in a way nobody
+     would think to check. A task start URL carries no token, so it always begins
+     clean; the shim mints one on the first navigation and carries it forward
+     like any other unowned param. */
+  var SESSION_PARAM = 's';
+
+  function sessionToken() {
+    return new URLSearchParams(root.location.search).get(SESSION_PARAM) || '';
+  }
+
+  function mintToken() {
+    return Math.random().toString(36).slice(2, 10);
+  }
+
+  function stateKey(token) {
+    return 'maze-state:' + ((desc && desc.proto) || 'x') + ':' + token;
+  }
+
+  function saveState(token) {
+    if (!desc || typeof desc.snapshot !== 'function' || !token) return;
+    var data;
+    try { data = desc.snapshot(); }
+    catch (e) { log('snapshot() threw: ' + e.message); return; }
+    if (!data) return;
+    try { root.sessionStorage.setItem(stateKey(token), JSON.stringify(data)); }
+    catch (e) { log('could not store state: ' + e.message); }   // quota, private mode
+  }
+
+  function loadState() {
+    if (!desc || typeof desc.restore !== 'function') return;
+    var token = sessionToken();
+    if (!token) return;            // fresh task start — nothing to restore, by design
+    var raw;
+    try { raw = root.sessionStorage.getItem(stateKey(token)); }
+    catch (e) { return; }
+    if (!raw) return;
+    try { desc.restore(JSON.parse(raw)); }
+    catch (e) {
+      log('restore() failed: ' + e.message + ' — continuing with fixture defaults');
+    }
+  }
+
   /* ── <base> guard ──────────────────────────────────────────────────────
      Screen folders carry <base href="../"> so one copy of a prototype can sit a
      directory deeper and still find its stylesheets. The side effect: href="#"
@@ -450,6 +532,12 @@
        first, and the debounced writer handles the second. */
     setTimeout(function () {
       (desc.wrap || []).forEach(wrapFn);
+
+      /* BEFORE apply(). apply() re-renders from whatever the buckets hold, so
+         restoring after it would paint the fixture defaults first and only then
+         the participant's actual queue — a visible flicker of work they had
+         already done being undone. */
+      loadState();
 
       var params = readParams();
       if (!params.screen && desc.defaultScreen) params.screen = desc.defaultScreen;
