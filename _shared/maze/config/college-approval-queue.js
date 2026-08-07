@@ -85,8 +85,28 @@
     }
   }
 
+
+  /* ── Refresh the counts the markup hardcodes ────────────────────────────
+     The workspace "review applications" card ships with a literal count in the
+     HTML (8). It is only corrected by updateBadges(), which runs inside
+     renderTable() — i.e. the first time the QUEUE renders. Land on the workspace
+     and the card shows the authored number regardless of the data behind it.
+
+     That was invisible while the fixture happened to contain exactly that many,
+     and seeding Jessica made it 9 against a card still reading 8. The card was
+     always capable of lying; it just had not been given the chance.
+
+     Deferred to DOMContentLoaded because this runs at parse time, before the
+     table DOM the render walks exists. */
+  function refreshCounts() {
+    document.addEventListener('DOMContentLoaded', function () {
+      try { if (typeof renderTable === 'function') renderTable(); } catch (e) {}
+    });
+  }
+
   seedChapter();
   seedNoSecondJessica();
+  refreshCounts();
 
   /* ── Mutations that must survive a page load ────────────────────────────
      As the HS fork, plus ALL_ADMITTED_APPS: this fork has a fifth bucket
