@@ -31,10 +31,29 @@ html.maze-booting::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: #fff;
+  /* --background is the prototype's own page colour (tokens.css, and it flips
+     per theme). Covering with that instead of a hardcoded #fff means the cover
+     is the same colour as the page underneath it, so a step reads as the
+     content going away and coming back rather than as a white flash. */
+  background: var(--background, #fff);
   z-index: 2147483646;
 }
 
+/* THE SPINNER IS DELAYED, NOT REMOVED.
+
+   Between screen folders the cover is up for a few hundred milliseconds. A
+   spinner appearing and vanishing inside that window is worse than no spinner
+   at all — it is a flash of UI that says "something went wrong" rather than
+   "this is loading", and it was the single thing that made a recorded step feel
+   broken.
+
+   So it stays invisible for MAZE_SPIN_DELAY and fades in only if the wait is
+   long enough to need explaining. A normal step never shows it. A genuinely
+   slow cold load still gets feedback rather than sitting on a blank page.
+
+   Two animations on one element: the spin runs throughout (so it is already
+   turning when it appears, not starting from rest), the fade holds it at
+   opacity 0 until the delay elapses. */
 html.maze-booting::after {
   content: '';
   position: fixed;
@@ -46,9 +65,13 @@ html.maze-booting::after {
   border: 3px solid rgba(0, 0, 0, .12);
   border-top-color: rgba(0, 0, 0, .38);
   border-radius: 50%;
-  animation: maze-boot-spin .7s linear infinite;
+  opacity: 0;
+  animation: maze-boot-spin .7s linear infinite,
+             maze-boot-appear .18s ease-out 700ms forwards;
   z-index: 2147483647;
 }
+
+@keyframes maze-boot-appear { to { opacity: 1; } }
 
 @keyframes maze-boot-spin { to { transform: rotate(360deg); } }
 

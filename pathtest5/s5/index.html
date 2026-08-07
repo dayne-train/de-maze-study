@@ -29,19 +29,15 @@
 </script>
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Step 4 - path test 4</title>
+<title>Step 5 - delay test</title>
 <style>body{font:16px/1.6 system-ui,sans-serif;margin:0;min-height:100vh}
 .wrap{position:relative;z-index:1;margin:12vh auto;max-width:34rem;padding:0 1.5rem}
-h1{font-size:1.4rem}code{background:#eee;padding:.1em .35em;border-radius:3px}
-a,button{display:inline-block;margin-top:1.5rem;font:inherit;padding:.7em 1.2em;border:1px solid #333;
-border-radius:6px;background:#fff;color:#111;text-decoration:none;cursor:pointer}
+h1{font-size:1.5rem}code{background:#eee;padding:.1em .35em;border-radius:3px}
+button{display:inline-block;margin-top:1.5rem;font:inherit;padding:.8em 1.4em;border:1px solid #333;
+border-radius:6px;background:#fff;color:#111;cursor:pointer}
 .tag{display:inline-block;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;
 background:#111;color:#fff;padding:.2em .5em;border-radius:3px;margin-bottom:.75rem}
 .q{background:#b30000}
-/* Watermark fills the WHOLE viewport, not a band through the middle: the box is
-   oversized so its corners still cover after rotation, rows start at the top and
-   run past the bottom, and enough tiles are emitted to fill the largest plausible
-   screen. Purely so a glance or a screenshot says which step you were on. */
 #wm{position:fixed;top:-60%;left:-60%;width:220%;height:220%;z-index:0;
 pointer-events:none;user-select:none;display:flex;flex-wrap:wrap;
 align-content:flex-start;justify-content:center;gap:1.4rem 3rem;
@@ -50,11 +46,11 @@ transform:rotate(-24deg);opacity:.09;overflow:hidden}
 #badge{position:fixed;top:0;right:0;z-index:2;background:#111;color:#fff;
 font:800 1.1rem/1 system-ui,sans-serif;letter-spacing:.08em;padding:.9rem 1.1rem;
 border-bottom-left-radius:8px}</style>
-<body data-step="4">
+<body data-step="5">
 <div id="wm"></div><div id="badge"></div>
 <div class="wrap">
-<h1>Step 4 - plain link</h1>
-<span class="tag">expect: recorded</span><p>Known good from round 1. The second bookend.</p><a href="../s5/">Continue</a>
+<h1>Step 5</h1>
+<span class="tag q">expected to fail</span><p>You reached this page with <strong>no delay at all</strong> — the navigation fired in the same tick as the click. Round 1 showed Maze does not record that. If step 5 DID record, the delay was never the variable and the earlier finding is wrong, which matters more than the timing answer.</p><p style="margin-top:1.5rem">End of the control.</p>
 <p style="margin-top:2rem;color:#777;font-size:.85rem">Diagnostic page. Not part of the study.</p>
 </div>
 <script>
@@ -64,6 +60,6 @@ border-bottom-left-radius:8px}</style>
   var out = '';
   for (var i = 0; i < 420; i++) out += '<span>STEP ' + n + '</span>';
   document.getElementById('wm').innerHTML = out;
-  document.title = 'Step ' + n + ' - path test 4';
+  document.title = 'Step ' + n + ' - delay test';
 })();
 </script>
