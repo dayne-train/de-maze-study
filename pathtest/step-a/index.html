@@ -1,0 +1,54 @@
+<!DOCTYPE html><meta charset="utf-8">
+<script>
+(function (m, a, z, e) {
+  var s, t, u, v;
+  try {
+    t = m.sessionStorage.getItem('maze-us');
+  } catch (err) {}
+
+  if (!t) {
+    t = new Date().getTime();
+    try {
+      m.sessionStorage.setItem('maze-us', t);
+    } catch (err) {}
+  }
+
+  u = document.currentScript || (function () {
+    var w = document.getElementsByTagName('script');
+    return w[w.length - 1];
+  })();
+  v = u && u.nonce;
+
+  s = a.createElement('script');
+  s.src = z + '?apiKey=' + e;
+  s.async = true;
+  if (v) s.setAttribute('nonce', v);
+  a.getElementsByTagName('head')[0].appendChild(s);
+  m.mazeUniversalSnippetApiKey = e;
+})(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'bf70bf5a-f819-443f-9895-f5a3e8314250');
+</script>
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Path test — Step 2 of 4 — query string only</title>
+<style>body{font:16px/1.6 system-ui,sans-serif;margin:12vh auto;max-width:34rem;padding:0 1.5rem}
+h1{font-size:1.4rem}code{background:#eee;padding:.1em .35em;border-radius:3px}
+a,button{display:inline-block;margin-top:1.5rem;font:inherit;padding:.7em 1.2em;border:1px solid #333;
+border-radius:6px;background:#fff;color:#111;text-decoration:none;cursor:pointer}</style>
+<h1>Step 2 of 4 — query string only</h1>
+<p>Plain link, but only the <strong>query string</strong> changes: same path, <code>?x=2</code> added. This is the shape every prototype URL uses.</p><a href="?x=2">Go to step 3</a>
+<p style="margin-top:2rem;color:#777;font-size:.85rem">Diagnostic page. Not part of the study.</p>
+
+<script>
+if (location.search.indexOf('x=2') !== -1) {
+  document.querySelector('h1').textContent = 'Step 3 of 4 — JavaScript navigation';
+  document.querySelectorAll('p')[0].innerHTML =
+    'Same page as step 2, reached by a query-string change. This button navigates with ' +
+    '<code>location.assign()</code> instead of being a link — a real page load, but driven by ' +
+    'code rather than by an anchor the browser knows about.';
+  var a = document.querySelector('a');
+  var b = document.createElement('button');
+  b.textContent = 'Go to step 4';
+  b.onclick = function () { location.assign('../step-b/'); };
+  a.replaceWith(b);
+}
+</script>
