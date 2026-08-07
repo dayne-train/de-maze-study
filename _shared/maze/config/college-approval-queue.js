@@ -63,7 +63,30 @@
     }
   }
 
+
+  /* ── No second Jessica ─────────────────────────────────────────────────
+     The Pending Invites fixture opens with "Jessica Abrams", and the study's
+     applicant is Jessica Cumberland. Completing Task 1 puts a real Jessica
+     Cumberland row at the top of that same list, so a participant sees two
+     Jessicas and reasonably reads the second as the first one with the wrong
+     surname — or worse, as evidence the invite went to the wrong student.
+
+     Renaming her TO Cumberland would be worse still: there would then be two
+     Cumberland rows, one added by the participant's own invite. So the fixture
+     row keeps its surname and loses the first name. Matched by name rather than
+     by id, so it still fires if the fixture is reordered upstream. */
+  function seedNoSecondJessica() {
+    try {
+      INVITED_FIXTURE.forEach(function (row) {
+        if (row.firstName === 'Jessica' && row.lastName !== 'Cumberland') row.firstName = 'Renee';
+      });
+    } catch (e) {
+      if (window.console) console.warn('[maze-shim] invited-fixture rename failed: ' + e.message);
+    }
+  }
+
   seedChapter();
+  seedNoSecondJessica();
 
   /* ── Mutations that must survive a page load ────────────────────────────
      As the HS fork, plus ALL_ADMITTED_APPS: this fork has a fifth bucket
@@ -76,6 +99,7 @@
     try { out.waiting = WAITING_APPS; } catch (e) {}
     try { out.admitted = ALL_ADMITTED_APPS; } catch (e) {}
     try { out.denied = ALL_DENIED_APPS; } catch (e) {}
+    try { out.invited = INVITED_FIXTURE; } catch (e) {}
     return out;
   }
 
@@ -91,8 +115,15 @@
     try { refill(WAITING_APPS, data.waiting); } catch (e) {}
     try { refill(ALL_ADMITTED_APPS, data.admitted); } catch (e) {}
     try { refill(ALL_DENIED_APPS, data.denied); } catch (e) {}
+    /* Pending Invites. Sending an invite unshifts rows onto INVITED_FIXTURE and
+       then navigates straight to that screen, so this is the ONE bucket whose
+       loss is guaranteed to be noticed: the participant invites a student and
+       lands on a list that does not contain them. Missed on the first pass
+       because the invite flow mutates a different fixture from the queue. */
+    try { refill(INVITED_FIXTURE, data.invited); } catch (e) {}
     try { if (typeof renderTable === 'function') renderTable(); } catch (e) {}
     try { if (typeof renderWaitingTable === 'function') renderWaitingTable(); } catch (e) {}
+    try { if (typeof renderInvitedTable === 'function') renderInvitedTable(); } catch (e) {}
   }
 
   MazeShim.init({
