@@ -42,6 +42,10 @@
   };
   function emptyAdvCriteria() {
     return {
+      /* Free text, the whole-record kind the workspace search box sends. It is a
+         criterion like any other so Global Search can show it, clear it, and be
+         re-opened with it still in the form. */
+      term: '',
       firstName: '', lastName: '', sisId: '',
       school: '', grade: '', gpaMin: '', gpaMax: '',
       institution: '', group: '',

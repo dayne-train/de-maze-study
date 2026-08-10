@@ -140,7 +140,7 @@
     var totalBadge = document.getElementById('total-badge');
     if (totalBadge) totalBadge.textContent = total;
     var segCount = document.getElementById('seg-count-needs-review');
-    if (segCount) segCount.textContent = total;
+    if (segCount) segCount.textContent = segCountsNow()['needs-review'];
     // Workspace "Dual Enrollment Applications" review count mirrors the queue —
     // drops as the counselor approves/denies, and reads 0 in the no-applications state.
     var wsCount = document.querySelector('#ws-review-card .workspace-count');
@@ -150,12 +150,31 @@
     /* results-label is now managed by queuePag.renderControls */
   }
 
-  /* Per-segment count badges on the NavToggle set */
+  /* Per-segment count badges on the NavToggle set.
+     While a search is active these count MATCHES, not bucket totals: the tabs are the only
+     place that says where the matches are, and a tab reading 8 next to an empty table is a
+     worse lie than no number at all. */
+  function segCountsNow() {
+    var t = (typeof searchTerm === 'string' ? searchTerm : '').trim().toLowerCase();
+    function n(list) {
+      if (!t) return list.length;
+      return list.filter(function (a) { return appHaystack(a).indexOf(t) !== -1; }).length;
+    }
+    return {
+      'needs-review': n(reviewBucket()),
+      'waiting':      n(waitingBucket()),
+      'active':       n(ALL_ACTIVE_APPS),
+      'denied':       n(ALL_DENIED_APPS)
+    };
+  }
+  window.segCountsNow = segCountsNow;
+
   function updateSegmentCounts() {
+    var c = segCountsNow();
     var map = {
-      'seg-count-waiting': waitingBucket().length,
-      'seg-count-active':  ALL_ACTIVE_APPS.length,
-      'seg-count-denied':  ALL_DENIED_APPS.length
+      'seg-count-waiting': c.waiting,
+      'seg-count-active':  c.active,
+      'seg-count-denied':  c.denied
     };
     Object.keys(map).forEach(function(id) {
       var el = document.getElementById(id);

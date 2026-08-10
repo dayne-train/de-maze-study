@@ -160,8 +160,11 @@
       'path-select', 'email', 'login', 'service-select', 'dashboard', 'de',
       'review', 'deny', 'bulk-approve', 'admit-confirm', 'invites',
       'invite-learners', 'invite-college', 'invite-groups', 'add-learners',
-      'bulk-upload', 'edit-learner', 'edit-groups'
-      /* 'adv-search' excluded — same cold-link problem as the HS fork. */
+      'bulk-upload', 'edit-learner', 'edit-groups',
+      /* 'adv-search' is routable now, for the same reason as the HS fork: the search term
+         travels in `q`, so apply() can rebuild the search before the screen renders and the
+         cold link is no longer blank. */
+      'adv-search'
     ],
 
     wrap: ['showScreen', 'switchSegment', 'enterReviewWorkflow',
@@ -185,8 +188,16 @@
          in sync by the prototype, and the field is the one that exists on both screens. */
       var q = null;
       try {
-        var qEl = document.getElementById('search-input') || document.getElementById('ws-search-input');
-        if (qEl && qEl.value.trim()) q = qEl.value.trim();
+        if (id === 'screen-adv-search') {
+          /* Global Search has no visible box holding the term — it is a criterion. Reading
+             the inputs here would report nothing, q would drop off the next URL write, and
+             the back button would land on a global-search folder with no term to rebuild
+             from: the blank page again, one step removed. */
+          if (advSearch && advSearch.criteria && advSearch.criteria.term) q = advSearch.criteria.term;
+        } else {
+          var qEl = document.getElementById('search-input') || document.getElementById('ws-search-input');
+          if (qEl && qEl.value.trim()) q = qEl.value.trim();
+        }
       } catch (e) {}
       var out = {
         q:    q,
@@ -202,13 +213,28 @@
       /* Restore the search term BEFORE anything renders, so the tables below are built
          filtered rather than built twice. window.applySearchTerm is the prototype's own
          entry point; falling back to the fields keeps this working if it is ever renamed. */
+      /* A Global Search address with no term renders the screen's own empty state — "No
+         applications match your search", with Adjust Search, Clear All and Back to Workspace
+         all present. Redirecting away from it was tried and removed: the shim applies
+         `screen` after this runs, so the redirect was silently overridden, and leaving the
+         code in would have implied a protection that was not there. The empty state is an
+         honest place to land and has its own ways out. */
       if (p.q) {
         try {
-          ['search-input', 'ws-search-input'].forEach(function (id) {
-            var el = document.getElementById(id);
-            if (el) el.value = p.q;
-          });
-          if (typeof window.applySearchTerm === 'function') window.applySearchTerm(p.q);
+          if (p.screen === 'adv-search') {
+            /* GLOBAL search: rebuild the criteria the workspace box sent and let the
+               prototype render its own results screen. Without this the folder loads and
+               renderAdvancedResults() early-returns — the blank page this route was
+               excluded for in the first place. */
+            if (typeof window.applyGlobalSearchTerm === 'function') window.applyGlobalSearchTerm(p.q);
+          } else {
+            /* QUEUE search: the term narrows the buckets already on screen. */
+            ['search-input', 'ws-search-input'].forEach(function (id) {
+              var el = document.getElementById(id);
+              if (el) el.value = p.q;
+            });
+            if (typeof window.applySearchTerm === 'function') window.applySearchTerm(p.q);
+          }
         } catch (e) {}
       }
 

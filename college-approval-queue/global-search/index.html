@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<!-- Source of truth: hand-edit this index.html directly. (Historically assembled from
+     index.template.html + screens/*.html, but that build is retired — no template/partials/build
+     exist in this workspace anymore.) -->
+<!--
+  ════════════════════════════════════════════════════════════════════
+  PARCHMENT — College Admin · Applications · STANDALONE PROTOTYPE
+  ════════════════════════════════════════════════════════════════════
+  Theme        : <html data-theme="default"|"light">
+  Chrome       : mounted by scripts/components.js via data-component
+  Logic       : scripts/app/*.js (13 modules, shared global scope — load order in <body>)
+  Tokens       : styles/tokens.css (Tasty primitives + --c-* aliases)
+  Chrome CSS   : styles/chrome.css
+  App CSS      : ../_shared/queue-screens/*.css (11 sheets, cascade order in <head>)
+
+  ╔════════════════════════ SCREEN INDEX ═════════════════════════════╗
+  ║  email                — entry-point email simulation              ║
+  ║  login                — login card                                ║
+  ║  dashboard            — Workspace (college-admin home)            ║
+  ║  de                   — Dual Enrollment queue + segments          ║
+  ║  invite-learners      — invite workflow step 1                    ║
+  ║  invite-college       — invite workflow step 2                    ║
+  ║  invite-groups        — invite workflow step 3                    ║
+  ║  review               — single-application review                 ║
+  ║  deny                 — denial reason capture                     ║
+  ║  bulk-approve         — bulk approval                             ║
+  ║  approve-success      — terminal success screen                   ║
+  ║  adv-search           — advanced search results                   ║
+
+  ╔═══════════════════ CHROME MOUNT POINTS ═══════════════════════════╗
+  ║  data-component="page-header-mount"       PageHeader              ║
+  ║  data-component="nav-tabs-mount"          NavTabSet               ║
+  ║  data-component="workflow-header-mount"   WorkflowHeader          ║
+  ║  data-component="page-footer-mount"       PageFooter              ║
+
+  Find any screen:    grep -n 'id="screen-NAME"' index.html
+  Find any mount:     grep -n 'data-component=' index.html
+  ════════════════════════════════════════════════════════════════════
+-->
+<html lang="en" data-theme="default">
+<head>
+  <meta charset="UTF-8">
+<base href="../">
+<meta name="maze-route" content="screen=adv-search">
+  <meta name="robots" content="noindex, nofollow">
+  <script>
+(function (m, a, z, e) {
+  var s, t, u, v;
+  try {
+    t = m.sessionStorage.getItem('maze-us');
+  } catch (err) {}
+
+  if (!t) {
+    t = new Date().getTime();
+    try {
+      m.sessionStorage.setItem('maze-us', t);
+    } catch (err) {}
+  }
+
+  u = document.currentScript || (function () {
+    var w = document.getElementsByTagName('script');
+    return w[w.length - 1];
+  })();
+  v = u && u.nonce;
+
+  s = a.createElement('script');
+  s.src = z + '?apiKey=' + e;
+  s.async = true;
+  if (v) s.setAttribute('nonce', v);
+  a.getElementsByTagName('head')[0].appendChild(s);
+  m.mazeUniversalSnippetApiKey = e;
+})(window, document, 'https://snippet.maze.co/maze-universal-loader.js', 'bf70bf5a-f819-443f-9895-f5a3e8314250');
+</script>
+  <script>document.documentElement.classList.add("maze-booting");setTimeout(function(){document.documentElement.classList.remove("maze-booting");},6000);</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parchment — College Approval Queue</title>
+
+  <!-- Persona theme guard: this is an ADMIN-facing prototype — always boot in the
+       default theme, independent of the <html> attribute above or any dev-drawer state left
+       over from a prior session. Runs before any stylesheet parses, so there's no flash of
+       the wrong theme even if the static attribute above is ever wrong or missing. -->
+  <script>document.documentElement.setAttribute('data-theme', 'default');</script>
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="../_kit/vendor/tabler-icons.min.css">
+
+  <!-- Tasty Design System -->
+  <link rel="stylesheet" href="../_kit/styles/tokens.css">
+  <link rel="stylesheet" href="../_kit/styles/icons.css">
+  <link rel="stylesheet" href="../_kit/styles/chrome.css">
+
+  <!-- App styles — split from former styles/app.css; ORDER MATTERS (cascade). -->
+  <link rel="stylesheet" href="../_shared/queue-screens/base.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/queue-table.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/review.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/deny.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/bulk.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/feedback.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/email-login.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/dashboard.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/invite.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/search.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/review-figma.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/decision-tree.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/bulk-upload.css">
+
+  <link rel="stylesheet" href="../_kit/styles/tasty-components.css">
+  <link rel="stylesheet" href="../_kit/styles/modals.css">
+  <link rel="stylesheet" href="../_shared/queue-screens/modals.css">
+  <link rel="stylesheet" href="../_shared/maze/maze-shim.css?v=1">
+  <!-- env-favicon: local build vs published, injected at runtime -->
+  <script>
+  (function(){
+    var h = location.hostname;
+    var local = location.protocol === 'file:' || h === 'localhost' || h === '127.0.0.1' || h === '';
+    var emoji = local ? '\uD83D\uDEA7' : '\uD83C\uDF93'; // construction sign vs graduation cap
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">' + emoji + '</text></svg>';
+    var link = document.querySelector('link[rel="icon"]') || document.createElement('link');
+    link.setAttribute('rel', 'icon');
+    link.setAttribute('href', 'data:image/svg+xml,' + encodeURIComponent(svg));
+    document.head.appendChild(link);
+  })();
+  </script>
+</head>
+<body>
+
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 0 — Path select (demo entry: start from the email, or log in directly)
+═══════════════════════════════════════════ -->
+<div class="screen active" id="screen-path-select" data-screen-label="Start">
+  <div class="path-select-wrap">
+    <div class="path-select-logo"><span data-tasty-illus="parchment-logo" data-size="190" alt="Parchment by Instructure"></span></div>
+    <div class="path-select-persona">
+      <span class="path-select-persona__avatar">KN</span>
+      <span class="path-select-persona__text">
+        <span class="path-select-persona__eyebrow">You're operating as</span>
+        <span class="path-select-persona__role">College Admin</span>
+        <span class="path-select-persona__name">Kathy Nguyen · West Valley Community College</span>
+      </span>
+    </div>
+    <h1 class="path-select-heading">How would you like to start?</h1>
+    <p class="path-select-sub">Pick where you'd like to begin.</p>
+    <div class="path-select-options">
+      <button class="path-select-tile" onclick="showScreen('email')">
+        <span class="path-select-tile-icon"><i class="ti ti-mail"></i></span>
+        <span class="path-select-tile-title">Start from email</span>
+        <span class="path-select-tile-desc">Begin at the notification this admin receives, then sign in.</span>
+      </button>
+      <button class="path-select-tile" onclick="window.__entryIntent='workspace'; showScreen('login')">
+        <span class="path-select-tile-icon"><i class="ti ti-login-2"></i></span>
+        <span class="path-select-tile-title">Start from login</span>
+        <span class="path-select-tile-desc">Begin at the Parchment sign-in as this admin.</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1 — Email notification (entry point from email invite link)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-email" data-screen-label="Email">
+  <div class="mail-app">
+    <!-- ── Top bar — generic mail client chrome ── -->
+    <header class="mail-app__topbar">
+      <div class="mail-app__traffic">
+        <span class="mail-app__dot mail-app__dot--red"></span>
+        <span class="mail-app__dot mail-app__dot--yellow"></span>
+        <span class="mail-app__dot mail-app__dot--green"></span>
+      </div>
+      <div class="mail-app__title"><i class="ti ti-mail"></i> Mail</div>
+      <div class="mail-app__search">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Search mail" />
+      </div>
+      <div class="mail-app__user">
+        <div class="mail-app__user-avatar">KN</div>
+      </div>
+    </header>
+
+    <div class="mail-app__body">
+      <!-- ── Sidebar — folder list ── -->
+      <nav class="mail-app__sidebar" aria-label="Folders">
+        <button class="mail-app__compose"><i class="ti ti-pencil"></i> Compose</button>
+        <ul class="mail-app__folders">
+          <li class="mail-app__folder mail-app__folder--active">
+            <i class="ti ti-inbox"></i><span>Inbox</span><span class="mail-app__badge">12</span>
+          </li>
+          <li class="mail-app__folder">
+            <i class="ti ti-star"></i><span>Starred</span>
+          </li>
+          <li class="mail-app__folder">
+            <i class="ti ti-clock"></i><span>Snoozed</span>
+          </li>
+          <li class="mail-app__folder">
+            <i class="ti ti-send"></i><span>Sent</span>
+          </li>
+          <li class="mail-app__folder">
+            <i class="ti ti-file"></i><span>Drafts</span><span class="mail-app__badge mail-app__badge--muted">3</span>
+          </li>
+          <li class="mail-app__folder">
+            <i class="ti ti-trash"></i><span>Trash</span>
+          </li>
+        </ul>
+        <p class="mail-app__section-label">Labels</p>
+        <ul class="mail-app__folders">
+          <li class="mail-app__folder"><span class="mail-app__label-dot" style="background:#1DAFCC;"></span><span>West Valley CC</span></li>
+          <li class="mail-app__folder"><span class="mail-app__label-dot" style="background:#CC7700;"></span><span>District</span></li>
+          <li class="mail-app__folder"><span class="mail-app__label-dot" style="background:#2D7F0E;"></span><span>Personal</span></li>
+        </ul>
+      </nav>
+
+      <!-- ── Email list pane ── -->
+      <section class="mail-app__list" aria-label="Email list">
+        <div class="mail-app__list-header">
+          <input type="checkbox" aria-label="Select all" />
+          <span>Inbox</span>
+          <span class="mail-app__list-count">1–12 of 47</span>
+        </div>
+
+        <div class="mail-app__item mail-app__item--selected mail-app__item--unread">
+          <input type="checkbox" aria-label="Select" />
+          <i class="ti ti-star-filled mail-app__item-star mail-app__item-star--filled"></i>
+          <div class="mail-app__item-from">Parchment Dual Enrollment</div>
+          <div class="mail-app__item-meta">
+            <div class="mail-app__item-subject">Action required: Dual enrollment applications waiting for review</div>
+            <div class="mail-app__item-preview">Hi Kathy, you have dual enrollment applications waiting for your review…</div>
+          </div>
+          <div class="mail-app__item-time">7:42 AM</div>
+        </div>
+
+        <div class="mail-app__item mail-app__item--unread">
+          <input type="checkbox" aria-label="Select" />
+          <i class="ti ti-star mail-app__item-star"></i>
+          <div class="mail-app__item-from">West Valley CC Admissions</div>
+          <div class="mail-app__item-meta">
+            <div class="mail-app__item-subject">Weekly admissions digest — Jun 8</div>
+            <div class="mail-app__item-preview">This week's updates: schedule changes, college fair signups, and…</div>
+          </div>
+          <div class="mail-app__item-time">Yesterday</div>
+        </div>
+
+        <div class="mail-app__item">
+          <input type="checkbox" aria-label="Select" />
+          <i class="ti ti-star mail-app__item-star"></i>
+          <div class="mail-app__item-from">Sue Park</div>
+          <div class="mail-app__item-meta">
+            <div class="mail-app__item-subject">Re: Schedule check-in this Thursday?</div>
+            <div class="mail-app__item-preview">Thursday works for me — should we do 2pm or 3pm? I have a parent conf…</div>
+          </div>
+          <div class="mail-app__item-time">Yesterday</div>
+        </div>
+
+        <div class="mail-app__item">
+          <input type="checkbox" aria-label="Select" />
+          <i class="ti ti-star mail-app__item-star"></i>
+          <div class="mail-app__item-from">LinkedIn</div>
+          <div class="mail-app__item-meta">
+            <div class="mail-app__item-subject">You appeared in 14 searches this week</div>
+            <div class="mail-app__item-preview">See who's been looking at your profile…</div>
+          </div>
+          <div class="mail-app__item-time">Tue</div>
+        </div>
+
+        <div class="mail-app__item">
+          <input type="checkbox" aria-label="Select" />
+          <i class="ti ti-star mail-app__item-star"></i>
+          <div class="mail-app__item-from">District Admin</div>
+          <div class="mail-app__item-meta">
+            <div class="mail-app__item-subject">FY26 budget allocation memo</div>
+            <div class="mail-app__item-preview">Please review the attached budget breakdown for the upcoming fiscal year…</div>
+          </div>
+          <div class="mail-app__item-time">Mon</div>
+        </div>
+      </section>
+
+      <!-- ── Reading pane — the Parchment email ── -->
+      <article class="mail-app__reader" aria-label="Email content">
+        <div class="mail-app__reader-toolbar">
+          <button class="mail-app__icon-btn" title="Archive"><i class="ti ti-archive"></i></button>
+          <button class="mail-app__icon-btn" title="Delete"><i class="ti ti-trash"></i></button>
+          <button class="mail-app__icon-btn" title="Mark unread"><i class="ti ti-mail-opened"></i></button>
+          <button class="mail-app__icon-btn" title="Snooze"><i class="ti ti-clock"></i></button>
+          <div class="mail-app__reader-spacer"></div>
+          <button class="mail-app__icon-btn" title="Reply"><i class="ti ti-arrow-back-up"></i></button>
+          <button class="mail-app__icon-btn" title="Forward"><i class="ti ti-arrow-forward-up"></i></button>
+        </div>
+
+        <div class="mail-app__reader-header">
+          <h1 class="mail-app__reader-subject">Action required: Dual enrollment applications are waiting for your review</h1>
+          <div class="mail-app__reader-from">
+            <div class="mail-app__reader-sender-avatar">
+              <img src="../_kit/assets/parchment-logo-white.png" alt="Parchment" />
+            </div>
+            <div class="mail-app__reader-meta">
+              <div>
+                <strong>Parchment Dual Enrollment</strong>
+                <span class="mail-app__reader-email">&lt;noreply@parchment.com&gt;</span>
+              </div>
+              <div class="mail-app__reader-to">to Kathy Nguyen · Today, 7:42 AM</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mail-app__reader-body">
+          <div class="email-notif-card">
+            <div class="email-notif-header">
+              <div class="email-notif-logo"><div class="email-notif-logo-tile">WV</div></div>
+              <p class="email-notif-headline">Applications are ready for your Institution Review</p>
+            </div>
+            <div class="email-notif-rule"></div>
+            <div class="email-notif-body">
+              <div class="email-notif-copy">
+                <p>Hi Kathy,</p>
+                <p>You have dual enrollment applications waiting for your review. Log in to confirm each learner's admission to West Valley Community College.</p>
+              </div>
+              <button class="email-notif-cta" type="button" onclick="window.__entryIntent='email-review'; showScreen('login')">Review Applications</button>
+            </div>
+            <div class="email-notif-callout-wrap">
+              <div class="email-notif-callout"><strong>Action is required on your part to complete this Dual Enrollment review.</strong> Class sizes are limited and dual enrollment is not guaranteed. Please do this promptly to avoid any delays or registration issues in completing this process.</div>
+            </div>
+            <div class="email-notif-footer">
+              <span class="logo">Parchment</span>
+              <a href="#" onclick="return false;">Privacy Policy</a>
+              <a href="#" onclick="return false;">Terms of Use</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2 — Login
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-login" data-screen-label="Login">
+  <div class="login-screen-wrap">
+    <div class="login-logo"><span data-tasty-illus="parchment-logo" data-size="210" alt="Parchment by Instructure"></span></div>
+    <div class="login-card">
+      <div class="login-card__body">
+      <h2 class="login-heading">Sign In</h2>
+      <div class="login-field">
+        <label class="tasty-field">
+          <span class="tasty-field__label"><span class="req">*</span> Email</span>
+          <span class="tasty-field__control"><input class="tasty-input" type="email" data-validate="required email" value="kathy.nguyen@wvcc.edu" /></span>
+          <span class="tasty-field__msg"></span>
+        </label>
+      </div>
+      <div class="login-field">
+        <label class="tasty-field">
+          <span class="tasty-field__label"><span class="req">*</span> Password</span>
+          <span class="tasty-field__control"><input class="tasty-input" type="password" data-validate="required" value="password" /></span>
+          <span class="tasty-field__msg"></span>
+        </label>
+      </div>
+      <a class="login-forgot" href="#" onclick="return false;">Forgot Password?</a>
+      <button class="tasty-btn is-success is-md is-full" onclick="completeSignIn()">Sign In</button>
+      </div>
+      <p class="login-legal">By accessing Parchment, you agree to comply with the <a href="#" onclick="return false;">End User Terms Of Use</a> and Parchment <a href="#" onclick="return false;">Privacy Policy</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2.5 — Service selector (multi-product chooser shown after sign-in)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-service-select" data-screen-label="Choose Service">
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+  <div class="service-select-body">
+    <h1 class="service-select-heading">Welcome back, Kathy.</h1>
+    <p class="service-select-sub">You have access to multiple Parchment platform services. Please select where you would like to start.</p>
+    <a class="service-select-prefs" href="#" onclick="showToast('Preferences aren’t part of this prototype.','config');return false;">Set Your Preferences</a>
+    <div class="service-select-grid">
+      <div class="tasty-tile is-sharp service-card">
+        <div class="service-card-logo"><span data-tasty-illus="parchment-award-brand-logo-full-color" data-size="170" alt="Parchment Award"></span></div>
+        <div class="service-card-illus">
+          <span data-tasty-illus="add-credential-fill" data-size="72" alt=""></span>
+          <span class="tasty-status-tag is-sm is-solid is-primary service-card-badge"><i class="ti ti-circle-check"></i> Default</span>
+        </div>
+        <p class="service-card-title">Transcript Services</p>
+        <p class="service-card-desc">Manage learners and credentials, and fulfill orders for academic credentials.</p>
+        <button class="tasty-btn is-primary is-md is-full" onclick="showToast('Transcript Services isn’t part of this prototype.', 'config')">Open</button>
+      </div>
+      <div class="tasty-tile is-sharp service-card">
+        <div class="service-card-logo"><span data-tasty-illus="parchment-pathways-brand-logo-full-color" data-size="170" alt="Parchment Pathways"></span></div>
+        <div class="service-card-illus">
+          <span data-tasty-illus="dual-enrollment-fill" data-size="72" alt=""></span>
+        </div>
+        <p class="service-card-title">Dual Enrollment</p>
+        <p class="service-card-desc">Enroll learners into dual enrollment courses along with comprehensive enrollment management.</p>
+        <button class="tasty-btn is-primary is-md is-full" onclick="showScreen('dashboard')">Open</button>
+      </div>
+    </div>
+  </div>
+  <footer class="service-select-footer">
+    <span class="service-select-footer-side"><i class="ti ti-help-circle"></i> Support: Help Desk &nbsp;·&nbsp; <i class="ti ti-message"></i> Support: Screen Share</span>
+    <span class="service-select-footer-center"><span data-tasty-illus="parchment-logowht" data-size="92" alt="Parchment"></span></span>
+    <span class="service-select-footer-side service-select-footer-right">Terms Of Use &nbsp;·&nbsp; Privacy Policy</span>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3 — Workspace / Dashboard (college-admin home, WorkspaceCards)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-dashboard" data-screen-label="Workspace">
+  <div class="dashboard-screen-wrap">
+    <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+    <div data-component="nav-tabs-mount" data-active="workspace" data-tabs='[{"id":"workspace","label":"Workspace","screen":"dashboard"},{"id":"dual-enrollment","label":"Applications","screen":"de"},{"id":"invites","label":"Pending Invites","screen":"invites"}]'></div>
+
+    <div class="dashboard-body" data-comment-anchor="4b5ecb04bc-div">
+
+      <!-- ─── Workspace Search Banner ─── -->
+      <div class="search-banner de-searchbanner">
+        <div class="search-banner-left">
+          <div class="tasty-section-header" style="width:auto;">
+            <span class="tasty-section-header__graphic"><span data-tasty-illus="dual-enrollment-fill" alt=""></span></span>
+            <div>
+              <div class="tasty-section-header__title">Dual Enrollment</div>
+              <div class="tasty-section-header__sub">Review applications and track learner enrollment status.</div>
+            </div>
+          </div>
+        </div>
+        <div class="search-banner-right">
+          <button class="ws-banner-info" type="button" aria-label="About Dual Enrollment" title="Search learners across every application in your workspace.">
+            <i class="ti ti-info-circle-filled"></i>
+          </button>
+          <div class="search-wrap">
+            <div class="search-input-wrap">
+              <i class="ti ti-search search-icon"></i>
+              <input class="search-input" type="text" placeholder="Search learners…" id="ws-search-input" autocomplete="off" />
+              <button class="search-filter-btn" id="ws-adv-btn" aria-label="Global search" title="Global search">
+                <i class="ti ti-adjustments-horizontal"></i>
+              </button>
+            </div>
+            <button class="search-btn" id="ws-search-btn">Search</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WORKSPACE section (Figma 16719:154727) — header + rule + cards in ONE
+           block, so the dashboard-body's 32px gap doesn't wedge them apart ─── -->
+      <div class="ws-section">
+      <div class="ws-section-head">
+        <p class="ws-section-title">Workspace</p>
+        <div class="ws-starting">
+          <button class="tasty-btn is-transparent is-no-border is-xs ws-starting-trigger" type="button" data-tasty="menu" aria-haspopup="listbox" aria-expanded="false">
+            <i class="ti ti-settings"></i> Starting Screen
+          </button>
+          <div class="tasty-menu ws-starting-menu" role="listbox" aria-label="Cards shown on your starting screen">
+            <p class="ws-starting-hint">Show on your starting screen</p>
+            <label class="tasty-menu__item ws-starting-opt" role="option" aria-selected="true" data-ws-card="ws-review-card" onclick="event.stopPropagation(); toggleWorkspaceCard('ws-review-card', this)">
+              <span class="tasty-checkbox is-checked"><span class="tasty-checkbox__box"><i class="ti ti-check"></i></span></span>Dual Enrollment Applications
+            </label>
+            <label class="tasty-menu__item ws-starting-opt" role="option" aria-selected="true" data-ws-card="ws-invites-card" onclick="event.stopPropagation(); toggleWorkspaceCard('ws-invites-card', this)">
+              <span class="tasty-checkbox is-checked"><span class="tasty-checkbox__box"><i class="ti ti-check"></i></span></span>Pending Invites
+            </label>
+            <label class="tasty-menu__item ws-starting-opt" role="option" aria-selected="true" data-ws-card="ws-invite-card" onclick="event.stopPropagation(); toggleWorkspaceCard('ws-invite-card', this)">
+              <span class="tasty-checkbox is-checked"><span class="tasty-checkbox__box"><i class="ti ti-check"></i></span></span>Invite Learners
+            </label>
+            <label class="tasty-menu__item ws-starting-opt" role="option" aria-selected="true" data-ws-card="ws-viewall-card" onclick="event.stopPropagation(); toggleWorkspaceCard('ws-viewall-card', this)">
+              <span class="tasty-checkbox is-checked"><span class="tasty-checkbox__box"><i class="ti ti-check"></i></span></span>View All Applications
+            </label>
+          </div>
+        </div>
+      </div>
+      <hr class="tasty-divider is-light ws-section-rule">
+
+      <div class="workspace-cards">
+        <div class="workspace-card" id="ws-review-card">
+          <div class="workspace-card-top">
+            <div class="workspace-count-pill"><span class="workspace-count">8</span></div>
+          </div>
+          <div class="workspace-card-mid">
+            <p class="workspace-card-title">Dual Enrollment Applications</p>
+            <p class="workspace-card-desc">New requests from learners to join a dual enrollment program.</p>
+          </div>
+          <div class="workspace-card-bottom">
+            <button class="tasty-btn is-success is-md" onclick="enterReviewWorkflow()">Review Applications</button>
+          </div>
+        </div>
+        <div class="workspace-card" id="ws-invites-card">
+          <div class="workspace-card-top">
+            <div class="workspace-count-pill"><span class="workspace-count workspace-invites-count">0</span></div>
+          </div>
+          <div class="workspace-card-mid">
+            <p class="workspace-card-title">Pending Invites</p>
+            <p class="workspace-card-desc">Learners you've invited who haven't started an application yet.</p>
+          </div>
+          <div class="workspace-card-bottom">
+            <button class="tasty-btn is-primary is-md" onclick="showScreen('invites')">View Invites</button>
+          </div>
+        </div>
+        <div class="workspace-card is-graphic" id="ws-invite-card">
+          <div class="workspace-card-top">
+            <div class="workspace-card-graphic"><span data-tasty-illus="invite-user-line" data-size="110" alt=""></span></div>
+          </div>
+          <div class="workspace-card-mid">
+            <p class="workspace-card-title">Invite Learners</p>
+            <p class="workspace-card-desc">Invite learners to explore and select available courses.</p>
+          </div>
+          <div class="workspace-card-bottom">
+            <button class="tasty-btn is-primary is-md" onclick="openInviteFlow()">Invite Learners</button>
+          </div>
+        </div>
+        <div class="workspace-card is-graphic" id="ws-viewall-card">
+          <div class="workspace-card-top">
+            <div class="workspace-card-graphic"><span data-tasty-illus="credentials-line" data-size="110" alt=""></span></div>
+          </div>
+          <div class="workspace-card-mid">
+            <p class="workspace-card-title">View All Applications</p>
+            <p class="workspace-card-desc">See the full queue across every stage of the workflow.</p>
+          </div>
+          <div class="workspace-card-bottom">
+            <button class="tasty-btn is-ghost is-md" onclick="showAllApplications()">View Applications</button>
+          </div>
+        </div>
+        <!-- Manage Learners card hidden for now — may revisit later
+        <div class="workspace-card">
+          <div class="workspace-card-top">
+            <div class="workspace-icon-circle"><i class="ti ti-users"></i></div>
+          </div>
+          <div class="workspace-card-mid">
+            <p class="workspace-card-title">Manage Learners</p>
+            <p class="workspace-card-desc">Manage and add learner details and records.</p>
+          </div>
+          <div class="workspace-card-bottom">
+            <button class="tasty-btn is-ghost is-sm">Manage Learners</button>
+          </div>
+        </div>
+        -->
+
+      </div>
+      </div>
+    </div>
+    <div data-component="page-footer-mount"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4 — Dual Enrollment (segmented control: New / Invited / Waiting / Registered / Closed)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-de" data-screen-label="Dual Enrollment Queue">
+<div class="dashboard-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <!-- Shell context A — standard page (All Applications). Nav tabs visible. -->
+  <div id="de-nav-shell">
+    <div data-component="nav-tabs-mount" data-active="dual-enrollment" data-tabs='[{"id":"workspace","label":"Workspace","screen":"dashboard"},{"id":"dual-enrollment","label":"Applications","screen":"de"},{"id":"invites","label":"Pending Invites","screen":"invites"}]'></div>
+  </div>
+  <!-- Shell context B — focused Review Applications workflow (Launchpad pattern).
+       WorkflowHeader replaces the nav; the only exit is Back to Workspace. -->
+  <div id="de-workflow-shell" style="display:none">
+    <div data-component="workflow-header-mount" data-back-label="Back to Workspace" data-back-action="exitReviewWorkflow()"></div>
+  </div>
+
+  <!-- Content area -->
+  <div class="app-wrap">
+  <div class="page-content" data-comment-anchor="80d9bf6a5e-div" style="gap: 16px">
+
+    <!-- Row 1 — Section header: DE illustration + title left, search aligned right -->
+    <div class="de-page-identity de-searchbanner">
+      <div class="tasty-section-header" style="width:auto;">
+        <span class="tasty-section-header__graphic"><span data-tasty-illus="document-fill" alt=""></span></span>
+        <div><div class="tasty-section-header__title" id="de-page-title">Applications</div></div>
+      </div>
+      <div class="de-header-search">
+        <div class="search-input-wrap">
+          <i class="ti ti-search search-icon"></i>
+          <input class="search-input" type="text" placeholder="Search learners…" id="search-input" />
+          <button class="search-filter-btn" id="de-adv-btn" aria-label="Global search" title="Global search">
+            <i class="ti ti-adjustments-horizontal"></i>
+          </button>
+        </div>
+        <button class="search-btn" id="search-btn" data-comment-anchor="c6607f34ce-button">Search</button>
+      </div>
+      <div class="de-options" id="de-options">
+        <button class="tasty-btn is-transparent is-icon de-options-trigger" id="de-options-trigger" type="button" aria-label="More options" aria-haspopup="listbox" aria-expanded="false" title="More options" data-tasty="menu">
+          <i class="ti ti-dots-vertical"></i>
+        </button>
+        <div class="tasty-menu de-options-menu" id="de-options-menu" role="listbox">
+          <div class="tasty-menu__item" id="de-export-btn" role="option" tabindex="0"><i class="ti ti-download"></i> Export report</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 — NavToggle (segment control) -->
+    <div class="seg-row">
+      <div class="tasty-navtoggle" id="seg-control">
+        <button class="tasty-navtoggle__item is-active" id="seg-btn-needs-review" onclick="switchSegment('needs-review')">Needs Review <span class="tasty-badge" id="seg-count-needs-review" data-comment-anchor="dfbae99909-span">8</span></button>
+        <button class="tasty-navtoggle__item" id="seg-btn-waiting" onclick="switchSegment('waiting')">Waiting <span class="tasty-badge" id="seg-count-waiting"></span></button>
+        <button class="tasty-navtoggle__item" id="seg-btn-admitted" onclick="switchSegment('admitted')">Admitted <span class="tasty-badge" id="seg-count-admitted"></span></button>
+        <button class="tasty-navtoggle__item" id="seg-btn-active" onclick="switchSegment('active')">Registered <span class="tasty-badge" id="seg-count-active"></span></button>
+        <button class="tasty-navtoggle__item" id="seg-btn-denied" onclick="switchSegment('denied')" data-comment-anchor="c0ae5e31d2-button">Closed <span class="tasty-badge" id="seg-count-denied"></span></button>
+      </div>
+    </div>
+
+    <!-- Advanced search results moved to screen-adv-search -->
+
+    <!-- Empty state — no applications anywhere in the queue (edge case; toggled via dev panel).
+         Hides the header row + segment tabs + tables and centers this. -->
+    <div class="de-empty-state" id="de-empty-state" style="display:none">
+      <h2 class="de-empty-title">No Applications</h2>
+      <p class="de-empty-text">You will manage your applications here once an application is received.</p>
+      <div class="de-empty-illus"><span data-tasty-illus="select-document-fill" data-size="100" alt=""></span></div>
+    </div>
+
+    <!-- New panel (status key: needs-review / pending) -->
+    <div class="seg-panel active" id="seg-panel-needs-review">
+
+    <!-- Table + bulk bar wrapper (no gap between them) -->
+    <div class="queue-section">
+
+    <!-- Bulk actions bar — shown via JS when rows selected -->
+    <div class="bulk-inline-bar" id="bulk-bar">
+      <span class="bulk-inline-count">
+        <span class="bulk-inline-count-badge" id="bulk-count-badge">0</span>
+        <span id="bulk-label-text">selected</span>
+      </span>
+      <button class="bulk-inline-select-all" id="bulk-select-all-btn">Select all 8</button>
+      <div class="bulk-inline-spacer"></div>
+      <button class="bulk-inline-deny" id="bulk-deny-btn">Deny Selected</button>
+      <button class="bulk-inline-approve" id="bulk-approve-btn">
+        <i class="ti ti-check"></i> Approve Selected
+      </button>
+    </div>
+
+    <!-- Applications Table -->
+    <div class="queue-table-wrap">
+      <table class="queue-table" id="queue-table">
+        <thead>
+          <tr>
+            <th class="col-check">
+              <input type="checkbox" class="row-checkbox" id="select-all-checkbox" aria-label="Select all applications" />
+            </th>
+            <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
+            <th><span class="th-inner">First Name</span></th>
+            <th><span class="th-inner">Application ID</span></th>
+            <th><span class="th-inner">High School</span></th>
+            <th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group <i class="ti ti-arrows-sort th-sort"></i></span></th>
+            <th class="is-sortable" data-sort-col="date" aria-sort="none"><span class="th-inner">Submission Date <i class="ti ti-arrows-sort th-sort"></i></span></th>
+            <th class="col-status-badge">Status</th>
+            <th class="col-actions"></th>
+          </tr>
+        </thead>
+        <tbody id="queue-tbody">
+          <!-- Rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    </div><!-- /queue-section -->
+
+    <div class="table-pagination" id="queue-pagination" style="padding: 24px 0px 16px">
+      <span class="pagination-range" id="queue-results-label">SHOWING <strong>1–8</strong> OF <strong>8</strong></span>
+      <div class="pagination-buttons" id="queue-page-buttons"></div>
+      <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="queue-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+    </div>
+
+    </div><!-- /seg-panel needs-review -->
+
+    <!-- Waiting panel — college reviewed, awaiting high school approval and/or guardian consent -->
+    <div class="seg-panel" id="seg-panel-waiting">
+      <div class="queue-section" id="waiting-table-section" style="display:none;">
+        <div class="queue-table-wrap">
+          <table class="queue-table" id="waiting-table">
+            <thead>
+              <tr>
+                <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th><span class="th-inner">First Name</span></th>
+                <th><span class="th-inner">Application ID</span></th>
+                <th><span class="th-inner">High School</span></th>
+                <th><span class="th-inner">Group</span></th>
+                <th><span class="th-inner">Submission Date <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th class="col-status-badge">Status</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="waiting-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="table-pagination" id="waiting-pagination" style="display: none; padding: 24px 0px 16px">
+        <span class="pagination-range" id="waiting-results-label"></span>
+        <div class="pagination-buttons" id="waiting-page-buttons"></div>
+        <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="waiting-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+      </div>
+      <div class="seg-empty" id="waiting-empty" style="display:none;">
+        <i class="ti ti-hourglass"></i>
+        <p>Applications you've approved that are waiting on high school approval or guardian consent will appear here.</p>
+      </div>
+    </div>
+
+    <!-- Admitted panel: admitted-on-hold learners (PM review #8 "Admit Only").
+         Sits AFTER Waiting: Waiting is pre-decision, Admitted is post-decision. -->
+    <div class="seg-panel" id="seg-panel-admitted">
+      <div class="bulk-inline-bar" id="admitted-bulk-bar" style="display:none;">
+        <span class="bulk-inline-count">
+          <span class="bulk-inline-count-badge" id="admitted-bulk-count">0</span>
+          <span>selected</span>
+        </span>
+        <button class="bulk-inline-select-all" id="admitted-bulk-select-all">Select all</button>
+        <div class="bulk-inline-spacer"></div>
+        <button class="bulk-inline-approve" id="admitted-bulk-invite"><i class="ti ti-send"></i> Invite To Register</button>
+      </div>
+      <div class="queue-section" id="admitted-table-section" style="display:none;">
+        <div class="queue-table-wrap">
+          <table class="queue-table" id="admitted-table">
+            <thead>
+              <tr>
+                <th class="col-check"><input type="checkbox" id="admitted-select-all-cb" class="row-checkbox" aria-label="Select all admitted learners"></th>
+                <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th><span class="th-inner">First Name</span></th>
+                <th><span class="th-inner">Application ID</span></th>
+                <th><span class="th-inner">High School</span></th>
+                <th><span class="th-inner">Group</span></th>
+                <th><span class="th-inner">Date Admitted <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th class="col-status-badge">Status</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="admitted-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="table-pagination" id="admitted-pagination" style="display: none; padding: 24px 0px 16px">
+        <span class="pagination-range" id="admitted-results-label"></span>
+        <div class="pagination-buttons" id="admitted-page-buttons"></div>
+        <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="admitted-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+      </div>
+      <div class="seg-empty" id="admitted-empty" style="display:none;">
+        <i class="ti ti-user-check"></i>
+        <p>Learners you've admitted on hold will appear here until you invite them to register for courses.</p>
+      </div>
+    </div>
+
+    <!-- Active panel -->
+    <div class="seg-panel" id="seg-panel-active">
+      <div class="queue-section" id="active-table-section" style="display:none;">
+        <div class="queue-table-wrap">
+          <table class="queue-table" id="active-table">
+            <thead>
+              <tr>
+                <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th><span class="th-inner">First Name</span></th>
+                <th><span class="th-inner">Application ID</span></th>
+                <th><span class="th-inner">High School</span></th>
+                <th><span class="th-inner">Group</span></th>
+                <th class="col-course"><span class="th-inner">Selected Course</span></th>
+                <th><span class="th-inner">Enrolled <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th class="col-status-badge">Status</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="active-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="table-pagination" id="active-pagination" style="display: none; padding: 24px 0px 16px">
+        <span class="pagination-range" id="active-results-label"></span>
+        <div class="pagination-buttons" id="active-page-buttons"></div>
+        <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="active-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+      </div>
+      <div class="seg-empty" id="active-empty" style="display:none;">
+        <i class="ti ti-users"></i>
+        <p>Learners actively enrolled in dual enrollment programs will appear here.</p>
+      </div>
+    </div>
+
+    <!-- Denied panel -->
+    <div class="seg-panel" id="seg-panel-denied">
+      <div class="queue-section" id="denied-table-section" style="display:none;">
+        <div class="queue-table-wrap">
+          <table class="queue-table" id="denied-table">
+            <thead>
+              <tr>
+                <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th><span class="th-inner">First Name</span></th>
+                <th><span class="th-inner">Application ID</span></th>
+                <th><span class="th-inner">High School</span></th>
+                <th><span class="th-inner">Group</span></th>
+                <th><span class="th-inner">Closed <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th class="col-status-badge">Status</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="denied-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="table-pagination" id="denied-pagination" style="display: none; padding: 24px 0px 16px">
+        <span class="pagination-range" id="denied-results-label"></span>
+        <div class="pagination-buttons" id="denied-page-buttons"></div>
+        <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="denied-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+      </div>
+      <div class="seg-empty" id="denied-empty" style="display:none;">
+        <i class="ti ti-ban"></i>
+        <p>Closed applications — denied or cancelled — will appear here.</p>
+      </div>
+    </div>
+
+  </div><!-- /page-content -->
+  </div><!-- /app-wrap -->
+
+  <div data-component="page-footer-mount"></div>
+
+</div><!-- /dashboard-screen-wrap -->
+</div><!-- /screen-de -->
+
+
+<!-- ═══════════════════════════════════════════
+     INVITES: pending-invitations tracker (own top-level tab; an invite
+     isn't an application yet, so it doesn't live in the Applications
+     table. PM review #7)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-invites" data-screen-label="Pending Invites">
+<div class="dashboard-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+  <div data-component="nav-tabs-mount" data-active="invites" data-tabs='[{"id":"workspace","label":"Workspace","screen":"dashboard"},{"id":"dual-enrollment","label":"Applications","screen":"de"},{"id":"invites","label":"Pending Invites","screen":"invites"}]'></div>
+
+  <div class="app-wrap">
+  <div class="page-content" style="gap: 16px">
+
+    <div class="de-page-identity de-searchbanner">
+      <div class="tasty-section-header" style="width:auto;">
+        <span class="tasty-section-header__graphic"><span data-tasty-illus="envelope-fill" alt=""></span></span>
+        <div>
+          <div class="tasty-section-header__title">Pending Invites</div>
+          <div class="tasty-section-header__sub">Learners you've invited who haven't started an application yet.</div>
+        </div>
+      </div>
+      <div class="de-header-search">
+        <div class="search-input-wrap">
+          <i class="ti ti-search search-icon"></i>
+          <input class="search-input" id="invited-search-input" type="text" placeholder="Enter Search Term" />
+          <button class="search-filter-btn" aria-label="Filter" title="Filter"><i class="ti ti-adjustments-horizontal"></i></button>
+        </div>
+        <button class="search-btn" id="invited-search-btn">Search</button>
+      </div>
+      <button class="tasty-btn is-md de-add-enrollment-btn" type="button" onclick="openInviteFlow()">
+        <i class="ti ti-user-plus"></i> Invite Learners
+      </button>
+      <div class="de-options" id="invited-options">
+        <button class="tasty-btn is-transparent is-icon de-options-trigger" id="invited-options-trigger" type="button" aria-label="More options" aria-haspopup="listbox" aria-expanded="false" title="More options" data-tasty="menu">
+          <i class="ti ti-dots-vertical"></i>
+        </button>
+        <div class="tasty-menu de-options-menu" id="invited-options-menu" role="listbox">
+          <div class="tasty-menu__item" id="invited-export-btn" role="option" tabindex="0"><i class="ti ti-download"></i> Export</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bulk resend bar — shown via JS when invited rows are selected -->
+    <div class="bulk-inline-bar" id="invited-bulk-bar" style="display:none;">
+      <span class="bulk-inline-count">
+        <span class="bulk-inline-count-badge" id="invited-bulk-count">0</span>
+        <span>selected</span>
+      </span>
+      <button class="bulk-inline-select-all" id="invited-bulk-select-all">Select all</button>
+      <div class="bulk-inline-spacer"></div>
+      <button class="bulk-inline-approve" id="invited-bulk-resend"><i class="ti ti-send"></i> Resend Invitations</button>
+    </div>
+
+    <div class="queue-section" id="invited-table-section" style="display:none;">
+      <div class="queue-table-wrap">
+        <table class="queue-table" id="invited-table">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" id="invited-select-all-cb" class="row-checkbox" aria-label="Select all invitations"></th>
+              <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
+              <th><span class="th-inner">First Name</span></th>
+              <th><span class="th-inner">High School</span></th>
+              <th><span class="th-inner">Group</span></th>
+              <th><span class="th-inner">Date Invited <i class="ti ti-arrows-sort th-sort"></i></span></th>
+              <th><span class="th-inner">Last Sent</span></th>
+              <th class="col-status-badge">Status</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="invited-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-pagination" id="invited-pagination" style="padding: 24px 0px 16px">
+      <span class="pagination-range" id="invited-results-label"></span>
+      <div class="pagination-buttons" id="invited-page-buttons">
+        <button class="tasty-pagination__item is-disabled" disabled aria-label="Previous page"><i class="ti ti-chevron-left"></i></button>
+        <button class="tasty-pagination__item is-active" aria-label="Page 1">1</button>
+        <button class="tasty-pagination__item is-disabled" disabled aria-label="Next page"><i class="ti ti-chevron-right"></i></button>
+      </div>
+      <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="invited-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+    </div>
+
+    <div class="seg-empty" id="invited-empty">
+      <i class="ti ti-mail"></i>
+      <p>Learners you've invited will appear here once invitations are sent.</p>
+    </div>
+
+  </div>
+  </div>
+
+  <div data-component="page-footer-mount"></div>
+
+</div><!-- /dashboard-screen-wrap -->
+</div><!-- /screen-invites -->
+
+
+<!-- ═══════════════════════════════════════════
+     INVITE FLOW — Step 1: Select Learners
+     Entry point: Workspace "Invite Learners" card button
+═══════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════
+     ADD LEARNERS — DecisionTree fork (single learner vs bulk CSV upload)
+     Opened from the invite-learners "Add Learners" button.
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-add-learners" data-screen-label="Add Learners"><div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-action="showScreen('invite-learners')"></div>
+
+  <div class="app-wrap"><div class="page-content">
+    <div class="decision-tree">
+      <h1 class="decision-tree__question">Do you want to add a single learner or do a bulk upload?</h1>
+      <div class="decision-tree__cards">
+        <button type="button" class="tasty-tile is-interactive decision-tree__tile" onclick="addLearnersChoice('single')">
+          <span class="decision-tree__icon"><span data-tasty-icon="add-account" data-size="80"></span></span>
+          <span class="decision-tree__title">Add One Learner</span>
+          <span class="decision-tree__desc">Add a single learner using our form</span>
+        </button>
+        <button type="button" class="tasty-tile is-interactive decision-tree__tile" onclick="addLearnersChoice('bulk')">
+          <span class="decision-tree__icon"><span data-tasty-icon="add-group" data-size="80"></span></span>
+          <span class="decision-tree__title">Add Multiple Learners</span>
+          <span class="decision-tree__desc">Add a bunch of learners at once using a CSV file</span>
+        </button>
+      </div>
+    </div>
+  </div></div>
+
+  <div data-component="page-footer-mount"></div>
+
+</div></div>
+
+<!-- ═══════════════════════════════════════════
+     BULK UPLOAD — Add Multiple Learners wizard (rendered by bulk-upload.js)
+     Opened from the Add Learners DecisionTree "Add Multiple Learners" card.
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-bulk-upload" data-screen-label="Add Learners"><div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-action="showScreen('add-learners')"></div>
+
+  <div class="app-wrap"><div class="page-content">
+    <div id="bulk-upload-mount"></div>
+  </div></div>
+
+  <div data-component="page-footer-mount"></div>
+
+</div></div>
+
+<div class="screen" id="screen-invite-learners" data-screen-label="Invite · Learners"><div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back to Workspace" data-back-id="invite-back-btn" data-back-action="exitInviteFlow()"></div>
+
+  <div class="app-wrap"><div class="page-content">
+    <div class="de-page-identity de-searchbanner">
+      <div class="tasty-section-header" style="width:auto;">
+        <span class="tasty-section-header__graphic"><span data-tasty-illus="invite-user-fill" alt=""></span></span>
+        <div>
+          <div class="tasty-section-header__title">Invite Learners</div>
+          <div class="tasty-section-header__sub">Select the learners you'd like to send a program invitation to.</div>
+        </div>
+      </div>
+      <div class="de-header-search">
+        <div class="search-input-wrap">
+          <i class="ti ti-search search-icon"></i>
+          <input class="search-input" id="invite-search-input" type="text" placeholder="Enter Search Term" />
+          <button class="search-filter-btn" aria-label="Filter" title="Filter"><i class="ti ti-adjustments-horizontal"></i></button>
+        </div>
+        <button class="search-btn" id="invite-search-btn">Search</button>
+      </div>
+      <button class="tasty-btn is-primary is-md de-add-enrollment-btn" id="invite-add-learners-btn"><i class="ti ti-circle-plus"></i> Add Learners</button>
+      <div class="de-options" id="invite-options">
+        <button class="tasty-btn is-transparent is-icon de-options-trigger" id="invite-options-trigger" type="button" aria-label="More options" aria-haspopup="listbox" aria-expanded="false" title="More options" data-tasty="menu">
+          <i class="ti ti-dots-vertical"></i>
+        </button>
+        <div class="tasty-menu de-options-menu" id="invite-options-menu" role="listbox">
+          <div class="tasty-menu__item" id="invite-export-btn" role="option" tabindex="0"><i class="ti ti-download"></i> Export</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-block">
+    <div class="bulk-inline-bar" id="invite-bulk-bar" style="display:none;">
+      <span class="bulk-inline-count">
+        <span class="bulk-inline-count-badge" id="invite-bulk-badge">0</span>
+        <span style="font-size:13px;font-weight:600;color:var(--c-surface);margin-left:4px;">LEARNERS SELECTED.</span>
+      </span>
+      <span style="font-size:13px;color:rgba(255,255,255,0.85);margin-left:6px;">Select the learners you would like to send a program invitation to.</span>
+      <button class="bulk-inline-select-all" id="invite-select-all-btn" style="margin-left:6px;">Select All (10)</button>
+      <div class="bulk-inline-spacer"></div>
+      <button class="bulk-inline-approve" id="invite-proceed-btn" style="background:transparent;border:1px solid rgba(255,255,255,0.6);color:#fff;" disabled>
+        Invite Learners
+      </button>
+    </div>
+
+    <div class="queue-section">
+      <div class="queue-table-wrap">
+        <table class="queue-table" id="invite-learner-table">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" class="row-checkbox" id="invite-select-all-cb" /></th>
+              <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
+              <th><span class="th-inner">First Name</span></th>
+              <th><span class="th-inner">Verified ID</span></th>
+              <th><span class="th-inner">Date of Birth</span></th>
+              <th><span class="th-inner">Last 4 SSN</span></th>
+              <th><span class="th-inner">Expected Grad Year</span></th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="invite-learner-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-pagination" id="invite-pagination" style="padding: 32px 0px 16px">
+      <span class="pagination-range" id="invite-results-label">SHOWING <strong>1–10</strong> OF <strong>10</strong></span>
+      <div class="pagination-buttons">
+        <button class="tasty-pagination__item is-disabled" disabled aria-label="Previous page"><i class="ti ti-chevron-left"></i></button>
+        <button class="tasty-pagination__item is-active" aria-label="Page 1">1</button>
+        <button class="tasty-pagination__item is-disabled" disabled aria-label="Next page"><i class="ti ti-chevron-right"></i></button>
+      </div>
+      <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+    </div><!-- /table-pagination -->
+    </div><!-- /table-block -->
+
+  </div></div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════
+     INVITE FLOW — Step 2: Select Institution (TileMemberSelect grid)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-invite-college" data-screen-label="Invite · Institution"><div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-action="showScreen('invite-learners')" data-cancel-label="Cancel" data-cancel-action="showInviteCancelConfirm()"></div>
+
+  <div class="app-wrap"><div class="page-content">
+    <div class="page-title-row">
+      <div class="tasty-section-header" style="width:auto;">
+        <div>
+          <div class="tasty-section-header__title">Select Institution</div>
+          <div class="tasty-section-header__sub">Choose the institution you'd like to invite learners to.</div>
+        </div>
+      </div>
+    </div>
+    <div class="college-tile-grid" id="invite-college-grid"></div>
+  </div></div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════
+     INVITE FLOW — Step 3: Select Groups (card with Continue button)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-invite-groups" data-screen-label="Invite · Groups"><div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-action="showScreen('invite-learners')" data-cancel-label="Cancel" data-cancel-action="showInviteCancelConfirm()"></div>
+
+  <div class="app-wrap"><div class="page-content">
+
+    <div class="invite-groups-card">
+      <div class="invite-groups-card-header">Select A Group</div>
+      <div class="invite-groups-card-body">
+
+        <div class="invite-groups-college-identity" id="invite-groups-college-identity">
+          <!-- JS-rendered: logo + name/city/url -->
+        </div>
+
+        <h3 class="invite-groups-section-heading">Available Groups</h3>
+
+        <div class="queue-table-wrap" style="margin:0;">
+          <table class="queue-table" id="invite-groups-table">
+            <thead>
+              <tr>
+                <th class="col-check"><input type="checkbox" class="row-checkbox" id="invite-groups-select-all-cb" /></th>
+                <th><span class="th-inner">Group <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                    <th><span class="th-inner">Description</span></th>
+                <th><span class="th-inner">Registration Deadline</span></th>
+              </tr>
+            </thead>
+            <tbody id="invite-groups-tbody"></tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="invite-groups-card-footer">
+        <button class="tasty-btn is-success is-sm" id="invite-groups-proceed-btn" disabled>Continue</button>
+      </div>
+    </div>
+
+  </div></div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL — Invite cancel confirmation (shown on Cancel from steps 2–3)
+═══════════════════════════════════════════ -->
+<div class="tasty-modal-overlay" id="invite-cancel-overlay">
+  <div class="tasty-modal is-narrow">
+    <div class="tasty-modal__head">
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <i class="ti ti-alert-triangle" style="color:var(--c-warning);font-size:18px;"></i>
+        <span class="tasty-modal__title">Cancel Invitations?</span>
+      </span>
+    </div>
+    <div class="tasty-modal__body">
+      Your progress will be lost. The learners you've selected and any group choices won't be saved.
+    </div>
+    <div class="tasty-modal__foot">
+      <button class="tasty-btn is-bold is-ghost" onclick="hideInviteCancelConfirm()">Keep Going</button>
+      <button class="tasty-btn is-error" onclick="confirmInviteCancel()">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════
+     MODAL — Invitation Summary (shown before Send Invitations Now)
+═══════════════════════════════════════════ -->
+<div class="tasty-modal-overlay" id="invite-summary-overlay">
+  <div class="tasty-modal is-md">
+    <div class="tasty-modal__head">
+      <span style="display:inline-flex;align-items:center;gap:8px;">
+        <i class="ti ti-send" style="color:var(--c-brand);font-size:18px;"></i>
+        <span class="tasty-modal__title">Invitation Summary</span>
+      </span>
+      <button class="tasty-modal__x" onclick="hideInviteSummary()" aria-label="Close"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="tasty-modal__body">
+      <div class="invite-summary-stats">
+        <div class="invite-summary-stat">
+          <p class="invite-summary-stat-label">Learners</p>
+          <p class="invite-summary-stat-value" id="summary-learner-count">0</p>
+          <p class="invite-summary-stat-sub" id="summary-learner-sub">selected</p>
+        </div>
+        <div class="invite-summary-stat">
+          <p class="invite-summary-stat-label">Institution</p>
+          <div id="summary-college-logo" style="width:56px;height:56px;border:1px solid var(--c-border);border-radius:4px;padding:4px;background:var(--c-surface);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--c-text-strong);margin:0 auto 4px;"></div>
+          <p class="invite-summary-stat-sub" id="summary-college-name">—</p>
+          <p class="invite-summary-stat-sub" id="summary-college-city" style="font-size:12px;margin-top:2px;"></p>
+        </div>
+        <div class="invite-summary-stat">
+          <p class="invite-summary-stat-label">Group(s)</p>
+          <div id="summary-groups-list" style="font-size:13px;color:var(--c-text-muted);text-align:center;line-height:1.7;"></div>
+        </div>
+      </div>
+      <p class="invite-summary-note">If your summary looks good, you can send the invitations now. Learners will receive email and SMS notifications.</p>
+    </div>
+    <div class="tasty-modal__foot">
+      <button class="tasty-btn is-bold is-ghost" onclick="hideInviteSummary()">Make Changes</button>
+      <button class="tasty-btn is-primary" onclick="sendInvitations()"><i class="ti ti-send"></i> Send Invitations Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5 — Review Application (individual review, 760px column)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-review" data-screen-label="Review Application">
+<div class="queue-screen-wrap">
+
+  <!-- App Header (static — no dynamic IDs to avoid conflicts) -->
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back to Queue" data-back-id="review-back-btn"></div>
+
+  <div class="app-wrap">
+    <div id="review-content"></div>
+  </div>
+</div>
+</div><!-- /screen-review -->
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 6 — Deny Application (single or bulk denial)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-deny" data-screen-label="Deny Application">
+<div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-id="deny-back-btn" data-cancel-label="Cancel" data-cancel-id="deny-cancel-btn" data-cancel-action="showScreen('de')"></div>
+
+  <div class="app-wrap">
+    <div id="deny-content"></div>
+  </div>
+</div>
+</div><!-- /screen-deny -->
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 7 — Bulk Approve (multi-select approval confirmation)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-bulk-approve" data-screen-label="Bulk Approve">
+<div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back to Queue" data-back-action="showScreen('de')"></div>
+
+  <div class="app-wrap">
+    <div id="bulk-approve-content"></div>
+  </div>
+<div id="bulk-req-mount"></div>
+
+</div>
+</div><!-- /screen-bulk-approve -->
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 7b — Admit Confirm (single-learner "Admit Now" workflow page, replaces the old
+     approve-consent modal). Figma "2.1.3 - Admin Application Approval 05" (13572:121048).
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-admit-confirm" data-screen-label="Admit Learner">
+<div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-id="admit-confirm-back-btn"></div>
+
+  <div class="app-wrap"><div class="page-content">
+    <div id="admit-confirm-content"></div>
+  </div></div>
+</div>
+</div><!-- /screen-admit-confirm -->
+
+<!-- (Removed Jun 29: #screen-approve-success — approvals now refresh the table in place + toast.) -->
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 8 — Edit Groups (assign which groups an approved learner can access)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-edit-groups" data-screen-label="Edit Groups">
+<div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-id="edit-groups-back-btn" data-cancel-label="Cancel" data-cancel-id="edit-groups-cancel-btn"></div>
+
+  <div class="app-wrap"><div class="page-content">
+    <div id="edit-groups-content"></div>
+  </div></div>
+</div>
+</div><!-- /screen-edit-groups -->
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 9 — Edit Learner (fix/complete a learner's record in the invite flow)
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-edit-learner" data-screen-label="Edit Learner">
+<div class="queue-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back" data-back-id="edit-learner-back-btn" data-cancel-label="Cancel" data-cancel-id="edit-learner-cancel-btn"></div>
+
+  <div class="app-wrap"><div class="page-content">
+    <div id="edit-learner-content"></div>
+  </div></div>
+</div>
+</div><!-- /screen-edit-learner -->
+
+<!-- ═══════════════════════════════════════════
+     GLOBAL MOUNTS — Fixed-position overlays live outside screen divs
+     so display:none on inactive screens doesn't clip them.
+═══════════════════════════════════════════ -->
+<div id="transcript-mount"></div>
+<div id="req-modal-mount"></div>
+<div class="tasty-toast-stack" id="toast-mount"></div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL — Deny single application (same content as the deny screen, from the detail view)
+═══════════════════════════════════════════ -->
+<div class="tasty-modal-overlay" id="deny-modal">
+  <!-- Dialog semantics sit on the dialog, not the backdrop: Tasty's Modal puts aria-modal
+       and aria-labelledby on the element that IS the dialog (Modal.tsx). -->
+  <div class="tasty-modal is-md" role="dialog" aria-modal="true" aria-labelledby="deny-modal-title">
+    <div class="tasty-modal__head">
+      <span class="tasty-modal__title" id="deny-modal-title">Deny Application</span>
+      <button class="tasty-modal__x" onclick="closeDenyModal()" aria-label="Close"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="tasty-modal__body" id="deny-modal-body"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL — Denial / Cancellation reason (Closed apps + detail page)
+═══════════════════════════════════════════ -->
+<div class="tasty-modal-overlay" id="denial-reason-overlay">
+  <!-- Dialog semantics sit on the dialog, not the backdrop: Tasty's Modal puts aria-modal
+       and aria-labelledby on the element that IS the dialog (Modal.tsx). -->
+  <div class="tasty-modal is-md" role="dialog" aria-modal="true" aria-labelledby="denial-reason-title">
+    <div class="tasty-modal__head">
+      <div>
+        <h2 class="tasty-modal__title" id="denial-reason-title">Denial Reason</h2>
+      </div>
+      <button class="tasty-modal__x" onclick="closeDenialReason()" aria-label="Close"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="tasty-modal__body">
+      <!-- The record this is about. Tasty's ModalTitle holds a title and nothing else — it has no
+           subtitle slot — so the identifying line lives in the body rather than inventing one. -->
+      <p class="denial-record-name" id="denial-reason-name">—</p>
+      <p class="denial-record-meta" id="denial-reason-meta">—</p>
+      <div class="denial-audit-trail">
+        <div class="denial-audit-item">
+          <p class="denial-audit-label">Closed On</p>
+          <p class="denial-audit-value" id="denial-audit-date">—</p>
+        </div>
+        <div class="denial-audit-item">
+          <p class="denial-audit-label">Stage</p>
+          <p class="denial-audit-value tag" id="denial-audit-state-tag">—</p>
+        </div>
+        <div class="denial-audit-item">
+          <p class="denial-audit-label">Closed By</p>
+          <p class="denial-audit-value" id="denial-audit-by">—</p>
+        </div>
+      </div>
+      <p class="denial-section-label">Reason</p>
+      <p class="denial-reason-body" id="denial-reason-body">—</p>
+    </div>
+    <div class="tasty-modal__foot">
+      <button class="tasty-btn is-bold is-ghost" onclick="closeDenialReason()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN — Advanced Search Results
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-adv-search" data-screen-label="Global Search Results">
+<div class="dashboard-screen-wrap">
+
+  <div data-component="page-header-mount" data-persona-name="Kathy Nguyen" data-persona-org="West Valley Community College" data-org-initials="WV" data-lang="English (US)"></div>
+
+  <div data-component="workflow-header-mount" data-back-label="Back to Workspace" data-back-id="adv-back-screen-btn"></div>
+
+  <div class="app-wrap"><div class="page-content">
+
+    <div class="adv-results-page-identity" style="display:flex; align-items:center; justify-content:space-between;">
+      <div class="tasty-section-header">
+        <span class="tasty-section-header__graphic"><span data-tasty-illus="search-fill" alt=""></span></span>
+        <div>
+          <div class="tasty-section-header__title">Dual Enrollment</div>
+          <div class="tasty-section-header__sub">Global Search Results</div>
+        </div>
+      </div>
+      <div class="de-options" id="adv-options">
+        <button class="tasty-btn is-transparent is-icon de-options-trigger" id="adv-options-trigger" type="button" aria-label="More options" aria-haspopup="listbox" aria-expanded="false" title="More options" data-tasty="menu">
+          <i class="ti ti-dots-vertical"></i>
+        </button>
+        <div class="tasty-menu de-options-menu" id="adv-options-menu" role="listbox">
+          <div class="tasty-menu__item" id="adv-export-btn" role="option" tabindex="0"><i class="ti ti-download"></i> Export results</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="adv-results-screen" id="adv-results-screen">
+      <p class="adv-results-count" id="adv-results-count">0 Results</p>
+      <div class="adv-results-tags-row">
+        <div class="adv-results-tags" id="adv-results-tags" style="padding: 0px"></div>
+        <div class="adv-results-row-actions">
+          <button class="tasty-clear-all is-sm" id="btn-adjust-search" type="button"><i class="ti ti-adjustments-horizontal"></i> Adjust Search</button>
+          <button class="tasty-clear-all is-sm" id="adv-results-clear" type="button">Clear All</button>
+        </div>
+      </div>
+      <div class="queue-section">
+        <div class="queue-table-wrap">
+          <table class="queue-table" id="adv-results-table">
+            <thead>
+              <tr>
+                <th><span class="th-inner">Last Name</span></th>
+                <th><span class="th-inner">First Name</span></th>
+                <th><span class="th-inner">Application ID</span></th>
+                <th><span class="th-inner">High School</span></th>
+                <th><span class="th-inner">Group</span></th>
+                <th><span class="th-inner">Submission Date</span></th>
+                <th class="col-status-badge">Status</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="adv-results-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="table-pagination" id="adv-results-pagination" style="display: none; padding: 24px 0px 16px">
+        <span class="pagination-range" id="adv-results-label"></span>
+        <div class="pagination-buttons" id="adv-results-page-buttons"></div>
+        <span class="pagination-per-page">RESULTS PER PAGE <select class="pg-perpage-select" id="adv-results-perpage-select"><option>5</option><option selected>10</option><option>25</option></select></span>
+      </div>
+      <div class="seg-empty" id="adv-results-empty" style="display:none;">
+        <i class="ti ti-search-off"></i>
+        <p>No applications match your search. Try removing some criteria.</p>
+      </div>
+    </div>
+
+  </div></div>
+</div>
+</div><!-- /screen-adv-search -->
+
+<div class="tasty-modal-overlay" id="adv-search-overlay">
+  <!-- Dialog semantics sit on the dialog, not the backdrop: Tasty's Modal puts aria-modal
+       and aria-labelledby on the element that IS the dialog (Modal.tsx). -->
+  <div class="tasty-modal is-wide" role="dialog" aria-modal="true" aria-labelledby="adv-search-title">
+    <div class="tasty-modal__head">
+      <div class="adv-search-header-left">
+        <i class="ti ti-adjustments-horizontal" style="color:var(--c-brand);font-size:18px;flex-shrink:0;"></i>
+        <div>
+          <h2 class="adv-search-title" id="adv-search-title">Global Search</h2>
+          <p class="adv-search-subtitle">Dual Enrollment Applications</p>
+        </div>
+      </div>
+      <div class="adv-search-header-right">
+        <button class="tasty-btn is-bold is-ghost is-sm" id="btn-adv-reset" type="button">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+        <button class="tasty-modal__x" id="adv-search-close" type="button" aria-label="Close">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="tasty-modal__body adv-search-body">
+
+      <div class="adv-search-section">
+        <div class="adv-search-section-header">
+          <div class="adv-search-section-icon"><i class="ti ti-user"></i></div>
+          <p class="adv-search-section-title">Learner details</p>
+        </div>
+        <div class="adv-search-row">
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-firstName">First name</label>
+            <input type="text" id="adv-firstName" data-adv="firstName" autocomplete="off" />
+          </div>
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-lastName">Last name</label>
+            <input type="text" id="adv-lastName" data-adv="lastName" autocomplete="off" />
+          </div>
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-sisId">SIS / application ID</label>
+            <input type="text" id="adv-sisId" data-adv="sisId" autocomplete="off" />
+          </div>
+        </div>
+        <div class="adv-search-row">
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-school">High school</label>
+            <select id="adv-school" data-adv="school">
+              <option value="">Any high school</option>
+            </select>
+          </div>
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-grade">Grade level</label>
+            <select id="adv-grade" data-adv="grade">
+              <option value="">Any grade</option>
+              <option value="9">9th grade</option>
+              <option value="10">10th grade</option>
+              <option value="11">11th grade</option>
+              <option value="12">12th grade</option>
+            </select>
+          </div>
+          <div class="adv-field">
+            <label class="adv-field-label">GPA range</label>
+            <div class="adv-gpa-pair">
+              <input type="number" step="0.1" min="0" max="4" placeholder="Min" id="adv-gpaMin" data-adv="gpaMin" />
+              <span class="adv-gpa-sep">–</span>
+              <input type="number" step="0.1" min="0" max="4" placeholder="Max" id="adv-gpaMax" data-adv="gpaMax" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="adv-search-section">
+        <div class="adv-search-section-header">
+          <div class="adv-search-section-icon"><i class="ti ti-file-text"></i></div>
+          <p class="adv-search-section-title">Application details</p>
+        </div>
+        <div class="adv-search-row">
+          <!-- Institution filter hidden: the college admin only ever sees their own institution (WVCC). -->
+          <div class="adv-field" style="display:none;">
+            <label class="adv-field-label" for="adv-institution">Institution</label>
+            <select id="adv-institution" data-adv="institution">
+              <option value="" selected>Any institution</option>
+              <option value="wvcc">West Valley Community College</option>
+            </select>
+          </div>
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-group">Group</label>
+            <select id="adv-group" data-adv="group" class="adv-select" data-comment-anchor="77aceab9a8-select">
+              <option value="">All groups</option>
+              <!-- options injected by app.js from COLLEGE_GROUPS -->
+            </select>
+          </div>
+          <div class="adv-field">
+            <label class="adv-field-label">Status</label>
+            <div class="adv-status-group" id="adv-status-group" role="group" aria-label="Status">
+              <button type="button" class="adv-status-chip" data-status="pending">Needs Review</button>
+              <button type="button" class="adv-status-chip" data-status="admitted">Admitted</button>
+              <button type="button" class="adv-status-chip" data-status="waiting">Waiting</button>
+              <button type="button" class="adv-status-chip" data-status="invited">Invited</button>
+              <button type="button" class="adv-status-chip" data-status="active">Registered</button>
+              <button type="button" class="adv-status-chip" data-status="denied">Denied</button>
+              <button type="button" class="adv-status-chip" data-status="cancelled">Cancelled</button>
+            </div>
+          </div>
+        </div>
+        <div class="adv-search-row" style="grid-template-columns: 1fr;">
+          <div class="adv-field">
+            <label class="adv-field-label">Application flags</label>
+            <div class="adv-checkbox-grid" id="adv-flag-grid">
+              <label><input type="checkbox" data-flag="transcript" /> Transcript missing</label>
+              <label><input type="checkbox" data-flag="consent" /> Guardian consent pending</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="adv-search-section">
+        <div class="adv-search-section-header">
+          <div class="adv-search-section-icon"><i class="ti ti-calendar"></i></div>
+          <p class="adv-search-section-title">Date received</p>
+        </div>
+        <div class="adv-search-row cols-2">
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-receivedFrom">From</label>
+            <input type="date" id="adv-receivedFrom" data-adv="receivedFrom" />
+          </div>
+          <div class="adv-field">
+            <label class="adv-field-label" for="adv-receivedTo">To</label>
+            <input type="date" id="adv-receivedTo" data-adv="receivedTo" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="adv-search-footer">
+      <div class="adv-search-count muted" id="adv-search-count">Add search criteria to perform a global search.</div>
+      <div class="adv-search-actions">
+        <button class="tasty-btn is-bold is-ghost is-sm" id="btn-adv-cancel" type="button">Cancel</button>
+        <button class="tasty-btn is-primary is-sm" id="btn-adv-submit" type="button" disabled>Search</button>
+      </div>
+    </div>
+</div>
+</div>
+  <script src="../_kit/assets/tasty/manifest.js"></script>
+  <script src="../_kit/scripts/tasty-icons.js"></script>
+  <script src="../_kit/scripts/components.js"></script>
+  <script src="../_kit/scripts/tasty-interactions.js"></script>
+
+  <!-- App logic — split from former scripts/app.js (one IIFE, now dissolved to shared
+       global scope). ORDER MATTERS: data → invite → core → screens → boot (last). -->
+  <script src="../_shared/network/network.js"></script>
+  <script src="scripts/app/data-apps.js"></script>
+  <script src="scripts/app/data-invite.js"></script>
+  <script src="scripts/app/invite.js"></script>
+  <script src="scripts/app/core.js"></script>
+  <script src="scripts/app/queue.js"></script>
+  <script src="scripts/app/review.js"></script>
+  <script src="scripts/app/edit-groups.js"></script>
+  <script src="scripts/app/edit-learner.js"></script>
+  <script src="scripts/app/bulk-upload.js"></script>
+  <script src="scripts/app/bulk.js"></script>
+  <script src="scripts/app/confirm.js"></script>
+  <script src="scripts/app/approve-consent.js"></script>
+  <script src="scripts/app/dev.js"></script>
+  <script src="scripts/app/segments.js"></script>
+  <script src="scripts/app/invites-screen.js"></script>
+  <script src="scripts/app/nav.js"></script>
+  <script src="scripts/app/review-workflow.js"></script>
+  <script src="scripts/app/search.js"></script>
+  <script src="scripts/app/workspace.js"></script>
+  <script src="scripts/app/boot.js"></script>
+  <!-- Dev drawer — shared vanilla side panel (no deps); identical on file:// and the upload. -->
+  <script src="../_shared/dev-drawer/dev-drawer.js"></script>
+  <script src="../_shared/dev-drawer/changelog.js"></script>
+  <script src="scripts/app/dev-drawer-config.js"></script>
+<script src="routes.js?v=1"></script>
+<script src="../_shared/maze/maze-shim.js?v=1"></script>
+<script src="../_shared/maze/config/college-approval-queue.js?v=1"></script>
+  <!-- Last: wraps the outermost showScreen/__dev, then applies any params in the URL. -->
+</body>
+</html>

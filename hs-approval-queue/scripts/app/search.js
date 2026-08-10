@@ -58,6 +58,10 @@
       if (!query) return true;
       return (field || '').toString().toLowerCase().indexOf(query.toLowerCase()) !== -1;
     }
+    /* The free-text term runs against the same index the queue's own search uses,
+       so a name typed in the workspace finds exactly what typing it in the queue
+       would — one search behaviour, two entry points. */
+    if (c.term && appHaystack(app).indexOf(c.term.toLowerCase()) === -1) return false;
     if (!txtMatch(app.firstName, c.firstName)) return false;
     if (!txtMatch(app.lastName, c.lastName)) return false;
     if (c.sisId && !(txtMatch(app.sisId, c.sisId) || txtMatch(app.id, c.sisId))) return false;
@@ -99,7 +103,7 @@
 
   /* Are any fields filled in? */
   function advHasCriteria(c) {
-    return !!(c.firstName || c.lastName || c.sisId || c.school || c.grade ||
+    return !!(c.term || c.firstName || c.lastName || c.sisId || c.school || c.grade ||
               c.gpaMin !== '' || c.gpaMax !== '' || c.institution || c.group ||
               c.statuses.size > 0 || c.flags.size > 0 ||
               c.receivedFrom || c.receivedTo);
@@ -312,6 +316,7 @@
     function add(key, label, value, onRemove) {
       tags.push({ key: label, value: value, remove: onRemove });
     }
+    if (c.term)        add('term', 'Search', c.term, function() { c.term = ''; });
     if (c.firstName)   add('firstName', 'First name', c.firstName, function() { c.firstName = ''; });
     if (c.lastName)    add('lastName', 'Last name', c.lastName, function() { c.lastName = ''; });
     if (c.sisId)       add('sisId', 'ID', c.sisId, function() { c.sisId = ''; });
@@ -443,7 +448,27 @@
     renderWaitingTable();
     renderActiveTable();
     renderDeniedTable();
+    jumpToFirstMatchingSegment();
   }
+
+  /* Searching inside the applications view narrows the buckets you are already looking at,
+     so the tabs carry the answer: their counts become match counts, and we land on the first
+     bucket that actually has one. Without the jump the admin searches a name, watches the tab
+     they happen to be on go empty, and concludes there are no matches while the tab beside it
+     reads 3. Stays put when the current bucket already has matches — moving someone off a
+     result they can already see is its own kind of wrong. */
+  function jumpToFirstMatchingSegment() {
+    if (!searchTerm) return;
+    var counts = (typeof segCountsNow === 'function') ? segCountsNow() : null;
+    if (!counts) return;
+    var current = ((document.querySelector('.seg-panel.active') || {}).id || '').replace(/^seg-panel-/, '');
+    if (counts[current] > 0) return;
+    var order = ['needs-review', 'waiting', 'active', 'denied'];
+    for (var i = 0; i < order.length; i++) {
+      if (counts[order[i]] > 0) { switchSegment(order[i]); return; }
+    }
+  }
+
   /* Apply a term programmatically — same effect as typing it and pressing Search, but
      without requiring a field to read from. Exposed because a caller outside this module
      may need to restore a search that a page load destroyed (the Maze study build turns
@@ -453,6 +478,19 @@
     var el = document.getElementById('search-input');
     if (el) el.value = term || '';
     triggerSearch();
+  };
+
+  /* Run a GLOBAL search for a term and show its results — what the workspace box does,
+     available to a caller that has the term but not the box. The study build needs it: a
+     screen there is its own page, so arriving at Global Search means rebuilding the search
+     that produced it rather than inheriting it from memory. */
+  window.applyGlobalSearchTerm = function (term) {
+    if (!term) return;
+    advSearch.criteria = emptyAdvCriteria();
+    advSearch.criteria.term = term;
+    advSearch.active = true;
+    advResultPag.page = 1;
+    renderAdvancedResults();
   };
 
   document.getElementById('search-btn').addEventListener('click', triggerSearch);
@@ -646,22 +684,22 @@
   var wsBtn   = document.getElementById('ws-search-btn');
   var wsAdv   = document.getElementById('ws-adv-btn');
 
+  /* The workspace search box is GLOBAL search: it looks across every application in the
+     workspace, whatever bucket they sit in, and lands on the Global Search Results screen
+     with the term as a removable criterion. That is a different job from the search inside
+     the applications view, which narrows the buckets you are already looking at.
+
+     It used to apply the term to the queue's own filter and stay on the workspace, which
+     read as a dead button, and then briefly took you to the queue instead — the right idea
+     aimed at the wrong screen. */
   function doWorkspaceSearch() {
     var term = wsInput ? wsInput.value.trim() : '';
-    searchTerm = term;
-    /* Sync the DE inline search field */
-    var deInput = document.getElementById('search-input');
-    if (deInput) deInput.value = term;
-    queuePag.page = 1; activePag.page = 1; deniedPag.page = 1;
-    renderTable();
-    renderWaitingTable();
-    renderActiveTable();
-    renderDeniedTable();
-    /* Then GO to the results. This used to apply the term and stay put, re-rendering tables
-       on a screen the admin was not looking at — so the workspace search button read as
-       broken: you typed, pressed Search, and the page did nothing. The applications screen
-       is where the matches live, so that is where searching takes you. */
-    showScreen('de');
+    if (!term) return;
+    advSearch.criteria = emptyAdvCriteria();
+    advSearch.criteria.term = term;
+    advSearch.active = true;
+    advResultPag.page = 1;
+    renderAdvancedResults();          // renders the results AND shows the screen
   }
 
   if (wsBtn)   wsBtn.addEventListener('click', doWorkspaceSearch);

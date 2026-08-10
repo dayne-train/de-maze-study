@@ -88,6 +88,12 @@ window.MAZE_ROUTES = {
     },
     {
       "params": {
+        "screen": "adv-search"
+      },
+      "slug": "global-search"
+    },
+    {
+      "params": {
         "screen": "review"
       },
       "slug": "application"
