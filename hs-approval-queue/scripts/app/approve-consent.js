@@ -9,22 +9,17 @@
   /* Show the attestation modal before committing an approval.
      institution: app.institution key · learnerName: display name · onConfirm: commit fn. */
   function requestApproveConsent(institution, learnerName, onConfirm) {
-    var r       = (typeof COLLEGE_REQS !== 'undefined' && (COLLEGE_REQS[institution] || COLLEGE_REQS.wvcc)) || { reqs: [] };
-    var reqs    = r.reqs || [];
+    var r       = (typeof COLLEGE_REQS !== 'undefined' && (COLLEGE_REQS[institution] || COLLEGE_REQS.wvcc)) || {};
+    var text    = r.text || '';
     var college = (typeof COLLEGES !== 'undefined' && (COLLEGES[institution] || institution)) || institution;
 
     document.getElementById('approve-consent-learner').textContent = learnerName || 'this learner';
-    document.getElementById('approve-consent-count').textContent   = reqs.length;
     document.getElementById('approve-consent-college').textContent = college;
-    document.getElementById('approve-consent-acc-label').textContent =
-      'View the ' + reqs.length + ' eligibility requirement' + (reqs.length === 1 ? '' : 's');
-    document.getElementById('approve-consent-reqs').innerHTML = reqs.map(function (req, i) {
-      return '<li class="req-modal-item">' +
-        '<div class="req-modal-num">' + (i + 1) + '</div>' +
-        '<div><p class="req-modal-label">' + req.label + '</p>' +
-        '<p class="req-modal-desc">' + req.desc + '</p></div>' +
-      '</li>';
-    }).join('');
+    /* One authored block, not a count: the institution's requirements arrive from Quottly as
+       free text, so there is no N to promise and nothing to number. An institution that has
+       not filled the field in says so, rather than rendering an empty accordion. */
+    document.getElementById('approve-consent-reqs').textContent =
+      text || 'This institution has not published its eligibility requirements.';
 
     // Reset transient state each open: collapsed accordion.
     document.getElementById('approve-consent-accordion').classList.remove('is-open');

@@ -90,6 +90,10 @@
   window.showDenialReason = function(id) {
     var a = ALL_DENIED_APPS.find(function(x) { return x.id === id; });
     if (!a) return;
+    /* The title says what the window is FOR; the learner it concerns leads the body. A
+       cancelled application was withdrawn rather than refused, so the title says so. */
+    document.getElementById('denial-reason-title').textContent =
+      (a.kind === 'cancelled') ? 'Cancellation Reason' : 'Denial Reason';
     document.getElementById('denial-reason-name').textContent = a.lastName + ', ' + a.firstName;
     document.getElementById('denial-reason-meta').textContent = a.id + ' · ' + (a.course || a.group) + ' · ' + (COLLEGES[a.institution] || a.institution);
     document.getElementById('denial-audit-date').textContent  = a.deniedDate;
@@ -101,6 +105,23 @@
   window.closeDenialReason = function() {
     document.getElementById('denial-reason-overlay').classList.remove('open');
   };
+
+  /* Escape and a click on the backdrop both close it. Tasty's Modal defaults closeOnEscape
+     and closeOnClickOverlay to true, and the requirements and advanced-search modals here
+     already behave that way — this one only closed from its two buttons, so it was the odd
+     one out and read as stuck to anyone who tried the usual ways out. Bound once at load
+     rather than per-open, so repeat opens cannot stack listeners. */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var ov = document.getElementById('denial-reason-overlay');
+    if (ov && ov.classList.contains('open')) window.closeDenialReason();
+  });
+  document.addEventListener('DOMContentLoaded', function () {
+    var ov = document.getElementById('denial-reason-overlay');
+    if (ov) ov.addEventListener('click', function (e) {
+      if (e.target === ov) window.closeDenialReason();   /* the backdrop itself, not the dialog */
+    });
+  });
 
   /* ─── Tweaks panel bridge ───────────────────────────────────────────
      Exposes IIFE-scoped state-mutators so scripts/tweaks.jsx can drive

@@ -175,10 +175,12 @@ function openCourseInfoModal(courseId) {
   var html = '<div class="tasty-modal-overlay open" id="course-info-overlay">' +
     '<div class="tasty-modal">' +
       '<div class="tasty-modal__head">' +
-        '<span class="tasty-modal__title">' + escapeHtml(a.course) + '</span>' +
+        '<span class="tasty-modal__title">Course Details</span>' +
         '<button class="tasty-modal__x" id="course-info-close" aria-label="Close"><i class="ti ti-x"></i></button>' +
       '</div>' +
       '<div class="tasty-modal__body">' +
+        /* Which course this is about — the title says what the window is for, not which record. */
+        '<p class="denial-record-name">' + escapeHtml(a.course) + '</p>' +
         '<div class="transcript-student-grid">' +
           '<div><p class="tr-key">Term</p><p class="tr-val">' + titleCaseTerm(a.term) + '</p></div>' +
           '<div><p class="tr-key">Institution</p><p class="tr-val">' + (COLLEGES[a.institution] || a.institution) + '</p></div>' +

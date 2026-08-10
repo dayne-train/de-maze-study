@@ -3,16 +3,24 @@
    is-md/is-wide, __body overflow) now comes from ../_kit/styles/modals.css, linked just
    before this file. Keep only what the kit shim does not provide. */
 
-/* A two-line head (title + sub-meta) — used by the denial/cancellation modal. */
-.tasty-modal__head .tasty-modal__submeta {
-  font-size: var(--font-small); color: var(--c-text-muted); margin: 2px 0 0;
+/* The record a modal is about, as the first line of its BODY. Tasty's ModalTitle holds a title
+   and nothing else, so this used to be a `.tasty-modal__submeta` invented inside the design
+   system's own namespace — a prototype-local idea wearing a canonical name. Same information,
+   honestly named, and no longer sitting in the title bar. */
+/* Who or what the modal is about, leading the body. The TITLE says what the window is for
+   ("Denial reason", "Course details"), so the record it concerns is content, not chrome. */
+.denial-record-name {
+  font-size: var(--font-medium); font-weight: 700; color: var(--c-text-strong); margin: 0 0 2px;
+}
+.denial-record-meta {
+  font-size: var(--font-small); color: var(--c-text-muted); margin: 0 0 16px;
 }
 
 /* ── Approval consent modal ── */
 .approve-consent-lead { font-size: 14px; line-height: 1.6; color: var(--c-text); margin: 0 0 16px; }
 .approve-consent-lead strong { color: var(--c-text-strong); font-weight: 700; }
 #approve-consent-accordion { border-radius: var(--radius-md); }
-#approve-consent-accordion .req-modal-list { margin: 0; }
+#approve-consent-accordion .req-modal-text { margin: 0; }
 .approve-consent-dismiss {
   display: flex; align-items: center; gap: 8px;
   margin: 18px 0 0; font-size: var(--font-small); color: var(--c-text); cursor: pointer;

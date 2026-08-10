@@ -1481,15 +1481,15 @@
     <div class="tasty-modal__head">
       <span style="display:inline-flex;align-items:center;gap:8px;">
         <i class="ti ti-alert-triangle" style="color:var(--c-warning);font-size:18px;"></i>
-        <span class="tasty-modal__title">Cancel invitations?</span>
+        <span class="tasty-modal__title">Cancel Invitations?</span>
       </span>
     </div>
     <div class="tasty-modal__body">
       Your progress will be lost. The learners you've selected and any group choices won't be saved.
     </div>
     <div class="tasty-modal__foot">
-      <button class="tasty-btn is-bold is-ghost is-sm" onclick="hideInviteCancelConfirm()">Keep Going</button>
-      <button class="tasty-btn is-error is-sm" onclick="confirmInviteCancel()">Yes, Cancel</button>
+      <button class="tasty-btn is-bold is-ghost" onclick="hideInviteCancelConfirm()">Keep Going</button>
+      <button class="tasty-btn is-error" onclick="confirmInviteCancel()">Yes, Cancel</button>
     </div>
   </div>
 </div>
@@ -1526,8 +1526,8 @@
       <p class="invite-summary-note">If your summary looks good, you can send the invitations now. Learners will receive email and SMS notifications.</p>
     </div>
     <div class="tasty-modal__foot">
-      <button class="tasty-btn is-bold is-ghost is-sm" onclick="hideInviteSummary()">Make Changes</button>
-      <button class="tasty-btn is-primary is-sm" onclick="sendInvitations()"><i class="ti ti-send"></i> Send Invitations Now</button>
+      <button class="tasty-btn is-bold is-ghost" onclick="hideInviteSummary()">Make Changes</button>
+      <button class="tasty-btn is-primary" onclick="sendInvitations()"><i class="ti ti-send"></i> Send Invitations Now</button>
     </div>
   </div>
 </div>
@@ -1631,8 +1631,10 @@
 <!-- ═══════════════════════════════════════════
      MODAL — Deny single application (same content as the deny screen, from the detail view)
 ═══════════════════════════════════════════ -->
-<div class="tasty-modal-overlay" id="deny-modal" role="dialog" aria-modal="true" aria-labelledby="deny-modal-title">
-  <div class="tasty-modal is-md">
+<div class="tasty-modal-overlay" id="deny-modal">
+  <!-- Dialog semantics sit on the dialog, not the backdrop: Tasty's Modal puts aria-modal
+       and aria-labelledby on the element that IS the dialog (Modal.tsx). -->
+  <div class="tasty-modal is-md" role="dialog" aria-modal="true" aria-labelledby="deny-modal-title">
     <div class="tasty-modal__head">
       <span class="tasty-modal__title" id="deny-modal-title">Deny Application</span>
       <button class="tasty-modal__x" onclick="closeDenyModal()" aria-label="Close"><i class="ti ti-x"></i></button>
@@ -1644,16 +1646,22 @@
 <!-- ═══════════════════════════════════════════
      MODAL — Denial / Cancellation reason (Closed apps + detail page)
 ═══════════════════════════════════════════ -->
-<div class="tasty-modal-overlay" id="denial-reason-overlay" role="dialog" aria-modal="true" aria-labelledby="denial-reason-name">
-  <div class="tasty-modal is-md">
+<div class="tasty-modal-overlay" id="denial-reason-overlay">
+  <!-- The dialog semantics belong on the dialog, not on the backdrop: Tasty's Modal puts
+       aria-modal and aria-labelledby on the element that IS the dialog (Modal.tsx), and a
+       screen reader announcing the overlay describes the scrim rather than the window. -->
+  <div class="tasty-modal is-md" role="dialog" aria-modal="true" aria-labelledby="denial-reason-title">
     <div class="tasty-modal__head">
       <div>
-        <h2 class="tasty-modal__title" id="denial-reason-name">—</h2>
-        <p class="tasty-modal__submeta" id="denial-reason-meta">—</p>
+        <h2 class="tasty-modal__title" id="denial-reason-title">Denial Reason</h2>
       </div>
       <button class="tasty-modal__x" onclick="closeDenialReason()" aria-label="Close"><i class="ti ti-x"></i></button>
     </div>
     <div class="tasty-modal__body">
+      <!-- The record this is about. Tasty's ModalTitle holds a title and nothing else — it has no
+           subtitle slot — so the identifying line lives in the body rather than inventing one. -->
+      <p class="denial-record-name" id="denial-reason-name">—</p>
+      <p class="denial-record-meta" id="denial-reason-meta">—</p>
       <div class="denial-audit-trail">
         <div class="denial-audit-item">
           <p class="denial-audit-label">Closed On</p>
@@ -1672,7 +1680,7 @@
       <p class="denial-reason-body" id="denial-reason-body">—</p>
     </div>
     <div class="tasty-modal__foot">
-      <button class="tasty-btn is-bold is-ghost is-sm" onclick="closeDenialReason()">Close</button>
+      <button class="tasty-btn is-bold is-ghost" onclick="closeDenialReason()">Close</button>
     </div>
   </div>
 </div>
@@ -1680,30 +1688,32 @@
 <!-- ═══════════════════════════════════════════
      MODAL — Approval consent (first approval, until dismissed)
 ═══════════════════════════════════════════ -->
-<div class="tasty-modal-overlay" id="approve-consent-overlay" role="dialog" aria-modal="true" aria-labelledby="approve-consent-title">
-  <div class="tasty-modal is-md">
+<div class="tasty-modal-overlay" id="approve-consent-overlay">
+  <!-- Dialog semantics sit on the dialog, not the backdrop: Tasty's Modal puts aria-modal
+       and aria-labelledby on the element that IS the dialog (Modal.tsx). -->
+  <div class="tasty-modal is-md" role="dialog" aria-modal="true" aria-labelledby="approve-consent-title">
     <div class="tasty-modal__head">
       <span style="display:inline-flex;align-items:center;gap:8px;">
         <i class="ti ti-shield-check" style="color:var(--c-brand);font-size:18px;"></i>
-        <span class="tasty-modal__title" id="approve-consent-title">Confirm approval</span>
+        <span class="tasty-modal__title" id="approve-consent-title">Confirm Approval</span>
       </span>
       <button class="tasty-modal__x" onclick="closeApproveConsent()" aria-label="Close"><i class="ti ti-x"></i></button>
     </div>
     <div class="tasty-modal__body">
-      <p class="approve-consent-lead">By approving, you confirm that <strong id="approve-consent-learner">this learner</strong> has satisfied the <strong id="approve-consent-count">0</strong> eligibility requirements for <strong id="approve-consent-college">the institution</strong>.</p>
+      <p class="approve-consent-lead">By approving, you confirm that <strong id="approve-consent-learner">this learner</strong> has satisfied the eligibility requirements for <strong id="approve-consent-college">the institution</strong>.</p>
       <div class="tasty-accordion" id="approve-consent-accordion">
         <div class="tasty-accordion__head" id="approve-consent-acc-head" role="button" tabindex="0" aria-expanded="false" onclick="toggleApproveConsentAccordion()">
           <span id="approve-consent-acc-label">View eligibility requirements</span>
           <i class="ti ti-chevron-right"></i>
         </div>
         <div class="tasty-accordion__body">
-          <ol class="req-modal-list" id="approve-consent-reqs"></ol>
+          <p class="req-modal-text" id="approve-consent-reqs"></p>
         </div>
       </div>
     </div>
     <div class="tasty-modal__foot">
-      <button class="tasty-btn is-bold is-ghost is-sm" onclick="closeApproveConsent()">Cancel</button>
-      <button class="tasty-btn is-success is-sm" id="approve-consent-confirm-btn">Approve</button>
+      <button class="tasty-btn is-bold is-ghost" onclick="closeApproveConsent()">Cancel</button>
+      <button class="tasty-btn is-success" id="approve-consent-confirm-btn">Approve</button>
     </div>
   </div>
 </div>
@@ -1781,8 +1791,10 @@
 </div>
 </div><!-- /screen-adv-search -->
 
-<div class="tasty-modal-overlay" id="adv-search-overlay" role="dialog" aria-modal="true" aria-labelledby="adv-search-title">
-  <div class="tasty-modal is-wide">
+<div class="tasty-modal-overlay" id="adv-search-overlay">
+  <!-- Dialog semantics sit on the dialog, not the backdrop: Tasty's Modal puts aria-modal
+       and aria-labelledby on the element that IS the dialog (Modal.tsx). -->
+  <div class="tasty-modal is-wide" role="dialog" aria-modal="true" aria-labelledby="adv-search-title">
     <div class="tasty-modal__head">
       <div class="adv-search-header-left">
         <i class="ti ti-adjustments-horizontal" style="color:var(--c-brand);font-size:18px;flex-shrink:0;"></i>

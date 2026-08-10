@@ -83,7 +83,7 @@
     var html = '<div class="tasty-modal-overlay open" id="transcript-overlay">' +
       '<div class="tasty-modal">' +
         '<div class="tasty-modal__head">' +
-          '<span class="tasty-modal__title">Transcript &mdash; ' + app.firstName + ' ' + app.lastName + '</span>' +
+          '<span class="tasty-modal__title">Transcript</span>' +
           '<button class="tasty-modal__x" id="transcript-close" aria-label="Close"><i class="ti ti-x"></i></button>' +
         '</div>' +
         '<div class="tasty-modal__body">' +

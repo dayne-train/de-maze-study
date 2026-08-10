@@ -90,6 +90,10 @@
   window.showDenialReason = function(id) {
     var a = ALL_DENIED_APPS.find(function(x) { return x.id === id; });
     if (!a) return;
+    /* The title says what the window is FOR; the learner it concerns leads the body. A
+       cancelled application was withdrawn rather than refused, so the title says so. */
+    document.getElementById('denial-reason-title').textContent =
+      (a.kind === 'cancelled') ? 'Cancellation Reason' : 'Denial Reason';
     document.getElementById('denial-reason-name').textContent = a.lastName + ', ' + a.firstName;
     document.getElementById('denial-reason-meta').textContent = a.id + ' · ' + (a.course || a.group) + ' · ' + (COLLEGES[a.institution] || a.institution);
     document.getElementById('denial-audit-date').textContent  = a.deniedDate;

@@ -357,31 +357,30 @@
   };
 
   /* Eligibility requirements per exchange network — sourced from network config, not editable by counselor */
-  const SHARED_REQS_TAIL = [
-    { key: 'attendance', label: 'Attendance and Conduct',      desc: 'Learner must demonstrate 90%+ attendance and no major disciplinary actions in the current or previous academic year.' },
-  ];
+  /* Eligibility requirements are ONE free-text block per institution, not a structured list.
+     Quottly hands this over as a single authored field — whatever the college typed into its
+     catalogue — so there is no count to show and no per-requirement label to render. It used to
+     be modelled as four labelled items with numbered bullets, which implied a structure the
+     source data does not have and could not survive contact with a real institution's copy. */
   const COLLEGE_REQS = {
     wvcc: { minGpa: 3.0, minGrade: 11, prereqRequired: true,
-            reqs: [
-              { key: 'gpa',    label: 'Academic Standing',    desc: 'Min cumulative GPA of 3.0 on a 4.0 scale.' },
-              { key: 'grade',  label: 'Grade Level',          desc: '11th or 12th grade enrollment required.' },
-              { key: 'prereq', label: 'Course Prerequisites', desc: 'Must have completed all prerequisite HS coursework.' },
-              ...SHARED_REQS_TAIL,
-            ]},
+            text: 'Students must have a minimum cumulative GPA of 3.0 on a 4.0 scale and be enrolled '
+                + 'in 11th or 12th grade at the time the course begins. All prerequisite high school '
+                + 'coursework for the selected subject must be completed with a grade of C or better. '
+                + 'Students are expected to maintain 90% attendance and remain in good standing, with '
+                + 'no major disciplinary action in the current or previous academic year. Placement '
+                + 'testing may be required for mathematics and English courses.' },
     asu:  { minGpa: 3.0, minGrade: 11, prereqRequired: true,
-            reqs: [
-              { key: 'gpa',    label: 'Academic Standing',    desc: 'Min cumulative GPA of 3.0 on a 4.0 scale.' },
-              { key: 'grade',  label: 'Grade Level',          desc: '11th or 12th grade enrollment required.' },
-              { key: 'prereq', label: 'Course Prerequisites', desc: 'Must have completed all prerequisite HS coursework.' },
-              ...SHARED_REQS_TAIL,
-            ]},
+            text: 'Applicants must hold a cumulative unweighted GPA of 3.0 or higher and be classified '
+                + 'as a junior or senior. Prerequisite coursework must be complete before the term '
+                + 'begins, and official high school transcripts are required with every application. '
+                + 'Students remain subject to the university\u2019s academic integrity policy for the '
+                + 'duration of the course.' },
     mesa: { minGpa: 3.0, minGrade: 10, prereqRequired: true,
-            reqs: [
-              { key: 'gpa',    label: 'Academic Standing',    desc: 'Min cumulative GPA of 3.0 on a 4.0 scale.' },
-              { key: 'grade',  label: 'Grade Level',          desc: '10th grade or above.' },
-              { key: 'prereq', label: 'Course Prerequisites', desc: 'Must have completed all prerequisite HS coursework.' },
-              ...SHARED_REQS_TAIL,
-            ]},
+            text: 'Open to students in 10th grade and above with a cumulative GPA of 3.0 or higher. '
+                + 'Prerequisite coursework must be completed prior to enrollment. Students must '
+                + 'demonstrate 90% attendance and have no major disciplinary actions on record. '
+                + 'A counselor recommendation is required for first-time dual enrollment students.' },
   };
 
   // gradeSuffix is the only remaining helper from this section.

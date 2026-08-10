@@ -168,31 +168,26 @@
     openReqModalForInstitution(_inst);
   }
 
-  /* On-demand eligibility requirements, keyed by network (used by bulk approve). */
+  /* On-demand eligibility requirements, keyed by network (used by bulk approve).
+     One authored block, not a numbered list: Quottly hands these over as a single free-text
+     field the institution typed, so there is nothing to enumerate. */
   function openReqModalForInstitution(_inst) {
     var r       = COLLEGE_REQS[_inst] || COLLEGE_REQS.wvcc;
     var college = COLLEGES[_inst] || _inst;
-    var items   = r.reqs.map(function(req, i) {
-      return '<li class="req-modal-item">' +
-        '<div class="req-modal-num">' + (i + 1) + '</div>' +
-        '<div>' +
-          '<p class="req-modal-label">' + req.label + '</p>' +
-          '<p class="req-modal-desc">' + req.desc + '</p>' +
-        '</div>' +
-      '</li>';
-    }).join('');
+    var text    = escapeHtml(r.text || 'This institution has not published its eligibility requirements.');
 
     var html = '<div class="tasty-modal-overlay open" id="req-modal-overlay">' +
       '<div class="tasty-modal is-md" role="dialog" aria-modal="true" aria-labelledby="req-modal-title">' +
         '<div class="tasty-modal__head">' +
           '<div>' +
             '<h2 class="tasty-modal__title" id="req-modal-title">Eligibility Requirements</h2>' +
-            '<p class="tasty-modal__submeta">' + college + '</p>' +
+
           '</div>' +
           '<button class="tasty-modal__x" id="req-modal-close" aria-label="Close"><i class="ti ti-x"></i></button>' +
         '</div>' +
         '<div class="tasty-modal__body">' +
-          '<ol class="req-modal-list">' + items + '</ol>' +
+          '<p class="denial-record-meta">' + college + '</p>' +
+          '<p class="req-modal-text">' + text + '</p>' +
         '</div>' +
       '</div>' +
     '</div>';

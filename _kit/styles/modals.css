@@ -9,10 +9,18 @@
 .tasty-modal-overlay { display: none; }
 .tasty-modal-overlay.open { display: flex; }
 
-/* Width modifiers — Tasty default is 760px. */
-.tasty-modal.is-narrow { max-width: 440px; }
-.tasty-modal.is-md     { max-width: 560px; }
-.tasty-modal.is-wide   { max-width: 1000px; }
+/* Width modifiers. Tasty has exactly TWO sizes (Modal.tsx `size`): medium, capped at
+   760px wide by 600px tall, and large, at 1200px. The kit previously invented three of its
+   own (440/560/1000), none of which are DS values, so a prototype asking for "md" got 560
+   where the design system says 760.
+
+   is-narrow and is-md are kept as ALIASES of medium rather than deleted: they are spelled
+   across existing prototypes, and silently resolving them to the real medium is what makes
+   those prototypes correct without a rename. Reach for neither in new work — a modal is
+   medium by default, and is-wide when it needs the large size. */
+.tasty-modal.is-narrow,
+.tasty-modal.is-md     { max-width: 760px; }   /* Modal size="medium" */
+.tasty-modal.is-wide   { max-width: 1200px; }  /* Modal size="large"  */
 
 /* Body absorbs overflow and scrolls within the 90vh cap (tall modals). */
 .tasty-modal__body { flex: 1 1 auto; min-height: 0; }
