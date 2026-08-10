@@ -87,11 +87,6 @@
       attachments: [ { name: app.lastName + '_Academic_Transcript.pdf', icon:'ti-file-text', kind:'transcript' } ],
     };
     if (h % 3 !== 0) d.attachments.push({ name: app.lastName + '_Immunization_Record.pdf', icon:'ti-vaccine', kind:'immunization' });
-    /* The DE application asks for Country, so the detail view has to be able to show it
-       (audited Aug 5, 2026). It does NOT ask who the high school admin is — approval routes to
-       the school's queue — so there is deliberately no adminName/adminEmail here; `counselor`
-       stays for the tracker, which legitimately knows who acted. */
-    d.country = 'United States';
     app.__detail = d;
     return d;
   }
@@ -304,18 +299,27 @@
           '<div class="appdetail-grid">' +
             field('Applying From', escapeHtml(school)) +
             field('Applying To', escapeHtml(institution)) +
-            field('Invitation Sent To', escapeHtml(learnerEmail)) +
             field('Date Invited', escapeHtml(dateSent)) +
             field('Last Sent', escapeHtml(app.lastSent || dateSent)) +
           '</div>' +
 
           '<hr class="appdetail-rule">' +
 
+          /* Same block structure as the submitted detail: identity, then contact on its own.
+             The email used to render up in the invitation block as "Invitation Sent To"; it's
+             the learner's address either way, so it moved down with the rest of the contact
+             details rather than appearing twice (Aug 10, 2026). */
           '<div class="appdetail-grid">' +
             field('Current Name', escapeHtml(d.fullName)) +
-            field('Address', escapeHtml(d.addrLine1) + '<br>' + escapeHtml(d.addrLine2)) +
-            field('Phone Number', escapeHtml(d.phone)) +
             field('Date of Birth', escapeHtml(d.dob)) +
+          '</div>' +
+
+          '<hr class="appdetail-rule">' +
+
+          '<div class="appdetail-grid">' +
+            field('Email Address', escapeHtml(learnerEmail)) +
+            field('Phone Number', escapeHtml(d.phone)) +
+            field('Address', escapeHtml(d.addrLine1) + '<br>' + escapeHtml(d.addrLine2)) +
           '</div>' +
         '</div>' +
 
@@ -490,10 +494,12 @@
 
           '<hr class="appdetail-rule">' +
 
+          /* Identity + academics first, then the learner's contact details as their own
+             block, then the guardian's. Contact fields used to be scattered through the
+             identity grid, and the learner's email was missing outright after the person
+             details moved out of the side rail into the body (fixed Aug 10, 2026). */
           '<div class="appdetail-grid">' +
             field('Current Name', escapeHtml(d.fullName)) +
-            field('Address', escapeHtml(d.addrLine1) + '<br>' + escapeHtml(d.addrLine2)) +
-            field('Country', escapeHtml(d.country)) +
             /* DOB comes from account sign-up rather than the DE application, but it belongs
                with the identity fields an admin verifies — and the invited detail shows it. */
             field('Date of Birth', escapeHtml(d.dob)) +
@@ -502,9 +508,16 @@
                 '<span id="detail-ssn-value" data-mask="' + d.ssnMask + '" data-full="' + d.ssnFull + '">' + d.ssnMask + '</span>' +
                 '<button class="appdetail-ssn-toggle" id="detail-ssn-toggle" data-shown="0" aria-label="Reveal SSN"><i class="ti ti-eye"></i></button>' +
               '</span>') +
-            field('Phone Number', escapeHtml(d.phone)) +
             field('State Student ID', escapeHtml(d.sisId)) +
             field('Current GPA', escapeHtml(d.gpa)) +
+          '</div>' +
+
+          '<hr class="appdetail-rule">' +
+
+          '<div class="appdetail-grid">' +
+            field('Email Address', escapeHtml(d.learnerEmail)) +
+            field('Phone Number', escapeHtml(d.phone)) +
+            field('Address', escapeHtml(d.addrLine1) + '<br>' + escapeHtml(d.addrLine2)) +
           '</div>' +
 
           '<hr class="appdetail-rule">' +

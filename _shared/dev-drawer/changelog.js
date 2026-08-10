@@ -4,6 +4,20 @@
    A prototype only shows items scoped to it (its key) or to 'all'. Keep items terse and dated;
    add a new dated block at the TOP at the end of each work session. */
 window.DEV_CHANGELOG = [
+  { date: 'Aug 10, 2026', items: [
+    { text: 'The application detail shows the learner’s email address again. It was lost when the person details moved out of the side panel into the body, which left the guardian’s email on the page but no way to reach the student.', scope: ['hs', 'college'] },
+    { text: 'The learner’s contact details (email, phone, address) are now one block of their own, below identity and academics. They used to be scattered through the same grid as name, date of birth, SSN and GPA.', scope: ['hs', 'college'] },
+    { text: 'The invitation detail follows the same blocks, so an invited application and a submitted one read the same way. Its email moved out of the invitation block, where it read “Invitation Sent To”, down into the contact details.', scope: ['hs', 'college'] },
+    { text: 'Country came off the application detail entirely.', scope: ['hs', 'college'] },
+    { text: 'Links are shareable now. The address bar tracks what you are looking at, so you can copy it and send it, and it opens on the same screen for whoever you send it to. There is a Share link button at the bottom of this drawer that copies it for you.', scope: ['all'] },
+    { text: 'Every screen can be linked to, including the ones that need a subject: an application detail, a denial, an admit or a groups edit all take the application in the link. A link to a screen that does not exist, or to an application this build no longer has, opens the queue instead of a blank page.', scope: ['hs', 'college'] },
+    { text: 'A link also carries the prototype settings, so the person opening it sees the same network configuration, persona and theme you set up rather than the defaults.', scope: ['all'] },
+    { text: 'Canvas view: every screen laid out side by side on a board you can pan and zoom, the way a Figma page shows a flow. Open it from the button at the bottom of this drawer, or add ?canvas=1 to the address. Drag to pan, pinch or hold ⌘ and scroll to zoom, Fit to see everything, Esc to leave.', scope: ['all'] },
+    { text: 'Each screen on the board has a “Start from here” button that opens the real prototype on that screen, carrying whatever it is about, so you can look at the whole flow and then step into any part of it.', scope: ['all'] },
+    { text: 'The board groups screens by the path someone actually walks rather than by the order they happen to be built in, so it reads as a flow.', scope: ['all'] },
+    { text: 'The board shows only what the current configuration includes. Switch a concept off, and its screens are not on the board at all rather than sitting there implying they exist.', scope: ['all'] },
+    { text: 'Screens that only fill in once you have walked to them now show real content on the board, and on a link. Select A Group was empty because it is built entirely from the institution you pick the step before, so opening it directly picks one. Global Search Results said no applications matched, because an empty search matches nothing, so it now opens on a real set of results.', scope: ['hs', 'college'] }
+  ] },
   { date: 'Aug 6, 2026', items: [
     { text: 'The prototypes work at narrow widths now. Every screen used to scroll sideways below about 780px \u2014 on a phone, and equally on a laptop at 200% browser zoom \u2014 because the header alone could not go narrower than that. Nothing scrolls sideways any more.', scope: ['all'] },
     { text: 'The header truncates instead of overflowing: below the desktop breakpoint the persona pill keeps its avatar and caret and drops the greeting, and the language selector drops its label, then disappears on a phone.', scope: ['all'] },

@@ -977,6 +977,8 @@
   window.switchDeTab = function (id) {
     deTab = id;
     renderDeTab();   // re-renders the boxes for this bucket AND restamps the active tab
+    // renderDeTab may reject the bucket and fall back, so sync after it, not before.
+    if (window.DELink) window.DELink.sync();
   };
 
   /* ════════════════════════════════════════
@@ -1807,16 +1809,23 @@
      vanilla drawer (../_shared/dev-drawer/dev-drawer.js), so expose the IIFE-scoped setters. */
   function initDevPanel() {
     window.__dev = {
-      setAxis: function (axis, val) { DEV[axis] = val; updateDevAxisButtons(axis, val); applyDevState(); },
+      // Each setter ends with a sync so a drawer flip lands in the address bar and the
+      // Share link panel stays honest about what it is offering.
+      setAxis: function (axis, val) {
+        DEV[axis] = val; updateDevAxisButtons(axis, val); applyDevState();
+        if (window.DELink) window.DELink.sync();
+      },
       setTheme: function (t) {
         if (typeof window.setTheme === 'function') window.setTheme(t);
         else document.documentElement.dataset.theme = t;
+        if (window.DELink) window.DELink.sync();
       },
       // Exchange-network entry points. Only the path-select chooser reacts (the four tiles
       // ARE the four entry points); nothing downstream depends on them.
       setEntry: function (key, on) {
         if (window.DENetwork) window.DENetwork.set(key, on);
         applyEntryPointsToPathSelect();
+        if (window.DELink) window.DELink.sync();
       },
       // Exchange-network approval gates. Flip a gate, keep appState valid, re-render.
       setGate: function (key, on) {
@@ -1830,6 +1839,9 @@
         updateDevAxisButtons('appState', DEV.appState);
         applyNetworkGatesToForm();
         applyDevState();
+        // After the coercion, not on DENetwork's own notify: that fires from set() above,
+        // before appState and inviteSource have been made valid again.
+        if (window.DELink) window.DELink.sync();
       }
     };
   }
@@ -2046,6 +2058,9 @@
     if (id === 'aer')         enableClickFill(document.getElementById('aer-form'), window.devFillAccountForm);
     else if (id === 'de-app') enableClickFill(document.getElementById('de-app-form'), window.devFillDeApp);
     else                      disableClickFill();
+    // Every navigation in this prototype funnels through here, including viewCourse and
+    // startCollegeSite, so one sync covers the address bar for all of them.
+    if (window.DELink) window.DELink.sync();
   };
 
   /* ════════════════════════════════════════
@@ -2143,8 +2158,195 @@
     DENetwork.setMany({ heInvite: true, hsInvite: true, selfUrl: true, dashboard: true });
   }
 
+  /* ════════════════════════════════════════
+     §17 · DEEP LINK — this prototype's URL vocabulary
+     Registered from inside the IIFE because DEV, deTab, currentCourse and COURSES are all
+     private to it, and a param's read/apply closures have to see them. The module itself
+     (../_shared/deeplink/deeplink.js) knows nothing about screens or buckets — everything
+     specific to the learner lives here.
+  ════════════════════════════════════════ */
+  if (window.DELink) {
+    /* Accepted on the way in → the internal showScreen id. Internal ids are accepted too,
+       because they are already all over the inline onclick attrs and the drawer's nav rows. */
+    var SCREEN_IN = {
+      'start': 'path-select', 'path-select': 'path-select',
+      'dashboard': 'dashboard',
+      'dual-enrollment': 'de-tab', 'de-tab': 'de-tab',
+      'entry': 'entry', 'select-hs': 'select-hs', 'select-college': 'select-college',
+      'college-site': 'college-site',
+      'inbox': 'email-landing', 'email-landing': 'email-landing',
+      'email-entry': 'email-entry',
+      'login': 'login',
+      'create-account': 'aer', 'aer': 'aer', 'signup': 'aer',
+      'confirm-email': 'confirm-email',
+      'apply': 'de-app', 'de-app': 'de-app',
+      'submitted': 'aer-confirm', 'aer-confirm': 'aer-confirm',
+      'courses': 'courses',
+      'course': 'course-detail', 'course-detail': 'course-detail',
+      'registered': 'registered'
+    };
+    /* Internal id → the one friendly slug sync() writes. The two picker screens map back to
+       `entry` because that is the only one of the three a link can actually re-enter. */
+    var SCREEN_OUT = {
+      'path-select': 'start', 'dashboard': 'dashboard', 'de-tab': 'dual-enrollment',
+      'entry': 'entry', 'select-hs': 'select-hs', 'select-college': 'select-college',
+      'college-site': 'college-site', 'email-landing': 'inbox', 'email-entry': 'email-entry',
+      'login': 'login', 'aer': 'create-account', 'confirm-email': 'confirm-email',
+      'de-app': 'apply', 'aer-confirm': 'submitted', 'courses': 'courses',
+      'course-detail': 'course', 'registered': 'registered'
+    };
+    /* The bucket the learner calls "Registered" is `enrolled` internally, and "Closed" is
+       `closed`. The URL uses the words on the tabs. */
+    var SEG_IN = { 'in-progress': 'in-progress', 'inprogress': 'in-progress',
+                   'registered': 'enrolled', 'enrolled': 'enrolled',
+                   'closed': 'closed', 'denied': 'closed' };
+    var SEG_OUT = { 'in-progress': 'in-progress', 'enrolled': 'registered', 'closed': 'closed' };
+
+    window.DELink.register({
+      id: 'learner-application',
+      carryNet: true,
+      order: ['state', 'mix', 'invite', 'path', 'schools', 'colleges', 'reapply',
+              'theme', 'course', 'screen', 'seg'],
+      params: {
+
+        /* ── phase 'state' — written into DEV before the first render ────────────────
+           renderAerConfirm() reads DEV.appState exactly once on boot and is never
+           re-rendered except by submitDeApp, so a state applied any later is stale. */
+        state: { phase: 'state', 'default': 'parent-consent-pending',
+          values: ['invited', 'open-enrollment', 'parent-consent-pending', 'counselor-pending',
+                   'dual-pending', 'college-review', 'approved', 'registered',
+                   'registered-in-session', 'denied-counselor', 'denied-college', 'cancelled'],
+          alias: { guardian: 'parent-consent-pending', counselor: 'counselor-pending',
+                   review: 'college-review' },
+          read:  function () { return DEV.appState; },
+          apply: function (v) { DEV.appState = v; return true; } },
+
+        mix: { phase: 'state', values: ['single', 'multi'], 'default': 'single',
+          alias: { '1': 'single', one: 'single', many: 'multi', multiple: 'multi' },
+          read:  function () { return DEV.appMix; },
+          apply: function (v) { DEV.appMix = v; return true; } },
+
+        invite: { phase: 'state', values: ['college', 'counselor'], 'default': 'college',
+          alias: { he: 'college', hs: 'counselor' },
+          read:  function () { return DEV.inviteSource; },
+          apply: function (v) { DEV.inviteSource = v; return true; } },
+
+        path: { phase: 'state', values: ['college-url', 'email-invite'], 'default': 'college-url',
+          alias: { url: 'college-url', college: 'college-url',
+                   email: 'email-invite', invite: 'email-invite' },
+          read:  function () { return DEV.entryPath; },
+          apply: function (v) { DEV.entryPath = v; return true; } },
+
+        schools: { phase: 'state', values: ['1', 'many'], 'default': '1',
+          alias: { single: '1', one: '1', 'false': '1', '0': '1', off: '1',
+                   multiple: 'many', multi: 'many', 'true': 'many', on: 'many' },
+          read:  function () { return DEV.hsCount === 'multiple' ? 'many' : '1'; },
+          apply: function (v) { DEV.hsCount = (v === 'many') ? 'multiple' : 'single'; return true; } },
+
+        colleges: { phase: 'state', values: ['1', 'many'], 'default': '1',
+          alias: { single: '1', one: '1', multiple: 'many', multi: 'many' },
+          read:  function () { return DEV.collegeCount === 'multiple' ? 'many' : '1'; },
+          apply: function (v) { DEV.collegeCount = (v === 'many') ? 'multiple' : 'single'; return true; } },
+
+        /* Not BOOL_ALIAS: that canonicalises to '1'/'0', which this param's own vocabulary
+           ('on'/'off') would then reject, so reapply=no silently did nothing. */
+        reapply: { phase: 'state', values: ['on', 'off'], 'default': 'on',
+          alias: { '1': 'on', 'true': 'on', yes: 'on', '0': 'off', 'false': 'off', no: 'off' },
+          read:  function () { return DEV.reapply; },
+          apply: function (v) { DEV.reapply = (v === '1' || v === 'on') ? 'on' : 'off'; return true; } },
+
+        /* ── phase 'view' — after initDevPanel(), so __dev and every fixture exist ── */
+        theme: { phase: 'view', values: ['default', 'light', 'white', 'dark', 'contrast'],
+          'default': 'light',
+          read:  function () { return document.documentElement.getAttribute('data-theme') || 'light'; },
+          apply: function (v) { window.__dev.setTheme(v);
+                                return document.documentElement.getAttribute('data-theme') === v; } },
+
+        /* Must precede `screen`: viewCourse renders AND navigates to course-detail, and it is
+           also what makes screen=registered show a course rather than "No course registered." */
+        course: { phase: 'view', values: null, 'default': null,
+          /* The canvas renders screen=course, which falls back to the list without one. */
+          sample: function () { return (COURSES && COURSES[0]) ? COURSES[0].id : null; },
+          read:  function () { return currentCourse ? currentCourse.id : null; },
+          apply: function (v) { window.viewCourse(String(v).trim().toUpperCase());
+                                return !!currentCourse; } },
+
+        screen: { phase: 'view', values: Object.keys(SCREEN_IN), 'default': null,
+          fallback: 'dashboard',
+          read:  function () {
+            var el = document.querySelector('.screen.active');
+            if (!el) return null;
+            var id = el.id.replace(/^screen-/, '');
+            return SCREEN_OUT[id] || null;   /* an unmapped screen simply drops out of the URL */
+          },
+          apply: function (v) {
+            var id = SCREEN_IN[v];
+            if (!id) return false;
+            /* #entry-mount, #hs-select-list and #college-select-list are empty in the markup
+               and showScreen does not fill them, so each picker is rendered by the function
+               that owns it before we navigate. startApplicationFlow does that for the entry
+               chooser; the two member-select screens have their own renderers. */
+            if (id === 'entry') { window.startApplicationFlow(); return true; }
+            if (id === 'select-hs')      { renderHsSelect();      window.showScreen('select-hs');      return true; }
+            if (id === 'select-college') { renderCollegeSelect(); window.showScreen('select-college'); return true; }
+            /* renderCourseDetail early-returns on a null currentCourse, so without a course=
+               the honest destination is the list. */
+            if (id === 'course-detail') {
+              /* Reported as a rejection, not a success: without a course this lands on the
+                 list, which is what returning false produces via the fallback anyway. Saying
+                 so lets surfaces that render screens cold know to hand it a course. */
+              if (!currentCourse) return false;
+              window.showScreen('course-detail'); return true;
+            }
+            /* registered renders once on boot, before `course` has run. */
+            if (id === 'registered') {
+              window.renderRegisteredScreen(); window.showScreen('registered'); return true;
+            }
+            window.showScreen(id);
+            var el = document.getElementById('screen-' + id);
+            return !!(el && el.classList.contains('active'));
+          } },
+
+        /* Applied last. renderDeTab falls back to the first occupied bucket, so reading deTab
+           back afterwards is what tells the truth about whether the link's bucket exists.
+           Pair any seg= link with mix=multi: with one application the NavToggle never renders. */
+        seg: { phase: 'view', values: ['in-progress', 'enrolled', 'closed'],
+          'default': 'in-progress', alias: SEG_IN,
+          read:  function () { return SEG_OUT[deTab] || null; },
+          apply: function (v) {
+            var el = document.getElementById('screen-de-tab');
+            if (!el || !el.classList.contains('active')) return false;
+            window.switchDeTab(v);
+            return deTab === v;
+          } }
+      }
+    });
+
+    /* Any DENetwork write, from anywhere, refreshes net= in the address bar. */
+    if (window.DENetwork) window.DENetwork.subscribe(function () { window.DELink.sync(); });
+  }
+
+
+  /* Canvas grouping — the order a learner actually walks this prototype, which the
+     deep-link vocabulary's declaration order cannot express. Screens are named by their
+     internal id; anything not claimed here still reaches the board, in a trailing group,
+     so adding a screen never means remembering to file it. */
+  window.DECanvasGroups = [
+    { title: 'Finding the way in', note: 'The five ways a learner arrives at an application.',
+      screens: ['path-select', 'entry', 'select-hs', 'select-college', 'college-site', 'email-landing', 'email-entry'] },
+    { title: 'Getting an account', note: 'Signing in, or creating the account the application needs.',
+      screens: ['login', 'aer', 'confirm-email'] },
+    { title: 'Applying', note: 'The application itself, and what comes back after submitting.',
+      screens: ['de-app', 'aer-confirm'] },
+    { title: 'Tracking it', note: 'Where a learner watches the approvals land.',
+      screens: ['dashboard', 'de-tab'] },
+    { title: 'Registering', note: 'What opens up once the application is approved.',
+      screens: ['courses', 'course-detail', 'registered'] }
+  ];
+
   window.addEventListener('DOMContentLoaded', function () {
     applyLearnerEntryDefaults();
+    if (window.DELink) window.DELink.apply('state');   // before the renders below read DEV
     applyDevState();
     renderCourseList();
     renderAerConfirm();
@@ -2152,6 +2354,9 @@
     populateDob();
     applyEntryPointsToPathSelect();
     initDevPanel();
+    /* Last: __dev, every fixture and the rendered screens all exist by here, and DENetwork has
+       already consumed ?net=. One write, immediately, so the address bar is right from frame one. */
+    if (window.DELink) { window.DELink.apply('view'); window.DELink.sync({ now: true }); }
   });
 
 })();

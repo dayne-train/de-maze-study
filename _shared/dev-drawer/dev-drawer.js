@@ -22,8 +22,10 @@
        live (like the segmented control always did). Pass { active: value }.
      • SIMILARITY — one look per job: navigation rows, value chips, switches,
        and plain actions each read differently instead of all being grey pills.
-     • Persistent FOOTER — Changelog / Reset / back-to-index are always reachable
-       instead of buried at whichever end of the scroll they landed in.
+     • Persistent FOOTER — Share link / Changelog / Reset / back-to-index are
+       always reachable instead of buried at whichever end of the scroll they
+       landed in. Share link appears only where _shared/deeplink/deeplink.js is
+       loaded; it hands back the URL for the view you are looking at.
 
    Usage (each prototype ships one small config script):
      DevDrawer.build('Tweaks', function (p) {
@@ -153,9 +155,11 @@
       '.dd-switch i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .15s;}',
       '.dd-switch.is-on i{left:18px;}',
       '.dd-hidden{display:none !important;}',
-      // Footer — the escape hatches, always in the same place.
-      '.devdrawer-foot{display:flex;gap:6px;padding:10px 14px;border-top:1px solid #efefef;background:#fff;}',
-      '.dd-foot-btn{flex:1;padding:8px 6px;border:1px solid #e0ddd2;border-radius:7px;background:#fff;color:#4a473c;',
+      // Footer — the escape hatches, always in the same place. It wraps because
+      // four labels at 320px would each truncate to a few characters, and a
+      // truncated escape hatch is not one.
+      '.devdrawer-foot{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-top:1px solid #efefef;background:#fff;}',
+      '.dd-foot-btn{flex:1 1 auto;min-width:72px;padding:8px 6px;border:1px solid #e0ddd2;border-radius:7px;background:#fff;color:#4a473c;',
         'font:600 11px/1 inherit;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
       '.dd-foot-btn:hover{background:#f5f4ec;}',
       '.dd-foot-btn.is-danger{color:#a32020;}',
@@ -223,6 +227,49 @@
       });
     });
     if (!shown) container.appendChild(el('p', 'dd-cl-empty', 'No changes logged yet.'));
+  }
+
+  /* Render the Share link sub-panel: the URL for the view currently on screen,
+     in a field you can also select by hand, plus a Copy button.
+     The field matters as much as the button — several browsers give a file://
+     page no clipboard at all, and DELink.copy() reports that honestly rather
+     than pretending, so there has to be something to select. */
+  function renderShare(container) {
+    var dl = window.DELink;
+    container.appendChild(el('p', 'dd-note',
+      'Opens this prototype in the view you are looking at now, carrying the exchange configuration with it.'));
+
+    var field = el('input', 'dd-field');
+    field.type = 'text';
+    field.readOnly = true;
+    field.setAttribute('aria-label', 'Shareable link');
+    field.value = dl.url();
+    field.onfocus = function () { field.select(); };
+    field.onclick = function () { field.select(); };
+    container.appendChild(field);
+
+    /* The module can be loaded without the prototype having declared anything
+       to put in a link. Say so rather than handing over a link that quietly
+       drops the state the viewer thinks they are sharing. */
+    if (typeof dl.descriptor === 'function' && !dl.descriptor()) {
+      container.appendChild(el('p', 'dd-note',
+        'This prototype has not registered any shareable state, so the link carries the page address only.'));
+    }
+
+    var copy = el('button', 'tasty-btn is-sm', 'Copy link');
+    copy.type = 'button';
+    copy.onclick = function () {
+      dl.copy().then(function (href) { field.value = href; field.select(); });
+    };
+    container.appendChild(copy);
+
+    /* Navigating behind the open panel rewrites the URL, so follow it. The
+       listener retires itself once the field is gone, since openPanel replaces
+       the panel body wholesale and never tells us it did. */
+    var off = dl.onChange(function () {
+      if (!document.body.contains(field)) { off(); return; }
+      field.value = dl.url();
+    });
   }
 
   window.DevDrawer = {
@@ -539,6 +586,24 @@
         bIdx.type = 'button';
         bIdx.onclick = function () { window.location.href = opts.indexHref; };
         foot.appendChild(bIdx);
+      }
+      /* Only where the deep-link module is loaded — a prototype that never
+         opted in gets no button rather than a dead one. */
+      if (window.DELink && typeof window.DELink.url === 'function') {
+        var bShare = el('button', 'dd-foot-btn', 'Share link');
+        bShare.type = 'button';
+        bShare.onclick = function () { openPanel('Share link', renderShare); };
+        foot.appendChild(bShare);
+      }
+      /* Canvas view — same opt-in rule as Share link: present only where
+         _shared/canvas/canvas.js is loaded and the prototype declared a screen
+         vocabulary for it to enumerate. Closing the drawer first, because the board
+         covers the page and a drawer floating over it reads as a stuck panel. */
+      if (window.DECanvas && window.DECanvas.available()) {
+        var bCanvas = el('button', 'dd-foot-btn', 'Canvas view');
+        bCanvas.type = 'button';
+        bCanvas.onclick = function () { setOpen(false); window.DECanvas.enter(); };
+        foot.appendChild(bCanvas);
       }
       if (opts.scope) {
         var bLog = el('button', 'dd-foot-btn', 'Changelog');
