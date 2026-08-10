@@ -180,7 +180,16 @@
           if (currentActionIds && currentActionIds.length) sel = currentActionIds.join(',');
         } catch (e) {}
       }
+      /* The search term, so it survives the load that searching from the workspace now
+         causes. Read from the live field rather than the module variable: the two are kept
+         in sync by the prototype, and the field is the one that exists on both screens. */
+      var q = null;
+      try {
+        var qEl = document.getElementById('search-input') || document.getElementById('ws-search-input');
+        if (qEl && qEl.value.trim()) q = qEl.value.trim();
+      } catch (e) {}
       var out = {
+        q:    q,
         seg:  onDe ? activeSeg() : null,
         mode: onDe ? (window.deScreenMode === 'review' ? 'review' : 'all') : null,
         app:  window.currentReviewId || null
@@ -190,6 +199,19 @@
     },
 
     apply: function (p) {
+      /* Restore the search term BEFORE anything renders, so the tables below are built
+         filtered rather than built twice. window.applySearchTerm is the prototype's own
+         entry point; falling back to the fields keeps this working if it is ever renamed. */
+      if (p.q) {
+        try {
+          ['search-input', 'ws-search-input'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.value = p.q;
+          });
+          if (typeof window.applySearchTerm === 'function') window.applySearchTerm(p.q);
+        } catch (e) {}
+      }
+
       /* ── The Admit workflow page ──────────────────────────────────────
          renderAdmitConfirmScreen() reads currentActionIds and, finding none
          after a page load, renders an EMPTY mount — the participant clicks

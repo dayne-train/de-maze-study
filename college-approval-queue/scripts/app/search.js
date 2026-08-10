@@ -447,6 +447,17 @@
     renderActiveTable();
     renderDeniedTable();
   }
+  /* Apply a term programmatically — same effect as typing it and pressing Search, but
+     without requiring a field to read from. Exposed because a caller outside this module
+     may need to restore a search that a page load destroyed (the Maze study build turns
+     every screen into its own page), and reaching into `searchTerm` from outside would be
+     reaching into an implementation detail. */
+  window.applySearchTerm = function (term) {
+    var el = document.getElementById('search-input');
+    if (el) el.value = term || '';
+    triggerSearch();
+  };
+
   document.getElementById('search-btn').addEventListener('click', triggerSearch);
   document.getElementById('search-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') triggerSearch();
@@ -649,11 +660,15 @@
     var deInput = document.getElementById('search-input');
     if (deInput) deInput.value = term;
     queuePag.page = 1; activePag.page = 1; deniedPag.page = 1;
-    /* Stay on workspace — results will be ready if user navigates to DE */
     renderTable();
     renderWaitingTable();
     renderActiveTable();
     renderDeniedTable();
+    /* Then GO to the results. This used to apply the term and stay put, re-rendering tables
+       on a screen the admin was not looking at — so the workspace search button read as
+       broken: you typed, pressed Search, and the page did nothing. The applications screen
+       is where the matches live, so that is where searching takes you. */
+    showScreen('de');
   }
 
   if (wsBtn)   wsBtn.addEventListener('click', doWorkspaceSearch);

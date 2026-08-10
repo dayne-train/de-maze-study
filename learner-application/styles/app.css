@@ -465,7 +465,6 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
   line-height: 1.6;
 }
 .confirm-actions { display: flex; justify-content: center; gap: var(--space-sm); margin-top: var(--space-lg); }
-.confirm-actions--row { flex-wrap: wrap; }
 
 /* Registered course list */
 .registered-card-body { padding: var(--space-lg) var(--space-xl); }

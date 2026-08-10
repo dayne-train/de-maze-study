@@ -44,8 +44,16 @@
      router would otherwise see no change at all — which is why an approval
      confirmed in a modal was invisible to Maze. Naming the open modal makes it
      addressable without turning it into a page. */
+  /* `q` carries a search term across the page load. Searching from the workspace now
+     navigates to the applications screen, which here is a real folder and therefore a
+     real page load — and the term itself lives in a module-scoped variable that the load
+     destroys. Without this the participant searches, lands on the applications list, and
+     finds it unfiltered: worse than the button doing nothing, because it looks like the
+     search ran and matched everything. A PAYLOAD param like `sel`, never a step: two
+     participants searching different names are doing the same thing and belong on the
+     same path. */
   var OWNED = ['screen', 'seg', 'mode', 'app', 'journey', 'state', 'step', 'variant',
-               'sel', 'col', 'grp', 'course', 'modal'];
+               'sel', 'col', 'grp', 'course', 'modal', 'q'];
 
   var desc = null;        // the active prototype descriptor
   var applying = false;   // true while WE are driving; suppresses pushState

@@ -208,11 +208,14 @@
   }
 
   function getTrackerSteps(appState, inviteSource) {
-    var c = inviteSource === 'counselor';
+    /* An invite from the high school says WHO asked the learner to apply. It does not say the
+       high school has approved them — nobody has reviewed anything at the point the invitation
+       goes out. The approval step is owed whenever its gate is on, whoever opened the door.
+       (Same correction the admin queues took: review follows the gate, not the entry point.) */
     var map = {
-      'invited':                 ['active', 'pending', c ? 'done' : 'pending', 'pending', 'pending'],
-      'open-enrollment':         ['active', 'pending', c ? 'done' : 'pending', 'pending', 'pending'],
-      'parent-consent-pending':  ['done',   'active',  c ? 'done' : 'active',  'pending', 'pending'],
+      'invited':                 ['active', 'pending', 'pending', 'pending', 'pending'],
+      'open-enrollment':         ['active', 'pending', 'pending', 'pending', 'pending'],
+      'parent-consent-pending':  ['done',   'active',  'active',  'pending', 'pending'],
       'counselor-pending':       ['done',   'done',    'active',               'pending', 'pending'],
       'dual-pending':            ['done',   'active',  'active',               'pending', 'pending'],
       'college-review':          ['done',   'done',    'done',                 'active',  'pending'],
@@ -221,7 +224,7 @@
       'registered-in-session':   ['done',   'done',    'done',                 'done',    'done'],
       'denied-counselor':        ['done',   'done',    'denied',               'pending', 'pending'],
       'denied-college':          ['done',   'done',    'done',                 'denied',  'pending'],
-      'cancelled':               ['done',   'done',    c ? 'done' : 'done',    'pending', 'pending'],
+      'cancelled':               ['done',   'done',    'done',    'pending', 'pending'],
     };
     return map[appState] || map['parent-consent-pending'];
   }
@@ -574,7 +577,7 @@
     var headerHtml = renderDacsHeader(getDacsHeader(appState));
     var rows = [];
     var needsParent    = guardianOn()  && (appState === 'parent-consent-pending' || appState === 'dual-pending');
-    var needsCounselor = counselorOn() && (appState === 'counselor-pending' || appState === 'dual-pending') && inviteSource !== 'counselor';
+    var needsCounselor = counselorOn() && (appState === 'counselor-pending' || appState === 'dual-pending');
     if (needsParent)    rows.push('guardian');
     if (needsCounselor) rows.push('hsadmin');
     var cardsHtml = rows.length ? '<div class="tasty-dacs__divider"></div>' + rows.map(renderActionCard).join('') : '';
@@ -994,7 +997,7 @@
     var title, body, ctaLabel;
     if (isCounselor) {
       title    = 'Your high school admin invited you to apply';
-      body     = 'Your high school admin invited you to apply for dual enrollment at ' + COLLEGE.name + ' for ' + APP.term + '. Once you apply, your high school\'s approval is already taken care of.';
+      body     = 'Your high school admin invited you to apply for dual enrollment at ' + COLLEGE.name + ' for ' + APP.term + '. Your high school is already known, so you will not need to pick it.';
       ctaLabel = 'Start application';
     } else if (isEmail) {
       title    = 'You\'ve been invited to apply for dual enrollment';
@@ -1128,10 +1131,9 @@
     if (nextEl) {
       var collegeName = esc(COLLEGE.name);
       // Only the gates this network requires are collected before college review.
-      // A counselor invite means counselor approval is already handled, so it drops out too.
       var gateParts = [];
       if (guardianOn())  gateParts.push('Parent/Guardian Consent');
-      if (counselorOn() && DEV.inviteSource !== 'counselor') gateParts.push('High School Approval');
+      if (counselorOn()) gateParts.push('High School Approval');
       var gateFrag = gateParts.length === 2
         ? gateParts.join(' and ') + ' are collected'
         : gateParts.length === 1
@@ -1521,11 +1523,11 @@
     // (not the stale invite/open-enrollment state). A counselor invite auto-completes
     // counselor approval, so only parent consent remains; college / open enrollment
     // owe both. Mirrors registerCourses bumping DEV.appState before re-render.
-    // Post-submit state = whichever gates this network still owes. A counselor
-    // invite auto-completes counselor approval; gates switched off drop out entirely.
-    // Nothing owed → straight to college review.
+    // Post-submit state = whichever gates this network still owes. Gates switched off drop
+    // out entirely; nothing owed → straight to college review. Being invited BY the high
+    // school does not discharge its approval — the invitation is not the review.
     var owesGuardian  = guardianOn();
-    var owesCounselor = counselorOn() && DEV.inviteSource !== 'counselor';
+    var owesCounselor = counselorOn();
     var postState = owesGuardian && owesCounselor ? 'dual-pending'
                   : owesGuardian                  ? 'parent-consent-pending'
                   : owesCounselor                 ? 'counselor-pending'

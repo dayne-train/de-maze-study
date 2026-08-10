@@ -244,9 +244,16 @@
     if (WAITING_APPS.some(function(a) { return a.id === app.id; })) return;
     /* Copy ALL original fields (incl. __detail cache, gpa, sisId etc.)
        so the review screen can re-render with full fidelity. */
+    /* Every caller of this is the college DECIDING (single approve, the confirm page, bulk
+       admit), so college review is finished by definition. What remains is whichever gate is
+       still outstanding — guardian consent on the flagged records — and once nothing is, the
+       learner registering for their courses. Without this last flag waitingSubText fell
+       through to its default and told the admin the application was "Awaiting college review"
+       immediately after they had reviewed it. */
     var copy = Object.assign({}, app, {
       awaitingConsent: !!app.hasAlert,
-      awaitingCounselor: false
+      awaitingCounselor: false,
+      awaitingRegistration: !app.hasAlert
     });
     WAITING_APPS.unshift(copy);
   }
