@@ -33,7 +33,9 @@
 
       var visible = true;
       if (term) {
-        var haystack = (learner.firstName + ' ' + learner.lastName + ' ' + learner.id).toLowerCase();
+        /* School is in the haystack because it is now a column: filtering the roster down to
+           one high school is the obvious thing to want when you serve six of them. */
+        var haystack = (learner.firstName + ' ' + learner.lastName + ' ' + learner.id + ' ' + (learner.school || '')).toLowerCase();
         if (haystack.indexOf(term) === -1) visible = false;
       }
       var rowStyle = visible ? '' : ' style="display:none"';
@@ -42,6 +44,7 @@
       rows += '<td class="col-check"><input type="checkbox" class="row-checkbox invite-learner-cb" data-id="' + learner.id + '" ' + checked + ' ' + disabledAttr + '></td>';
       rows += '<td style="font-size:13px;font-weight:600;">' + learner.lastName + '</td>';
       rows += '<td style="font-size:13px;">' + learner.firstName + '</td>';
+      rows += '<td class="col-hs" style="font-size:13px;color:var(--c-text-muted);">' + (learner.school || '\u2014') + '</td>';
       rows += '<td>' + verifiedIdCell + '</td>';
       rows += '<td style="font-size:13px;color:var(--c-text-muted);">' + learner.dob + '</td>';
       rows += '<td style="font-size:13px;color:var(--c-text-muted);">' + learner.ssnLast4 + '</td>';

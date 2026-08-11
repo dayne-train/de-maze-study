@@ -28,14 +28,14 @@
      (the Pending Invites screen). Keep the two lists disjoint or the flow can only
      ever re-invite. */
   var LEARNER_ROSTER = [
-    { id:'20481', lastName:'Dawson',   firstName:'Emily',    middleName:'Rose',   initials:'ED', classOf:2027, dob:'Mar 14, 2010', ssnLast4:'4821', missingData:false },
-    { id:'31752', lastName:'Escobar',  firstName:'Luis',     middleName:'',       initials:'LE',    classOf:2026, dob:'Jul 2, 2009',  ssnLast4:'7345', missingData:false },
-    { id:'48063', lastName:'Gao',      firstName:'Kevin',    middleName:'',       initials:'KG',       classOf:2027, dob:'Dec 8, 2009',  ssnLast4:'n/o',  missingData:true  },
-    { id:'59314', lastName:'Herrera',  firstName:'Sofia',    middleName:'Isabel', initials:'SH', classOf:2026, dob:'Feb 21, 2010', ssnLast4:'2210', missingData:false },
+    { id:'20481', lastName:'Dawson',   firstName:'Emily',    middleName:'Rose',   school:'Pioneer High School', initials:'ED', classOf:2027, dob:'Mar 14, 2010', ssnLast4:'4821', missingData:false },
+    { id:'31752', lastName:'Escobar',  firstName:'Luis',     middleName:'',       school:'Westview Academy', initials:'LE',    classOf:2026, dob:'Jul 2, 2009',  ssnLast4:'7345', missingData:false },
+    { id:'48063', lastName:'Gao',      firstName:'Kevin',    middleName:'',       school:'Eastside High', initials:'KG',       classOf:2027, dob:'Dec 8, 2009',  ssnLast4:'n/o',  missingData:true  },
+    { id:'59314', lastName:'Herrera',  firstName:'Sofia',    middleName:'Isabel', school:'Pioneer High School', initials:'SH', classOf:2026, dob:'Feb 21, 2010', ssnLast4:'2210', missingData:false },
     { id:'60825', lastName:'Ibrahim',  firstName:'Yusuf',    middleName:'',       initials:'YI', classOf:2026, dob:'Sep 5, 2009',  ssnLast4:'8804', missingData:false },
-    { id:'71536', lastName:'Kowalski', firstName:'Anna',     middleName:'Marie',  initials:'AK',    classOf:2027, dob:'May 30, 2010', ssnLast4:'1937', missingData:false },
-    { id:'82947', lastName:'Larsen',   firstName:'Peter',    middleName:'',       initials:'PL',       classOf:2026, dob:'Oct 12, 2009', ssnLast4:'n/o',  missingData:true  },
-    { id:'93158', lastName:'Moreno',   firstName:'Isabella', middleName:'',       initials:'IM', classOf:2026, dob:'Jan 26, 2010', ssnLast4:'5568', missingData:false },
+    { id:'71536', lastName:'Kowalski', firstName:'Anna',     middleName:'Marie',  school:'Eastside High', initials:'AK',    classOf:2027, dob:'May 30, 2010', ssnLast4:'1937', missingData:false },
+    { id:'82947', lastName:'Larsen',   firstName:'Peter',    middleName:'',       school:'Northgate High', initials:'PL',       classOf:2026, dob:'Oct 12, 2009', ssnLast4:'n/o',  missingData:true  },
+    { id:'93158', lastName:'Moreno',   firstName:'Isabella', middleName:'',       school:'Westview Academy', initials:'IM', classOf:2026, dob:'Jan 26, 2010', ssnLast4:'5568', missingData:false },
     { id:'14269', lastName:'Novak',    firstName:'Daniel',   middleName:'James',  initials:'DN', classOf:2027, dob:'Aug 17, 2010', ssnLast4:'3092', missingData:false },
     { id:'25370', lastName:'Quinn',    firstName:'Maya',     middleName:'',       initials:'MQ',    classOf:2026, dob:'Apr 3, 2010',  ssnLast4:'6714', missingData:false },
   ];

@@ -32,6 +32,15 @@
     return '<input class="tasty-input" data-el="' + key + '"' + dv +
       ' ' + attrs + ' value="' + (value ? String(value).replace(/"/g, '&quot;') : '') + '">';
   }
+  /* The high schools this college serves, read from the fixture that already lists them so
+     the form cannot drift from the queue's own idea of who is in the exchange. */
+  function _elSchools() {
+    try {
+      if (typeof HS_COUNSELORS !== 'undefined') return Object.keys(HS_COUNSELORS);
+    } catch (e) {}
+    return [];
+  }
+
   function _elSelect(key, required, opts, revealKey, value) {
     var o = '<option value="">Select</option>' + opts.map(function(v) {
       return '<option' + (v === value ? ' selected' : '') + '>' + v + '</option>';
@@ -140,6 +149,16 @@
               _elField("Date Of Birth", true, _elInput('dob', true, 'placeholder="MM / DD / YYYY"', dob)) +
               _elField("Mobile Number", false, _elInput('mobile', false, 'placeholder="555-345-6789"', '')) +
             '</div>' +
+
+            /* Which high school — this college serves six of them, and the roster now has a
+               column for it, so a learner added here has to be able to say which one rather
+               than silently inheriting a default. Options come from the schools this fork
+               already knows about. */
+            /* Optional on purpose: some learners on this roster have no high school behind them
+               yet — the college holds the record, but there is no enrollment — and the roster
+               shows that as a dash. Requiring it here would make a state the data supports
+               impossible to enter. */
+            _elField("High School", false, _elSelect('school', false, _elSchools(), null, (l && l.school) || '')) +
 
             _elField("Learner's Email", true, _elInput('email', true, 'type="email"', email)) +
 
@@ -298,7 +317,7 @@
           id: _elLearnerId,
           lastName: ln, firstName: fn, middleName: get('middleName'),
           initials: ((fn.charAt(0) || '') + (ln.charAt(0) || '')).toUpperCase(),
-          school: 'Pioneer High School',
+          school: get('school') || '\u2014',
           classOf: yr ? parseInt(yr, 10) : '',
           dob: get('dob'), ssnLast4: get('ssn'),
           missingData: false
