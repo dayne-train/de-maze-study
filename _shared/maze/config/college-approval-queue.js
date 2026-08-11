@@ -183,6 +183,21 @@
           if (currentActionIds && currentActionIds.length) sel = currentActionIds.join(',');
         } catch (e) {}
       }
+      /* Edit Learner and Edit Groups are rebuilt from a subject the same way the review
+         screen is, and neither had one: arriving from the Add Learners cards produced a screen
+         with no form on it at all. `sel` carries WHICH learner (absent = the Add case, which is
+         a legitimately blank form rather than a broken one) and `app` carries which
+         application's groups are open. */
+      if (id === 'screen-edit-learner') {
+        try {
+          if (typeof _elMode !== 'undefined' && _elMode !== 'add' &&
+              typeof _elLearnerId !== 'undefined' && _elLearnerId) sel = String(_elLearnerId);
+        } catch (e) {}
+      }
+      var egApp = null;
+      if (id === 'screen-edit-groups') {
+        try { if (typeof _egAppId !== 'undefined' && _egAppId) egApp = _egAppId; } catch (e) {}
+      }
       /* The search term, so it survives the load that searching from the workspace now
          causes. Read from the live field rather than the module variable: the two are kept
          in sync by the prototype, and the field is the one that exists on both screens. */
@@ -203,7 +218,7 @@
         q:    q,
         seg:  onDe ? activeSeg() : null,
         mode: onDe ? (window.deScreenMode === 'review' ? 'review' : 'all') : null,
-        app:  window.currentReviewId || null
+        app:  egApp || window.currentReviewId || null
       };
       if (sel) out.sel = sel;
       return out;
@@ -219,6 +234,26 @@
          `screen` after this runs, so the redirect was silently overridden, and leaving the
          code in would have implied a protection that was not there. The empty state is an
          honest place to land and has its own ways out. */
+      /* These three screens render from state their OPENER sets, not from markup, so a page
+         load leaves them blank — the participant picks "Add One Learner", the page loads, and
+         the form is not there. Re-entered through the prototype's own openers, which is what a
+         click would have called, so the screen is built the same way it always is.
+
+         Dead ends matter more here than anywhere: a blank screen ends the task, and the path
+         we are trying to capture ends with it. */
+      if (p.screen === 'edit-learner') {
+        try {
+          if (p.sel && typeof window.openEditLearner === 'function') window.openEditLearner(String(p.sel).split(',')[0]);
+          else if (typeof window.openAddLearner === 'function') window.openAddLearner();
+        } catch (e) {}
+      }
+      if (p.screen === 'bulk-upload') {
+        try { if (typeof window.openBulkUpload === 'function') window.openBulkUpload(); } catch (e) {}
+      }
+      if (p.screen === 'edit-groups' && p.app) {
+        try { if (typeof window.openEditGroups === 'function') window.openEditGroups(p.app); } catch (e) {}
+      }
+
       if (p.q) {
         try {
           if (p.screen === 'adv-search') {
