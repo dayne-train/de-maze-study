@@ -3,7 +3,7 @@
 <!--
   Parchment Dual Enrollment — Learner Application prototype
   Persona: Jessica Cumberland · Pioneer High School
-  Screens: Dashboard → DE Tab → Entry → HS Select → College Select → AER Form → Confirm → Courses → Registered
+  Screens: Dashboard → DE Tab → HS Select → College Select → AER Form → Confirm → Courses → Registered
   Dev panel: App state (12) · Entry path · Invite source · HS count · College count · Reapply · Theme
 -->
 <head>
@@ -164,25 +164,6 @@
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     SCREEN 3 — Entry (invitation card or apply landing)
-══════════════════════════════════════════════════════════ -->
-<section id="screen-entry" class="screen">
-  <div class="app-wrap">
-    <div data-component="page-header-mount"
-         data-persona-name="Jessica Cumberland"
-         data-persona-org="Pioneer High School"
-         data-org-initials="JC"
-         data-lang="EN"></div>
-    <div data-component="workflow-header-mount"
-         data-back-label="Back to Dashboard"
-         data-back-action="showScreen('dashboard')"></div>
-    <div class="page-content">
-      <div id="entry-mount"></div>
-    </div>
-    <div data-component="page-footer-mount"></div>
-  </div>
-</section>
 
 <!-- ══════════════════════════════════════════════════════════
      SCREEN 4 — Select high school (multi-HS path)
@@ -822,7 +803,7 @@
          data-lang="EN"></div>
     <div data-component="workflow-header-mount"
          data-back-label="Back"
-         data-back-action="showScreen('entry')"
+         data-back-action="showScreen('dashboard')"
          data-cancel-label="Cancel"
          data-cancel-action="showCancelConfirm()"></div>
     <div class="page-content">

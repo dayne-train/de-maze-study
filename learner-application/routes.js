@@ -23,12 +23,6 @@ window.MAZE_ROUTES = {
     },
     {
       "params": {
-        "screen": "entry"
-      },
-      "slug": "get-started"
-    },
-    {
-      "params": {
         "screen": "select-hs"
       },
       "slug": "choose-school"

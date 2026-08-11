@@ -12,7 +12,7 @@
    §3  DashboardStatusTracker renderDashboardStatusTracker(item) dispatch · renderDSTInvite (green) · renderDSTStatus (gray) · renderStatusTag · getDSTNextStep · DynamicActionCardSection: getDacsHeader · renderDacsHeader · renderActionCard · renderDynamicActionCardSection
    §4  Dashboard render ...... renderDashboard · renderHsCard · renderCredentialTile · renderHsDeSection · renderDeStatusPill · renderAnotherInstitution
    §5  DE Tab render ......... renderDeTab · instSectionHeader · renderDeInviteBox · renderDeAppBox · deBucket · switchDeTab
-   §6  Entry / HS / college .. renderEntryScreen · renderHsSelect · renderCollegeSelect
+   §6  HS / college select ... renderHsSelect · renderCollegeSelect
    §7  Confirm member-box .... renderConfirmMemberBox
    §8  AER confirm ........... renderAerConfirm
    §9  Registered screen ..... renderRegisteredScreen
@@ -984,52 +984,6 @@
     if (window.DELink) window.DELink.sync();
   };
 
-  /* ════════════════════════════════════════
-     §6 · ENTRY SCREEN render
-  ════════════════════════════════════════ */
-  function renderEntryScreen() {
-    var mount = document.getElementById('entry-mount');
-    if (!mount) return;
-
-    var isCounselor = DEV.inviteSource === 'counselor';
-    var isEmail     = DEV.entryPath === 'email-invite';
-
-    var title, body, ctaLabel;
-    if (isCounselor) {
-      title    = 'Your high school admin invited you to apply';
-      body     = 'Your high school admin invited you to apply for dual enrollment at ' + COLLEGE.name + ' for ' + APP.term + '. Your high school is already known, so you will not need to pick it.';
-      ctaLabel = 'Start application';
-    } else if (isEmail) {
-      title    = 'You\'ve been invited to apply for dual enrollment';
-      body     = COLLEGE.name + ' has invited you to apply for ' + APP.term + ' dual enrollment. Complete your application to get started.';
-      ctaLabel = 'Start application';
-    } else {
-      title    = 'Apply for dual enrollment';
-      body     = 'You\'re applying for dual enrollment at ' + COLLEGE.name + ' for ' + APP.term + '. You\'ll need to provide your personal information'
-               + (guardianOn() ? ' and your parent or guardian\'s contact details.' : '.');
-      ctaLabel = 'Continue';
-    }
-
-    var declineBtn = isEmail
-      ? '<button type="button" class="tasty-btn is-ghost is-sm" onclick="showScreen(\'dashboard\')">Decline invitation</button>'
-      : '';
-
-    mount.innerHTML = '<div class="entry-card">' +
-      '<div class="entry-illus">' + tastyIllus('vg-6f-learner-school-welcome', { size: 120, alt: '' }) + '</div>' +
-      '<h1 class="entry-title">' + esc(title) + '</h1>' +
-      '<p class="entry-body">' + esc(body) + '</p>' +
-      '<div class="entry-college-tag">' +
-      tastyIcon('school', { size: 14 }) +
-      ' ' + esc(COLLEGE.name) + ' &nbsp;·&nbsp; ' + esc(APP.term) +
-      '</div>' +
-      '<div class="entry-actions">' +
-      '<button type="button" class="tasty-btn is-primary is-md" onclick="advanceEntryFlow()">' + esc(ctaLabel) + '</button>' +
-      declineBtn +
-      '</div>' +
-      '</div>';
-
-    if (typeof resolveTastyAssets === 'function') resolveTastyAssets(mount);
-  }
 
   /* ─── HS select render ─── */
   /* TileMemberSelect (Figma): a canonical .tasty-tile.is-interactive holding a
@@ -1396,9 +1350,12 @@
   /* The college site's Apply CTA hands off to the Parchment sign-up. */
   window.startCollegeApply = function () { showScreen('email-entry'); };
 
+  /* Apply Now goes straight into the flow. There used to be a confirmation screen in
+     between — "You're applying for dual enrollment at X for Y", Continue — which restated
+     what the invitation card the learner had just clicked already said, and cost a step to
+     agree with itself. Removed Aug 11, 2026; this now does what its Continue button did. */
   window.startApplicationFlow = function () {
-    renderEntryScreen();
-    showScreen('entry');
+    advanceEntryFlow();
   };
 
   window.advanceEntryFlow = function () {
@@ -2174,7 +2131,7 @@
       'start': 'path-select', 'path-select': 'path-select',
       'dashboard': 'dashboard',
       'dual-enrollment': 'de-tab', 'de-tab': 'de-tab',
-      'entry': 'entry', 'select-hs': 'select-hs', 'select-college': 'select-college',
+      'select-hs': 'select-hs', 'select-college': 'select-college',
       'college-site': 'college-site',
       'inbox': 'email-landing', 'email-landing': 'email-landing',
       'email-entry': 'email-entry',
@@ -2191,7 +2148,7 @@
        `entry` because that is the only one of the three a link can actually re-enter. */
     var SCREEN_OUT = {
       'path-select': 'start', 'dashboard': 'dashboard', 'de-tab': 'dual-enrollment',
-      'entry': 'entry', 'select-hs': 'select-hs', 'select-college': 'select-college',
+      'select-hs': 'select-hs', 'select-college': 'select-college',
       'college-site': 'college-site', 'email-landing': 'inbox', 'email-entry': 'email-entry',
       'login': 'login', 'aer': 'create-account', 'confirm-email': 'confirm-email',
       'de-app': 'apply', 'aer-confirm': 'submitted', 'courses': 'courses',
@@ -2288,7 +2245,6 @@
                and showScreen does not fill them, so each picker is rendered by the function
                that owns it before we navigate. startApplicationFlow does that for the entry
                chooser; the two member-select screens have their own renderers. */
-            if (id === 'entry') { window.startApplicationFlow(); return true; }
             if (id === 'select-hs')      { renderHsSelect();      window.showScreen('select-hs');      return true; }
             if (id === 'select-college') { renderCollegeSelect(); window.showScreen('select-college'); return true; }
             /* renderCourseDetail early-returns on a null currentCourse, so without a course=
@@ -2335,7 +2291,7 @@
      so adding a screen never means remembering to file it. */
   window.DECanvasGroups = [
     { title: 'Finding the way in', note: 'The five ways a learner arrives at an application.',
-      screens: ['path-select', 'entry', 'select-hs', 'select-college', 'college-site', 'email-landing', 'email-entry'] },
+      screens: ['path-select', 'select-hs', 'select-college', 'college-site', 'email-landing', 'email-entry'] },
     { title: 'Getting an account', note: 'Signing in, or creating the account the application needs.',
       screens: ['login', 'aer', 'confirm-email'] },
     { title: 'Applying', note: 'The application itself, and what comes back after submitting.',

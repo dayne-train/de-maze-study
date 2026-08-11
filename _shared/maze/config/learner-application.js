@@ -249,7 +249,7 @@
     defaultScreen: 'dashboard',
 
     screens: [
-      'path-select', 'dashboard', 'de-tab', 'entry', 'select-hs', 'select-college',
+      'path-select', 'dashboard', 'de-tab', 'select-hs', 'select-college',
       'college-site', 'email-landing', 'email-entry', 'login', 'aer',
       'confirm-email', 'de-app', 'aer-confirm', 'courses', 'course-detail', 'registered'
     ],
@@ -323,12 +323,12 @@
       }
 
       if (p.screen) {
-        /* Prefer the semantic entry points over raw showScreen: 'entry' has no
-           showScreen hook at all and would skip renderEntryScreen entirely. */
+        /* Prefer the semantic entry point over raw showScreen: the application screen needs
+           goToApplication to build it. The 'entry' branch went with the confirmation screen
+           it served — Apply Now advances straight into the flow now, so there is no screen
+           to route to. */
         if (p.screen === 'de-app' && typeof window.goToApplication === 'function') {
           window.goToApplication();
-        } else if (p.screen === 'entry' && typeof window.startApplicationFlow === 'function') {
-          window.startApplicationFlow();
         } else {
           window.showScreen(p.screen);
         }
