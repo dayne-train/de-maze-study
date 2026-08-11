@@ -934,13 +934,22 @@
         (live ? renderOptionsMenu() : '') +
       '</div>';
 
+    /* Registered is an OUTCOME, not a step in flight: Figma (15467-218106) drops the tracker
+       and shows what the learner got — the course, then the confirmation band. Anything still
+       moving keeps the tracker plus its action section. */
+    var done = appState === 'registered' || appState === 'registered-in-session';
+    var lower = done
+      ? registeredCourseBlock(registeredCourseOrDefault()) + registeredDoneBand(registeredCourseOrDefault())
+      : '<div class="de-stepper-area">' + renderFullTracker(appState, item.inviteSource) + '</div>' +
+        renderDynamicActionCardSection(item);
+
     // Branded strip = this learner's HS color (matches the dashboard MemberBox for that school).
     // Lower region is the shared DynamicActionCardSection (header + cards, or a CTA).
-    return '<div class="tasty-member-box de-member-box" style="--member-color:var(' + HS.accent + ')">' +
+    return '<div class="tasty-member-box de-member-box' + (done ? ' is-registered' : '') +
+      '" style="--member-color:var(' + HS.accent + ')">' +
       '<div class="de-inst-header">' + instHtml + asideHtml +
       '</div>' +
-      '<div class="de-stepper-area">' + renderFullTracker(appState, item.inviteSource) + '</div>' +
-      renderDynamicActionCardSection(item) +
+      lower +
     '</div>';
   }
 
@@ -1113,6 +1122,59 @@
   /* ════════════════════════════════════════
      §9 · REGISTERED screen render
   ════════════════════════════════════════ */
+
+  /* The registered course, drawn as Figma 15467-218106 draws it: a shaded block carrying the
+     course identity, a row of facts, and the catalogue description. ONE renderer, because the
+     success screen and the Dual Enrollment tab show the same thing — they had drifted into a
+     three-word summary row on one and nothing at all on the other.
+     No kebab, unlike the Figma frame: nothing is actionable once registered, which is the rule
+     the rest of the post-registration UI already follows. */
+  /* Which course the registered views show. registeredCourse is set only by a real
+     registration and currentCourse only by browsing the catalogue, so every other way into
+     this state — a dev-drawer jump, a deep link, the canvas board — had neither and rendered
+     "No course registered." under a headline saying they were registered. MATH1D is the
+     canonical course the rest of the prototype falls back to (registerCourses does the same). */
+  function registeredCourseOrDefault() {
+    return registeredCourse || currentCourse ||
+      COURSES.find(function (c) { return c.id === 'MATH1D'; }) || null;
+  }
+
+  function registeredCourseBlock(c) {
+    if (!c) return '<p class="registered-empty">No course registered.</p>';
+    var facts = [
+      ['location', c.location],
+      ['time',     c.meets],
+      c.transferrable ? ['check', 'Transferrable Credit'] : null,
+      ['acct-profile', c.instructor]
+    ].filter(Boolean).map(function (f) {
+      return '<li class="reg-course__fact">' + tastyIcon(f[0], { size: 14 }) + esc(f[1]) + '</li>';
+    }).join('');
+
+    return '<div class="reg-course">' +
+      '<div class="reg-course__head">' +
+        '<span class="reg-course__icon" aria-hidden="true">' + tastyIcon('document', { size: 24 }) + '</span>' +
+        '<div>' +
+          '<p class="reg-course__title">' + esc(c.id) + ' - ' + esc(c.title) + '</p>' +
+          '<p class="reg-course__sub">' + esc(c.term) + ' &middot; <strong>' + c.credits + ' Credits</strong></p>' +
+        '</div>' +
+      '</div>' +
+      '<ul class="reg-course__facts">' + facts + '</ul>' +
+      (c.description ? '<p class="reg-course__desc">' + esc(c.description) + '</p>' : '') +
+    '</div>';
+  }
+
+  /* The closing band under the course block — the confirmation the frame ends on. */
+  function registeredDoneBand(c) {
+    var start = c && c.start ? esc(c.start) : esc(APP.term);
+    return '<div class="reg-done">' +
+      '<span class="reg-done__illus">' + tastyIllus('enrollment-complete', { size: 48, alt: '' }) + '</span>' +
+      '<div>' +
+        '<p class="reg-done__title">You Are Registered!</p>' +
+        '<p class="reg-done__sub">Your course begins on ' + start + ' at <strong>' + esc(COLLEGE.name) + '</strong></p>' +
+      '</div>' +
+    '</div>';
+  }
+
   function renderRegisteredScreen() {
     var illusEl = document.getElementById('registered-illus');
     var cardEl  = document.getElementById('registered-card');
@@ -1128,20 +1190,20 @@
          headline saying the learner is registered. currentCourse is the course
          they were viewing when they registered, so it is the same course in
          every path that can reach this screen. */
-      var c = registeredCourse || currentCourse;
-      var courseRows = c
-        ? '<div class="registered-course-row">' +
-            '<span class="reg-course-code">' + esc(c.id) + '</span>' +
-            '<span class="reg-course-title">' + esc(c.title) + '</span>' +
-            '<span class="reg-course-credits">' + c.credits + ' cr</span>' +
-          '</div>'
-        : '<p class="registered-empty">No course registered.</p>';
-      var bodyHtml = '<div class="registered-card-body">' +
-        '<p class="registered-card-meta">' + esc(COLLEGE.name) + ' &nbsp;·&nbsp; ' + esc(APP.term) + '</p>' +
-        '<div class="registered-courses">' + courseRows + '</div>' +
-        '</div>';
+      var c = registeredCourseOrDefault();
+      var bodyHtml = '<div class="registered-card-body">' + registeredCourseBlock(c) + '</div>' +
+                     registeredDoneBand(c);
       cardEl.innerHTML = renderConfirmMemberBox('registered', { body: bodyHtml });
       if (typeof resolveTastyAssets === 'function') resolveTastyAssets(cardEl);
+    }
+
+    /* The lead used to name a hardcoded start date, which was wrong for every course whose
+       term does not begin that day. Read it off the course actually registered. */
+    var leadEl = document.querySelector('#screen-registered .confirm-body');
+    if (leadEl) {
+      var rc = registeredCourseOrDefault();
+      leadEl.innerHTML = (rc && rc.start ? 'Classes start ' + esc(rc.start) + '. ' : '') +
+        'Check your Parchment email for confirmation and your course schedule.';
     }
   }
 
@@ -1832,6 +1894,23 @@
     renderDeTab();
   }
 
+  /* Some screens only exist in one part of the lifecycle, so ARRIVING at one says something
+     about the application. Without this, a link naming only the screen — the canvas board's
+     "Start from here", a URL someone pasted — opened the registered screen on top of the
+     DEFAULT state, and Back to dashboard then showed an application still awaiting consent:
+     the learner appeared to un-register by navigating.
+     An explicit state= in the URL always wins, since the link said what it meant. A state
+     further along than the implication wins too, so opening a course while registered does
+     not knock the application back to approved. */
+  function implyScreenState(target, alreadyFine) {
+    var explicit = false;
+    try { explicit = new URLSearchParams(window.location.search).has('state'); } catch (e) {}
+    if (explicit || alreadyFine.indexOf(DEV.appState) !== -1) return;
+    DEV.appState = target;
+    if (typeof updateDevAxisButtons === 'function') updateDevAxisButtons('appState', target);
+    applyDevState();
+  }
+
   /* ════════════════════════════════════════
      §13 · DEV HELPERS — one-click fill the account form + demo-email injection
   ════════════════════════════════════════ */
@@ -2249,6 +2328,10 @@
             if (id === 'select-college') { renderCollegeSelect(); window.showScreen('select-college'); return true; }
             /* renderCourseDetail early-returns on a null currentCourse, so without a course=
                the honest destination is the list. */
+            /* Course registration is offered only once the application is approved. */
+            if (id === 'courses' || id === 'course-detail') {
+              implyScreenState('approved', ['approved', 'registered', 'registered-in-session']);
+            }
             if (id === 'course-detail') {
               /* Reported as a rejection, not a success: without a course this lands on the
                  list, which is what returning false produces via the fallback anyway. Saying
@@ -2258,6 +2341,7 @@
             }
             /* registered renders once on boot, before `course` has run. */
             if (id === 'registered') {
+              implyScreenState('registered', ['registered', 'registered-in-session']);
               window.renderRegisteredScreen(); window.showScreen('registered'); return true;
             }
             window.showScreen(id);

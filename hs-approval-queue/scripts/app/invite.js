@@ -13,7 +13,7 @@
     var term = (document.getElementById('invite-search-input') ? document.getElementById('invite-search-input').value : '').toLowerCase();
 
     var rows = '';
-    LEARNER_ROSTER.forEach(function(learner, i) {
+    DETableSort.apply('#invite-learner-table', LEARNER_ROSTER.slice()).forEach(function(learner, i) {
       var checked = inviteState.selectedLearnerIds.has(learner.id) ? 'checked' : '';
       var disabledAttr = learner.missingData ? 'disabled' : '';
 
@@ -243,7 +243,7 @@
     // Table rows
     var tbody = document.getElementById('invite-groups-tbody');
     if (!tbody) return;
-    var groups = COLLEGE_GROUPS[key] || [];
+    var groups = DETableSort.apply('#invite-groups-table', (COLLEGE_GROUPS[key] || []).slice());
     var rows = '';
     groups.forEach(function(group) {
       var checked = inviteState.selectedGroupIds.has(group.id) ? 'checked' : '';

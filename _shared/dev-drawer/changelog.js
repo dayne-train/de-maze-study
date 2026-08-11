@@ -4,6 +4,22 @@
    A prototype only shows items scoped to it (its key) or to 'all'. Keep items terse and dated;
    add a new dated block at the TOP at the end of each work session. */
 window.DEV_CHANGELOG = [
+  { date: 'Aug 11, 2026', items: [
+    { text: 'Canvas view shows each screen at three widths: desktop, and underneath it tablet and phone side by side. The same screen gets taller as it narrows, because each one is genuinely being rendered at that width rather than shrunk to look like it.', scope: ['all'] },
+    { text: 'Cells are real windows now, not copies of the screen pasted into a box. That box was never a window, so every cell used to render whatever layout your BROWSER width implied — on a narrow laptop the board showed tablet layouts labelled as desktop. A cell holds its width whatever the window does.', scope: ['all'] },
+    { text: 'Cells are pictures, not working copies: you cannot click into one. Clicking used to navigate inside that cell and leave the board showing a screen that no longer matched its own label, and the same change fixes dragging and zooming while the cursor is over a cell, which used to do nothing at all. “Start from here” still opens the real thing.', scope: ['all'] },
+    { text: 'The board loads only the cells you are near, and lets go of the ones you are not, so three widths per screen costs about what one did.', scope: ['all'] },
+    { text: 'The learner’s “applying for dual enrollment” confirmation step is gone. Apply Now goes straight into the application, or to picking a high school when there is more than one.', scope: ['learner'] },
+    { text: 'The college admin’s invite roster shows which high school each learner attends, and searching the roster searches that too. A few learners deliberately show a dash: the college holds the record, but there is no enrollment behind it.', scope: ['college'] },
+    { text: 'The registered course is shown properly on both the “You’re registered” screen and the Dual Enrollment tab: where it meets, when, who teaches it, whether the credit transfers, and the catalogue description. It used to be one line of course code, title and credits, which answered none of the questions you come back to that screen with.', scope: ['learner'] },
+    { text: 'The Dual Enrollment tab drops the progress tracker once you are registered and shows the course instead. Registered is where the application ended up, not a step still in flight.', scope: ['learner'] },
+    { text: 'Fixed: opening the registered screen from a link or the canvas board, then going back to the dashboard, showed an application still waiting on consent. Arriving at a screen that only exists once you are registered now says so. A link that names a state explicitly still wins.', scope: ['learner'] },
+    { text: 'Fixed: a band of empty space sat between the top of every application box and the section under it, with a line above and below it.', scope: ['learner'] },
+    { text: 'The course list’s paging controls sit together and centred under the table, like every other table here. They were stacked down the left with no styling at all.', scope: ['learner'] },
+    { text: 'Edit Groups is one bordered card, the same container as Select A Group in the invite flow. The two screens do the same job from different starting points and now look like it.', scope: ['hs', 'college'] },
+    { text: 'On both of those screens the institution row and the button bar sit on a light grey band, and the buttons share a fixed width in the middle rather than sitting small and centred.', scope: ['hs', 'college'] },
+    { text: 'The college admin’s Admit button says “Admit”, not “Admit Now”. Nothing is admitted at that click: a confirmation screen follows, where you choose between admitting and admitting with an invitation.', scope: ['college'] }
+  ] },
   { date: 'Aug 10, 2026', items: [
     { text: 'The application detail shows the learner’s email address again. It was lost when the person details moved out of the side panel into the body, which left the guardian’s email on the page but no way to reach the student.', scope: ['hs', 'college'] },
     { text: 'The learner’s contact details (email, phone, address) are now one block of their own, below identity and academics. They used to be scattered through the same grid as name, date of birth, SSN and GPA.', scope: ['hs', 'college'] },

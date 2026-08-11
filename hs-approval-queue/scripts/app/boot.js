@@ -325,3 +325,30 @@
      kit (tasty-interactions.js) toggles the sibling .tasty-menu's .is-open and closes it on an
      outside click. The menu is shown via .is-open (see the .tasty-menu:not(.is-open) rule) —
      do NOT toggle the [hidden] attribute here; that fights the kit. ─── */
+
+  /* ── Column sorting ──────────────────────────────────────────────────────
+     Registered here because boot.js loads after every renderer, so each table can name the
+     function that repaints it. The shared sorter (_shared/queue-screens/table-sort.js) owns
+     the click handling, the direction toggle and the header indicator; these lines only say
+     which columns a table has and what redraws it.
+
+     Defaults match what each screen is for: the queues open newest-first, because an admin
+     wants what just arrived; the roster and group list open A→Z, because those are things you
+     look up by name. */
+  (function wireTableSorting() {
+    if (!window.DETableSort) return;
+    var A = window.DE_SORT_COLS, R = window.DE_ROSTER_COLS, G = window.DE_GROUP_COLS;
+    var reg = [
+      ['#queue-table',          A, { col: 'date', dir: 'desc' }, function () { queuePag.page = 1; renderTable(); }],
+      ['#waiting-table',        A, { col: 'date', dir: 'desc' }, function () { waitingPag.page = 1; renderWaitingTable(); }],
+      ['#active-table',         A, { col: 'date', dir: 'desc' }, function () { activePag.page = 1; renderActiveTable(); }],
+      ['#denied-table',         A, { col: 'date', dir: 'desc' }, function () { deniedPag.page = 1; renderDeniedTable(); }],
+      ['#invited-table',        A, { col: 'date', dir: 'desc' }, function () { renderInvitedTable(); }],
+      ['#invite-learner-table', R, { col: 'name', dir: 'asc'  }, function () { renderInviteLearners(); }],
+      ['#invite-groups-table',  G, { col: 'group', dir: 'asc' }, function () { renderInviteGroups(); }]
+    ];
+    reg.forEach(function (r) {
+      if (!document.querySelector(r[0])) return;      /* a fork without that table */
+      DETableSort.register(r[0], { columns: r[1], initial: r[2], render: r[3] });
+    });
+  })();

@@ -150,12 +150,19 @@
   padding: 28px 40px;
 }
 
-/* College identity row inside card — logo + name/city/url */
+/* College identity row inside card — logo + name/city/url.
+   It sits on its own shaded band running the full width of the card, with a rule under it
+   (Figma 16662-212920 for Select A Group, 17447-93862 for Edit Groups). The negative margins
+   cancel the body's padding so the band meets the card's edges; z-index2 is the lighter of the
+   two greys, a step off white rather than the header band's tone. */
 .invite-groups-college-identity {
   display: flex;
   align-items: flex-start;
   gap: 16px;
-  margin-bottom: 32px;
+  margin: -28px -40px 32px;
+  padding: 24px 40px;
+  background: var(--white-space-z-index2);
+  border-bottom: 1px solid var(--c-border);
 }
 
 /* ImageMemberLogo — 80×80 white square matching TileMemberSelect */
@@ -206,13 +213,22 @@
   margin: 0 0 4px;
 }
 
+/* Action band closing the card. The buttons sit in a 600px column and share it equally —
+   one Continue fills the width, Cancel + Save take half each (Figma 16662-212920 and
+   17447-93862). The column is made with padding rather than a wrapper element so every
+   footer gets it without touching seven pieces of markup: a percentage padding resolves
+   against the footer's width, so `50% - 300px` a side leaves exactly 600px between them,
+   and max() keeps a sane gutter once the card itself is narrower than that. */
 .invite-groups-card-footer {
-  padding: 20px 40px 24px;
+  padding: 20px max(24px, calc(50% - 300px)) 24px;
   border-top: 1px solid var(--c-border);
   display: flex;
   justify-content: center;
-  background: var(--c-surface);
+  gap: 12px;
+  /* Shaded action band, same lighter grey as the identity row above. */
+  background: var(--white-space-z-index2);
 }
+.invite-groups-card-footer > * { flex: 1 1 0; min-width: 0; }
 
 /* Continue button — full-width, brand green when active, gray when disabled */
 

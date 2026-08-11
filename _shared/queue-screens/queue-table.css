@@ -67,43 +67,56 @@
   .bulk-inline-approve:hover { opacity: 0.9; }
   .bulk-inline-approve:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 2px; }
   .bulk-inline-approve i { font-size: 15px; }
-  /* Header */
+  /* Header — Tasty TableHeader.tsx.
+     DELIBERATE DIVERGENCE, both about density: font-size stays 13px against the DS's inherited
+     16px, and padding stays tight against its 8px 25px. These queues carry 8–10 columns where
+     the DS examples carry 4, and DS metrics would start shedding columns at far wider
+     viewports. Everything else here follows the component. */
   .queue-table thead th {
     padding: 0 8px;
     height: 50px;
     background: var(--c-surface);
-    border-bottom: 2px solid var(--c-text-strong); /* $body-font-base — Tasty TableBasic spec */
+    border-bottom: 3px solid var(--body-font-base);  /* TableHeader.tsx:159 — 3px, body base */
     text-align: left;
     font-size: var(--font-small); font-weight: 700;
-    color: var(--c-brand);                         /* $action-default */
+    color: var(--body-font-base);                    /* plain headers are text, not links */
     white-space: nowrap;
     user-select: none;
   }
   .queue-table thead th .th-inner {
     display: inline-flex; align-items: center; gap: 5px;
   }
-  .queue-table thead th .th-sort {
-    font-size: 12px; opacity: 0.35; flex-shrink: 0;
-    transition: opacity var(--t-quick);
+  /* Sortable columns are the ONLY blue ones. In Tasty the blue IS the affordance — a sortable
+     header is a button (TableHeaderSortButton.tsx:20-47), underlined on hover. Painting every
+     header blue, as this file used to, spent the signal on columns that could not sort. */
+  .queue-table thead th.is-sortable {
+    cursor: pointer;
+    color: var(--c-brand);                           /* $action-default #006AA8 */
   }
-  /* Sortable columns — clickable headers */
-  .queue-table thead th.is-sortable { cursor: pointer; }
-  .queue-table thead th.is-sortable:hover .th-sort { opacity: 0.7; }
-  .queue-table thead th.is-sorted .th-sort { opacity: 1; }
+  .queue-table thead th.is-sortable:hover .th-inner,
+  .queue-table thead th.is-sortable:focus-visible .th-inner { text-decoration: underline; }
+  /* The caret appears ONLY on the sorted column (TableHeader.tsx:94-100) — an unsorted column
+     shows nothing at all. It is injected by table-sort.js, never sitting in the markup. */
+  .queue-table thead th .th-sort {
+    flex-shrink: 0; display: inline-flex; align-items: center;
+    color: var(--c-brand);
+    transform: rotate(0deg);
+  }
+  .queue-table thead th .th-sort.is-asc { transform: rotate(180deg); }
   .queue-table thead th.col-check { width: 44px; padding: 0 8px; }
   .queue-table thead th.col-actions { text-align: right; }
-  /* Body rows — no zebra; hover/selected use $in-list-active @anakiwa */
+  /* Body rows — TableRow.tsx. No zebra: the DS has none, and the comment here used to say so
+     while the rules underneath striped the rows anyway. Divider and hover are the component's
+     own values rather than darker approximations. */
   .queue-table tbody tr {
     height: 50px;
-    border-bottom: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--white-space-z-index4);  /* TableRow.tsx:261 — #E6E6E6 */
     transition: background var(--t-quick);
     cursor: pointer;
   }
   .queue-table tbody tr:last-child { border-bottom: none; }
-  .queue-table tbody tr:nth-child(odd)  { background: var(--c-surface); }        /* white */
-  .queue-table tbody tr:nth-child(even) { background: var(--c-surface-subtle); } /* $white-space-z-index2 — Tasty zebra */
-  .queue-table tbody tr:hover { background: var(--c-row-active); }
-  .queue-table tbody tr.selected { background: var(--c-row-active); }
+  .queue-table tbody tr:hover { background: var(--white-space-z-index2); }  /* TableRow.tsx:244 */
+  .queue-table tbody tr.selected { background: var(--white-space-z-index3); } /* selected, :234 */
   .queue-table tbody tr.approving { opacity: 0.5; pointer-events: none; }
   @keyframes row-out {
     from { opacity: 0.5; }
@@ -322,21 +335,21 @@
     .queue-table.is-stacked-rows tr,
     .queue-table.is-stacked-rows td { display: block; width: auto; }
     .queue-table.is-stacked-rows thead { display: none; }
-    .queue-table.is-stacked-rows { border-top: 2px solid var(--c-text-strong); }
+    .queue-table.is-stacked-rows { border-top: 3px solid var(--body-font-base); }
     /* height:auto is load-bearing. `.queue-table tbody tr` is pinned to 50px; as a
        block that height does NOT grow with the stacked cells, so every row's
        content overflowed into the row beneath it and the whole table rendered as
        overlapping text. Same for the cells' fixed vertical-align/height. */
     .queue-table.is-stacked-rows tbody tr {
       height: auto;
-      border-bottom: 2px solid var(--c-text-strong);
+      border-bottom: 3px solid var(--body-font-base);
       padding: 8px 0 14px;
     }
     .queue-table.is-stacked-rows td {
       border: 0; padding: 4px 0; text-align: left !important; white-space: normal;
       height: auto; vertical-align: baseline;
     }
-    .queue-table.is-stacked-rows td[data-label] { padding: 4px 0 8px; border-bottom: 1px solid var(--c-border); }
+    .queue-table.is-stacked-rows td[data-label] { padding: 4px 0 8px; border-bottom: 1px solid var(--white-space-z-index4); }
     .queue-table.is-stacked-rows td[data-label]:last-of-type { border-bottom: 0; }
     .queue-table.is-stacked-rows td[data-label]::before {
       content: attr(data-label);

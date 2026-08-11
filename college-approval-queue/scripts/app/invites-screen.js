@@ -14,7 +14,9 @@
     });
   }
   function renderInvitedTable() {
-    var data = _invitedRows();
+    /* slice() first: _invitedRows can hand back INVITED_FIXTURE itself when nothing is
+       being searched, and sorting that in place would reorder the fixture for good. */
+    var data = DETableSort.apply('#invited-table', _invitedRows().slice());
 
     var section = document.getElementById('invited-table-section');
     var pagEl   = document.getElementById('invited-pagination');

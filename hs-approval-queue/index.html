@@ -632,13 +632,13 @@
             <th class="col-check">
               <input type="checkbox" class="row-checkbox" id="select-all-checkbox" aria-label="Select all applications" />
             </th>
-            <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
-            <th><span class="th-inner">First Name</span></th>
-            <th><span class="th-inner">Application ID</span></th>
-            <th><span class="th-inner">Institution</span></th>
-            <th class="col-hs"><span class="th-inner">High School</span></th><th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group <i class="ti ti-arrows-sort th-sort"></i></span></th>
-            <th class="is-sortable" data-sort-col="date" aria-sort="none"><span class="th-inner">Submission Date <i class="ti ti-arrows-sort th-sort"></i></span></th>
-            <th class="col-status-badge">Status</th>
+            <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name</span></th>
+            <th class="is-sortable" data-sort-col="first" aria-sort="none"><span class="th-inner">First Name</span></th>
+            <th class="is-sortable" data-sort-col="id" aria-sort="none"><span class="th-inner">Application ID</span></th>
+            <th class="is-sortable" data-sort-col="institution" aria-sort="none"><span class="th-inner">Institution</span></th>
+            <th class="is-sortable col-hs" data-sort-col="school" aria-sort="none"><span class="th-inner">High School</span></th><th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group</span></th>
+            <th class="is-sortable" data-sort-col="date" aria-sort="none"><span class="th-inner">Submission Date</span></th>
+            <th class="is-sortable col-status-badge" data-sort-col="status" aria-sort="none">Status</th>
             <th class="col-actions"></th>
           </tr>
         </thead>
@@ -665,13 +665,13 @@
           <table class="queue-table" id="waiting-table">
             <thead>
               <tr>
-                <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
-                <th><span class="th-inner">First Name</span></th>
-                <th><span class="th-inner">Application ID</span></th>
-                <th><span class="th-inner">Institution</span></th>
-                <th class="col-hs"><span class="th-inner">High School</span></th><th><span class="th-inner">Group</span></th>
-                <th><span class="th-inner">Submission Date <i class="ti ti-arrows-sort th-sort"></i></span></th>
-                <th class="col-status-badge">Status</th>
+                <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name</span></th>
+                <th class="is-sortable" data-sort-col="first" aria-sort="none"><span class="th-inner">First Name</span></th>
+                <th class="is-sortable" data-sort-col="id" aria-sort="none"><span class="th-inner">Application ID</span></th>
+                <th class="is-sortable" data-sort-col="institution" aria-sort="none"><span class="th-inner">Institution</span></th>
+                <th class="is-sortable col-hs" data-sort-col="school" aria-sort="none"><span class="th-inner">High School</span></th><th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group</span></th>
+                <th class="is-sortable" data-sort-col="date" aria-sort="none"><span class="th-inner">Submission Date</span></th>
+                <th class="is-sortable col-status-badge" data-sort-col="status" aria-sort="none">Status</th>
                 <th class="col-actions"></th>
               </tr>
             </thead>
@@ -697,14 +697,14 @@
           <table class="queue-table" id="active-table">
             <thead>
               <tr>
-                <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
-                <th><span class="th-inner">First Name</span></th>
-                <th><span class="th-inner">Application ID</span></th>
-                <th><span class="th-inner">Institution</span></th>
-                <th class="col-hs"><span class="th-inner">High School</span></th><th><span class="th-inner">Group</span></th>
-                <th class="col-course"><span class="th-inner">Selected Course</span></th>
-                <th><span class="th-inner">Enrolled <i class="ti ti-arrows-sort th-sort"></i></span></th>
-                <th class="col-status-badge">Status</th>
+                <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name</span></th>
+                <th class="is-sortable" data-sort-col="first" aria-sort="none"><span class="th-inner">First Name</span></th>
+                <th class="is-sortable" data-sort-col="id" aria-sort="none"><span class="th-inner">Application ID</span></th>
+                <th class="is-sortable" data-sort-col="institution" aria-sort="none"><span class="th-inner">Institution</span></th>
+                <th class="is-sortable col-hs" data-sort-col="school" aria-sort="none"><span class="th-inner">High School</span></th><th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group</span></th>
+                <th class="is-sortable col-course" data-sort-col="course" aria-sort="none"><span class="th-inner">Selected Course</span></th>
+                <th class="is-sortable" data-sort-col="date" aria-sort="none"><span class="th-inner">Enrolled</span></th>
+                <th class="is-sortable col-status-badge" data-sort-col="status" aria-sort="none">Status</th>
                 <th class="col-actions"></th>
               </tr>
             </thead>
@@ -730,13 +730,13 @@
           <table class="queue-table" id="denied-table">
             <thead>
               <tr>
-                <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
-                <th><span class="th-inner">First Name</span></th>
-                <th><span class="th-inner">Application ID</span></th>
-                <th><span class="th-inner">Institution</span></th>
-                <th class="col-hs"><span class="th-inner">High School</span></th><th><span class="th-inner">Group</span></th>
-                <th><span class="th-inner">Closed <i class="ti ti-arrows-sort th-sort"></i></span></th>
-                <th class="col-status-badge">Status</th>
+                <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name</span></th>
+                <th class="is-sortable" data-sort-col="first" aria-sort="none"><span class="th-inner">First Name</span></th>
+                <th class="is-sortable" data-sort-col="id" aria-sort="none"><span class="th-inner">Application ID</span></th>
+                <th class="is-sortable" data-sort-col="institution" aria-sort="none"><span class="th-inner">Institution</span></th>
+                <th class="is-sortable col-hs" data-sort-col="school" aria-sort="none"><span class="th-inner">High School</span></th><th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group</span></th>
+                <th class="is-sortable" data-sort-col="date" aria-sort="none"><span class="th-inner">Closed</span></th>
+                <th class="is-sortable col-status-badge" data-sort-col="status" aria-sort="none">Status</th>
                 <th class="col-actions"></th>
               </tr>
             </thead>
@@ -824,13 +824,13 @@
           <thead>
             <tr>
               <th class="col-check"><input type="checkbox" id="invited-select-all-cb" class="row-checkbox" aria-label="Select all invitations"></th>
-              <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
-              <th><span class="th-inner">First Name</span></th>
-              <th><span class="th-inner">Institution</span></th>
-              <th class="col-hs"><span class="th-inner">High School</span></th><th><span class="th-inner">Group</span></th>
-              <th><span class="th-inner">Date Invited <i class="ti ti-arrows-sort th-sort"></i></span></th>
-              <th><span class="th-inner">Last Sent</span></th>
-              <th class="col-status-badge">Status</th>
+              <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name</span></th>
+              <th class="is-sortable" data-sort-col="first" aria-sort="none"><span class="th-inner">First Name</span></th>
+              <th class="is-sortable" data-sort-col="institution" aria-sort="none"><span class="th-inner">Institution</span></th>
+              <th class="is-sortable col-hs" data-sort-col="school" aria-sort="none"><span class="th-inner">High School</span></th><th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group</span></th>
+              <th class="is-sortable" data-sort-col="date" aria-sort="none"><span class="th-inner">Date Invited</span></th>
+              <th class="is-sortable" data-sort-col="sent" aria-sort="none"><span class="th-inner">Last Sent</span></th>
+              <th class="is-sortable col-status-badge" data-sort-col="status" aria-sort="none">Status</th>
               <th class="col-actions"></th>
             </tr>
           </thead>
@@ -1377,12 +1377,12 @@
           <thead>
             <tr>
               <th class="col-check"><input type="checkbox" class="row-checkbox" id="invite-select-all-cb" /></th>
-              <th><span class="th-inner">Last Name <i class="ti ti-arrows-sort th-sort"></i></span></th>
-              <th><span class="th-inner">First Name</span></th>
-              <th><span class="th-inner">Verified ID</span></th>
-              <th><span class="th-inner">Date of Birth</span></th>
+              <th class="is-sortable" data-sort-col="name" aria-sort="none"><span class="th-inner">Last Name</span></th>
+              <th class="is-sortable" data-sort-col="first" aria-sort="none"><span class="th-inner">First Name</span></th>
+              <th class="is-sortable" data-sort-col="id" aria-sort="none"><span class="th-inner">Verified ID</span></th>
+              <th class="is-sortable" data-sort-col="dob" aria-sort="none"><span class="th-inner">Date of Birth</span></th>
               <th><span class="th-inner">Last 4 SSN</span></th>
-              <th><span class="th-inner">Expected Grad Year</span></th>
+              <th class="is-sortable" data-sort-col="grad" aria-sort="none"><span class="th-inner">Expected Grad Year</span></th>
               <th class="col-actions"></th>
             </tr>
           </thead>
@@ -1453,9 +1453,9 @@
             <thead>
               <tr>
                 <th class="col-check"><input type="checkbox" class="row-checkbox" id="invite-groups-select-all-cb" /></th>
-                <th><span class="th-inner">Group <i class="ti ti-arrows-sort th-sort"></i></span></th>
+                <th class="is-sortable" data-sort-col="group" aria-sort="none"><span class="th-inner">Group</span></th>
                     <th><span class="th-inner">Description</span></th>
-                <th><span class="th-inner">Registration Deadline</span></th>
+                <th class="is-sortable" data-sort-col="deadline" aria-sort="none"><span class="th-inner">Registration Deadline</span></th>
               </tr>
             </thead>
             <tbody id="invite-groups-tbody"></tbody>
@@ -1940,6 +1940,9 @@
 
   <!-- App logic — split from former scripts/app.js (one IIFE, now dissolved to shared
        global scope). ORDER MATTERS: data → invite → core → screens → boot (last). -->
+  <!-- Column sorting for every queue table. Before the app scripts: they register
+       their tables as they load. -->
+  <script src="../_shared/queue-screens/table-sort.js"></script>
   <script src="../_shared/network/network.js"></script>
   <script src="scripts/app/data-apps.js"></script>
   <script src="scripts/app/data-invite.js"></script>

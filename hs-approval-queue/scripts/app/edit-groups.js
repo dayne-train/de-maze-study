@@ -34,7 +34,7 @@
 
     var rows = groups.map(function(g) {
       var checked = _egSelected.indexOf(g.id) > -1;
-      return '<tr data-eg-row="' + g.id + '">' +
+      return '<tr data-eg-row="' + g.id + '"' + (checked ? ' class="selected"' : '') + '>' +
         '<td class="col-check"><label class="tasty-checkbox' + (checked ? ' is-checked' : '') + '" data-eg-check="' + g.id + '">' +
           '<span class="tasty-checkbox__box">' + (checked ? '<i class="ti ti-check"></i>' : '') + '</span></label></td>' +
         '<td class="eg-group">' + escapeHtml(g.name) + '</td>' +
@@ -44,6 +44,11 @@
       '</tr>';
     }).join('');
 
+    /* One bordered card holding the whole task — banded "Assign To Group" head, the
+       institution the groups belong to, the table, and the actions. Same container as the
+       invite flow's "Select A Group" step (`.invite-groups-card`), because the two screens
+       are the same job seen from different entry points and were drawn that way in Figma
+       (node 17447-93862). Shared CSS shades the identity row and the footer on both. */
     var html =
       '<div class="editgroups">' +
         '<div class="tasty-section-header">' +
@@ -53,27 +58,36 @@
             '<div class="tasty-section-header__sub">Select which group(s) to give the approved learner access to</div>' +
           '</div>' +
         '</div>' +
-        '<div class="editgroups-panel">' +
-          '<div class="editgroups-panel-head">Assign To Group</div>' +
-          '<div class="editgroups-inst">' +
-            '<span class="editgroups-inst-abbr" style="color:' + meta.color + ';border-color:' + meta.color + ';">' + escapeHtml(meta.abbr) + '</span>' +
-            '<div>' +
-              '<p class="editgroups-inst-name">' + escapeHtml(meta.name) + '</p>' +
-              '<p class="editgroups-inst-city">' + escapeHtml(meta.city) + '</p>' +
+        '<div class="invite-groups-card">' +
+          '<div class="invite-groups-card-header">Assign To Group</div>' +
+          '<div class="invite-groups-card-body">' +
+            '<div class="invite-groups-college-identity">' +
+              '<div class="invite-groups-college-logo" style="color:' + meta.color + ';">' + escapeHtml(meta.abbr) + '</div>' +
+              '<div>' +
+                '<p class="invite-groups-college-name">' + escapeHtml(meta.name) + '</p>' +
+                '<p class="invite-groups-college-city">' + escapeHtml(meta.city) + '</p>' +
+                '<a class="invite-groups-college-url" href="#"><i class="ti ti-external-link"></i> www.' +
+                  escapeHtml(String(meta.abbr).toLowerCase()) + '.edu</a>' +
+              '</div>' +
+            '</div>' +
+            '<h3 class="invite-groups-section-heading">Available Groups</h3>' +
+            '<div class="queue-table-wrap" style="margin:0;">' +
+              '<table class="queue-table editgroups-table">' +
+                '<thead><tr>' +
+                  '<th class="col-check"><label class="tasty-checkbox" id="eg-select-all"><span class="tasty-checkbox__box"></span></label></th>' +
+                  '<th><span class="th-inner">Group</span></th>' +
+                  '<th><span class="th-inner">Term</span></th>' +
+                  '<th><span class="th-inner">Description</span></th>' +
+                  '<th><span class="th-inner">Registration Deadline</span></th>' +
+                '</tr></thead>' +
+                '<tbody>' + rows + '</tbody>' +
+              '</table>' +
             '</div>' +
           '</div>' +
-        '</div>' +
-        '<p class="editgroups-avail-title">Available Groups</p>' +
-        '<table class="tasty-table editgroups-table">' +
-          '<thead><tr>' +
-            '<th class="col-check"><label class="tasty-checkbox" id="eg-select-all"><span class="tasty-checkbox__box"></span></label></th>' +
-            '<th>Group</th><th>Term</th><th>Description</th><th>Registration Deadline</th>' +
-          '</tr></thead>' +
-          '<tbody>' + rows + '</tbody>' +
-        '</table>' +
-        '<div class="editgroups-foot">' +
-          '<button class="tasty-btn is-bold is-ghost is-md" id="eg-cancel-btn">Cancel</button>' +
-          '<button class="tasty-btn is-success is-md" id="eg-save-btn">Save</button>' +
+          '<div class="invite-groups-card-footer">' +
+            '<button class="tasty-btn is-bold is-ghost is-md" id="eg-cancel-btn">Cancel</button>' +
+            '<button class="tasty-btn is-success is-md" id="eg-save-btn">Save</button>' +
+          '</div>' +
         '</div>' +
       '</div>';
 
@@ -115,6 +129,9 @@
   function _egPaint(cb, on) {
     cb.classList.toggle('is-checked', on);
     cb.querySelector('.tasty-checkbox__box').innerHTML = on ? '<i class="ti ti-check"></i>' : '';
+    /* .selected is how a queue-table row shows it is picked; keep it with the box. */
+    var row = cb.closest && cb.closest('tr');
+    if (row) row.classList.toggle('selected', on);
   }
   function _egUpdateSelectAll(groups) {
     var sel = document.getElementById('eg-select-all');

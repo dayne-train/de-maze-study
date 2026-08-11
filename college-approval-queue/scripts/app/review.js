@@ -399,7 +399,7 @@
     if (status === 'pending') {
       actions =
         '<div class="appdetail-actions">' +
-          '<button class="tasty-btn is-success is-md appdetail-action-btn" id="detail-approve-btn">Admit Now</button>' +
+          '<button class="tasty-btn is-success is-md appdetail-action-btn" id="detail-approve-btn">Admit</button>' +
           '<button class="tasty-btn is-ghost is-error is-md appdetail-action-btn" id="detail-reject-btn">Deny</button>' +
         '</div>';
     } else if (status === 'invited') {

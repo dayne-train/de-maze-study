@@ -244,6 +244,23 @@
     window.submitDeApp.__mazeSubmit = true;
   })();
 
+  /* Registering is the same shape as submitting, and needs the same carry-forward.
+     confirmRegistration() sets DEV.appState to 'registered' and then navigates; the page
+     load throws DEV away, so "Back to dashboard" landed on a dashboard still showing the
+     application waiting on approval — the participant appeared to un-register by leaving
+     the screen that told them they had registered.
+     Set BEFORE the call for the same reason as the submit above: it ends with a navigation
+     whose URL is built from observe(), so writing the state afterwards loses the race. */
+  (function captureRegister() {
+    if (typeof window.confirmRegistration !== 'function' || window.confirmRegistration.__mazeReg) return;
+    var orig = window.confirmRegistration;
+    window.confirmRegistration = function () {
+      postSubmitState = 'registered';
+      return orig.apply(this, arguments);
+    };
+    window.confirmRegistration.__mazeReg = true;
+  })();
+
   MazeShim.init({
     proto: 'learner-application',
     defaultScreen: 'dashboard',
@@ -302,8 +319,14 @@
         console.warn('[maze-shim] unknown journey "' + p.journey + '" — ignored');
       }
 
-      if (p.state && window.__dev && typeof window.__dev.setAxis === 'function') {
-        window.__dev.setAxis('appState', p.state);
+      /* A route that lands cold on the registered screen without naming a state gets one:
+         that screen only exists once the learner IS registered, so arriving there says so.
+         Recorded in postSubmitState as well as applied, so observe() carries it into the
+         next URL and the dashboard behind it agrees. An explicit state in the route wins. */
+      var st = p.state || (p.screen === 'registered' ? 'registered' : null);
+      if (st && window.__dev && typeof window.__dev.setAxis === 'function') {
+        window.__dev.setAxis('appState', st);
+        if (!p.state) postSubmitState = st;
       }
 
       /* Restore the chosen course before landing on a screen that renders from

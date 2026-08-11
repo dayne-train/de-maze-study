@@ -38,10 +38,11 @@
   function renderWaitingTable() {
     var t = searchTerm.toLowerCase();
     var _waiting = waitingBucket();
-    var filtered = _waiting.filter(function(a) {
+    /* Sorted before paging, or page 2 would be page 2 of the unsorted list. */
+    var filtered = DETableSort.apply('#waiting-table', _waiting.filter(function(a) {
       if (!t) return true;
       return appHaystack(a).indexOf(t) !== -1;
-    });
+    }));
     var section = document.getElementById('waiting-table-section');
     var empty   = document.getElementById('waiting-empty');
     var pagEl   = document.getElementById('waiting-pagination');
@@ -78,10 +79,10 @@
   /* ─── Admitted tab render: admitted-on-hold learners (PM review #8) ─── */
   function renderAdmittedTable() {
     var t = searchTerm.toLowerCase();
-    var filtered = ALL_ADMITTED_APPS.filter(function(a) {
+    var filtered = DETableSort.apply('#admitted-table', ALL_ADMITTED_APPS.slice().filter(function(a) {
       if (!t) return true;
       return appHaystack(a).indexOf(t) !== -1;
-    });
+    }));
     var section = document.getElementById('admitted-table-section');
     var empty   = document.getElementById('admitted-empty');
     var pagEl   = document.getElementById('admitted-pagination');
@@ -196,10 +197,10 @@
   /* ─── Active tab render ─── */
   function renderActiveTable() {
     var t = searchTerm.toLowerCase();
-    var filtered = ALL_ACTIVE_APPS.filter(function(a) {
+    var filtered = DETableSort.apply('#active-table', ALL_ACTIVE_APPS.slice().filter(function(a) {
       if (!t) return true;
       return appHaystack(a).indexOf(t) !== -1;
-    });
+    }));
     var section = document.getElementById('active-table-section');
     var empty   = document.getElementById('active-empty');
     var pagEl   = document.getElementById('active-pagination');
@@ -242,10 +243,10 @@
   /* ─── Denied tab render ─── */
   function renderDeniedTable() {
     var t = searchTerm.toLowerCase();
-    var filtered = ALL_DENIED_APPS.filter(function(a) {
+    var filtered = DETableSort.apply('#denied-table', ALL_DENIED_APPS.slice().filter(function(a) {
       if (!t) return true;
       return appHaystack(a).indexOf(t) !== -1;
-    });
+    }));
     var section = document.getElementById('denied-table-section');
     var empty   = document.getElementById('denied-empty');
     var pagEl   = document.getElementById('denied-pagination');

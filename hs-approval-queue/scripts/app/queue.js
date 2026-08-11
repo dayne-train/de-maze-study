@@ -7,48 +7,65 @@
   /* ─── Quick-filter + sort state (Row 3 toolbar) ─── */
   /* Column sort state for the main queue. Driven by clicking the column headers.
      Default: Received, newest first. */
-  var deSort = { col: 'date', dir: 'desc' };
   var deQuickFilters = { transcript: '', consent: '' };
   function _appDate(a) {
     var d = new Date(a.submitted || a.dateInvited || a.enrolledDate || a.deniedDate || 0);
     return isNaN(d.getTime()) ? 0 : d.getTime();
   }
-  function _sortVal(a, col) {
-    if (col === 'name')   return ((a.lastName || '') + ' ' + (a.firstName || '')).toLowerCase();
-    if (col === 'group')  return (a.group || '').toLowerCase();
-    if (col === 'course') return (a.course || '').toLowerCase();
-    if (col === 'date')   return _appDate(a);
-    return '';
-  }
+  /* ── Column accessors for every queue table ──────────────────────────────
+     One map, because the tables are the same records viewed through different buckets: a
+     column named "Submission Date" in one and "Closed" in another is the same idea — when
+     this row happened — so `date` resolves whichever date field the row carries. Sorting is
+     wired through _shared/queue-screens/table-sort.js; these say what a column MEANS. */
+  var DE_SORT_COLS = {
+    name:        function (a) { return ((a.lastName || '') + ' ' + (a.firstName || '')).toLowerCase(); },
+    first:       function (a) { return (a.firstName || '').toLowerCase(); },
+    id:          function (a) { return (a.id || '').toLowerCase(); },
+    institution: function (a) { return ((typeof COLLEGES !== 'undefined' && COLLEGES[a.institution]) || a.college || a.institution || '').toLowerCase(); },
+    school:      function (a) { return (a.school || '').toLowerCase(); },
+    group:       function (a) { return (a.group || '').toLowerCase(); },
+    course:      function (a) { return (a.course || '').toLowerCase(); },
+    date:        function (a) { return _appDate(a); },
+    sent:        function (a) { var d = new Date(a.lastSent || a.dateInvited || 0); return isNaN(d.getTime()) ? 0 : d.getTime(); },
+    /* Status sorts by the words on screen, not by an internal key: the admin is sorting what
+       they can read. Each bucket has its own sub-status helper, so ask whichever exists. */
+    status:      function (a) {
+      try {
+        if (a.awaitingRegistration || a.awaitingConsent || a.awaitingCounselor) {
+          if (typeof waitingSubText === 'function') return waitingSubText(a).toLowerCase();
+        }
+        if (a.deniedState || a.kind === 'cancelled') {
+          if (typeof closedSubText === 'function') return closedSubText(a).toLowerCase();
+        }
+      } catch (e) {}
+      return (a.status || '').toLowerCase();
+    }
+  };
+  window.DE_SORT_COLS = DE_SORT_COLS;
+
+  /* The roster and the group list are not applications, so they get their own small maps. */
+  var DE_ROSTER_COLS = {
+    name:   function (l) { return ((l.lastName || '') + ' ' + (l.firstName || '')).toLowerCase(); },
+    first:  function (l) { return (l.firstName || '').toLowerCase(); },
+    school: function (l) { return (l.school || '').toLowerCase(); },
+    id:     function (l) { return (l.id || '').toLowerCase(); },
+    dob:    function (l) { var d = new Date(l.dob || 0); return isNaN(d.getTime()) ? 0 : d.getTime(); },
+    grad:   function (l) { return parseInt(l.classOf, 10) || 0; }
+  };
+  window.DE_ROSTER_COLS = DE_ROSTER_COLS;
+
+  var DE_GROUP_COLS = {
+    group:    function (g) { return (g.name || '').toLowerCase(); },
+    deadline: function (g) { var d = new Date(g.deadline || 0); return isNaN(d.getTime()) ? 0 : d.getTime(); }
+  };
+  window.DE_GROUP_COLS = DE_GROUP_COLS;
+
+  /* One source of truth for this table's order. Kept as a named function because
+     search.js sorts the Needs Review rows through it too, and both should agree. */
   function sortAppList(list) {
-    var col = deSort.col;
-    var dir = deSort.dir === 'asc' ? 1 : -1;
-    list.sort(function(a, b) {
-      var va = _sortVal(a, col), vb = _sortVal(b, col);
-      if (va < vb) return -dir;
-      if (va > vb) return dir;
-      // Stable tiebreak by learner name so equal values keep a predictable order.
-      var na = ((a.lastName || '') + (a.firstName || '')).toLowerCase();
-      var nb = ((b.lastName || '') + (b.firstName || '')).toLowerCase();
-      return na < nb ? -1 : na > nb ? 1 : 0;
-    });
-    return list;
+    return (root_DETableSort() || { apply: function (x, l) { return l; } }).apply('#queue-table', list);
   }
-  /* Reflect the active column + direction in the header sort icons. */
-  function updateSortHeaders() {
-    var thead = document.querySelector('#queue-table thead');
-    if (!thead) return;
-    thead.querySelectorAll('th.is-sortable').forEach(function(th) {
-      var active = th.dataset.sortCol === deSort.col;
-      var icon = th.querySelector('.th-sort');
-      th.classList.toggle('is-sorted', active);
-      th.setAttribute('aria-sort', active ? (deSort.dir === 'asc' ? 'ascending' : 'descending') : 'none');
-      if (icon) {
-        icon.classList.remove('ti-arrows-sort', 'ti-sort-ascending', 'ti-sort-descending');
-        icon.classList.add(active ? (deSort.dir === 'asc' ? 'ti-sort-ascending' : 'ti-sort-descending') : 'ti-arrows-sort');
-      }
-    });
-  }
+  function root_DETableSort() { return window.DETableSort; }
   /* Quick-filter predicates only narrow segments that carry the relevant field. */
   function passesQuickFilters(app) {
     if (deQuickFilters.transcript === 'missing'  && app.transcriptAttached !== false) return false;
@@ -76,7 +93,7 @@
       return true;
     });
     sortAppList(visibleApps);
-    updateSortHeaders();
+    if (window.DETableSort) DETableSort.repaint('#queue-table');
 
     const tbody = document.getElementById('queue-tbody');
 
@@ -235,20 +252,6 @@
     if (btn.dataset.action === 'approve') approveFromQueue(id);
   });
 
-  /* ─── Column-header sorting ─── */
-  document.querySelector('#queue-table thead').addEventListener('click', function (e) {
-    var th = e.target.closest('th.is-sortable');
-    if (!th) return;
-    var col = th.dataset.sortCol;
-    if (deSort.col === col) {
-      deSort.dir = deSort.dir === 'asc' ? 'desc' : 'asc';   // toggle direction
-    } else {
-      deSort.col = col;
-      deSort.dir = col === 'date' ? 'desc' : 'asc';         // dates default newest-first, text A→Z
-    }
-    queuePag.page = 1;
-    renderTable();
-  });
 
   /* ─── Move helpers — relocate an app between status tabs ───
      Approving a Needs-review app sends it to the Waiting tab (counselor

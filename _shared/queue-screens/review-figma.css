@@ -1187,24 +1187,11 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
 }
 
 /* ── Edit Groups screen ────────────────────────────────────────────── */
+/* The container is the invite flow's `.invite-groups-card` (see invite.css), not a second
+   panel of its own: the two screens do the same job from different entry points and Figma
+   draws them alike. Only the column treatment below is specific to this table. */
 .editgroups { width: 100%; }
 .editgroups .tasty-section-header { margin-bottom: 24px; }
-.editgroups-panel {
-  border: 1px solid var(--c-border); border-radius: var(--radius-md);
-  overflow: hidden; margin-bottom: 28px;
-}
-.editgroups-panel-head {
-  background: var(--c-surface-subtle); border-bottom: 1px solid var(--c-border);
-  padding: 12px 20px; text-align: center; font-size: 14px; font-weight: 700; color: var(--c-text-strong);
-}
-.editgroups-inst { display: flex; align-items: center; gap: 16px; padding: 20px 24px; }
-.editgroups-inst-abbr {
-  width: 56px; height: 56px; border: 1px solid; border-radius: 6px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800;
-}
-.editgroups-inst-name { font-size: var(--font-medium); font-weight: 700; color: var(--c-text-strong); margin: 0 0 2px; }
-.editgroups-inst-city { font-size: var(--font-small); color: var(--c-text-muted); margin: 0; }
-.editgroups-avail-title { font-size: 18px; font-weight: 700; color: var(--c-text-strong); margin: 0 0 12px; }
 .editgroups-table .col-check { width: 48px; }
 .editgroups-table .eg-group { font-weight: 600; color: var(--c-text-strong); white-space: nowrap; }
 .editgroups-table .eg-term { white-space: nowrap; color: var(--c-text); }
@@ -1212,7 +1199,6 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
 .editgroups-table .eg-deadline { white-space: nowrap; color: var(--c-text); }
 .editgroups-table .eg-deadline i { color: var(--c-text-muted); margin-right: 5px; }
 .editgroups-table .tasty-checkbox { cursor: pointer; }
-.editgroups-foot { display: flex; justify-content: center; gap: 12px; padding: 28px 0 8px; }
 
 /* ── Edit Learner screen ───────────────────────────────────────────── */
 .editlearner { width: 100%; display: flex; justify-content: center; }
