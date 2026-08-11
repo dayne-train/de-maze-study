@@ -23,5 +23,3 @@
   .deny-page .review-action-zone { background: transparent; padding: 8px 0 60px; }
   /* Modal-context action row only (single deny) — standard compact modal footer, right-aligned. */
   .deny-action-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
-
-  /* ─────────────────────────────────────────────

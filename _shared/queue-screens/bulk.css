@@ -62,5 +62,3 @@
     font-size: var(--font-small); color: var(--c-text); margin: 0; line-height: 1.6;
     white-space: pre-line;   /* honour paragraph breaks the institution typed */
   }
-
-  /* ─────────────────────────────────────────────
