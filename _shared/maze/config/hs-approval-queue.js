@@ -504,6 +504,21 @@
             inviteState.selectedLearnerIds = new Set(p.sel.split(',').filter(Boolean));
           }
           if (p.col) inviteState.collegeKey = p.col;
+          /* Select A Group is built ENTIRELY from the institution picked the step before, and
+             this fork serves many institutions, so with no `col` it renders an empty table
+             under a heading promising groups. Walking the wizard always supplies one; arriving
+             any other way — a task URL, a back button, a re-entry — did not, and left a dead
+             end. Fall back to the first institution rather than showing nothing.
+             The college fork never had this: it holds one institution, already set. */
+          if (!inviteState.collegeKey && p.screen === 'invite-groups') {
+            try {
+              var firstCollege = Object.keys(window.COLLEGE_GROUPS || {})[0] || null;
+              if (firstCollege) {
+                inviteState.collegeKey = firstCollege;
+                console.warn('[maze-shim] invite-groups without an institution — defaulting to "' + firstCollege + '"');
+              }
+            } catch (e2) {}
+          }
           if (p.grp) {
             /* AFTER collegeKey. inviteSelectCollege() resets the group selection
                whenever the institution changes, so groups restored first would
