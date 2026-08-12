@@ -356,6 +356,29 @@
       });
     });
     table.classList.add('is-stacked-rows');
+    watch(table);
+  }
+
+  /* Keep the stamps alive when a renderer rebuilds its rows.
+     stack() ran once at load, and a table whose body is filled in later by JS -- which is most
+     of them -- kept stamped HEADERS and unstamped CELLS. That splits the two halves of every
+     narrow-width rule: `[data-col="x"] { display:none }` then hides the header and not the
+     cell, so every column label sits one column to the left of its data, and the stacked layout
+     below the mobile breakpoint loses the `data-label` it renders each field from. One renderer
+     remembered to call stackTableRows() again; ten did not, which is not a thing to keep
+     remembering.
+     childList only, deliberately: stamping writes ATTRIBUTES, so it cannot retrigger this and
+     loop. Watching the table as well as its bodies catches a tbody that is replaced outright
+     rather than refilled. */
+  function watch(table) {
+    if (table.__tastyStackWatch || typeof MutationObserver !== 'function') return;
+    var obs = new MutationObserver(function () {
+      if (table.__tastyStacking) return;
+      table.__tastyStacking = true;
+      try { stack(table); } finally { table.__tastyStacking = false; }
+    });
+    obs.observe(table, { childList: true, subtree: true });
+    table.__tastyStackWatch = obs;
   }
 
   function scan(root) {

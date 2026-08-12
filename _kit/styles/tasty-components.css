@@ -578,7 +578,16 @@
 .tasty-input-grid { display: grid; gap: var(--space-md); grid-template-columns: repeat(2, 1fr); }
 .tasty-input-grid.is-name { grid-template-columns: repeat(3, 1fr); }   /* First/Middle/Last — middle renders by default (InputGridName.tsx:40,132) */
 .tasty-input-grid.is-dob { grid-template-columns: repeat(3, 1fr); }
-@media (max-width: 480px) { .tasty-input-grid { grid-template-columns: 1fr; } }   /* source stacks below mediumMin 481 */
+/* The .is-* variants are named here deliberately. A bare `.tasty-input-grid` in this query is
+   one class and never beat `.tasty-input-grid.is-name`, which is two — media queries add no
+   specificity of their own — so the 3-up name and date-of-birth rows stayed 3-up on a phone and
+   pushed the whole form wider than the screen. getGridInputStyle() in the source is explicit
+   that "on mobile, cells stack vertically (full-width)". */
+@media (max-width: 480px) {
+  .tasty-input-grid,
+  .tasty-input-grid.is-name,
+  .tasty-input-grid.is-dob { grid-template-columns: 1fr; }   /* source stacks below mediumMin 481 */
+}
 
 /* ── CONTAINER: Accordion — Accordion.tsx ── */
 .tasty-accordion { border: 1px solid var(--border-color); }
@@ -1026,7 +1035,13 @@
 .tasty-consent__canvas::after { content: ""; position: absolute; left: 16px; right: 80px; bottom: 28px; border-bottom: 1px solid var(--c-border-strong); }   /* stops short of the Clear button */
 
 /* Workflow / WorkflowContainer — centered 760 panel, header + footer strips. */
-.tasty-workflow { max-width: 760px; margin: 0 auto; background: var(--white-space-base); border: 1px solid var(--border-color); }
+/* width:100% matters more than it looks. .page-content is a COLUMN flex container, and an auto
+   cross-axis margin (the `margin: 0 auto` that centres this card) switches the item off stretch
+   and onto fit-content — so the card sized itself to its own min-content instead of to the
+   column. On a phone that made a 358px column hold a 442px card, and the page scrolled sideways
+   with the right-hand side of every field cut off. width:100% puts it back on the container;
+   max-width still caps it at 760 and the auto margins still centre it. */
+.tasty-workflow { width: 100%; max-width: 760px; margin: 0 auto; background: var(--white-space-base); border: 1px solid var(--border-color); }
 .tasty-workflow__head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 10px; background: var(--white-space-z-index3); border-bottom: 1px solid var(--border-color); font-weight: 700; font-size: 16px; text-transform: capitalize; }   /* WorkflowHeader: font 16, capitalize (Workflow.tsx:144-145) */
 .tasty-workflow__title { text-align: center; }
 .tasty-workflow__body { padding: var(--space-lg); }
@@ -1279,7 +1294,6 @@
   .tasty-mini-status-tracker__indicator { width: 15px; height: 15px; }
   .tasty-mini-status-tracker__indicator:not(.is-done):not(.is-active):not(.is-denied) { width: 10px; height: 10px; }
   .tasty-mini-status-tracker__indicator > * { width: 10px; height: 10px; }
-}
 }
 
 /* ── TableBasic, Mobile format: each row becomes a stacked section ──────────

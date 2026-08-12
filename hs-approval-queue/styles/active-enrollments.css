@@ -168,6 +168,11 @@ body.hide-in-progress .tasty-navtoggle__item[onclick*="switchEnrollmentSegmentB(
   .ae-split-layout { flex-direction: column; }
   .ae-split-rule { display: none; }
   .ae-split-panel { flex-basis: auto; width: 100%; position: static; }
+  /* width:100% for the same reason the panel above needs it. Stacked, this is a COLUMN flex,
+     and `align-items: flex-start` on the layout means children do NOT stretch — so the main
+     column sized to its toolbar's min-content and hung 42px past the page instead of fitting
+     the width it was given. */
+  .ae-split-main { width: 100%; }
 }
 
 /* ═══════════════════════ Variant C — Grade Report (bespoke, not Tasty components) ═══════════════════════
@@ -275,4 +280,15 @@ body.hide-in-progress .tasty-navtoggle__item[onclick*="switchEnrollmentSegmentB(
   .gradesc-stats { margin-left: 0; gap: 20px; }
   .gradesc-card { grid-template-columns: auto 1fr; }
   .gradesc-card-courses, .gradesc-card-metrics { grid-column: 2 / -1; justify-content: flex-start; }
+}
+
+/* The toolbar is a Term select (200px floor) + a Course select (220px floor) + the search
+   field, in a row that never wrapped: 620px of floors alone on a 358px screen, which is where
+   this screen's 624px of sideways scroll came from. The floors are there to stop the selects
+   collapsing around long course names on desktop; on a phone each control takes its own line
+   instead. */
+@media (max-width: 700px) {
+  .ae-term-field,
+  .ae-course-field { min-width: 0; flex: 1 1 100%; }
+  .de-page-identity .de-header-search { flex: 1 1 100%; min-width: 0; }
 }

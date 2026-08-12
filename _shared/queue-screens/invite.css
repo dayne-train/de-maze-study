@@ -71,6 +71,16 @@
   gap: 10px;
   margin-top: 8px;
 }
+/* One per row on a phone. Two 1fr columns of a 358px page leave ~170px per tile, and the tile
+   is a fixed 80px logo beside the institution's name — so the name had ~70px and every one of
+   them was cut off mid-word. The choice being made here is which college to invite to, so the
+   name is the one thing that cannot be clipped. */
+@media (max-width: 480px) {
+  .college-tile-grid { grid-template-columns: 1fr; }
+  /* 40px of padding either side plus an 80px logo is most of a phone's width before the name
+     gets any. The tile also stops being a fixed 175px so a long name can take a third line. */
+  .college-tile { padding: 0 20px; gap: 16px; height: auto; min-height: 140px; }
+}
 
 .college-tile {
   height: 175px;

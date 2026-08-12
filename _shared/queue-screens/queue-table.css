@@ -312,7 +312,11 @@
      tasty-interactions.js, so the date column is addressed by whichever label
      that bucket uses rather than by position. */
   @media (max-width: 1200px) {
-    .queue-table [data-col="group"] { display: none; }
+    /* Group is a SECONDARY column in the queues and the first thing they can afford to shed.
+       It is the PRIMARY column on Select A Group and Edit Groups, where shedding it leaves a
+       table of descriptions and deadlines belonging to nothing. Those two opt out by naming
+       their primary column; everything else drops it as before. */
+    .queue-table:not([data-primary-col~="group"]) [data-col="group"] { display: none; }
   }
   @media (max-width: 1024px) {
     .queue-table [data-col="institution"],

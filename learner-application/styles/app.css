@@ -473,6 +473,13 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
 }
 .confirm-actions { display: flex; justify-content: center; gap: var(--space-sm); margin-top: var(--space-lg); }
 
+/* The course table sits in a .queue-table-wrap, but that class is styled in
+   _shared/queue-screens/queue-table.css, which this prototype does not load — the same trap the
+   pager fell into. Without the scroll container the table pushed the page sideways between the
+   stacking breakpoint (700px) and the desktop layout. Restated here rather than pulling in the
+   whole queue bundle. */
+.queue-table-wrap { width: 100%; overflow-x: auto; }
+
 /* ─── Registered course block (Figma 15467-218106) ───
    The course the learner ended up with, shown identically on the success screen and on the
    Dual Enrollment tab. It replaced a one-line summary row (code · title · credits) that
@@ -541,7 +548,11 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
    The panel-with-grey-header shell both course screens share, the college
    identity card, the details two-column, and the processing spinner. Table,
    pagination, buttons and modal all come from the kit — nothing rolled here. */
-.crs-wrap { max-width: 1240px; margin: 0 auto; }
+/* width:100% for the same reason .hs-select-page carries it: .page-content is a COLUMN flex
+   container, and the auto side margins that centre this panel switch it off stretch and onto
+   fit-content — so it sized to the course table's min-content (1033px) instead of the 358px
+   the phone actually has, and the whole page scrolled sideways. */
+.crs-wrap { width: 100%; max-width: 1240px; margin: 0 auto; }
 
 .crs-panel {
   border: 1px solid var(--border-color);
@@ -798,7 +809,14 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
 }
 .aer-pw-reqs:hover { text-decoration: underline; }
 /* legend is flex (kit); let it span full width so the link sits flush right */
-.tasty-fieldset > legend:has(.aer-pw-reqs) { width: 100%; padding-right: var(--space-xs); }
+.tasty-fieldset > legend:has(.aer-pw-reqs) { width: 100%; padding-right: var(--space-xs); flex-wrap: wrap; }
+/* On a phone the heading and the requirements link together need ~400px and the link is
+   nowrap, so the pair could not fit a 358px column and pushed the whole form sideways. Let the
+   link drop to its own line rather than shrink or clip it. */
+@media (max-width: 480px) {
+  .aer-legend-text { margin-right: 0; }
+  .aer-pw-reqs { margin-top: 4px; }
+}
 
 /* Password field with inline show/hide eye */
 .aer-pw { position: relative; display: block; }

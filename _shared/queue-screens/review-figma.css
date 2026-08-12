@@ -1091,6 +1091,21 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
 .appdetail-step.is-denied .appdetail-step-title { color: var(--c-danger); }
 .appdetail-step.is-denied .appdetail-step-meta { color: var(--c-danger); font-weight: 600; }
 
+/* Bulk approve / review identity strip on a phone.
+   It is a row of [count][statement] | divider | [institution], and at 390px the three parts
+   overlapped rather than overflowing — which is why a page-overflow sweep never flagged it and
+   a screenshot did. Stacked, the divider becomes a rule between the two halves instead of a
+   hairline down the middle, and the eligibility link drops below the institution name it
+   belongs to rather than being squeezed off the edge. */
+@media (max-width: 560px) {
+  .review-identity { flex-direction: column; align-items: stretch; gap: 0; padding: 24px 16px 0; }
+  .review-identity-left { padding-right: 0; }
+  .review-identity-divider { width: auto; height: 1px; margin: 16px 0; align-self: auto; }
+  .review-identity-right { padding: 0; }
+  .bulk-net-head { flex-wrap: wrap; }
+  .bulk-req-link { flex-basis: 100%; }
+}
+
 /* ── Right rail: meta blocks ── */
 .appdetail-side-label {
   display: flex; align-items: center; gap: 8px;

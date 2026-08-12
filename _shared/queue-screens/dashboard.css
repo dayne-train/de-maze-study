@@ -274,7 +274,11 @@
     .workspace-cards { grid-template-columns: minmax(0, 1fr); }
   }
   .workspace-card {
-    min-width: 0; height: 340px;
+    /* min-height, not height. A fixed 340px is enough for a two-line description at desktop
+       and not for the four lines the same copy takes on a phone, so the text overflowed its
+       own card and ran underneath the button. The card grows instead; the grid still stretches
+       every card in a row to match the tallest. */
+    min-width: 0; min-height: 340px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 20px 30px; gap: 10px;
     border-left: 1px solid var(--c-border);
@@ -440,8 +444,10 @@
   .de-searchbanner .de-options { order: 4; margin-left: 0; flex: none; }
   .search-banner.de-searchbanner { padding: 24px; min-height: 0; }
 
-  /* SearchInput at the DS sm scale, matching the buttons beside it. */
-  .de-searchbanner .search-input { height: 40px; font-size: var(--font-small); padding-left: 40px; }
+  /* SearchInput at the DS sm scale, matching the buttons beside it. The CONTROL shrinks; the
+     text it holds does not. 13px was the one piece of type that got smaller on the screen where
+     it is hardest to read, and any input under 16px also makes iOS zoom the page on focus. */
+  .de-searchbanner .search-input { height: 40px; font-size: var(--font-medium); padding-left: 40px; }
   .de-searchbanner .search-icon { left: 12px; font-size: var(--font-medium); }
   .de-searchbanner .search-filter-btn { font-size: var(--font-medium); padding: 0 10px; }
   .de-searchbanner .search-btn { height: 40px; padding: 0 20px; font-size: var(--font-small); }
@@ -471,7 +477,8 @@
    search + export would otherwise strand their kebab alone on a row, so there
    the search drops its floor and shares the line with it instead. */
 @media (max-width: 480px) {
-  .de-searchbanner .tasty-section-header__sub { display: none; }
+  /* The subtitle stays. It was hidden here to buy vertical space, but it is the line that says
+     what this screen is for, and it costs one wrapped line to keep. */
   .de-searchbanner .de-header-search { min-width: 0; }
   .de-searchbanner:has(.de-add-enrollment-btn) .de-header-search { flex: 1 1 100%; }
   .de-searchbanner .de-header-actions { flex: 1 1 100%; }

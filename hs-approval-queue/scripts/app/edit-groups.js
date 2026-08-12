@@ -72,7 +72,7 @@
             '</div>' +
             '<h3 class="invite-groups-section-heading">Available Groups</h3>' +
             '<div class="queue-table-wrap" style="margin:0;">' +
-              '<table class="queue-table editgroups-table">' +
+              '<table class="queue-table is-stackable editgroups-table" data-primary-col="group">' +
                 '<thead><tr>' +
                   '<th class="col-check"><label class="tasty-checkbox" id="eg-select-all"><span class="tasty-checkbox__box"></span></label></th>' +
                   '<th><span class="th-inner">Group</span></th>' +
@@ -94,6 +94,11 @@
     var mount = document.getElementById('edit-groups-content');
     mount.innerHTML = html;
     if (typeof resolveTastyAssets === 'function') resolveTastyAssets(mount);
+    /* This screen builds its table from scratch every time it opens, so it misses the pass that
+       stamps column names and field labels at load. Without them a narrow layout hides headers
+       whose cells stay put, and the stacked rows below the mobile breakpoint have no labels to
+       render. Stamping also attaches the watcher that keeps them in step from here on. */
+    if (typeof stackTableRows === 'function') stackTableRows(mount);
 
     /* Row checkbox toggles */
     mount.querySelectorAll('[data-eg-check]').forEach(function(cb) {
