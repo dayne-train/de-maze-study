@@ -152,11 +152,11 @@
     if (isNaN(refDate.getTime())) return out;
 
     var refIdx = (status === 'active') ? 5
-      : (status === 'denied' || status === 'cancelled') ?
-          ((app.deniedState === 'Application') ? 1
-           : (app.deniedState === 'Guardian Consent') ? 2
-           : (app.deniedState === 'Institution Review' || app.deniedState === 'College Review') ? 4
-           : 3)
+      : (status === 'denied')    ? _closedStepIdx(app)
+      /* The cancelled step is no longer part of the timeline (it is upcoming now), so date from
+         the last step that actually completed — otherwise the reference step is not in the
+         active set, and every completed step above loses its timestamp. */
+      : (status === 'cancelled') ? Math.max(0, _closedStepIdx(app) - 1)
       : 1; /* pending / waiting: the stored date is when the Application step completed */
 
     var activeIdx = [];
@@ -189,6 +189,15 @@
       out[idx] = label + ' at ' + hr12 + ':' + mm + (hr < 12 ? 'am' : 'pm') + ' PST';
     });
     return out;
+  }
+
+  /* Which step a closed application stopped at. Was written out twice, once for the timeline
+     and once for the step states, which is how the two could disagree. */
+  function _closedStepIdx(app) {
+    return (app.deniedState === 'Application') ? 1
+         : (app.deniedState === 'Guardian Consent') ? 2
+         : (app.deniedState === 'Institution Review' || app.deniedState === 'College Review') ? 4
+         : 3;
   }
 
   /* Per-step lifecycle state → complete | current | upcoming | denied */
@@ -225,13 +234,21 @@
       s[0]='complete'; s[1]='complete'; s[2]='complete'; s[3]='complete'; s[4]='complete';
     }
     else if (status === 'active') { s = ['complete','complete','complete','complete','complete','complete']; }
-    else if (status === 'denied' || status === 'cancelled') {
-      var di = (app.deniedState === 'Application') ? 1
-             : (app.deniedState === 'Guardian Consent') ? 2
-             : (app.deniedState === 'Institution Review' || app.deniedState === 'College Review') ? 4
-             : 3;
+    else if (status === 'denied') {
+      var di = _closedStepIdx(app);
       for (var i=0;i<di;i++) s[i]='complete';
       s[di]='denied';
+    }
+    /* CANCELLED is not a denial and must not be drawn as one. The learner withdrew the
+       application; nobody refused it. Marking the step it stopped at with the denied cross put a
+       red X on, say, Parent/Guardian Consent — which reads as the guardian having declined, a
+       different and far more consequential event than the student changing their mind.
+       So: whatever genuinely completed stays complete, and the step it never reached stays
+       upcoming. The status tag and the detail's own note carry the fact that it was cancelled.
+       This matches the learner's own tracker, which has never drawn an X for cancelled. */
+    else if (status === 'cancelled') {
+      var ci = _closedStepIdx(app);
+      for (var c=0;c<ci;c++) s[c]='complete';
     }
     return s;
   }

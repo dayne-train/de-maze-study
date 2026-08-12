@@ -71,7 +71,6 @@
          the first application. */
       p.note('Applications');
       p.segmented([['One', 'single'], ['Several (all buckets)', 'multi']], at('mix', 'single'), function (v) { axis('appMix', v); });
-      p.toggle('Reapply after cancel', at('reapply', 'on') === 'on', function (on) { axis('reapply', on ? 'on' : 'off'); });
 
       p.section('Appearance');
       p.select(['default', 'light', 'white', 'dark', 'contrast'], at('theme', 'light'), function (v) { dev().setTheme && dev().setTheme(v); });

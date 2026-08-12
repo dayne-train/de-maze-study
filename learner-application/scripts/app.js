@@ -80,7 +80,6 @@
     appMix:       'single',   /* 'single' = one application (the selected state) · 'multi' = a
                                 portfolio spanning all three DE-tab buckets, so the NavToggle,
                                 its bucket filtering and its count badges are all reachable */
-    reapply:      'on',
   };
 
   /* ─── Session state ─── */
@@ -435,7 +434,7 @@
       'registered-in-session':   ['In session',       'is-success', null],
       'denied-counselor':        ['Not approved',     'is-error',   null],
       'denied-college':          ['Not accepted',     'is-error',   null],
-      'cancelled':               ['Cancelled',        'is-bold',    null],
+      'cancelled':               ['Cancelled',        'is-bold',    'cancel'],
     };
     var t = map[appState] || ['—', '', null];
     var icon = t[2] ? tastyIcon(t[2], { size: 14 }) : '';
@@ -559,13 +558,20 @@
       }), 'is-success');
     }
 
-    // CANCELLED → CallToAction with optional Reapply
+    // CANCELLED → a statement of record, no action (Figma 15762-186014)
     if (appState === 'cancelled') {
-      var canReapply = DEV.reapply === 'on';
+      /* What it was waiting on when the learner stopped it. There is no record of the state it
+         was in, so it is derived from the gates that were owed — the same inputs the tracker
+         uses. Without this the box says an application was cancelled and nothing about where it
+         had got to, which is the one thing the learner is likely to be reconstructing. */
+      var owed = [];
+      if (guardianOn())  owed.push('parent/guardian');
+      if (counselorOn()) owed.push('high school approval');
+      var awaiting = owed.length ? 'Was awaiting ' + owed.join(' and ') : 'Was awaiting institution review';
       return wrap(cta({
         title: 'Application Was Cancelled',
-        body: 'Cancelled on ' + STEP_DONE_TS + '. ' + (canReapply ? 'You can apply again while the enrollment window is open.' : 'The enrollment window has closed.'),
-        button: canReapply ? '<button type="button" class="tasty-btn is-secondary is-sm" onclick="startApplicationFlow()">Reapply</button>' : ''
+        body: 'Cancelled on ' + STEP_DONE_TS +
+              '<span class="de-cancel-awaiting">' + esc(awaiting) + '</span>'
       }));
     }
 
@@ -749,7 +755,16 @@
     var invites = enrollments.filter(function (it) {
       return (it.kind === 'invite' || it.kind === 'discovery') && !isDismissed(it);
     });
-    var apps    = enrollments.filter(function (it) { return it.kind === 'app'; });
+    /* A cancelled application does not appear on the dashboard. The dashboard answers "what is
+       happening with my enrolments", and a cancelled one is the learner's own closed decision —
+       there is no next step, nothing owed by anyone, and nothing to track. It is still on the
+       Dual Enrollment tab under Closed, which is where you go to look something up rather than
+       to be told what needs doing.
+       Denied is NOT filtered: that is somebody else's decision about the learner, and they need
+       to see it. */
+    var apps    = enrollments.filter(function (it) {
+      return it.kind === 'app' && it.appState !== 'cancelled';
+    });
     var html = invites.map(function (it) { return renderDashboardStatusTracker(it); }).join('');
     if (apps.length === 1)     html += renderDashboardStatusTracker(apps[0]);
     else if (apps.length > 1)  html += renderAppsSummaryRow(apps);
@@ -921,11 +936,15 @@
     // tag, never under the kebab); the OptionsMenu sits OUTSIDE that group, to its right. Kebab +
     // App ID only on live, actionable states — none once registered/closed; Cancel is pre-registration.
     var live = ['parent-consent-pending','counselor-pending','dual-pending','college-review','approved'].indexOf(appState) !== -1;
+    /* Cancelled keeps its application ID (Figma 15762-186014) though it is not live: the learner
+       cancelled it themselves, and the id is what they quote if they ask about it. The kebab still
+       goes — Cancel is the only thing in it, and it has already happened. */
+    var showAppId = live || appState === 'cancelled';
     var asideHtml =
       '<div class="de-app-aside">' +
         '<div class="de-app-aside__meta">' +
           renderStatusTag(appState) +
-          (live ? '<span class="de-app-id">Application ID: ' + esc(item.appId || APP.id) + '</span>' : '') +
+          (showAppId ? '<span class="de-app-id">Application ID: ' + esc(item.appId || APP.id) + '</span>' : '') +
         '</div>' +
         (live ? renderOptionsMenu() : '') +
       '</div>';
@@ -934,8 +953,15 @@
        and shows what the learner got — the course, then the confirmation band. Anything still
        moving keeps the tracker plus its action section. */
     var done = appState === 'registered' || appState === 'registered-in-session';
+    /* A cancelled application has no progress to show: the learner stopped it, so a tracker of
+       steps nobody will take reads as though it were still moving. Figma 15762-186014 drops it,
+       and drops the receiving institution from the header too — the application never reached
+       one, and naming a college implies a relationship that does not exist. */
+    var cancelled = appState === 'cancelled';
     var lower = done
       ? registeredCourseBlock(registeredCourseOrDefault()) + registeredDoneBand(registeredCourseOrDefault())
+      : cancelled
+      ? renderDynamicActionCardSection(item)
       : '<div class="de-stepper-area">' + renderFullTracker(appState, item.inviteSource) + '</div>' +
         renderDynamicActionCardSection(item);
 
@@ -943,7 +969,11 @@
     // Lower region is the shared DynamicActionCardSection (header + cards, or a CTA).
     return '<div class="tasty-member-box de-member-box' + (done ? ' is-registered' : '') +
       '" style="--member-color:var(' + HS.accent + ')">' +
-      '<div class="de-inst-header">' + instHtml + asideHtml +
+      '<div class="de-inst-header' + (cancelled ? ' de-inst-header--single' : '') + '">' +
+        (cancelled
+          ? instSectionHeader('assets/pioneer-logo.png', 'P', 'de-inst-logo--hs', HS.name, HS.city)
+          : instHtml) +
+        asideHtml +
       '</div>' +
       lower +
     '</div>';
@@ -2245,7 +2275,7 @@
     window.DELink.register({
       id: 'learner-application',
       carryNet: true,
-      order: ['state', 'mix', 'invite', 'path', 'schools', 'colleges', 'reapply',
+      order: ['state', 'mix', 'invite', 'path', 'schools', 'colleges',
               'theme', 'course', 'screen', 'seg'],
       params: {
 
@@ -2288,12 +2318,6 @@
           read:  function () { return DEV.collegeCount === 'multiple' ? 'many' : '1'; },
           apply: function (v) { DEV.collegeCount = (v === 'many') ? 'multiple' : 'single'; return true; } },
 
-        /* Not BOOL_ALIAS: that canonicalises to '1'/'0', which this param's own vocabulary
-           ('on'/'off') would then reject, so reapply=no silently did nothing. */
-        reapply: { phase: 'state', values: ['on', 'off'], 'default': 'on',
-          alias: { '1': 'on', 'true': 'on', yes: 'on', '0': 'off', 'false': 'off', no: 'off' },
-          read:  function () { return DEV.reapply; },
-          apply: function (v) { DEV.reapply = (v === '1' || v === 'on') ? 'on' : 'off'; return true; } },
 
         /* ── phase 'view' — after initDevPanel(), so __dev and every fixture exist ── */
         theme: { phase: 'view', values: ['default', 'light', 'white', 'dark', 'contrast'],

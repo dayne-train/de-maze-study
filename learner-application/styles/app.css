@@ -480,6 +480,14 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
    whole queue bundle. */
 .queue-table-wrap { width: 100%; overflow-x: auto; }
 
+/* The "was awaiting …" line under a cancellation — its own line, a step quieter than the
+   timestamp above it (Figma 15762-186014). */
+.de-cancel-awaiting {
+  display: block;
+  color: var(--body-font-weak);
+  margin-top: 2px;
+}
+
 /* ─── Registered course block (Figma 15467-218106) ───
    The course the learner ended up with, shown identically on the success screen and on the
    Dual Enrollment tab. It replaced a one-line summary row (code · title · credits) that
