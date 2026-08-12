@@ -379,6 +379,14 @@
 
     /* ── Contextual actions ── */
     var actions;
+    /* Group is assignable only while the application is still in motion. Once the learner has
+       registered, the group and the course they took from it are settled and Parchment is not
+       where either changes — so the pencil comes OFF rather than being disabled: there is
+       nothing behind it to offer. Denied and cancelled are closed for the same reason. */
+    var groupEditBtn = (status === 'active' || status === 'denied' || status === 'cancelled')
+      ? ''
+      : ' <button class="appdetail-group-edit" id="detail-group-edit" aria-label="Edit group"><i class="ti ti-edit"></i></button>';
+
     if (status === 'pending') {
       actions =
         '<div class="appdetail-actions">' +
@@ -530,7 +538,7 @@
           '<hr class="appdetail-rule">' +
 
           '<div class="appdetail-side-block">' +
-            '<div class="appdetail-side-label"><i class="ti ti-users"></i> Group(s) <button class="appdetail-group-edit" id="detail-group-edit" aria-label="Edit group"><i class="ti ti-edit"></i></button></div>' +
+            '<div class="appdetail-side-label"><i class="ti ti-users"></i> Group(s)' + groupEditBtn + '</div>' +
             '<div class="appdetail-group-value">' + groupsValueHTML(app) + '</div>' +
           '</div>' +
 
@@ -716,7 +724,14 @@
          the (TERM) chip when the name doesn't already say it. */
       var nameHasTerm = g.term && g.name.toLowerCase().indexOf(g.term.toLowerCase()) !== -1;
       var term = (g.term && !nameHasTerm) ? ' <span class="appdetail-group-term">(' + escapeHtml(g.term) + ')</span>' : '';
-      var courseBit = (i === 0 && app.course) ? '<span class="appdetail-group-course">' + escapeHtml(app.course) + '</span>' : '';
+      /* A group is what grants access to courses, so the course belongs to the group it came
+         with, captioned so the second line is not read as a subtitle of the group name. It
+         used to be an unstyled span nested in the name, which rendered as
+         "…Fall 2026MATH1D — Calculus" with nothing between them. */
+      var courseBit = (i === 0 && app.course)
+        ? '<span class="appdetail-group-caption">Registered course</span>' +
+          '<span class="appdetail-group-course">' + escapeHtml(app.course) + '</span>'
+        : '';
       return '<span class="appdetail-group-line">' + escapeHtml(g.name) + term + courseBit + '</span>';
     }).join('');
   }

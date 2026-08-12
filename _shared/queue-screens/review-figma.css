@@ -1107,9 +1107,21 @@ body:not(.show-attachments) .appdetail-attachments { display: none; }
   margin: 10px 0 0;
   border-left: 3px solid var(--c-brand);
   padding-left: 12px;
-  display: flex; flex-direction: column; gap: 3px;
+  /* 14px, not the 3px this had when a group was a single line. A group is now a stack — name,
+     caption, course — and 3px between two of those stacks stops reading as a break BETWEEN
+     groups and starts reading as a fourth line OF the first one. The bar runs the full height
+     either way, so the groups stay visibly one set however far apart they sit. */
+  display: flex; flex-direction: column; gap: 14px;
 }
-.appdetail-group-course { font-size: 12.5px; font-weight: 400; color: var(--c-text-muted); }
+/* The course a group granted, on its own line and captioned. It was an unstyled inline span
+   nested inside the group name, so it rendered as "…Fall 2026MATH1D — Calculus". */
+.appdetail-group-caption {
+  display: block;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--c-text-subtle);
+  margin-top: 7px;
+}
+.appdetail-group-course { display: block; font-size: 12.5px; font-weight: 400; color: var(--c-text-muted); }
 
 /* Rail school chip — NO current consumer (Aug 5, 2026): the school moved into the detail's
    identity row as "Applying From". Rules kept, not deleted, in case the chip comes back. */
