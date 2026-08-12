@@ -21,11 +21,18 @@
   // Universal "View application" action — opens the unified application detail page.
   // Remembers the originating screen so Back/Cancel/Return lead there (path remembrance),
   // e.g. Global Search → View → Back returns to Global Search, not the queue.
+  /* The list screens a detail can legitimately be opened FROM. Anything else is not a
+     destination to send someone back to, so it falls back to the queue.
+     This used to exclude only 'review', which held while the detail was always reached by
+     clicking a row. It is not the only way in any more: a deep link, the canvas board, and
+     every screen in the Maze study open it COLD, with the prototype's own start screen still
+     active — so the origin recorded was `path-select`, and "Return to Queue" sent people out
+     to the persona chooser. */
+  var REVIEW_ORIGINS = ['de', 'adv-search', 'invites'];
   window.viewApplication = function(id) {
     var current = document.querySelector('.screen.active');
     var origin  = current ? current.id.replace('screen-', '') : 'de';
-    // Detail can only be opened from a list screen; ignore anything unexpected.
-    window.__reviewOrigin = (origin === 'review') ? 'de' : origin;
+    window.__reviewOrigin = REVIEW_ORIGINS.indexOf(origin) !== -1 ? origin : 'de';
     showScreen('review', id);
   };
 

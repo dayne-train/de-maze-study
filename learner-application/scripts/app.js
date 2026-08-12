@@ -56,21 +56,17 @@
   ];
 
   /* Courses offered by the college, per Figma 13431-194273 (Select A Course) and
-     13484-75159 (Course Details). Twelve rows so the table paginates 1–10 of 12
-     exactly as designed. MATH1D is the study's canonical pick — it is the course
-     on Jessica Cumberland's record in both admin queues. */
+     13484-75159 (Course Details).
+     THREE rows, not the original twelve. Twelve existed to show the table paginating 1-10 of
+     12, which demonstrated the component at the cost of the decision: a study participant
+     asked to register was scanning a page of near-identical rows to find one. Three distinct
+     courses — a maths, an english and an online psychology — make the choice legible, and
+     whichever is picked is the one the registered screen then shows.
+     MATH1D stays the canonical pick: it is the course on Jessica Cumberland's record in both
+     admin queues, and the fallback the registered screen uses when it is reached cold. */
   var COURSES = [
-    { id:'AVC169',  title:'2D Media Design',                  term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:2, location:'Pioneer High School',           crn:'10201', instructor:'Prof. Dana Whitfield',  modality:'On Campus', meets:'MW 10:00–11:15am', seats:8,  tuition:82.00,  transferrable:true,  units:'2.0 semester units', description:'An introduction to two-dimensional design principles: composition, color, typography and visual hierarchy, worked through studio projects in both analog and digital media.' },
-    { id:'AVC177',  title:'Digital Photographic Imaging I',   term:'Fall 2026', start:'SEP 15, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10214', instructor:'Prof. Ruben Ortega',    modality:'On Campus', meets:'TTh 1:00–2:20pm',  seats:5,  tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'Camera operation, exposure, and digital darkroom technique, with an emphasis on developing a personal visual vocabulary through weekly shooting assignments.' },
     { id:'ENG101',  title:'First-Year Composition',           term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10228', instructor:'Prof. Alice Marchetti', modality:'On Campus', meets:'MWF 9:00–9:50am',  seats:12, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'College-level reading and writing: argument, evidence, revision, and research practice across a sequence of essays.' },
     { id:'MATH1D',  title:'Calculus',                         term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:3, location:'West Valley Community College', crn:'10353', instructor:'Prof. Michael Angelone', modality:'On Campus', meets:'TBA',              seats:10, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'The focus and themes of the Introduction to Calculus course address the most important foundations for applications of mathematics in science, engineering and commerce. The course emphasizes the key ideas and historical motivation for calculus, while at the same time striking a balance between theory and application, leading to a mastery of key threshold concepts in foundational mathematics.' },
-    { id:'MAT241',  title:'Calculus With Analytic Geometry III', term:'Fall 2026', start:'AUG 28, 2026', end:'DEC 17, 2026', credits:4, location:'Pioneer High School',        crn:'10361', instructor:'Prof. Helen Brody',    modality:'On Campus', meets:'MWF 11:00–12:10pm', seats:6, tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Multivariable calculus: vectors, partial derivatives, multiple integrals and vector fields, with applications in physics and engineering.' },
-    { id:'MUP181',  title:'Chamber Music Ensembles',          term:'Fall 2026', start:'SEP 15, 2026', end:'DEC 17, 2026', credits:1, location:'West Valley Community College', crn:'10377', instructor:'Prof. Sofia Delacroix', modality:'On Campus', meets:'Th 4:00–5:30pm',  seats:4,  tuition:41.00,  transferrable:false, units:'1.0 semester unit',  description:'Small-ensemble performance for intermediate and advanced instrumentalists, culminating in an end-of-term recital. Audition required.' },
-    { id:'MUP131',  title:'Classic Piano I',                  term:'Fall 2026', start:'AUG 07, 2026', end:'DEC 17, 2026', credits:1, location:'West Valley Community College', crn:'10384', instructor:'Prof. Sofia Delacroix', modality:'On Campus', meets:'F 2:00–3:00pm',   seats:9,  tuition:41.00,  transferrable:false, units:'1.0 semester unit',  description:'Foundational keyboard technique, sight-reading and repertoire for students with little or no prior piano experience.' },
-    { id:'MAT151',  title:'College Algebra/Functions',        term:'Fall 2026', start:'AUG 28, 2026', end:'DEC 17, 2026', credits:4, location:'Online',                        crn:'10390', instructor:'Prof. Nathan Reyes',   modality:'Online',    meets:'Asynchronous',    seats:22, tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Functions, graphs, systems of equations and an introduction to modelling, preparing students for pre-calculus and statistics pathways.' },
-    { id:'HIS103',  title:'United States History To 1865',    term:'Fall 2026', start:'AUG 07, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10402', instructor:'Prof. Grace Okonkwo',  modality:'On Campus', meets:'TTh 9:30–10:45am', seats:14, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'The American past from pre-contact through Reconstruction, with attention to primary sources and competing historical interpretations.' },
-    { id:'SPA101',  title:'Elementary Spanish I',             term:'Fall 2026', start:'AUG 10, 2026', end:'DEC 17, 2026', credits:4, location:'Online',                        crn:'10418', instructor:'Prof. Carmen Villalobos', modality:'Online', meets:'Asynchronous',   seats:18, tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Introductory Spanish: everyday communication, present and past tenses, and cultural context across the Spanish-speaking world.' },
-    { id:'BIO156',  title:'Introductory Biology',             term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:4, location:'West Valley Community College', crn:'10425', instructor:'Prof. Amara Osei',     modality:'On Campus', meets:'MW 1:00–3:30pm',  seats:7,  tuition:165.00, transferrable:true,  units:'4.0 semester units', description:'Cell biology, genetics and evolution with a weekly laboratory. Meets the laboratory science requirement for most transfer pathways.' },
     { id:'PSY101',  title:'Introduction to Psychology',       term:'Fall 2026', start:'AUG 10, 2026', end:'DEC 17, 2026', credits:3, location:'Online',                        crn:'10431', instructor:'Prof. Ellis Grant',    modality:'Online',    meets:'Asynchronous',    seats:26, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'A survey of psychological science: research methods, cognition, development, personality and psychological disorders.' },
   ];
 
@@ -1267,6 +1263,12 @@
         '</td>' +
       '</tr>';
     }).join('');
+
+    /* Page controls only when there is more than one page. With three courses the pager was
+       a row of controls that could not go anywhere, sitting under the decision it was meant to
+       help with. The count line stays: "showing 3 of 3" is still worth saying. */
+    var pagEl = document.getElementById('crs-pagination');
+    if (pagEl) pagEl.classList.toggle('is-single-page', pages <= 1);
 
     var label = document.getElementById('crs-results-label');
     if (label) {

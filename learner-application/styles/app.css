@@ -614,6 +614,9 @@ body { margin: 0; font-family: var(--font-family-base); color: var(--body-font-b
   display: flex; flex-direction: column; align-items: center; gap: var(--space-sm);
   padding: var(--space-sm) 0 var(--space-lg);
 }
+/* Nothing to page through — the buttons go, the count stays. */
+.table-pagination.is-single-page .pagination-buttons,
+.table-pagination.is-single-page .pagination-per-page { display: none; }
 .table-pagination.is-centered { justify-content: center; gap: var(--space-lg); }
 .pagination-range {
   font-size: var(--font-xSmall); font-weight: 600; letter-spacing: 0.07em;

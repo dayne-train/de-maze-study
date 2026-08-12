@@ -53,7 +53,7 @@
      participants searching different names are doing the same thing and belong on the
      same path. */
   var OWNED = ['screen', 'seg', 'mode', 'app', 'journey', 'state', 'step', 'variant',
-               'sel', 'col', 'grp', 'course', 'modal', 'q'];
+               'sel', 'col', 'grp', 'course', 'modal', 'q', 'from'];
 
   var desc = null;        // the active prototype descriptor
   var applying = false;   // true while WE are driving; suppresses pushState

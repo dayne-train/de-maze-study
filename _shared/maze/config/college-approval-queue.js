@@ -183,6 +183,14 @@
           if (currentActionIds && currentActionIds.length) sel = currentActionIds.join(',');
         } catch (e) {}
       }
+      /* WHERE the admit workflow was entered from. requestApproveConsent() reads that off the
+         live DOM (is the detail showing?) and keeps it in `currentActionSource`, which the page
+         load destroys — so the admin was returned to the TABLE even when they started from an
+         application detail, and the commit ran the queue's path rather than the detail's. */
+      var from = null;
+      if (id === 'screen-admit-confirm') {
+        try { if (typeof currentActionSource !== 'undefined') from = currentActionSource; } catch (e) {}
+      }
       /* Edit Learner and Edit Groups are rebuilt from a subject the same way the review
          screen is, and neither had one: arriving from the Add Learners cards produced a screen
          with no form on it at all. `sel` carries WHICH learner (absent = the Add case, which is
@@ -221,6 +229,7 @@
         app:  egApp || window.currentReviewId || null
       };
       if (sel) out.sel = sel;
+      if (from) out.from = from;
       return out;
     },
 
@@ -293,6 +302,15 @@
       if (p.screen === 'admit-confirm' && p.sel) {
         var admitId = p.sel.split(',')[0];
         var admitApp = knownApp(admitId) && window.findAppAnywhere(admitId);
+        /* Started from the application detail: re-enter through the detail's own Admit button.
+           That rebuilds currentActionSource, so the commit runs the detail's path and lands
+           back on the detail rather than running the queue's path and landing on the table. */
+        if (admitApp && p.from === 'review' && typeof window.viewApplication === 'function') {
+          window.viewApplication(admitId);
+          var admitBtn = document.getElementById('detail-approve-btn');
+          if (admitBtn) { admitBtn.click(); return; }
+          console.warn('[maze-shim] detail has no Admit action for "' + admitId + '" — using the queue path');
+        }
         if (admitApp && typeof window.requestApproveConsent === 'function') {
           window.requestApproveConsent(
             admitId, admitApp.institution,
