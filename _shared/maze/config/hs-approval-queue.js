@@ -467,13 +467,29 @@
          Confirm button does nothing. */
       if (p.modal === 'approve') {
         var target = p.app;
-        if (target && knownApp(target) && typeof window.approveFromQueue === 'function') {
+        if (!(target && knownApp(target))) {
+          console.warn('[maze-shim] approve modal without a known application — showing the queue');
           window.showScreen('de');
-          window.approveFromQueue(target);
           return;
         }
-        console.warn('[maze-shim] approve modal without a known application — showing the queue');
+        /* Restore the screen the participant was ON, then re-open the modal from THAT screen.
+           This used to force the queue, which was wrong twice over. Visibly: approve from an
+           application detail and the modal came back over the applications table, so the
+           participant was somewhere they had not been. Invisibly, and worse: the prototype has
+           two approve paths and doEndorse() branches on whether the detail is showing
+           (`fromReview`), so re-entering through the queue path also changed what Confirm did
+           afterwards.
+           The detail path is re-entered by clicking the screen's own Approve button rather than
+           by calling into the module, because confirmEndorse() is not exposed and the button is
+           the same affordance the participant used. */
+        if (p.screen === 'review' && typeof window.viewApplication === 'function') {
+          window.viewApplication(target);
+          var approveBtn = document.getElementById('detail-approve-btn');
+          if (approveBtn) { approveBtn.click(); return; }
+          console.warn('[maze-shim] detail has no Approve action for "' + target + '" — using the queue path');
+        }
         window.showScreen('de');
+        if (typeof window.approveFromQueue === 'function') window.approveFromQueue(target);
         return;
       }
 

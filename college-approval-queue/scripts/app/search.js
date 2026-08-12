@@ -395,6 +395,10 @@
     }
     empty.style.display = 'none';
     if (pagEl) pagEl.style.display = '';
+    /* Sort the WHOLE result set before paginating. Sorting the page slice instead would
+       reorder the ten rows you can see and leave the other pages where they were, which is
+       not sorting — it is shuffling a window. */
+    if (window.DETableSort) DETableSort.apply('#adv-results-table', advSearch.results);
     var pg = advResultPag.paginate(advSearch.results);
     var rows = '';
     pg.slice.forEach(function(a) {

@@ -343,7 +343,11 @@
       ['#denied-table',         A, { col: 'date', dir: 'desc' }, function () { deniedPag.page = 1; renderDeniedTable(); }],
       ['#invited-table',        A, { col: 'date', dir: 'desc' }, function () { renderInvitedTable(); }],
       ['#invite-learner-table', R, { col: 'name', dir: 'asc'  }, function () { renderInviteLearners(); }],
-      ['#invite-groups-table',  G, { col: 'group', dir: 'asc' }, function () { renderInviteGroups(); }]
+      ['#invite-groups-table',  G, { col: 'group', dir: 'asc' }, function () { renderInviteGroups(); }],
+      /* Global Search Results. It was the one queue-shaped table with no sorting at all: not
+         wired here, and no sort control of its own either, so a result set arrived in whatever
+         order the search happened to build it. */
+      ['#adv-results-table',    A, { col: 'date', dir: 'desc' }, function () { advResultPag.page = 1; renderAdvancedResults(); }]
     ];
     reg.splice(4, 0, ['#admitted-table', A, { col: 'date', dir: 'desc' },
                      function () { admittedPag.page = 1; renderAdmittedTable(); }]);
