@@ -50,7 +50,7 @@
   /* Colleges that can invite (multi-college invite + multi-app states).
      terms = the term/subject offers named in invite copy. */
   var INVITE_COLLEGES = [
-    { name: 'West Valley Community College', abbr: 'WVCC', city: 'Phoenix, AZ',   terms: ['Engineering - Dual Enrollment Fall 2026', 'Math - Dual Enrollment Fall 2026'] },
+    { name: 'West Valley Community College', abbr: 'WVCC', city: 'Phoenix, AZ',   terms: ['Math - Dual Enrollment Fall 2026'] },
     { name: 'Northern Arizona University',   abbr: 'NAU',  city: 'Flagstaff, AZ', terms: ['Fall 2026 Cohort'] },
     { name: 'Grand Canyon University',       abbr: 'GCU',  city: 'Phoenix, AZ',   terms: [] },
   ];
@@ -135,7 +135,7 @@
     return keep;
   }
 
-  /* ─── "Engineering - Dual Enrollment Fall 2026, and Math - Dual Enrollment Fall 2026" ─── */
+  /* ─── one term -> "<strong>Math - Dual Enrollment Fall 2026</strong>"; many -> "A, B, and C" ─── */
   function joinTerms(terms) {
     if (!terms || !terms.length) return '';
     if (terms.length === 1) return '<strong>' + esc(terms[0]) + '</strong>';
@@ -272,9 +272,13 @@
       return { line1: STEP_DONE_TS, line2: denial };
     }
     if (st === 'active') {
-      // line1 = responsible party; line2 = deadline (Register only). The High School Approval
-      // step used to print the admin's email here — gone with the named admin (Aug 5, 2026).
-      var line2 = idx === 4 ? 'Register by APR 25' : '';
+      // line1 = responsible party; line2 = the party's notification email (so the learner
+      // sees where the request went), or the Register deadline on the last step. The High
+      // School Approval step stays email-less — it routes to the school's queue, which has
+      // no learner-owned address (null NOTIFY email, Aug 5, 2026).
+      var notifyKey = idx === 1 ? 'guardian' : idx === 2 ? 'hsadmin' : null;
+      var email = notifyKey && NOTIFY[notifyKey] ? NOTIFY[notifyKey].email : null;
+      var line2 = idx === 4 ? 'Register by APR 25' : (email || '');
       return { line1: STEP_PARTIES[idx] || '', line2: line2 };
     }
     // pending — line1 = responsible-party name; line2 empty.
@@ -1429,7 +1433,7 @@
     var from    = counselor ? 'Pioneer HS' : 'West Valley CC';
     var inviter = counselor ? 'Your high school admin at Pioneer High School' : 'West Valley Community College';
     var atName  = counselor ? 'Pioneer High School' : 'West Valley Community College';
-    var terms   = '<strong>Engineering - Dual Enrollment Fall 2026</strong> and <strong>Math - Dual Enrollment Fall 2026</strong>';
+    var terms   = '<strong>Math - Dual Enrollment Fall 2026</strong>';
     var setText = function (id, txt) { var el = document.getElementById(id); if (el) el.textContent = txt; };
     var setHtml = function (id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; };
     setText('eml-from', from);
