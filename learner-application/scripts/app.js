@@ -272,13 +272,10 @@
       return { line1: STEP_DONE_TS, line2: denial };
     }
     if (st === 'active') {
-      // line1 = responsible party; line2 = the party's notification email (so the learner
-      // sees where the request went), or the Register deadline on the last step. The High
-      // School Approval step stays email-less — it routes to the school's queue, which has
-      // no learner-owned address (null NOTIFY email, Aug 5, 2026).
-      var notifyKey = idx === 1 ? 'guardian' : idx === 2 ? 'hsadmin' : null;
-      var email = notifyKey && NOTIFY[notifyKey] ? NOTIFY[notifyKey].email : null;
-      var line2 = idx === 4 ? 'Register by APR 25' : (email || '');
+      // line1 = responsible party; line2 = deadline (Register only). The party's email is NOT
+      // shown here in a pending state — it already appears in the notification card below the
+      // tracker (member box). The High School step never had one (named admin gone Aug 5, 2026).
+      var line2 = idx === 4 ? 'Register by APR 25' : '';
       return { line1: STEP_PARTIES[idx] || '', line2: line2 };
     }
     // pending — line1 = responsible-party name; line2 empty.
