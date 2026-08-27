@@ -1,4 +1,8 @@
-Built:  2026-08-12 14:36:58 MDT
-Source: ~/Desktop/Parchment/dual-enrollment-design/dual-enrollment/prototypes
-Commit: 7b6f971 on main
-Dirty:  0 uncommitted file(s)
+Built:  2026-08-27 09:18:14 PDT
+Source: frozen local snapshot (patches/) — link to published prototypes broken
+  Frozen: 2026-08-27
+  Cut from: dual-enrollment-design/dual-enrollment/prototypes
+  Commit: 6008b78 on main
+  Uncommitted at freeze: 1 file(s)
+  Note: the maze study no longer rebuilds from the published prototypes.
+        patches/ IS the frozen source; edit here only with explicit go-ahead.
