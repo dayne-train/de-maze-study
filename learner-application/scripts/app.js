@@ -60,14 +60,15 @@
      THREE rows, not the original twelve. Twelve existed to show the table paginating 1-10 of
      12, which demonstrated the component at the cost of the decision: a study participant
      asked to register was scanning a page of near-identical rows to find one. Three distinct
-     courses — a maths, an english and an online psychology — make the choice legible, and
-     whichever is picked is the one the registered screen then shows.
+     math courses — an on-campus algebra at the high school, calculus at the college, and an
+     online statistics, all in the Math group Jessica was invited to — keep the choice legible
+     while every option is a plausible fit. Whichever is picked is the one the registered screen shows.
      MATH1D stays the canonical pick: it is the course on Jessica Cumberland's record in both
      admin queues, and the fallback the registered screen uses when it is reached cold. */
   var COURSES = [
-    { id:'ENG101',  title:'First-Year Composition',           term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10228', instructor:'Prof. Alice Marchetti', modality:'On Campus', meets:'MWF 9:00–9:50am',  seats:12, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'College-level reading and writing: argument, evidence, revision, and research practice across a sequence of essays.' },
+    { id:'MATH1A',  title:'College Algebra',                  term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:3, location:'Pioneer High School',           crn:'10228', instructor:'Prof. Alice Marchetti', modality:'On Campus', meets:'MWF 9:00–9:50am',  seats:12, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'Functions, equations and inequalities, polynomial and rational expressions, exponential and logarithmic functions, and systems, with an emphasis on problem solving and preparation for calculus.' },
     { id:'MATH1D',  title:'Calculus',                         term:'Fall 2026', start:'AUG 03, 2026', end:'DEC 17, 2026', credits:3, location:'West Valley Community College', crn:'10353', instructor:'Prof. Michael Angelone', modality:'On Campus', meets:'TBA',              seats:10, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'The focus and themes of the Introduction to Calculus course address the most important foundations for applications of mathematics in science, engineering and commerce. The course emphasizes the key ideas and historical motivation for calculus, while at the same time striking a balance between theory and application, leading to a mastery of key threshold concepts in foundational mathematics.' },
-    { id:'PSY101',  title:'Introduction to Psychology',       term:'Fall 2026', start:'AUG 10, 2026', end:'DEC 17, 2026', credits:3, location:'Online',                        crn:'10431', instructor:'Prof. Ellis Grant',    modality:'Online',    meets:'Asynchronous',    seats:26, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'A survey of psychological science: research methods, cognition, development, personality and psychological disorders.' },
+    { id:'MATH2S',  title:'Elementary Statistics',            term:'Fall 2026', start:'AUG 10, 2026', end:'DEC 17, 2026', credits:3, location:'Online',                        crn:'10431', instructor:'Prof. Ellis Grant',    modality:'Online',    meets:'Asynchronous',    seats:26, tuition:124.00, transferrable:true,  units:'3.0 semester units', description:'Descriptive and inferential statistics: sampling, probability, distributions, confidence intervals, hypothesis testing, correlation and regression, using real data sets.' },
   ];
 
   /* ─── Dev state ─── */
